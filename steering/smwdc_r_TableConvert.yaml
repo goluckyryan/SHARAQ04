@@ -1,0 +1,84 @@
+# require : plastic_V767.yaml
+# output :  smwdc_R_XX
+
+Processor:
+  - name: smwdc_R_prm
+    type: art::TAffineConverterArrayGenerator
+    parameter:
+      - name: ParameterList
+        value: ["prm_smwdc_R_ch2ns","prm/mwdc/smwdc_R/ch2ns.dat"]
+                
+  - name: smwdc_R_raw
+    type: art::TTimingChargeMappingProcessor
+    parameter:
+      - name: CatID
+        value: 12
+      - name: TimingTypeID
+        value: 0
+      - name: OutputCollection
+        value: smwdc_R_raw
+      - name: TrailingComesFirst
+        value: 1
+      - name: OutputTransparency
+        value: 1
+        
+  - name: smwdc_R_cal
+    type: art::TTimingChargeCalibrationProcessor
+    parameter:
+      - name: InputCollection
+        value: smwdc_R_raw
+      - name: OutputCollection
+        value: smwdc_R_cal
+      - name: TimingConverterArray
+        value: prm_smwdc_R_ch2ns
+      - name: OutputTransparency
+        value: 1
+        
+  - name: smwdc_R_cal_2_DT
+    type: art::TTimingSubtractionProcessor
+    parameter:
+      - name: InputCollection           
+        value: smwdc_R_cal
+      - name: OutputCollection
+        value: smwdc_R_DT
+      - name: StartTimingCollection     
+        value: plaV767      
+      - name: StartTimingDetID   # 0 for Tpla-L
+        value: 0
+      - name: UseMultipleStartTiming
+        value: 0
+      - name: OutputTransparency
+        value: 0
+        
+  - name: mwdc_smwdc_R_dtdx
+    type: art::TMonotoneTableConverterGenerator
+    parameter:
+      - name: ParameterList
+        value: ["smwdc_R_x1_dtdx","prm/mwdc/smwdc_R/dtdx_x1.dat",
+                "smwdc_R_x2_dtdx","prm/mwdc/smwdc_R/dtdx_x2.dat",
+                "smwdc_R_u1_dtdx","prm/mwdc/smwdc_R/dtdx_u1.dat",
+                "smwdc_R_u2_dtdx","prm/mwdc/smwdc_R/dtdx_u2.dat",
+                "smwdc_R_v1_dtdx","prm/mwdc/smwdc_R/dtdx_v1.dat",
+                "smwdc_R_v2_dtdx","prm/mwdc/smwdc_R/dtdx_v2.dat"]
+                
+  - name: mwdc_smwdc_R
+    type: art::TMWDCPlaneProcessor
+    parameter:
+      - name: InputCollection
+        value: smwdc_R_DT
+      - name: MWDCName
+        value: smwdc_R
+      - name: GeometryFileName
+        value: prm/mwdc/smwdc_R/geometry.yaml
+      - name: ConverterList
+        value:
+          - smwdc_R_x1_dtdx
+          - smwdc_R_x2_dtdx
+          - smwdc_R_u1_dtdx
+          - smwdc_R_u2_dtdx
+          - smwdc_R_v1_dtdx
+          - smwdc_R_v2_dtdx 
+      - name: OutputTransparency
+        value: 1
+          
+#==================================================      

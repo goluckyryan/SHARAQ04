@@ -1,0 +1,25 @@
+# require : plastic_FH9.yaml
+#         : dcx1.ymal
+#         : dcx2.ymal
+# output : S0img
+
+Processor:
+  - name: mwdctrack_dcx1x2
+    type: art::TMWDCTrackingProcessor
+    parameter:
+      - name: InputCollection
+        value:
+          - dcx1_x
+          - dcx1_u
+          - dcx1_v
+          - dcx2_u1
+          - dcx2_u2
+          - dcx2_v1
+          - dcx2_v2
+      - name: OutputCollection
+        value: S0img
+      - name: UseGlobalPos
+        value: 1       
+          
+#==================================================      
+

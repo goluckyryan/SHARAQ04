@@ -1,0 +1,20 @@
+# coincident Register
+# 0 : F3
+# 1 : FH9 (beam trigger)
+# 2 : ppcoin
+# 3 : NDcoin
+# 4 : pp single
+# 5 : ND single
+# 6 : ND cosmic
+Processor:
+  - name: coinReg
+    type: art::TCoinRegMappingProcessor
+    parameter:
+      - name: OutputCollection
+        value: coinReg
+      - name: CatID
+        value: 7
+      - name: NumBits
+        value: 8
+
+#===========================================================

@@ -1,0 +1,30 @@
+Processor:
+  - name: timer
+    type: art::TTimerProcessor
+        
+#  - include: RunsProton.yaml
+  - include: RunsO14.yaml
+  
+  - name: mapper
+    type: art::TMappingProcessor
+    parameter:
+      - name: OutputTransparency
+        value: 1      
+        
+#===========================================================
+#  - include: coinReg.yaml
+  - include: plastic_V775.yaml
+#  - include: plastic_V767_timeRef.yaml
+#  - include: plastic_V767.yaml
+  - include: nyoki.yaml                    # reuire plastic_V775 for tof
+  - include: smwdc_S1_TableConvert.yaml    # require nyoki
+#  - include: smwdc_S1_track.yaml
+#  - include: smwdc_S1_cal.yaml #no coinReg gate
+      
+#==================================================      
+  - name: outputtree
+    type: art::TOutputTreeProcessor
+    parameter:
+      - name: FileName
+        value: test_smwdc_S1.root
+

@@ -1,0 +1,33 @@
+Processor:
+  - name: timer
+    type: art::TTimerProcessor
+        
+  - include: RunsProton.yaml
+#  - include: RunsO14.yaml
+  
+  - name: mapper
+    type: art::TMappingProcessor
+    parameter:
+      - name: OutputTransparency
+        value: 1      
+        
+#===========================================================
+#  - include: coinReg.yaml
+#  - include: plastic_V775.yaml
+  - include: plastic_V767_timeRef.yaml
+  - include: plastic_V767.yaml
+#  - include: smwdc_l_TableConvert.yaml 
+  - include: smwdc_l_PolyConvert.yaml
+  - include: smwdc_l_track.yaml
+#  - include: smwdc_l_track_2.yaml
+#  - include: smwdc_l_track_3.yaml
+#  - include: smwdc_l_cal.yaml #no coinReg gate
+      
+#==================================================      
+  - name: outputtree
+    type: art::TOutputTreeProcessor
+    parameter:
+      - name: FileName
+#        value: smwdc_l.root
+        value: temp.root
+

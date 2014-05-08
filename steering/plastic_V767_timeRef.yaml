@@ -1,0 +1,47 @@
+
+# require :none
+# output : none
+
+# SMWDC-L/R and Tpla-L/R use module geo=4,6, 8, 10, 12. this is the segConfig
+
+Processor:    
+  - name: timeref_V767_1
+    type: art::TTimeReferenceProcessor
+    parameter:
+      - name: RefConfig
+        value: [11,24,43,12,127]
+      - name: SegConfig
+        value: [11,24,43,12]
+
+  - name: timeref_V767_2
+    type: art::TTimeReferenceProcessor
+    parameter:
+      - name: RefConfig
+        value: [11,24,43,12,127]
+      - name: SegConfig
+        value: [11,24,43,4]
+        
+  - name: timeref_V767_3
+    type: art::TTimeReferenceProcessor
+    parameter:
+      - name: RefConfig
+        value: [11,24,43,12,127]
+      - name: SegConfig
+        value: [11,24,43,6]
+        
+  - name: timeref_V767_4
+    type: art::TTimeReferenceProcessor
+    parameter:
+      - name: RefConfig
+        value: [11,24,43,12,127]
+      - name: SegConfig
+        value: [11,24,43,8]        
+        
+  - name: timeref_V767_5
+    type: art::TTimeReferenceProcessor
+    parameter:
+      - name: RefConfig
+        value: [11,24,43,12,127]
+      - name: SegConfig
+        value: [11,24,43,10]
+#===========================================================

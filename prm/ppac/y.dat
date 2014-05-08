@@ -1,0 +1,5 @@
+# PPAC Y conversion parameter
+# Y (mm) = a + b * tdiff (ns)
+#
+# [a] [b]
+0.51795 0.6115 # F6PPAC (sign can be opposite 2013.10.31)

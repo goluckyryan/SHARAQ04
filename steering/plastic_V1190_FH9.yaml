@@ -1,0 +1,78 @@
+# require : plastic_V1190_prm.yaml
+# output : plaV1190_FH9 
+
+Processor:          
+  - name: timeref_FH9
+    type: art::TTimeReferenceProcessor
+    parameter:
+      - name: RefConfig
+        value: [11, 9,31, 1, 0]
+      - name: SegConfig
+        value: [11, 9,31,1]
+
+  - name: plastic_V1190_FH9_L_raw      #must be different from output name and no "-"
+    type: art::TTimingChargeMappingProcessor
+    parameter:
+      - name: CatID 
+        value: 21
+      - name: TimingTypeID             #colnumber of map file[0=first]
+        value: 0
+      - name: TrailingComesFirst       # 1 = positive voltage
+        value: 1
+      - name: OutputCollection
+        value: plaV1190_FH9_L_raw
+      - name: OutputTransparency  
+        value: 1                       # 1 = no output
+
+  - name: plastic_V1190_FH9_L_cal
+    type: art::TTimingChargeCalibrationProcessor
+    parameter:
+      - name: InputCollection
+        value: plaV1190_FH9_L_raw
+      - name: OutputCollection
+        value: plaV1190_FH9_L_cal
+      - name: TimingConverterArray
+        value: prm_pla_t1
+      - name: OutputTransparency
+        value: 1
+
+  - name: plastic_V1190_FH9_R_raw
+    type: art::TTimingChargeMappingProcessor
+    parameter:
+      - name: TimingTypeID
+        value: 1
+      - name: TrailingComesFirst
+        value: 1
+      - name: OutputCollection
+        value: plaV1190_FH9_R_raw
+      - name: OutputTransparency
+        value: 1
+        
+  - name: plastic_V1190_FH9_R_cal
+    type: art::TTimingChargeCalibrationProcessor
+    parameter:
+      - name: InputCollection
+        value: plaV1190_FH9_R_raw
+      - name: OutputCollection
+        value: plaV1190_FH9_R_cal
+      - name: TimingConverterArray
+        value: prm_pla_t2
+      - name: OutputTransparency
+        value: 1
+
+  - name: plastic_V1190_FH9
+    type: art::TTwoSidedPlasticCalibrationProcessor
+    parameter:
+      - name: InputCollection
+        value:
+          - plaV1190_FH9_L_cal
+          - plaV1190_FH9_R_cal
+      - name: OutputCollection
+        value: plaV1190_FH9
+      - name: DetIDRange
+        value: [0,0]
+#      - name: PositionConverterArray
+#        value: prm_pla_tdiff2pos
+
+#===========================================================
+

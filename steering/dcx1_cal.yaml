@@ -1,0 +1,83 @@
+######################################################################
+# TMWDCCalibrationProcessor, run for first time. after loop, run /share/marco/MWDCCalib.C
+# only run for frist time to geneterate DT2DL table
+# change the TimingGate and ChargeGate
+
+# require : coinReg.yaml
+
+Processor:
+#  - name: gate_x
+#    type: art::TCoinRegGateProcessor
+#    parameter:
+#      - name: InputCollection
+#        value: dcx1_x
+#      - name: GateInput
+#        value: coinReg
+#      - name: OutputCollection
+#        value: dcx1_x_gate
+#      - name: GateRange
+#        value: [1,1]
+        
+#  - name: gate_u
+#    type: art::TCoinRegGateProcessor
+#    parameter:
+#      - name: InputCollection
+#        value: dcx1_u
+#      - name: GateInput
+#        value: coinReg
+#      - name: OutputCollection
+#        value: dcx1_u_gate
+#      - name: GateRange
+#        value: [1,1]
+
+#  - name: gate_v
+#    type: art::TCoinRegGateProcessor
+#    parameter:
+#      - name: InputCollection
+#        value:
+#        value: dcx1_v
+#      - name: GateInput
+#        value: coinReg
+#      - name: OutputCollection
+#        value: dcx1_v_gate
+#      - name: GateRange
+#        value: [1,1]
+
+  - name: mwdccalib_dcx1_x
+    type: art::TMWDCCalibrationProcessor
+    parameter:
+      - name: InputCollection
+        value: dcx1_x
+      - name: TimingGate
+        value: [50,150]
+      - name: ChargeGate
+        value: [600,1800]
+      - name: OutputFileName
+        value: prm/mwdc/dcx1/dtdx_x.dat
+
+  - name: mwdccalib_dcx1_u
+    type: art::TMWDCCalibrationProcessor
+    parameter:
+      - name: InputCollection
+        value: dcx1_u
+      - name: TimingGate
+        value: [50,150]
+      - name: ChargeGate
+        value: [600,1800]
+      - name: OutputFileName
+        value: prm/mwdc/dcx1/dtdx_u.dat
+
+  - name: mwdccalib_dcx1_v
+    type: art::TMWDCCalibrationProcessor
+    parameter:
+      - name: InputCollection
+        value: dcx1_v
+      - name: TimingGate
+        value: [50,150]
+      - name: ChargeGate
+        value: [600,1800]
+      - name: OutputFileName
+        value: prm/mwdc/dcx1/dtdx_v.dat
+      
+#==================================================      
+

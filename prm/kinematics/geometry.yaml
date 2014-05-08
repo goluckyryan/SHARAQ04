@@ -1,0 +1,17 @@
+L:
+  MWDC:
+    angle: -60.
+    distance: 1022.37
+    yOffset: 0.
+  Plastic:
+    angle: -60.
+    distance: 1400.
+
+R:
+  MWDC:
+    angle: 60.
+    distance: 1022.37
+    yOffset: 0.
+  Plastic:
+    angle: 60.
+    distance: 1400.

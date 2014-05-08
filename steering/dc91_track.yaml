@@ -1,0 +1,21 @@
+# require : plastic_FH9.yaml
+#         : dc91.ymal
+# output : dc91
+
+Processor:
+  - name: mwdctrack_dc91
+    type: art::TMWDCTrackingProcessor
+    parameter:
+      - name: InputCollection
+        value:
+          - dc91_x
+          - dc91_u
+          - dc91_y
+      - name: OutputCollection
+        value: dc91
+      - name: UseGlobalPos
+        value: 0          
+          
+
+#==================================================      
+

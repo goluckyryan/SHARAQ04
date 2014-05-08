@@ -1,0 +1,43 @@
+aliases:
+#====== 22O runs
+  ResO: &ResO [ &residualO ResO,prm/pidDS/22o/o.dat]
+  hist: &hist [hPID_DS,PID_DS;TOF;Charge,150,-130,-124,100,1000,2500]
+
+#====== 14O runs
+#  ResN: &ResN [ &residualN ResN,prm/pidDS/14o/n.dat]
+#  ResC: &ResC [ &residualC ResC,prm/pidDS/14o/c.dat]
+#  hist: &hist [hPID_DS,PID_DS;TOF;Charge,150,-130,-115,300,0,3000]
+  
+#====== 24O runs
+#  ResF: &ResF [ &residualF ResF,prm/pidDS/24o/f.dat]
+#  ResO: &ResO [ &residualO ResO,prm/pidDS/24o/o.dat]
+#  ResN: &ResN [ &residualN ResN,prm/pidDS/24o/n.dat]
+#  hist: &hist [hPID_DS,PID_DS;TOF;Charge,150,-133,-124,300,500,3500] 
+  
+Processor:
+  - name: proc_pidgate_downstream
+    type: art::TPIDGateProcessor
+    parameter:
+      - name: TimingArray
+        value: tofS0D
+      - name: TimingDetID
+        value: 0
+      - name: ChargeArray
+        value: plaV775
+      - name: ChargeDetID
+        value: 4
+      - name: Polygon
+        value:
+#          - *ResF
+          - *ResO
+#          - *ResN
+      - name: HistogramOption
+        value: *hist
+        
+#  - name: proc_stop_downstream
+#    type: art::TGateStopProcessor
+#    parameter:
+#      - name: GateName
+#        value: *residualO
+
+#===========================================================

@@ -1,0 +1,20 @@
+# require : 
+# output : 
+
+Processor: 
+  - name: timeref_dcx1x2
+    type: art::TTimeReferenceProcessor
+    parameter:
+      - name: RefConfig
+        value: [11,10,31, 1, 0]
+      - name: SegConfig
+        value: [11,10,31, 1]
+
+  - name: timeref_dcx2
+    type: art::TTimeReferenceProcessor
+    parameter:
+      - name: RefConfig
+        value: [11,10,31, 2, 0]
+      - name: SegConfig
+        value: [11,10,31, 2]
+#===========================================================

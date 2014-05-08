@@ -1,0 +1,134 @@
+# require : plaV775.yaml
+# output : dcs0d
+
+Processor:
+#========================== Parameters
+  - name: dcs0d_prm
+    type: art::TParameterArrayLoader
+    parameter:
+      - name: Name
+        value: prm_dcs0d_ch2ns
+      - name: Type
+        value: art::TAffineConverter
+      - name: FileName
+        value: prm/mwdc/dcs0d/ch2ns.dat
+
+  - name: dcs0d_x1_dtdx
+    type: art::TParameterLoader
+    parameter:
+      - name: Name
+        value: dcs0d_x1_dtdx
+      - name: Type
+        value: art::TMonotoneTableConverter
+      - name: FileName
+        value: prm/mwdc/dcs0d/dtdx_x1.dat
+
+  - name: dcs0d_x2_dtdx
+    type: art::TParameterLoader
+    parameter:
+      - name: Name
+        value: dcs0d_x2_dtdx
+      - name: Type
+        value: art::TMonotoneTableConverter
+      - name: FileName
+        value: prm/mwdc/dcs0d/dtdx_x2.dat
+
+  - name: dcs0d_y1_dtdx
+    type: art::TParameterLoader
+    parameter:
+      - name: Name
+        value: dcs0d_y1_dtdx
+      - name: Type
+        value: art::TMonotoneTableConverter
+      - name: FileName
+        value: prm/mwdc/dcs0d/dtdx_y1.dat
+
+  - name: dcs0d_y2_dtdx
+    type: art::TParameterLoader
+    parameter:
+      - name: Name
+        value: dcs0d_y2_dtdx
+      - name: Type
+        value: art::TMonotoneTableConverter
+      - name: FileName
+        value: prm/mwdc/dcs0d/dtdx_y2.dat
+
+  - name: mwdc_dcs0d_geo
+    type: art::TParameterLoader
+    parameter:
+      - name: Name
+        value: dcs0d
+      - name: Type
+        value: art::TMWDCParameter
+      - name: FileName
+        value: prm/mwdc/dcs0d/geometry.yaml   
+
+#========================== Start
+
+  - name: timeref_dcs0d
+    type: art::TTimeReferenceProcessor
+    parameter:
+      - name: RefConfig
+        value: [11,20,31,3, 127]
+      - name: SegConfig
+        value: [11,20,31,3]
+                
+  - name: dcs0d_raw
+    type: art::TTimingChargeMappingProcessor
+    parameter:
+      - name: CatID
+        value: 41
+      - name: TimingTypeID
+        value: 0
+      - name: TrailingComesFirst       # 1 = positive voltage
+        value: 0
+      - name: OutputCollection
+        value: dcs0d_raw
+      - name: OutputTransparency
+        value: 1
+        
+  - name: dcs0d_cal
+    type: art::TTimingChargeCalibrationProcessor
+    parameter:
+      - name: InputCollection
+        value: dcs0d_raw
+      - name: OutputCollection
+        value: dcs0d_cal
+      - name: TimingConverterArray
+        value: prm_dcs0d_ch2ns
+      - name: OutputTransparency
+        value: 1
+        
+  - name: dcs0d_cal_2_DT
+    type: art::TTimingSubtractionProcessor
+    parameter:
+      - name: InputCollection           
+        value: dcs0d_cal
+      - name: OutputCollection
+        value: dcs0d_DT
+      - name: StartTimingCollection     
+        value: plaV775         
+      - name: StartTimingDetID
+        value: 4
+      - name: UseMultipleStartTiming
+        value: 0         
+      - name: OutputTransparency
+        value: 0  
+                
+  - name: mwdc_dcs0d
+    type: art::TMWDCPlaneProcessor
+    parameter:
+      - name: InputCollection
+        value: dcs0d_DT
+      - name: MWDCName
+        value: dcs0d
+      - name: ConverterList
+        value:
+          - dcs0d_x1_dtdx
+          - dcs0d_x2_dtdx
+          - dcs0d_y1_dtdx
+          - dcs0d_y2_dtdx 
+      - name: OutputTransparency
+        value: 0
+          
+#==================================================      

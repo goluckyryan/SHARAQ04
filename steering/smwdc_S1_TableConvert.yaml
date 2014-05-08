@@ -1,0 +1,90 @@
+# require : plastic_V767.yaml
+# output :  smwdc_S1_XX
+
+Processor:
+  - name: smwdc_S1_prm
+    type: art::TAffineConverterArrayGenerator
+    parameter:
+      - name: ParameterList
+        value: ["prm_smwdc_S1_ch2ns","prm/mwdc/smwdc_S1/ch2ns.dat"]
+                
+  - name: smwdc_S1_raw
+    type: art::TTimingChargeMappingProcessor
+    parameter:
+      - name: CatID
+        value: 13
+      - name: TimingTypeID
+        value: 0
+      - name: TrailingComesFirst       # 1 = positive voltage
+        value: 1
+      - name: OutputCollection
+        value: smwdc_S1_raw
+      - name: TrailingComesFirst
+        value: 1
+      - name: OutputTransparency
+        value: 1
+        
+  - name: smwdc_S1_cal
+    type: art::TTimingChargeCalibrationProcessor
+    parameter:
+      - name: InputCollection
+        value: smwdc_S1_raw
+      - name: OutputCollection
+        value: smwdc_S1_cal
+      - name: TimingConverterArray
+        value: prm_smwdc_S1_ch2ns
+      - name: OutputTransparency
+        value: 1
+        
+  - name: smwdc_S1_cal_2_DT
+    type: art::TTimingSubtractionProcessor
+    parameter:
+      - name: InputCollection           
+        value: smwdc_S1_cal
+      - name: OutputCollection
+        value: smwdc_S1_DT
+      - name: StartTimingCollection     
+        value: nyoki
+      - name: StartTimingDetID  
+        value: 7
+      - name: UseMultipleStartTiming
+        value: 0
+      - name: OutputTransparency
+        value: 0
+        
+  - name: mwdc_smwdc_S1_dtdx
+    type: art::TMonotoneTableConverterGenerator
+    parameter:
+      - name: ParameterList
+        value: ["smwdc_S1_x1_dtdx","prm/mwdc/smwdc_S1/dtdx_x1.dat",
+                "smwdc_S1_x2_dtdx","prm/mwdc/smwdc_S1/dtdx_x2.dat",
+                "smwdc_S1_u1_dtdx","prm/mwdc/smwdc_S1/dtdx_u1.dat",
+                "smwdc_S1_u2_dtdx","prm/mwdc/smwdc_S1/dtdx_u2.dat",
+                "smwdc_S1_v1_dtdx","prm/mwdc/smwdc_S1/dtdx_v1.dat",
+                "smwdc_S1_v2_dtdx","prm/mwdc/smwdc_S1/dtdx_v2.dat"]
+                
+  - name: mwdc_S1_geo
+    type: art::TMWDCParameterLoader
+    parameter:
+      - name: ParameterList
+        value: ["smwdc_S1","prm/mwdc/smwdc_S1/geometry.yaml"]             
+                
+  - name: mwdc_smwdc_S1
+    type: art::TMWDCPlaneProcessor
+    parameter:
+      - name: InputCollection
+        value: smwdc_S1_DT
+      - name: MWDCName
+        value: smwdc_S1
+      - name: ConverterList
+        value:
+          - smwdc_S1_x1_dtdx
+          - smwdc_S1_x2_dtdx
+          - smwdc_S1_u1_dtdx
+          - smwdc_S1_u2_dtdx
+          - smwdc_S1_v1_dtdx
+          - smwdc_S1_v2_dtdx 
+      - name: OutputTransparency
+        value: 0
+          
+#==================================================      

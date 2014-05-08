@@ -1,0 +1,38 @@
+Processor:
+  - name: ridfevent
+    type: art::TRIDFEventStore
+    parameter:
+      - name: InputFiles
+        value:
+          - /media/sh04HD/RawData/phys140005.ridf
+      - name: OutputTransparency
+        value: 1
+      - name: TreeName
+        value: tree
+        
+  - name: timer
+    type: art::TTimerProcessor
+    
+#============== eventheader  =============================        
+  - name: mapper
+    type: art::TMappingProcessor 
+    parameter:
+      - name: OutputTransparency
+        value: 1
+
+#===========================================================
+#  - include: coinReg.yaml
+  - include: plastic_V1190_prm.yaml
+  - include: plastic_V1190_FH9.yaml
+  - include: dcx1x2_timeRef.yaml
+  - include: dcx1.yaml
+  - include: dcx1_track.yaml
+  - include: dcx1_cal.yaml
+      
+#==================================================      
+  - name: outputtree
+    type: art::TOutputTreeProcessor
+    parameter:
+      - name: FileName
+        value: dcx1.root
+

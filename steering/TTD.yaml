@@ -1,0 +1,57 @@
+# require : none
+# output : TTD
+
+Processor:
+  - name: TTD_prm
+    type: art::TAffineConverterArrayGenerator
+    parameter:
+      - name: ParameterList
+        value: ["prm_TTD_ch2ns","prm/plastic/ttd_ch2ns.dat"]
+
+  - name: plastic_TTD_raw     #must be different from output name and no "-"
+    type: art::TTimingChargeMappingProcessor
+    parameter:
+      - name: CatID 
+        value: 10
+      - name: TimingTypeID             #colnumber of map file[0=first]
+        value: 0
+      - name: TrailingComesFirst       # 0 negative voltage TDC
+        value: 0
+      - name: ChargeType
+        value: 1
+      - name: ChargeTypeID
+        value: 1
+      - name: OutputCollection
+        value: TTD_raw
+      - name: OutputTransparency  
+        value: 1                       # 1 = no output
+
+  - name: plastic_TTD
+    type: art::TTimingChargeCalibrationProcessor
+    parameter:
+      - name: InputCollection
+        value: TTD_raw
+      - name: OutputCollection
+        value: TTD
+      - name: TimingConverterArray
+        value: prm_TTD_ch2ns
+      - name: OutputTransparency
+        value: 0
+        
+  - name: tof_FH9_to_TTD
+    type: art::TTimingSubtractionProcessor
+    parameter:
+      - name: InputCollection           # tof = [t] - tref
+        value: TTD
+      - name: OutputCollection
+        value: tof_ttd
+      - name: StartTimingCollection     #  tof= t - [tref]
+        value: plaV775            
+      - name: StartTimingDetID
+        value: 3                        # FH9
+      - name: UseMultipleStartTiming
+        value: 0
+      - name: OutputTransparency
+        value: 0
+        
+#===========================================================

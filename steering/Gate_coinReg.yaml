@@ -1,0 +1,10 @@
+Processor:
+  - name: proc_coin_gate
+    type: art::TCoinRegGateProcessor.cc
+    parameter:
+      - name: InputCollection
+        value: coinReg
+      - name: GateCoincidenceID
+        value: 2
+
+#===========================================================

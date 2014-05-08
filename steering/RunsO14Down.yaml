@@ -1,0 +1,32 @@
+Processor:
+  - name: ridfevent
+    type: art::TRIDFEventStore
+    parameter:
+      - name: OutputTransparency
+        value: 1
+      - name: InputFiles
+        value:
+#          - /media/sh04HD/RawData/phys140044.ridf  # S0D HV changed
+          - /media/sh04HD/RawData/phys140045.ridf
+          - /media/sh04HD/RawData/phys140046.ridf
+          - /media/sh04HD/RawData/phys140047.ridf
+          - /media/sh04HD/RawData/phys140048.ridf
+          - /media/sh04HD/RawData/phys140049.ridf
+          - /media/sh04HD/RawData/phys140050.ridf
+          - /media/sh04HD/RawData/phys140051.ridf
+          - /media/sh04HD/RawData/phys140052.ridf
+          - /media/sh04HD/RawData/phys140053.ridf
+          - /media/sh04HD/RawData/phys140054.ridf
+          - /media/sh04HD/RawData/phys140055.ridf
+          - /media/sh04HD/RawData/phys140056.ridf
+          - /media/sh04HD/RawData/phys140057.ridf
+          - /media/sh04HD/RawData/phys140058.ridf
+          - /media/sh04HD/RawData/phys140059.ridf
+          - /media/sh04HD/RawData/phys140060.ridf
+          - /media/sh04HD/RawData/phys140061.ridf
+          - /media/sh04HD/RawData/phys140062.ridf
+          - /media/sh04HD/RawData/phys140063.ridf
+          - /media/sh04HD/RawData/phys140064.ridf
+          - /media/sh04HD/RawData/phys140065.ridf
+          - /media/sh04HD/RawData/phys140066.ridf
+          - /media/sh04HD/RawData/phys140067.ridf

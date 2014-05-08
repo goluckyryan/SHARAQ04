@@ -1,0 +1,115 @@
+
+# require : non
+# output : plaV775
+#          tof_DS
+
+# Dones not requrie time reference. since the time is counted as common stop.
+
+Processor:    
+  - name: plaprm_v775_L
+    type: art::TParameterArrayLoader
+    parameter:
+      - name: Name
+        value: prm_pla_V775_L
+      - name: Type
+        value: art::TAffineConverter
+      - name: FileName
+        value: prm/plastic/V775_L_ch2ns.dat
+
+  - name: plaprm_v775_R
+    type: art::TParameterArrayLoader
+    parameter:
+      - name: Name
+        value: prm_pla_V775_R
+      - name: Type
+        value: art::TAffineConverter
+      - name: FileName
+        value: prm/plastic/V775_R_ch2ns.dat            
+
+  - name: plastic_V775_L_raw
+    type: art::TTimingChargeMappingProcessor
+    parameter:
+      - name: CatID 
+        value: 9
+      - name: TimingTypeID
+        value: 0
+      - name: ChargeType   #1 = QDC
+        value: 1
+      - name: ChargeTypeID
+        value: 2
+      - name: OutputCollection
+        value: plaV775_L_raw
+      - name: OutputTransparency
+        value: 1
+        
+  - name: plastic_V775_L_cal
+    type: art::TTimingChargeCalibrationProcessor
+    parameter:
+      - name: InputCollection
+        value: plaV775_L_raw
+      - name: OutputCollection
+        value: plaV775_L_cal
+      - name: TimingConverterArray
+        value: prm_pla_V775_L
+      - name: OutputTransparency
+        value: 1
+
+  - name: plastic_V775_R_raw
+    type: art::TTimingChargeMappingProcessor
+    parameter:
+      - name: CatID 
+        value: 9
+      - name: TimingTypeID
+        value: 1
+      - name: ChargeType
+        value: 1
+      - name: ChargeTypeID
+        value: 3
+      - name: OutputCollection
+        value: plaV775_R_raw
+      - name: OutputTransparency
+        value: 1
+        
+  - name: plastic_V775_R_cal
+    type: art::TTimingChargeCalibrationProcessor
+    parameter:
+      - name: InputCollection
+        value: plaV775_R_raw
+      - name: OutputCollection
+        value: plaV775_R_cal
+      - name: TimingConverterArray
+        value: prm_pla_V775_R
+      - name: OutputTransparency
+        value: 1
+
+  - name: plastic_cal_V775
+    type: art::TTwoSidedPlasticCalibrationProcessor
+    parameter:
+      - name: InputCollection
+        value:
+          - plaV775_L_cal
+          - plaV775_R_cal
+      - name: OutputCollection
+        value: plaV775
+      - name: DetIDRange
+        value: [0,4]
+      - name: OutputTransparency
+        value: 0
+
+  - name: tof_DownStream
+    type: art::TTimingSubtractionProcessor
+    parameter:
+      - name: InputCollection           # tof = [t] - tref
+        value: plaV775
+      - name: OutputCollection
+        value: tof_DS
+      - name: StartTimingCollection     #  tof= t - [tref]
+        value: plaV775            
+      - name: StartTimingDetID
+        value: 3
+      - name: UseMultipleStartTiming
+        value: 1
+      - name: OutputTransparency
+        value: 0
+
+#===========================================================

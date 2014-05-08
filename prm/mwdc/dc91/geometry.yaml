@@ -1,0 +1,3 @@
+position: [0.,0.,0.]
+angle: 0.
+plane_config: prm/mwdc/dc91/config.yaml

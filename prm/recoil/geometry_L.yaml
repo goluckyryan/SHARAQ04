@@ -1,0 +1,7 @@
+MWDC:
+  distance: 1012.37  # distance of MWDC from the polarized target
+  angle: 60  # Rotation angle of MWDC in zx-plane (deg)
+  yOffset: 0  # y-position offset of MWDC (optional)
+StopDetector:
+  distance: 1400  # distance of stop-time detector from the polarized target
+  angle: 60  # Rotation angle of stop-time detector in zx-plane (deg)

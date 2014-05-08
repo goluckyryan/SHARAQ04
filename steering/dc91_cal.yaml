@@ -1,0 +1,45 @@
+######################################################################
+# TMWDCCalibrationProcessor, run for first time. after loop, run /share/marco/MWDCCalib.C
+# only run for frist time to geneterate DT2DL table
+# change the TimingGate and ChargeGate
+
+
+Processor:
+  - name: mwdccalib_dc91_x
+    type: art::TMWDCCalibrationProcessor
+    parameter:
+      - name: InputCollection
+        value: dc91_x
+      - name: TimingGate
+        value: [-70, 100]
+      - name: ChargeGate
+        value: [800, 2500]
+      - name: OutputFileName
+        value: prm/mwdc/dc91/dtdx_x.dat
+
+  - name: mwdccalib_dc91_u
+    type: art::TMWDCCalibrationProcessor
+    parameter:
+      - name: InputCollection
+        value: dc91_u
+      - name: TimingGate
+        value: [-70, 100]
+      - name: ChargeGate
+        value: [800, 2500]
+      - name: OutputFileName
+        value: prm/mwdc/dc91/dtdx_u.dat
+
+  - name: mwdccalib_dc91_y
+    type: art::TMWDCCalibrationProcessor
+    parameter:
+      - name: InputCollection
+        value: dc91_y
+      - name: TimingGate
+        value: [-70,100]
+      - name: ChargeGate
+        value: [800, 2500]
+      - name: OutputFileName
+        value: prm/mwdc/dc91/dtdx_y.dat
+      
+#==================================================      
+

@@ -1,0 +1,5 @@
+# PPAC X conversion parameter
+# X (mm) = a + b * tdiff (ns)
+#
+# [a] [b]
+-1.0765 -0.621 # F6PPAC (sign checked by tof vs Energy 2014.2.26)

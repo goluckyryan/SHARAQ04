@@ -1,0 +1,22 @@
+# require : plastic_V775.yaml
+#         : dcs0d.ymal
+# output : dcs0d
+
+Processor:
+  - name: mwdctrack_dcs0d
+    type: art::TMWDCTrackingProcessor
+    parameter:
+      - name: InputCollection
+        value:
+          - dcs0d_x1
+          - dcs0d_x2
+          - dcs0d_y1
+          - dcs0d_y2
+      - name: OutputCollection
+        value: dcs0d
+      - name: UseGlobalPos
+        value: 0          
+          
+
+#==================================================      
+

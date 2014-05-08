@@ -1,0 +1,123 @@
+# require : plastic_FH9.yaml
+# output : dcx2
+
+Processor:
+#========================== Parameters
+  - name: dcx2_prm
+    type: art::TParameterArrayLoader
+    parameter:
+      - name: Name
+        value: prm_dcx2_ch2ns
+      - name: Type
+        value: art::TAffineConverter
+      - name: FileName
+        value: prm/mwdc/dcx2/ch2ns.dat
+
+  - name: dcx2_u1_dtdx
+    type: art::TParameterLoader
+    parameter:
+      - name: Name
+        value: dcx2_u1_dtdx
+      - name: Type
+        value: art::TMonotoneTableConverter
+      - name: FileName
+        value: prm/mwdc/dcx2/dtdx_u1.dat
+        
+  - name: dcx2_v1_dtdx
+    type: art::TParameterLoader
+    parameter:
+      - name: Name
+        value: dcx2_v1_dtdx
+      - name: Type
+        value: art::TMonotoneTableConverter
+      - name: FileName
+        value: prm/mwdc/dcx2/dtdx_v1.dat
+        
+  - name: dcx2_v2_dtdx
+    type: art::TParameterLoader
+    parameter:
+      - name: Name
+        value: dcx2_v2_dtdx
+      - name: Type
+        value: art::TMonotoneTableConverter
+      - name: FileName
+        value: prm/mwdc/dcx2/dtdx_v2.dat
+
+  - name: dcx2_u2_dtdx
+    type: art::TParameterLoader
+    parameter:
+      - name: Name
+        value: dcx2_u2_dtdx
+      - name: Type
+        value: art::TMonotoneTableConverter
+      - name: FileName
+        value: prm/mwdc/dcx2/dtdx_u2.dat
+
+  - name: dcx2_geo
+    type: art::TParameterLoader
+    parameter:
+      - name: Name
+        value: dcx2
+      - name: Type
+        value: art::TMWDCParameter
+      - name: FileName
+        value: prm/mwdc/dcx2/geometry.yaml     
+#========================== Start
+
+  - name: dcx2_raw
+    type: art::TTimingChargeMappingProcessor
+    parameter:
+      - name: CatID
+        value: 38
+      - name: TimingTypeID
+        value: 0
+      - name: OutputCollection
+        value: dcx2_raw
+      - name: OutputTransparency
+        value: 1
+        
+  - name: dcx2_cal
+    type: art::TTimingChargeCalibrationProcessor
+    parameter:
+      - name: InputCollection
+        value: dcx2_raw
+      - name: OutputCollection
+        value: dcx2_cal
+      - name: TimingConverterArray
+        value: prm_dcx2_ch2ns
+      - name: OutputTransparency
+        value: 1
+        
+  - name: dcx2_cal_2_DT
+    type: art::TTimingSubtractionProcessor
+    parameter:
+      - name: InputCollection           
+        value: dcx2_cal
+      - name: OutputCollection
+        value: dcx2_DT
+      - name: StartTimingCollection     
+        value: plaV1190_FH9
+      - name: StartTimingDetID
+        value: 0
+      - name: UseMultipleStartTiming
+        value: 0
+      - name: OutputTransparency
+        value: 1
+
+  - name: mwdc_dcx2
+    type: art::TMWDCPlaneProcessor
+    parameter:
+      - name: InputCollection
+        value: dcx2_DT
+      - name: MWDCName
+        value: dcx2
+      - name: ConverterList
+        value:
+          - dcx2_u1_dtdx
+          - dcx2_u2_dtdx
+          - dcx2_v1_dtdx
+          - dcx2_v2_dtdx
+      - name: OutputTransparency
+        value: 1
+          
+#==================================================      

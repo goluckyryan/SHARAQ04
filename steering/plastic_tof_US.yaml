@@ -1,0 +1,25 @@
+# require : plastic_V1190_prm.yaml
+#           plastic_V1190_FH9.yaml
+#           plastic_V1190_F3.yaml
+
+# output : tof_US
+
+Processor:    
+  - name: tof_Upstream
+    type: art::TTimingSubtractionProcessor
+    parameter:
+      - name: InputCollection           # tof = [t] - tref
+        value: plaV1190_FH9
+      - name: OutputCollection
+        value: tof_US
+      - name: StartTimingCollection     #  tof= t - [tref]
+        value: plaV1190_F3
+      - name: StartTimingDetID
+        value: 0
+      - name: UseMultipleStartTiming
+        value: 1
+      - name: OutputTransparency
+        value: 0
+
+#===========================================================
+

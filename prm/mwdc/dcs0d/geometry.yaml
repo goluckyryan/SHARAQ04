@@ -1,0 +1,4 @@
+# the z positon could be 18883.38
+position: [0.,0.,0.]
+angle: 0.
+plane_config: prm/mwdc/dcs0d/config.yaml

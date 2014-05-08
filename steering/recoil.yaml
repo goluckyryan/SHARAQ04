@@ -1,0 +1,127 @@
+aliases:
+  beamZ: &beamZ 0.
+
+Processor:
+  - name: smwdc_geometry
+    type: art::TParameterLoader
+    parameter:
+      - name: Name
+        value: SMWDC_geometry
+      - name: Type
+        value: art::sh04::TDetectorGeometry
+      - name: FileName
+        value: prm/kinematics/geometry.yaml
+
+  - name: proc_beamz
+    type: art::sh04::TBeamZProcessor
+    parameter:
+      - name: TrackL
+        value: smwdc_L
+      - name: TrackR
+        value: smwdc_R
+      - name: Geometry
+        value: SMWDC_geometry
+      - name: OutputCollection
+        value: beamZ
+      - name: OutputTransparency
+        value: 0
+                
+  - name: tpla_tof
+    type: art::sh04::TRecoilTOFProcessor
+    parameter:
+      - name: OutputL
+        value: tofL
+      - name: OutputR
+        value: tofR
+      - name: F3PlasticColName
+        value: plaV775
+      - name: F3PlasticDetID
+        value: 2
+      - name: FH9PlasticColName
+        value: plaV775
+      - name: FH9PlasticDetID
+        value: 3
+      - name: S0DPlasticColName
+        value: plaV775
+      - name: S0DPlasticDetID
+        value: 4
+      - name: TPlasticColName
+        value: plaV775
+      - name: TPlasticLDetID
+        value: 0
+      - name: TPlasticRDetID
+        value: 1
+      - name: BeamZ
+        value: *beamZ
+      - name: OutputTransparency
+        value: 0
+
+  - name: Recoil_L
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      - name: OutputCollection
+        value: recoil_L
+      - name: TrackCollection
+        value: smwdc_L
+      - name: TOFCollection
+        value: tofL
+      - name: S0Track
+        value: S0img
+      - name: Geometry
+        value: SMWDC_geometry
+      - name: Side
+        value: 0
+      - name: BeamZ
+        value: *beamZ
+      - name: UseReactionPointCollection
+        value: 1
+      - name: UseIncidentAngleCollection
+        value: 1
+      - name: UsePolarizedMagnetCollection
+        value: 1
+      - name: OutputTransparency
+        value: 0
+        
+  - name: Recoil_R
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      - name: OutputCollection
+        value: recoil_R
+      - name: TrackCollection
+        value: smwdc_R
+      - name: TOFCollection
+        value: tofR
+      - name: S0Track
+        value: S0img
+      - name: Geometry
+        value: SMWDC_geometry
+      - name: Side
+        value: 1
+      - name: BeamZ
+        value: *beamZ
+      - name: UseReactionPointCollection
+        value: 1
+      - name: UseIncidentAngleCollection
+        value: 1
+      - name: UsePolarizedMagnetCollection
+        value: 1
+      - name: OutputTransparency
+        value: 0
+
+  - name: proc_p2p
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      - name: OutputCollection
+        value: p2p
+      - name: RecoilL
+        value: recoil_L
+      - name: RecoilR
+        value: recoil_R
+      - name: PPAC
+        value: ppac
+      - name: PPACDetID
+        value: 0
+      - name: BeamParameter
+        value: beam
+      - name: OutputTransparency
+        value: 0
