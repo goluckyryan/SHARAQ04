@@ -3,111 +3,78 @@
 
 Processor:
 #========================== Parameters
-  - name: dcx1_prm
+  - name: dcx1_ch2ns
     type: art::TParameterArrayLoader
     parameter:
-      - name: Name
-        value: prm_dcx1_ch2ns
-      - name: Type
-        value: art::TAffineConverter
-      - name: FileName
-        value: prm/mwdc/dcx1/ch2ns.dat
+      Name:     prm_dcx1_ch2ns
+      Type:     art::TAffineConverter
+      FileName: prm/mwdc/dcx1/ch2ns.dat
 
   - name: dcx1_x_dtdx
     type: art::TParameterLoader
     parameter:
-      - name: Name
-        value: dcx1_x_dtdx
-      - name: Type
-        value: art::TMonotoneTableConverter
-      - name: FileName
-        value: prm/mwdc/dcx1/dtdx_x.dat
+      Name:     dcx1_x_dtdx
+      Type:     art::TMonotoneTableConverter
+      FileName: prm/mwdc/dcx1/dtdx_x.dat
         
   - name: dcx1_u_dtdx
     type: art::TParameterLoader
     parameter:
-      - name: Name
-        value: dcx1_u_dtdx
-      - name: Type
-        value: art::TMonotoneTableConverter
-      - name: FileName
-        value: prm/mwdc/dcx1/dtdx_u.dat
+      Name:     dcx1_u_dtdx
+      Type:     art::TMonotoneTableConverter
+      FileName: prm/mwdc/dcx1/dtdx_u.dat
 
   - name: dcx1_v_dtdx
     type: art::TParameterLoader
     parameter:
-      - name: Name
-        value: dcx1_v_dtdx
-      - name: Type
-        value: art::TMonotoneTableConverter
-      - name: FileName
-        value: prm/mwdc/dcx1/dtdx_v.dat
+      Name:     dcx1_v_dtdx
+      Type:     art::TMonotoneTableConverter
+      FileName: prm/mwdc/dcx1/dtdx_v.dat
 
   - name: dcx1_geo
     type: art::TParameterLoader
     parameter:
-      - name: Name
-        value: dcx1
-      - name: Type
-        value: art::TMWDCParameter
-      - name: FileName
-        value: prm/mwdc/dcx1/geometry.yaml     
+      Name:     dcx1
+      Type:     art::TMWDCParameter
+      FileName: prm/mwdc/dcx1/geometry.yaml     
 
 #========================== Start
 
   - name: dcx1_raw
     type: art::TTimingChargeMappingProcessor
     parameter:
-      - name: CatID
-        value: 36
-      - name: TimingTypeID
-        value: 0
-      - name: OutputCollection
-        value: dcx1_raw
-      - name: OutputTransparency
-        value: 1
+      CatID:              36
+      TimingTypeID:       0
+      OutputCollection:   dcx1_raw
+      OutputTransparency: 1
         
   - name: dcx1_cal
     type: art::TTimingChargeCalibrationProcessor
     parameter:
-      - name: InputCollection
-        value: dcx1_raw
-      - name: OutputCollection
-        value: dcx1_cal
-      - name: TimingConverterArray
-        value: prm_dcx1_ch2ns
-      - name: OutputTransparency
-        value: 1
+      InputCollection:      dcx1_raw
+      OutputCollection:     dcx1_cal
+      TimingConverterArray: prm_dcx1_ch2ns
+      OutputTransparency:   1
         
-  - name: dcx1_cal_2_DT
+  - name: dcx1_cal_DT
     type: art::TTimingSubtractionProcessor
     parameter:
-      - name: InputCollection           
-        value: dcx1_cal
-      - name: OutputCollection
-        value: dcx1_DT
-      - name: StartTimingCollection     
-        value: plaV775 
-      - name: StartTimingDetID
-        value: 3
-      - name: UseMultipleStartTiming
-        value: 0 
-      - name: OutputTransparency
-        value: 1
+      InputCollection:        dcx1_cal
+      OutputCollection:       dcx1_DT
+      StartTimingCollection:  plaV775 
+      StartTimingDetID:       3
+      UseMultipleStartTiming: 0 
+      OutputTransparency:     1
                 
   - name: mwdc_dcx1
     type: art::TMWDCPlaneProcessor
     parameter:
-      - name: InputCollection
-        value: dcx1_DT
-      - name: MWDCName
-        value: dcx1
-      - name: ConverterList
-        value:
-          - dcx1_x_dtdx
-          - dcx1_u_dtdx
-          - dcx1_v_dtdx 
-      - name: OutputTransparency
-        value: 1
+      InputCollection: dcx1_DT
+      MWDCName:        dcx1
+      ConverterList:
+        - dcx1_x_dtdx
+        - dcx1_u_dtdx
+        - dcx1_v_dtdx 
+      OutputTransparency: 1
           
 #==================================================      

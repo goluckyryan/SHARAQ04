@@ -3,10 +3,8 @@ Processor:
     type: art::TRIDFEventStore
 #    type: art::TRIDFEventShifter
     parameter:
-      - name: OutputTransparency
-        value: 1
-      - name: InputFiles
-        value:
+      OutputTransparency: 1
+      InputFiles:
           - /media/sh04HD/RawData/ppcoin1008.ridf
           - /media/sh04HD/RawData/ppcoin1009.ridf   #just before O22 run  
 

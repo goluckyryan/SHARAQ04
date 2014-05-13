@@ -1,0 +1,29 @@
+Processor:
+  - name: ridfevent
+    type: art::TRIDFEventStore
+    parameter:
+      OutputTransparency: 1 
+      InputFiles:
+        - /media/sh04HD/RawData/phys140005.ridf
+#      TreeName: tree
+        
+  - name: timer
+    type: art::TTimerProcessor
+#===========================================================    
+  - name: mapper
+    type: art::TMappingProcessor 
+    parameter:
+      OutputTransparency: 1
+#===========================================================   
+  - name: coinReg
+    type: art::TCoinRegMappingProcessor
+    parameter:
+      OutputCollection: coinReg
+      CatID:            7
+      NumBits:          8
+
+#===========================================================
+  - name: outputtree
+    type: art::TOutputTreeProcessor
+    parameter:
+      FileName: test.root

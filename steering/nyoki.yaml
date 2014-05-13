@@ -6,61 +6,41 @@ Processor:
   - name: nyoki_prm
     type: art::TAffineConverterArrayGenerator
     parameter:
-      - name: ParameterList
-        value: ["prm_nyoki_ch2ns","prm/nyoki/ch2ns.dat"]
+      ParameterList: ["prm_nyoki_ch2ns","prm/nyoki/ch2ns.dat"]
      
   - name: timeref_nyoki
     type: art::TTimeReferenceProcessor
     parameter:
-      - name: RefConfig
-        value: [11,21,31,1, 0]
-      - name: SegConfig
-        value: [11,21,31,1]
+      RefConfig: [11,21,31,1, 0]
+      SegConfig: [11,21,31,1]
 
   - name: plastic_nyoki_raw     #must be different from output name and no "-"
     type: art::TTimingChargeMappingProcessor
     parameter:
-      - name: CatID 
-        value: 48
-      - name: TimingTypeID             #colnumber of map file[0=first]
-        value: 0
-      - name: TrailingComesFirst       # 0 negative voltage TDC
-        value: 0
-      - name: ChargeType
-        value: 1
-      - name: ChargeTypeID
-        value: 1
-      - name: OutputCollection
-        value: nyoki_raw
-      - name: OutputTransparency  
-        value: 1                       # 1 = no output
+      CatID:              48
+      TimingTypeID:       0       #colnumber of map file[0=first]
+      TrailingComesFirst: 0       # 0 negative voltage TDC
+      ChargeType:         1
+      ChargeTypeID:       1
+      OutputCollection:   nyoki_raw
+      OutputTransparency: 1                       # 1 = no output
 
   - name: plastic_nyoki_cal
     type: art::TTimingChargeCalibrationProcessor
     parameter:
-      - name: InputCollection
-        value: nyoki_raw
-      - name: OutputCollection
-        value: nyoki
-      - name: TimingConverterArray
-        value: prm_nyoki_ch2ns
-      - name: OutputTransparency
-        value: 0
+      InputCollection:      nyoki_raw
+      OutputCollection:     nyoki
+      TimingConverterArray: prm_nyoki_ch2ns
+      OutputTransparency:   0
 
   - name: tof_S0D_to_D1
     type: art::TTimingSubtractionProcessor
     parameter:
-      - name: InputCollection           # tof = [t] - tref
-        value: nyoki
-      - name: OutputCollection
-        value: tof_D1
-      - name: StartTimingCollection     #  tof= t - [tref]
-        value: plaV775            
-      - name: StartTimingDetID
-        value: 4                        # S0D
-      - name: UseMultipleStartTiming
-        value: 0
-      - name: OutputTransparency
-        value: 0
+      InputCollection:        nyoki       # tof = [t] - tref
+      OutputCollection:       tof_D1
+      StartTimingCollection:  plaV775     #  tof= t - [tref]
+      StartTimingDetID:       4           # S0D
+      UseMultipleStartTiming: 0
+      OutputTransparency:     0
 
 #===========================================================

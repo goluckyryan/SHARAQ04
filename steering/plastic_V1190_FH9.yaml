@@ -5,74 +5,49 @@ Processor:
   - name: timeref_FH9
     type: art::TTimeReferenceProcessor
     parameter:
-      - name: RefConfig
-        value: [11, 9,31, 1, 0]
-      - name: SegConfig
-        value: [11, 9,31,1]
+      RefConfig: [11, 9,31, 1, 0]
+      SegConfig: [11, 9,31,1]
 
   - name: plastic_V1190_FH9_L_raw      #must be different from output name and no "-"
     type: art::TTimingChargeMappingProcessor
     parameter:
-      - name: CatID 
-        value: 21
-      - name: TimingTypeID             #colnumber of map file[0=first]
-        value: 0
-      - name: TrailingComesFirst       # 1 = positive voltage
-        value: 1
-      - name: OutputCollection
-        value: plaV1190_FH9_L_raw
-      - name: OutputTransparency  
-        value: 1                       # 1 = no output
+      CatID:              21
+      TimingTypeID:       0                      #colnumber of map file[0=first]
+      TrailingComesFirst: 1                      # 1 = positive voltage
+      OutputCollection:   plaV1190_FH9_L_raw
+      OutputTransparency: 1                      # 1 = no output
 
   - name: plastic_V1190_FH9_L_cal
     type: art::TTimingChargeCalibrationProcessor
     parameter:
-      - name: InputCollection
-        value: plaV1190_FH9_L_raw
-      - name: OutputCollection
-        value: plaV1190_FH9_L_cal
-      - name: TimingConverterArray
-        value: prm_pla_t1
-      - name: OutputTransparency
-        value: 1
+      InputCollection:      plaV1190_FH9_L_raw
+      OutputCollection:     plaV1190_FH9_L_cal
+      TimingConverterArray: prm_pla_t1
+      OutputTransparency:   1
 
   - name: plastic_V1190_FH9_R_raw
     type: art::TTimingChargeMappingProcessor
     parameter:
-      - name: TimingTypeID
-        value: 1
-      - name: TrailingComesFirst
-        value: 1
-      - name: OutputCollection
-        value: plaV1190_FH9_R_raw
-      - name: OutputTransparency
-        value: 1
+      TimingTypeID:       1
+      TrailingComesFirst: 1
+      OutputCollection:   plaV1190_FH9_R_raw
+      OutputTransparency: 1
         
   - name: plastic_V1190_FH9_R_cal
     type: art::TTimingChargeCalibrationProcessor
     parameter:
-      - name: InputCollection
-        value: plaV1190_FH9_R_raw
-      - name: OutputCollection
-        value: plaV1190_FH9_R_cal
-      - name: TimingConverterArray
-        value: prm_pla_t2
-      - name: OutputTransparency
-        value: 1
+      InputCollection:      plaV1190_FH9_R_raw
+      OutputCollection:     plaV1190_FH9_R_cal
+      TimingConverterArray: prm_pla_t2
+      OutputTransparency:   1
 
   - name: plastic_V1190_FH9
     type: art::TTwoSidedPlasticCalibrationProcessor
     parameter:
-      - name: InputCollection
-        value:
-          - plaV1190_FH9_L_cal
-          - plaV1190_FH9_R_cal
-      - name: OutputCollection
-        value: plaV1190_FH9
-      - name: DetIDRange
-        value: [0,0]
-#      - name: PositionConverterArray
-#        value: prm_pla_tdiff2pos
+      InputCollection:        [plaV1190_FH9_L_cal,plaV1190_FH9_R_cal]
+      OutputCollection:       plaV1190_FH9
+      DetIDRange:             [0,0]
+#     PositionConverterArray: prm_pla_tdiff2pos
 
 #===========================================================
 

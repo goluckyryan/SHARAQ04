@@ -1,18 +1,10 @@
 Processor:
-  - name: timer
-    type: art::TTimerProcessor
-        
-  - include: RunsProton.yaml
-#  - include: RunsO14.yaml
+  - include: RunsO14.yaml
   
-  - name: mapper
-    type: art::TMappingProcessor
-    parameter:
-      - name: OutputTransparency
-        value: 1      
+  - include: Mapper_Timer.yaml    
         
 #===========================================================
-#  - include: coinReg.yaml
+  - include: coinReg.yaml
 #  - include: plastic_V775.yaml
   - include: plastic_V767_timeRef.yaml
   - include: plastic_V767.yaml
@@ -25,6 +17,5 @@ Processor:
   - name: outputtree
     type: art::TOutputTreeProcessor
     parameter:
-      - name: FileName
-        value: test.root
+      FileName: test.root
 

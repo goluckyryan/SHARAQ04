@@ -34,10 +34,17 @@
    cf->Register(TCatCmdSave::Instance());
    cf->Register(TCatCmdXval::Instance());
    cf->Register(art::TCatCmdListg::Instance());
+   cf->Register(new TCatCmdLg(TCatCmdLg::kX,0)); // log x
+   cf->Register(new TCatCmdLg(TCatCmdLg::kY,0)); // log y
+   cf->Register(new TCatCmdLg(TCatCmdLg::kZ,0)); // log z
+   cf->Register(new TCatCmdLg(TCatCmdLg::kX,1)); // unset log x
+   cf->Register(new TCatCmdLg(TCatCmdLg::kY,1)); // unset log x
+   cf->Register(new TCatCmdLg(TCatCmdLg::kZ,1)); // unset log x
 
    {
       TString path = gSystem->GetIncludePath();
-//      path.Append("-I$WORKDIR/processors");
+      TString artemis_inc = gSystem->Getenv("ARTEMIS_HOME");
+      path.Append(TString::Format("-I%s/include",artemis_inc.Data()));
       gSystem->SetIncludePath(path);
    }
    {
@@ -56,9 +63,8 @@
       df->Register(new art::TModuleDecoderV1190);
 // mod ID 25 : ???
       df->Register(new art::TModuleDecoderSkip(25));
-// mod ID 26 : V1190C
+// mod ID 26 : V1190C == V1190 (reference ch. modified)
       df->Register(new art::TModuleDecoderV1190(26));
-//      df->Register(new art::TModuleDecoderSkip(26));
 // mod ID 63 : V1740
       df->Register(new art::TModuleDecoderV1740);
 

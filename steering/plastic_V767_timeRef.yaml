@@ -8,40 +8,30 @@ Processor:
   - name: timeref_V767_1
     type: art::TTimeReferenceProcessor
     parameter:
-      - name: RefConfig
-        value: [11,24,43,12,127]
-      - name: SegConfig
-        value: [11,24,43,12]
+      RefConfig: [11,24,43,12,127]
+      SegConfig: [11,24,43,12]
 
   - name: timeref_V767_2
     type: art::TTimeReferenceProcessor
     parameter:
-      - name: RefConfig
-        value: [11,24,43,12,127]
-      - name: SegConfig
-        value: [11,24,43,4]
+      RefConfig: [11,24,43,12,127]
+      SegConfig: [11,24,43,4]
         
   - name: timeref_V767_3
     type: art::TTimeReferenceProcessor
     parameter:
-      - name: RefConfig
-        value: [11,24,43,12,127]
-      - name: SegConfig
-        value: [11,24,43,6]
+      RefConfig: [11,24,43,12,127]
+      SegConfig: [11,24,43,6]
         
   - name: timeref_V767_4
     type: art::TTimeReferenceProcessor
     parameter:
-      - name: RefConfig
-        value: [11,24,43,12,127]
-      - name: SegConfig
-        value: [11,24,43,8]        
+      RefConfig: [11,24,43,12,127]
+      SegConfig: [11,24,43,8]        
         
   - name: timeref_V767_5
     type: art::TTimeReferenceProcessor
     parameter:
-      - name: RefConfig
-        value: [11,24,43,12,127]
-      - name: SegConfig
-        value: [11,24,43,10]
+      RefConfig: [11,24,43,12,127]
+      SegConfig: [11,24,43,10]
 #===========================================================

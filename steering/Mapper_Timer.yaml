@@ -1,0 +1,8 @@
+Processor:
+  - name: timer
+    type: art::TTimerProcessor
+  
+  - name: mapper
+    type: art::TMappingProcessor
+    parameter:
+      OutputTransparency: 1      

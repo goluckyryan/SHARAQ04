@@ -18,21 +18,15 @@ Processor:
   - name: proc_pidgate_downstream
     type: art::TPIDGateProcessor
     parameter:
-      - name: TimingArray
-        value: tofS0D
-      - name: TimingDetID
-        value: 0
-      - name: ChargeArray
-        value: plaV775
-      - name: ChargeDetID
-        value: 4
-      - name: Polygon
-        value:
+      TimingArray: tofS0D
+      TimingDetID: 0
+      ChargeArray: plaV775
+      ChargeDetID: 4
+      Polygon:
 #          - *ResF
           - *ResO
 #          - *ResN
-      - name: HistogramOption
-        value: *hist
+      HistogramOption: *hist
         
 #  - name: proc_stop_downstream
 #    type: art::TGateStopProcessor

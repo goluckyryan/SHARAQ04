@@ -6,15 +6,12 @@ Processor:
   - name: mwdctrack_dcx2
     type: art::TMWDCTrackingProcessor
     parameter:
-      - name: InputCollection
-        value:
-          - dcx2_u1
-          - dcx2_v1
-          - dcx2_v2
-          - dcx2_u2
-      - name: OutputCollection
-        value: dcx2
-      - name: UseGlobalPos
-        value: 0
+      InputCollection:
+       - dcx2_u1
+       - dcx2_v1
+       - dcx2_v2
+       - dcx2_u2
+      OutputCollection: dcx2
+      UseGlobalPos: 0
           
 #==================================================      

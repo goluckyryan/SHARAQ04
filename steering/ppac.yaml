@@ -5,43 +5,30 @@ Processor:
   - name: ppac_prm_ch2ns
     type: art::TParameterArrayLoader
     parameter:
-      - name: Name
-        value: prm_ppac_ch2ns
-      - name: Type
-        value: art::TAffineConverter
-      - name: FileName
-        value: prm/ppac/ch2ns.dat
+      Name:     prm_ppac_ch2ns
+      Type:     art::TAffineConverter
+      FileName: prm/ppac/ch2ns.dat
 
   - name: ppac_prm_xconv
     type: art::TParameterArrayLoader
     parameter:
-      - name: Name
-        value: prm_ppac_xconv
-      - name: Type
-        value: art::TAffineConverter
-      - name: FileName
-        value: prm/ppac/x.dat
+      Name:     prm_ppac_xconv
+      Type:     art::TAffineConverter
+      FileName: prm/ppac/x.dat
         
   - name: ppac_prm_yconv
     type: art::TParameterArrayLoader
     parameter:
-      - name: Name
-        value: prm_ppac_yconv
-      - name: Type
-        value: art::TAffineConverter
-      - name: FileName
-        value: prm/ppac/y.dat
+      Name:     prm_ppac_yconv
+      Type:     art::TAffineConverter
+      FileName: prm/ppac/y.dat
 
   - name: ppac
     type: art::TPPACProcessor
     parameter:
-      - name: CatID
-        value: 2
-      - name: TimingConverterArray
-        value: prm_ppac_ch2ns
-      - name: XConverterArray
-        value: prm_ppac_xconv
-      - name: YConverterArray
-        value: prm_ppac_yconv
+      CatID:                2
+      TimingConverterArray: prm_ppac_ch2ns
+      XConverterArray:      prm_ppac_xconv
+      YConverterArray:      prm_ppac_yconv
 
 #======================================================

@@ -8,18 +8,13 @@ Processor:
   - name: tof_Upstream
     type: art::TTimingSubtractionProcessor
     parameter:
-      - name: InputCollection           # tof = [t] - tref
-        value: plaV1190_FH9
-      - name: OutputCollection
-        value: tof_US
-      - name: StartTimingCollection     #  tof= t - [tref]
-        value: plaV1190_F3
-      - name: StartTimingDetID
-        value: 0
-      - name: UseMultipleStartTiming
-        value: 1
-      - name: OutputTransparency
-        value: 0
+      InputCollection:        plaV1190_FH9           # tof = [t] - tref
+      OutputCollection:       tof_US
+      StartTimingCollection:  plaV1190_F3     #  tof= t - [tref]
+      StartTimingDetID:       0
+      MaxDetID:               1
+      UseMultipleStartTiming: 1
+      OutputTransparency:     0
 
 #===========================================================
 

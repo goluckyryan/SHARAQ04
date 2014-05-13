@@ -2,10 +2,8 @@ Processor:
   - name: ridfevent
     type: art::TRIDFEventStore
     parameter:
-      - name: OutputTransparency
-        value: 1
-      - name: InputFiles
-        value:
+      OutputTransparency: 1
+      InputFiles:
 #          - /media/sh04HD/RawData/phys140044.ridf  # S0D HV changed
           - /media/sh04HD/RawData/phys140045.ridf
           - /media/sh04HD/RawData/phys140046.ridf

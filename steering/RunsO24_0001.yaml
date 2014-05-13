@@ -2,8 +2,6 @@ Processor:
   - name: ridfevent
     type: art::TRIDFEventStore
     parameter:
-      - name: OutputTransparency
-        value: 1    
-      - name: InputFiles
-        value:
+      OutputTransparency: 1
+      InputFiles:
           - /media/sh04HD/RawData/phys240001.ridf

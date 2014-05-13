@@ -7,143 +7,100 @@ Processor:
   - name: smwdc_L_prm
     type: art::TParameterArrayLoader
     parameter:
-      - name: Name
-        value: prm_smwdc_L_ch2ns
-      - name: Type
-        value: art::TAffineConverter
-      - name: FileName
-        value: prm/mwdc/smwdc_L/ch2ns.dat
+      Name: prm_smwdc_L_ch2ns
+      Type: art::TAffineConverter
+      FileName: prm/mwdc/smwdc_L/ch2ns.dat
 
   - name: smwdc_L_x1_dtdx
     type: art::TParameterLoader
     parameter:
-      - name: Name
-        value: smwdc_L_x1_dtdx
-      - name: Type
-        value: art::TPolynomialConverter
-      - name: FileName
-        value: prm/mwdc/smwdc_L/polyConvert/dtdx_x1.dat
+      Name: smwdc_L_x1_dtdx
+      Type: art::TPolynomialConverter
+      FileName: prm/mwdc/smwdc_L/polyConvert/dtdx_x1.dat
 
   - name: smwdc_L_x2_dtdx
     type: art::TParameterLoader
     parameter:
-      - name: Name
-        value: smwdc_L_x2_dtdx
-      - name: Type
-        value: art::TPolynomialConverter
-      - name: FileName
-        value: prm/mwdc/smwdc_L/polyConvert/dtdx_x2.dat
+      Name: smwdc_L_x2_dtdx
+      Type: art::TPolynomialConverter
+      FileName: prm/mwdc/smwdc_L/polyConvert/dtdx_x2.dat
 
   - name: smwdc_L_u1_dtdx
     type: art::TParameterLoader
     parameter:
-      - name: Name
-        value: smwdc_L_u1_dtdx
-      - name: Type
-        value: art::TPolynomialConverter
-      - name: FileName
-        value: prm/mwdc/smwdc_L/polyConvert/dtdx_u1.dat  
+      Name: smwdc_L_u1_dtdx
+      Type: art::TPolynomialConverter
+      FileName: prm/mwdc/smwdc_L/polyConvert/dtdx_u1.dat  
 
   - name: smwdc_L_u2_dtdx
     type: art::TParameterLoader
     parameter:
-      - name: Name
-        value: smwdc_L_u2_dtdx
-      - name: Type
-        value: art::TPolynomialConverter
-      - name: FileName
-        value: prm/mwdc/smwdc_L/polyConvert/dtdx_u2.dat  
+      Name: smwdc_L_u2_dtdx
+      Type: art::TPolynomialConverter
+      FileName: prm/mwdc/smwdc_L/polyConvert/dtdx_u2.dat  
 
   - name: smwdc_L_v1_dtdx
     type: art::TParameterLoader
     parameter:
-      - name: Name
-        value: smwdc_L_v1_dtdx
-      - name: Type
-        value: art::TPolynomialConverter
-      - name: FileName
-        value: prm/mwdc/smwdc_L/polyConvert/dtdx_v1.dat  
+      Name: smwdc_L_v1_dtdx
+      Type: art::TPolynomialConverter
+      FileName: prm/mwdc/smwdc_L/polyConvert/dtdx_v1.dat  
 
   - name: smwdc_L_v2_dtdx
     type: art::TParameterLoader
     parameter:
-      - name: Name
-        value: smwdc_L_v2_dtdx
-      - name: Type
-        value: art::TPolynomialConverter
-      - name: FileName
-        value: prm/mwdc/smwdc_L/polyConvert/dtdx_v2.dat  
+      Name: smwdc_L_v2_dtdx
+      Type: art::TPolynomialConverter
+      FileName: prm/mwdc/smwdc_L/polyConvert/dtdx_v2.dat  
 
   - name: mwdc_L_geo
     type: art::TParameterLoader
     parameter:
-      - name: Name
-        value: smwdc_L
-      - name: Type
-        value: art::TMWDCParameter
-      - name: FileName
-        value: prm/mwdc/smwdc_L/geometry.yaml   
+      Name: smwdc_L
+      Type: art::TMWDCParameter
+      FileName: prm/mwdc/smwdc_L/geometry.yaml   
 
 #========================== Start
 
   - name: smwdc_L_raw
     type: art::TTimingChargeMappingProcessor
     parameter:
-      - name: CatID
-        value: 11
-      - name: TimingTypeID
-        value: 0
-      - name: OutputCollection
-        value: smwdc_L_raw
-      - name: TrailingComesFirst
-        value: 1
-      - name: OutputTransparency
-        value: 1
+      CatID:              11
+      TimingTypeID:       0
+      OutputCollection:   smwdc_L_raw
+      TrailingComesFirst: 1
+      OutputTransparency: 1
         
   - name: smwdc_L_cal
     type: art::TTimingChargeCalibrationProcessor
     parameter:
-      - name: InputCollection
-        value: smwdc_L_raw
-      - name: OutputCollection
-        value: smwdc_L_cal
-      - name: TimingConverterArray
-        value: prm_smwdc_L_ch2ns
-      - name: OutputTransparency
-        value: 1
+      InputCollection:      smwdc_L_raw
+      OutputCollection:     smwdc_L_cal
+      TimingConverterArray: prm_smwdc_L_ch2ns
+      OutputTransparency:   1
         
   - name: smwdc_L_cal_2_DT
     type: art::TTimingSubtractionProcessor
     parameter:
-      - name: InputCollection           
-        value: smwdc_L_cal
-      - name: OutputCollection
-        value: smwdc_L_DT
-      - name: StartTimingCollection     
-        value: plaV767      
-      - name: StartTimingDetID   # 0 for Tpla-L
-        value: 0
-      - name: UseMultipleStartTiming
-        value: 0
-      - name: OutputTransparency
-        value: 1       
+      InputCollection:        smwdc_L_cal
+      OutputCollection:       smwdc_L_DT
+      StartTimingCollection:  plaV767      
+      StartTimingDetID:       0   # 0 for Tpla-L
+      UseMultipleStartTiming: 0
+      OutputTransparency:     1       
                 
   - name: mwdc_smwdc_L
     type: art::TMWDCPlaneProcessor
     parameter:
-      - name: InputCollection
-        value: smwdc_L_DT
-      - name: MWDCName
-        value: smwdc_L
-      - name: ConverterList
-        value:
+      InputCollection: smwdc_L_DT
+      MWDCName:        smwdc_L
+      ConverterList:
           - smwdc_L_x1_dtdx
           - smwdc_L_x2_dtdx
           - smwdc_L_u1_dtdx
           - smwdc_L_u2_dtdx
           - smwdc_L_v1_dtdx
           - smwdc_L_v2_dtdx 
-      - name: OutputTransparency
-        value: 1
+      OutputTransparency: 1
 
 #==================================================      

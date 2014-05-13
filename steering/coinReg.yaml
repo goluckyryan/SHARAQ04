@@ -10,11 +10,8 @@ Processor:
   - name: coinReg
     type: art::TCoinRegMappingProcessor
     parameter:
-      - name: OutputCollection
-        value: coinReg
-      - name: CatID
-        value: 7
-      - name: NumBits
-        value: 8
+      OutputCollection: coinReg
+      CatID:            7
+      NumBits:          8
 
 #===========================================================

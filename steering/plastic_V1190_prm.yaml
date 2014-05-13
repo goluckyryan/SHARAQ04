@@ -2,36 +2,21 @@
 # share with F3  and FH9 plastic
 # output : non
 Processor:   
-#  - name: plaprm_V1190          
-#    type: art::TAffineConverterArrayGenerator
-#    parameter:
-#      - name: ParameterList
-#        value: ["prm_pla_t1","prm/plastic/t1.dat",
-#                "prm_pla_t2","prm/plastic/t2.dat",
-#                "prm_pla_q1","prm/plastic/q1.dat",
-#                "prm_pla_q2","prm/plastic/q2.dat",
-#                "prm_pla_tdiff2pos","prm/plastic/tdiff2pos.dat"] 
-
   - name: plaprm_V1190_t1        
     type: art::TParameterArrayLoader
     parameter:
-      - name: Name
-        value: prm_pla_t1
-      - name: Type
-        value: art::TAffineConverter
-      - name: FileName
-        value: prm/plastic/t1.dat
+      Name:     prm_pla_t1
+      Type:     art::TAffineConverter
+      FileName: prm/plastic/t1.dat
 
+# t1 and t2 should be the same. they are ch2ns parameters
 
   - name: plaprm_V1190_t2        
     type: art::TParameterArrayLoader
     parameter:
-      - name: Name
-        value: prm_pla_t2
-      - name: Type
-        value: art::TAffineConverter
-      - name: FileName
-        value: prm/plastic/t2.dat
+      Name:     prm_pla_t2
+      Type:     art::TAffineConverter
+      FileName: prm/plastic/t2.dat
         
 #  - name: plaprm_V1190_tdiff3pos   
 #    type: art::TParameterArrayLoader

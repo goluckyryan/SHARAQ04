@@ -1,16 +1,7 @@
 Processor:
-  - name: ridfevent
-    type: art::TRIDFEventStore
-    parameter:
-      - name: InputFiles
-        value:
-#          - /media/ResearchData/sharaq04/phys220002.ridf
-          - /media/Data/sh04/phys220043.ridf
-      - name: TreeName
-        value: tree
-        
-  - name: timer
-    type: art::TTimerProcessor
+  - include: RunsO14.yaml
+  
+  - include: Mapper_Timer.yaml   
 #===========================================================    
   - include: coinReg.yaml
   - include: plastic_V1190_prm.yaml
@@ -20,14 +11,13 @@ Processor:
   - include: plastic_V775.yaml
   - include: plastic_V767_timeRef.yaml
   - include: plastic_V767.yaml
-  - include: TTD.yaml
-  - include: nyoki.yaml
+#  - include: TTD.yaml
+#  - include: nyoki.yaml
 
 #===========================================================
 
   - name: outputtree
     type: art::TOutputTreeProcessor
     parameter:
-      - name: FileName
-        value: plastic.root
+      FileName: test.root
 

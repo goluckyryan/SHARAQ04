@@ -2,32 +2,23 @@ Processor:
   - name: proc_xygate
     type: art::TTrackXYGateProcessor
     parameter:
-      - name: TrackingResult
-        value: S0img
-      - name: Circle  #gate name, Xpos, Ypos, Radius
-        value: [target_r7_y0,0.,0.,7.]
-      - name: HistogramOption
-        value: [hS0XY,hS0XY;X (mm);Y (mm),500,-25,25,500,-25,25]
+      TrackingResult:  S0img
+      Circle:          [target_r7_y0,0.,0.,7.] #gate name, Xpos, Ypos, Radius
+      HistogramOption: [hS0XY,hS0XY;X (mm);Y (mm),500,-25,25,500,-25,25]
         
-  - name: proc_xygate_2
-    type: art::TTrackXYGateProcessor
-    parameter:
-      - name: TrackingResult
-        value: S0img
-      - name: Circle  #gate name, Xpos, Ypos, Radius
-        value: [target_r8_y0,0.,0.,8.]
-      - name: HistogramOption
-        value: [hS0XY,hS0XY;X (mm);Y (mm),500,-25,25,500,-25,25]        
+#  - name: proc_xygate_2
+#    type: art::TTrackXYGateProcessor
+#    parameter:
+#      TrackingResult:  S0img
+#      Circle:          [target_r8_y0,0.,0.,8.]
+#      HistogramOption: [hS0XY,hS0XY;X (mm);Y (mm),500,-25,25,500,-25,25]        
 
-  - name: proc_xygate_3
-    type: art::TTrackXYGateProcessor
-    parameter:
-      - name: TrackingResult
-        value: S0img
-      - name: Circle  #gate name, Xpos, Ypos, Radius
-        value: [target_r7_y1.9,0.,1.9,7.]
-      - name: HistogramOption
-        value: [hS0XY,hS0XY;X (mm);Y (mm),500,-25,25,500,-25,25]
+#  - name: proc_xygate_3
+#    type: art::TTrackXYGateProcessor
+#    parameter:
+#      TrackingResult:  S0img
+#      Circle:          [target_r7_y1.9,0.,1.9,7.]
+#      HistogramOption: [hS0XY,hS0XY;X (mm);Y (mm),500,-25,25,500,-25,25]
         
 #  - name: proc_stop_S0img
 #    type: art::TGateStopProcessor

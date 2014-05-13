@@ -1,32 +1,23 @@
 aliases:
-#  PIDGate: &PIDGate [ &nuclide 14O,-1446,5646,-1436,5930]
+  PIDGate: &PIDGate [ &nuclide 14O,-1446,5646,-1436,5930]
 #  PIDGate: &PIDGate [ &nuclide 22O,-1448,5665,-1444,5905]
 #  PIDGate: &PIDGate [ &nuclide 24O,-1442.,5657., -1433., 5915.]
-  PIDGate: &PIDGate [ &nuclide 23F,-1465.,5767.,-1461.,6060.]
+#  PIDGate: &PIDGate [ &nuclide 23F,-1465.,5767.,-1461.,6060.]
 #  PIDGate: &PIDGate [ &nuclide 25F,-1461.,5750.,-1453.,6013.]
-
 Processor:
-  - name: proc_pidgate_1
+  - name: proc_pidgate_US
     type: art::TPIDGateProcessor
     parameter:
-      - name: TimingArray
-        value: tof_US
-      - name: TimingDetID
-        value: 0
-      - name: ChargeArray
-        value: plaV1190_FH9
-      - name: ChargeDetID
-        value: 0
-      - name: Rectangle
-        value: *PIDGate
-      - name: HistogramOption
-        value: [hPID,PID;TOF;Charge,1000,-1500,-1420,600,5000,6500]
-      - name: OutputTransparency
-        value: 0          
+      TimingArray:        tof_US
+      TimingDetID:        0
+      ChargeArray:        plaV1190_FH9
+      ChargeDetID:        0
+      Rectangle:          *PIDGate
+      HistogramOption:    [hPID,PID;TOF;Charge,1000,-1500,-1420,600,5000,6500]
+      OutputTransparency: 0          
 
   - name: proc_stop_US
     type: art::TGateStopProcessor
     parameter:
-      - name: GateName
-        value: *nuclide
+      GateName: *nuclide
 #===========================================================

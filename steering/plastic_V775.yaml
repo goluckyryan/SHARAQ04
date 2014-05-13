@@ -1,4 +1,3 @@
-
 # require : non
 # output : plaV775
 #          tof_DS
@@ -9,107 +8,71 @@ Processor:
   - name: plaprm_v775_L
     type: art::TParameterArrayLoader
     parameter:
-      - name: Name
-        value: prm_pla_V775_L
-      - name: Type
-        value: art::TAffineConverter
-      - name: FileName
-        value: prm/plastic/V775_L_ch2ns.dat
+      Name:     prm_pla_V775_L
+      Type:     art::TAffineConverter
+      FileName: prm/plastic/V775_L_ch2ns.dat
 
   - name: plaprm_v775_R
     type: art::TParameterArrayLoader
     parameter:
-      - name: Name
-        value: prm_pla_V775_R
-      - name: Type
-        value: art::TAffineConverter
-      - name: FileName
-        value: prm/plastic/V775_R_ch2ns.dat            
+      Name:     prm_pla_V775_R
+      Type:     art::TAffineConverter
+      FileName: prm/plastic/V775_R_ch2ns.dat            
 
   - name: plastic_V775_L_raw
     type: art::TTimingChargeMappingProcessor
     parameter:
-      - name: CatID 
-        value: 9
-      - name: TimingTypeID
-        value: 0
-      - name: ChargeType   #1 = QDC
-        value: 1
-      - name: ChargeTypeID
-        value: 2
-      - name: OutputCollection
-        value: plaV775_L_raw
-      - name: OutputTransparency
-        value: 1
+      CatID:              9
+      TimingTypeID:       0
+      ChargeType:         1   #1 = QDC
+      ChargeTypeID:       2
+      OutputCollection:   plaV775_L_raw
+      OutputTransparency: 1
         
   - name: plastic_V775_L_cal
     type: art::TTimingChargeCalibrationProcessor
     parameter:
-      - name: InputCollection
-        value: plaV775_L_raw
-      - name: OutputCollection
-        value: plaV775_L_cal
-      - name: TimingConverterArray
-        value: prm_pla_V775_L
-      - name: OutputTransparency
-        value: 1
+      InputCollection:      plaV775_L_raw
+      OutputCollection:     plaV775_L_cal
+      TimingConverterArray: prm_pla_V775_L
+      OutputTransparency:   1
 
   - name: plastic_V775_R_raw
     type: art::TTimingChargeMappingProcessor
     parameter:
-      - name: CatID 
-        value: 9
-      - name: TimingTypeID
-        value: 1
-      - name: ChargeType
-        value: 1
-      - name: ChargeTypeID
-        value: 3
-      - name: OutputCollection
-        value: plaV775_R_raw
-      - name: OutputTransparency
-        value: 1
+      CatID:              9
+      TimingTypeID:       1
+      ChargeType:         1
+      ChargeTypeID:       3
+      OutputCollection:   plaV775_R_raw
+      OutputTransparency: 1
         
   - name: plastic_V775_R_cal
     type: art::TTimingChargeCalibrationProcessor
     parameter:
-      - name: InputCollection
-        value: plaV775_R_raw
-      - name: OutputCollection
-        value: plaV775_R_cal
-      - name: TimingConverterArray
-        value: prm_pla_V775_R
-      - name: OutputTransparency
-        value: 1
+      InputCollection:      plaV775_R_raw
+      OutputCollection:     plaV775_R_cal
+      TimingConverterArray: prm_pla_V775_R
+      OutputTransparency:   1
 
   - name: plastic_cal_V775
     type: art::TTwoSidedPlasticCalibrationProcessor
     parameter:
-      - name: InputCollection
-        value:
-          - plaV775_L_cal
-          - plaV775_R_cal
-      - name: OutputCollection
-        value: plaV775
-      - name: DetIDRange
-        value: [0,4]
-      - name: OutputTransparency
-        value: 0
+      InputCollection:
+       - plaV775_L_cal
+       - plaV775_R_cal
+      OutputCollection:   plaV775
+      DetIDRange:         [0,4]
+      OutputTransparency: 0
 
   - name: tof_DownStream
     type: art::TTimingSubtractionProcessor
     parameter:
-      - name: InputCollection           # tof = [t] - tref
-        value: plaV775
-      - name: OutputCollection
-        value: tof_DS
-      - name: StartTimingCollection     #  tof= t - [tref]
-        value: plaV775            
-      - name: StartTimingDetID
-        value: 3
-      - name: UseMultipleStartTiming
-        value: 1
-      - name: OutputTransparency
-        value: 0
+      InputCollection:        plaV775     # tof = [t] - tref
+      OutputCollection:       tof_DS
+      StartTimingCollection:  plaV775     #  tof= t - [tref]
+      StartTimingDetID:       3
+      UseMultipleStartTiming: 1
+      OutputTransparency:     0
 
 #===========================================================

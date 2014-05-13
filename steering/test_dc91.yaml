@@ -1,17 +1,9 @@
 Processor:  
-  - name: timer
-    type: art::TTimerProcessor
-
   - include: RunsO14.yaml
 #  - include: RunsO22Optics.yaml    
 #  - include: RunsO24Optics.yaml   
-
-#============== eventheader  =============================        
-  - name: mapper
-    type: art::TMappingProcessor 
-    parameter:
-      - name: OutputTransparency
-        value: 1
+  
+  - include: Mapper_Timer.yaml   
 
 #===========================================================
   - include: coinReg.yaml
@@ -26,6 +18,5 @@ Processor:
   - name: outputtree
     type: art::TOutputTreeProcessor
     parameter:
-      - name: FileName
-        value: test.root
+      FileName: test.root
 

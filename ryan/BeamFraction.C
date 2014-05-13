@@ -1,6 +1,6 @@
 #include "TBeamData.h"
 void BeamFraction() {
-   const char* rootfile="Data/phys24Up.root";
+   const char* rootfile="PrimaryData/phys24Up.root";
    TBeamData *beam = new TBeamData("25F");
    
    Bool_t allentry  = 0;

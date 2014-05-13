@@ -2,10 +2,8 @@ Processor:
   - name: ridfevent
     type: art::TRIDFEventStore
     parameter:
-      - name: OutputTransparency
-        value: 1
-      - name: InputFiles
-        value:
+      OutputTransparency: 1
+      InputFiles:
           - /media/sh04HD/RawData/optics2003.ridf
           - /media/sh04HD/RawData/optics2004.ridf
           - /media/sh04HD/RawData/optics2005.ridf

@@ -1,18 +1,9 @@
 Processor:
-  - name: timer
-    type: art::TTimerProcessor
-    
 #=============  DATA              ==========================
   - include: RunsProtonDown.yaml
         
-  - name: mapper
-    type: art::TMappingProcessor
-    parameter:
-      - name: OutputTransparency
-        value: 1
-    
 #============== PROCESSORS     =============================
- 
+  - include: Mapper_Timer.yaml    
   - include: coinReg.yaml
   - include: plastic_V1190_prm.yaml
   - include: plastic_V1190_F3.yaml
@@ -35,6 +26,5 @@ Processor:
   - name: outputtree
     type: art::TOutputTreeProcessor
     parameter:
-      - name: FileName
-        value: ppDown.root
+      FileName: ppDown.root
         

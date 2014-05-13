@@ -6,15 +6,12 @@ Processor:
   - name: mwdctrack_dc91
     type: art::TMWDCTrackingProcessor
     parameter:
-      - name: InputCollection
-        value:
+      InputCollection:
           - dc91_x
           - dc91_u
           - dc91_y
-      - name: OutputCollection
-        value: dc91
-      - name: UseGlobalPos
-        value: 0          
+      OutputCollection: dc91
+      UseGlobalPos: 0          
           
 
 #==================================================      
