@@ -1,6 +1,8 @@
 aliases:
-  outroot: &output test.root
-  beamprm: &beamprm prm/kinematics/14O.yaml
+  - &output  phys14up.root
+  
+  - &beamprm prm/kinematics/14O.yaml  
+#  - &beamprm prm/kinematics/22O.yaml
 
 #===========================================================
 Processor:
@@ -11,8 +13,8 @@ Processor:
 #  - include: RunsProtonDown.yaml
 #  - include: RunsO22.yaml
 #  - include: RunsO22Optics.yaml
-  - include: RunsO14.yaml
-#  - include: RunsO14Up.yaml
+#  - include: RunsO14.yaml
+  - include: RunsO14Up.yaml
 #  - include: RunsO14Down.yaml
 #  - include: RunsO14Others.yaml
 #  - include: RunsO24.yaml
@@ -24,13 +26,13 @@ Processor:
   - include: Mapper_Timer.yaml    
 #============== PROCESSORS     =============================
   - include: coinReg.yaml
-#  - include: Gate_Initialtor.yaml
-#  - include: Gate_coinReg.yaml
+  - include: Gate_Initialtor.yaml
+  - include: Gate_coinReg.yaml
   - include: plastic_V1190_prm.yaml
   - include: plastic_V1190_F3.yaml         # no branch output
   - include: plastic_V1190_FH9.yaml
   - include: plastic_tof_US.yaml
-#  - include: Gate_PID.yaml
+  - include: Gate_PID.yaml
   - include: ppac.yaml
 #  - include: dc91.yaml
 #  - include: dc91_track.yaml
@@ -41,7 +43,7 @@ Processor:
   - include: dcx2.yaml
 #  - include: dcx2_track.yaml
   - include: S0img.yaml
-#  - include: Gate_S0img.yaml
+  - include: Gate_S0img.yaml
 #  - include: dcS0D.yaml                    
 #  - include: TTD.yaml                      # reuire plastic_V775 for tof
 #  - include: nyoki.yaml                    # reuire plastic_V775 for tof
@@ -49,20 +51,20 @@ Processor:
   - include: plastic_V767.yaml              
   - include: smwdc_l_PolyConvert.yaml     
   - include: smwdc_l_track.yaml  
-#  - include: smwdc_r_PolyConvert.yaml     
-#  - include: smwdc_r_track.yaml
+  - include: smwdc_r_PolyConvert.yaml     
+  - include: smwdc_r_track.yaml
 #  - include: smwdc_S1_TableConvert.yaml    # require nyoki
 #  - include: smwdc_S1_track.yaml
 
-#  - name: proc_beam
-#    type: art::TParameterLoader
-#    parameter:
-#      Name:     beam
-#      Type:     art::sh04::TBeamParameter
-#      FileName: *beamprm
+  - name: proc_beam
+    type: art::TParameterLoader
+    parameter:
+      Name:     beam
+      Type:     art::sh04::TBeamParameter
+      FileName: *beamprm
 
-#  - include: recoil.yaml                   # set beamZ, angle correction
-#  - include: Gate_PIDdownstream.yaml
+  - include: recoil.yaml                   # set beamZ, angle correction
+  - include: Gate_PIDdownstream.yaml
 #============== Output     =============================
   - name: outputtree
     type: art::TOutputTreeProcessor

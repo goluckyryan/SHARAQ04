@@ -1,16 +1,9 @@
 Processor:
-  - name: timer
-    type: art::TTimerProcessor
-    
 #=============  DATA              ==========================
   - include: RunsProtonUp.yaml  #from #4 - #10
         
-  - name: mapper
-    type: art::TMappingProcessor
-    parameter:
-      - name: OutputTransparency
-        value: 1
-    
+#============= Mapper and Timer ============================
+  - include: Mapper_Timer.yaml    
 #============== PROCESSORS     =============================
  
   - include: coinReg.yaml
@@ -23,32 +16,22 @@ Processor:
 #  - include: nyoki.yaml
   - include: plastic_V767_timeRef.yaml
   - include: plastic_V767.yaml              
-#  - include: smwdc_l_TableConvert.yaml     #require plastic_V767*
   - include: smwdc_l_PolyConvert.yaml       # replace smwdc_l_TableConvert.yaml
   - include: smwdc_l_track.yaml
-#  - include: smwdc_r_TableConvert.yaml     #require plastic_V767*
   - include: smwdc_r_PolyConvert.yaml       # replace smwdc_l_TableConvert.yaml
   - include: smwdc_r_track.yaml
-#  - include: recoil.yaml
 
-#================= P2P ==================================
-#  - name: P2P
-#    type: art::sh04::TP2PKinematicsProcessor
-#    parameter:
-#      - name: OutputCollection
-#        value: p2p
-#      - name: RecoilL
-#        value: recoil_L
-#      - name: RecoilR
-#        value: recoil_R
-#      - name: PPAC
-#        value: ppac
-#      - name: ParameterFile
-#        value: "prm/kinematics/ppcoin.yaml"
+  - name: proc_beam
+    type: art::TParameterLoader
+    parameter:
+      Name:     beam
+      Type:     art::sh04::TBeamParameter
+      FileName: prm/kinematics/ppcoin.yaml
+
+  - include: recoil_ppcoin.yaml
 
 #============== Output     =============================
   - name: outputtree
     type: art::TOutputTreeProcessor
     parameter:
-      - name: FileName
-        value: ppUp.root
+      FileName: ppUp.root

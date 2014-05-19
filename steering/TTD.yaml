@@ -5,53 +5,35 @@ Processor:
   - name: TTD_prm
     type: art::TAffineConverterArrayGenerator
     parameter:
-      - name: ParameterList
-        value: ["prm_TTD_ch2ns","prm/plastic/ttd_ch2ns.dat"]
+      ParameterList: ["prm_TTD_ch2ns","prm/plastic/ttd_ch2ns.dat"]
 
   - name: plastic_TTD_raw     #must be different from output name and no "-"
     type: art::TTimingChargeMappingProcessor
     parameter:
-      - name: CatID 
-        value: 10
-      - name: TimingTypeID             #colnumber of map file[0=first]
-        value: 0
-      - name: TrailingComesFirst       # 0 negative voltage TDC
-        value: 0
-      - name: ChargeType
-        value: 1
-      - name: ChargeTypeID
-        value: 1
-      - name: OutputCollection
-        value: TTD_raw
-      - name: OutputTransparency  
-        value: 1                       # 1 = no output
+      CatID :             10
+      TimingTypeID:       0         #colnumber of map file[0=first]
+      TrailingComesFirst: 0         # 0 negative voltage TDC
+      ChargeType:         1
+      ChargeTypeID:       1
+      OutputCollection:   TTD_raw
+      OutputTransparency: 1         # 1 = no output
 
   - name: plastic_TTD
     type: art::TTimingChargeCalibrationProcessor
     parameter:
-      - name: InputCollection
-        value: TTD_raw
-      - name: OutputCollection
-        value: TTD
-      - name: TimingConverterArray
-        value: prm_TTD_ch2ns
-      - name: OutputTransparency
-        value: 0
+      InputCollection:      TTD_raw
+      OutputCollection:     TTD
+      TimingConverterArray: prm_TTD_ch2ns
+      OutputTransparency:   0
         
   - name: tof_FH9_to_TTD
     type: art::TTimingSubtractionProcessor
     parameter:
-      - name: InputCollection           # tof = [t] - tref
-        value: TTD
-      - name: OutputCollection
-        value: tof_ttd
-      - name: StartTimingCollection     #  tof= t - [tref]
-        value: plaV775            
-      - name: StartTimingDetID
-        value: 3                        # FH9
-      - name: UseMultipleStartTiming
-        value: 0
-      - name: OutputTransparency
-        value: 0
+      InputCollection:        TTD         # tof = [t] - tref
+      OutputCollection:       tof_ttd
+      StartTimingCollection:  plaV775     #  tof= t - [tref]
+      StartTimingDetID:       3           # FH9
+      UseMultipleStartTiming: 0
+      OutputTransparency:     0
         
 #===========================================================

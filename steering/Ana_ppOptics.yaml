@@ -1,15 +1,9 @@
 Processor:
-  - name: timer
-    type: art::TTimerProcessor
-    
 #=============  DATA              ==========================
   - include: RunsProtonOptics.yaml
-        
-  - name: mapper
-    type: art::TMappingProcessor
-    parameter:
-      - name: OutputTransparency
-        value: 1
+
+#============= Mapper and Timer ============================
+  - include: Mapper_Timer.yaml   
     
 #============== PROCESSORS     =============================
 
@@ -20,44 +14,31 @@ Processor:
   - include: plastic_tof_US.yaml
   - include: ppac.yaml
   - include: dcx1.yaml
-#  - include: dcx1_track.yaml
-#  - include: dcx1_cal.yaml                # require TCoinRegGateProcessor
   - include: dcx2.yaml
-#  - include: dcx2_track.yaml
-#  - include: dcx2_cal.yaml                # require TCoinRegGateProcessor
   - include: S0img.yaml
   - include: plastic_V775.yaml             # include tof_DS
 #  - include: TTD.yaml
 #  - include: nyoki.yaml
   - include: plastic_V767_timeRef.yaml
   - include: plastic_V767.yaml              
-#  - include: smwdc_l_TableConvert.yaml    # require plastic_V767*
-  - include: smwdc_l_PolyConvert.yaml      # replace smwdc_l_TableConvert.yaml
+  - include: smwdc_l_PolyConvert.yaml      
   - include: smwdc_l_track.yaml
-#  - include: smwdc_r_TableConvert.yaml    # require plastic_V767*
-  - include: smwdc_r_PolyConvert.yaml      # replace smwdc_l_TableConvert.yaml
+  - include: smwdc_r_PolyConvert.yaml      
   - include: smwdc_r_track.yaml
-#  - include: recoil.yaml
-#================= P2P ==================================
-#  - name: P2P
-#    type: art::sh04::TP2PKinematicsProcessor
-#    parameter:
-#      - name: OutputCollection
-#        value: p2p
-#      - name: RecoilL
-#        value: recoil_L
-#      - name: RecoilR
-#        value: recoil_R
-#      - name: PPAC
-#        value: ppac
-#      - name: ParameterFile
-#        value: "prm/kinematics/14O.yaml"
+
+  - name: proc_beam
+    type: art::TParameterLoader
+    parameter:
+      Name:     beam
+      Type:     art::sh04::TBeamParameter
+      FileName: prm/kinematics/ppcoin.yaml
+
+  - include: recoil.yaml
 
 #============== Output     =============================
   - name: outputtree
     type: art::TOutputTreeProcessor
     parameter:
-      - name: FileName
-        value: ppOptics.root
+      FileName: ppOptics.root
 
         

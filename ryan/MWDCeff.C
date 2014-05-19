@@ -3,7 +3,7 @@ void MWDCeff() {
 
 //############################################################################  
    //const char* rootfile="ppDown.root"; 
-   const char* rootfile="/media/Data/sh04/phys14_1_43.root";
+   const char* rootfile="ppcoin8_15.root";
    //const char* rootfile="/media/ResearchData/sharaq04/ppUp.root";
    //const char* rootfile="phys14_45_67.root";
    Bool_t ValidorTracked = 0; // 0 = Valid, 1 = tracked
@@ -31,7 +31,7 @@ void MWDCeff() {
    TH1F * htdiff2  = new TH1F("tdiff2", "Tdiff2", 100, -15, 15);
    htdiff1->SetLineColor(4);
    htdiff2->SetLineColor(2);
-   
+   sd
    TH2F * hQ1Plane = new TH2F("Q1Plane", "Q1 vs NValidPlane1", 7, 0, 7, 200, 0, 3000);
    TH2F * hQ2Plane = new TH2F("Q2Plane", "Q2 vs NValidPlane2", 7, 0, 7, 200, 0, 3000);
    

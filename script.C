@@ -1,31 +1,17 @@
 {
    gROOT->Reset();
    gROOT->ProcessLine(".!date");
-   gStyle->SetOptStat(0);
+//   gStyle->SetOptStat(0);
 
-//   TFile *f1 = new TFile ("test.root");
-//   TTree *test = (TTree*)f1->Get("recoil");
+   TFile *f1 = new TFile ("PrimaryData/ppAll.root");
+   TTree *ppnew = (TTree*)f1->Get("tree");
+  
    
-//   TFile *f2 = new TFile ("phys24_down_1.root");
-//   TTree *recoil = (TTree*)f2->Get("tree");
+//   TFile *f2 = new TFile ("PrimaryData/ppOptics.root");
+//   TTree *ppold = (TTree*)f2->Get("tree");
    
-//   TFile *f0 = new TFile ("25F_new.root");
-//   TTree *tree = (TTree*)f0->Get("tree");
-   
-   TFile *f1 = new TFile ("PrimaryData/phys14Up.root");
-   TTree *test = (TTree*)f1->Get("tree");
-   
-/*   TFile *f1 = new TFile ("phys22DCX1X2.root");
-   TTree *phys22 = (TTree*)f1->Get("tree");
-   
-   TFile *f0 = new TFile ("TimeCheck25F.root");
-   TTree *recoil1 = (TTree*)f0->Get("recoil");
-   
-/*   TFile *f1 = new TFile ("CompareTKAphy14.root");
-   TTree *recoil2 = (TTree*)f1->Get("recoil");
-   
-   TFile *f2 = new TFile ("CompareTKAproton.root");
-   TTree *recoil3 = (TTree*)f2->Get("recoil");
+//   TFile *f3 = new TFile ("RppAll.root");
+//   TTree *ppold2 = (TTree*)f3->Get("recoil");
    
    
 /*   Int_t Xrange[2] = {80,92};
@@ -37,7 +23,6 @@
    
    //TCanvas *cScript = new TCanvas("cScript", "cScript", 1200,50, 600,400);
 */
-//   gROOT->ProcessLine("TBrowser B");
    
    TBrowser B("test","test", 900,600);
    

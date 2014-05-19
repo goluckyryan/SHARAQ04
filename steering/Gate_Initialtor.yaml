@@ -2,3 +2,8 @@ Processor:
   - name: proc_gateinit
     type: art::TGateArrayInitializer
 #===========================================================
+#------- to use the gate:
+# $ tree->Draw("xxxx", "gate.Test(gateID)")
+#------- to show gateID
+# $ cd  or $gROOT->cd()
+# $ ls

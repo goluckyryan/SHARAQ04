@@ -16,7 +16,6 @@ Processor:
           - dcx2_v1
           - dcx2_v2
       OutputCollection: S0img
-      UseGlobalPos:     1       
-          
+      UseGlobalPos:     1
 #==================================================      
 

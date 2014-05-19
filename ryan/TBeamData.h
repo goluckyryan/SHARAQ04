@@ -81,12 +81,12 @@ void TBeamData::UseProjectile(TString str){
       fToffset1 = 56.7;//12.82
       fToffset2 = 57.9;//11.62
    }else if ( str == "14O"){
-      fBrho = 4.217; // 4.2 given. 
+      fBrho = 4.2; // 4.217 in datasheet. 
       fMass = mO14; fZ    = 8; fA    = 14; 
       fTofGate[0]  = -1446.; fTofGate[1]  = -1436.;
       fQGate[0]    =  5646.;  fQGate[1]   =  5930.;
       fToffsetV1190 = -1440.3;
-      fToffsetV775  = -301.9;
+      fToffsetV775  = -302.16;
       fToffset1 = 55.7;//14.62;
       fToffset2 = 57.1;//13.27;
       fppacOn  = 1;
@@ -118,7 +118,7 @@ void TBeamData::UseProjectile(TString str){
       fMass = mF23; fZ    = 9; fA    = 23; 
       fTofGate[0]  = -1465.; fTofGate[1]  = -1461.;
       fQGate[0]    =  5767.;  fQGate[1]   =  6060.;
-      fToffsetV1190 = -1462.9;
+      fToffsetV1190 = -1462.88;
       fToffsetV775  = -324.58;
       fToffset1 = 56.6;
       fToffset2 = 57.7;

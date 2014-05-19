@@ -4,7 +4,7 @@
 
 void tplaSlew() {
    
-   const char* rootfile="Data/phys14Down.root";
+   const char* rootfile="ParimaryData/phys14Down.root";
    TString detector = "Tpla-L"; //Tpla-L
    TBeamData *beam = new TBeamData("14O");
    Bool_t allentry  = 0;
@@ -28,6 +28,7 @@ void tplaSlew() {
    Double_t tofoffset;
    Double_t slewOffset;
    
+//========================================================   
    TClonesArray *hoge_V775, *hoge_L, *hoge_R;
    TFile *f = new TFile(rootfile,"read");
    TTree *tree = (TTree*)f->Get("tree");
@@ -75,8 +76,11 @@ void tplaSlew() {
       slewOffset = 10;
    }
    
+
+
+//========================================================    
+
    //gStyle->SetOptStat(0);
-   
    TH1F* ht1    = new TH1F("ht1", detector + " t1", 200, -240, -180);
    TH1F* ht2    = new TH1F("ht2", detector + " t2", 200, -240, -180);
    ht1->SetLineColor(4);

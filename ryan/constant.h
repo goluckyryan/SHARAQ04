@@ -11,11 +11,11 @@ const Double_t cVaccum=299.792458; //speed of light [mm/ns]
 const Double_t mp = 938.272;
 const Double_t mn = 939.565;
 const Double_t me = 0.5109989;
-const Double_t mO14 = 13048.92336 - 8*me;
-const Double_t mO22 = 20502.15215 - 8*me;
-const Double_t mO24 = 22374.92640 - 8*me;
-const Double_t mF23 = 21427.69175 - 9*me;
-const Double_t mF25 = 23298.62270 - 9*me;
+const Double_t mO14 = 13044.836324;
+const Double_t mO22 = 20498.065598;
+const Double_t mO24 = 22370.839976;
+const Double_t mF23 = 21423.094276;
+const Double_t mF25 = 23294.025362;
 
 const Double_t deg2rad=0.01745329251;
 const Double_t rad2deg=57.2957795131;
