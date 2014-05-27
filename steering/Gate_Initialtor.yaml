@@ -7,3 +7,5 @@ Processor:
 #------- to show gateID
 # $ cd  or $gROOT->cd()
 # $ ls
+#------- after reloaded the root
+# $ listg <treename>

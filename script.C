@@ -1,30 +1,30 @@
+
 {
    gROOT->Reset();
    gROOT->ProcessLine(".!date");
-//   gStyle->SetOptStat(0);
+   gStyle->SetOptStat(0);
 
-   TFile *f1 = new TFile ("PrimaryData/ppAll.root");
-   TTree *ppnew = (TTree*)f1->Get("tree");
-  
+//   TFile *f1 = new TFile ("PrimaryData/phys14Up.root"); TTree *tree = (TTree*)f1->Get("tree");
    
-//   TFile *f2 = new TFile ("PrimaryData/ppOptics.root");
-//   TTree *ppold = (TTree*)f2->Get("tree");
+   TFile *f2 = new TFile ("test.root"); TTree *recoil = (TTree*)f2->Get("recoil");
    
-//   TFile *f3 = new TFile ("RppAll.root");
-//   TTree *ppold2 = (TTree*)f3->Get("recoil");
+//   TFile *f3 = new TFile ("RppAll.root"); TTree *ppold2 = (TTree*)f3->Get("recoil");
+   
+   TBrowser B("test","test", 900,600); 
+
+/*	TCanvas * cScript = new TCanvas ("cScript", "Tpla Decay constant", 10, 30, 800, 800);   
+   
+   TH2F * hQ
+   
+   Double_t tof, Q1, Q2, x1, a1;
    
    
-/*   Int_t Xrange[2] = {80,92};
-   Int_t nBin = (Xrange[1]-Xrange[0])*4;
+   */
    
-   TH1F *h0 = new TH1F("h0", "Opening Angle", nBin, Xrange[0],Xrange[1]);
-   TH1F *h1 = new TH1F("h1", "Mag Corr", nBin, Xrange[0],Xrange[1]);
-   TH1F *h2 = new TH1F("h2", "Mag beamZ Corr", nBin, Xrange[0],Xrange[1]);
-   
-   //TCanvas *cScript = new TCanvas("cScript", "cScript", 1200,50, 600,400);
-*/
-   
-   TBrowser B("test","test", 900,600);
+}
+
+
+//############################################# Template
    
 /*   TLatex text;
    text.SetNDC();
@@ -36,4 +36,11 @@
    text.DrawText(0.2, 0.2, "Mag + BeamZ=15 Corr");*/
    
    
-}
+/* ----------- get leave data
+
+	Double_t data;
+	tree->SetBranchAddress("branch", &data);
+	tree->GetEntry(eventID);
+	printf("%f \n", data);
+	
+	*/

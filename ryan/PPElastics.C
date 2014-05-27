@@ -16,13 +16,13 @@
 void PPElastics() {
   
    const char* savefilename="test.root";
-   const char* rootfile="Data/ppDown.root";
+   const char* rootfile="PrimaryData/ppDown.root";
    TBeamData* beam = new TBeamData("proton");
-   Bool_t allentry  = 0;
+   Bool_t allentry  = 1;
    Int_t firstEntry = 0;
    Int_t nEntries=100000;
    // Both Tpla,  gamma, tof_us,  0<tof<30, recoil,  E<400, |wbeamZ|<1000
-   Bool_t Gate[7] = {1, 1, 1, 1, 1, 0, 0};
+   Bool_t Gate[7] = {0, 0, 0, 0, 0, 0, 0};
    
    beam->Print();
    Double_t Principle_tof = tofByBrho(L_F3FH9,beam->fBrho, beam->fMass, beam->fZ);
@@ -247,7 +247,7 @@ void PPElastics() {
          a1 = track1->GetA();
          b1 = track1->GetB();
          if ( TrackingID1 != 1) continue;
-         recoil1->SetKinetic(1,tof1,x1,y1,a1,b1, 0.5, ex1, 0, ea1, 0);
+         recoil1->SetKinetic(1,tof1,x1,y1,a1,b1, 0, 0, 0.5, ex1, 0, ea1, 0);
       }
       Int_t nHit = hoge_R->GetEntriesFast();
       Double_t ex2, ea2;    
@@ -264,7 +264,7 @@ void PPElastics() {
          a2 = track2->GetA();
          b2 = track2->GetB();
          if ( TrackingID2 != 1) continue;
-         recoil2->SetKinetic(2, tof2,x2,y2,a2,b2, 0.5, ex2, 0,ea2, 0);
+         recoil2->SetKinetic(2, tof2,x2,y2,a2,b2, 0, 0, 0.5, ex2, 0,ea2, 0);
       }
       
       if (Gate[4] && (recoil1->fOK == 0 || recoil2->fOK == 0)) continue;   // recoil gate

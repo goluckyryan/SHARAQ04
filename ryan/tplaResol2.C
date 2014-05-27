@@ -1,20 +1,19 @@
 #include "constant.h"
 
-void tplaResol() {
+void tplaResol2() {
    
    const char* rootfile="PrimaryData/phys14Down.root";
    TString detector = "Tpla-L"; //Tpla-L
    Double_t TplaBeta = 0.55;
    Bool_t allentry  = 1;
    Int_t firstEntry = 0;
-   Int_t nEntries=4000000;
-   Int_t nBin = 400;
-   Double_t slideBin[2] = {nBin/2-1,nBin/2+1};
+   Int_t nEntries=1000000;
+   Int_t nBin = 500;
+   Int_t relBinWidth = 2;
    
-   Int_t detectorID;
-   Double_t Xrange[2];
-   Double_t Yrange[2];
+   printf("\n >>>>> file: %s \n", rootfile); 
 
+//######################################
    TClonesArray *hoge_V775, *hoge_MWDC;
    TFile *f = new TFile(rootfile,"read");
    TTree *tree = (TTree*)f->Get("tree");
@@ -23,6 +22,14 @@ void tplaResol() {
    tree->SetBranchStatus("plaV775",1);
    tree->SetBranchAddress("plaV775",&hoge_V775);
    
+   TBenchmark clock;
+   clock.Reset();
+   clock.Start("timer");
+   Bool_t shown = 0;
+   
+   Int_t detectorID;
+   Double_t Xrange[2];
+   Double_t Yrange[2];
    if ( detector == "Tpla-L"){
       tree->SetBranchStatus("smwdc_L",1);
       tree->SetBranchAddress("smwdc_L",&hoge_MWDC);
@@ -41,11 +48,18 @@ void tplaResol() {
       Yrange[1] = 1300;
    }
    
+   gStyle->SetOptStat(0);
    TString hTdiffTitle;
    hTdiffTitle.Form("%s | tdiff vs Tpla(X by mwdc)",detector.Data());  
-   TH2F* hTdiff = new TH2F("hTdiff",hTdiffTitle,200, Xrange[0], Xrange[1], nBin , Yrange[0], Yrange[1]);
-   hTdiff->SetXTitle("Tdiff[ns]");
-   hTdiff->SetYTitle("Tpla(X)");
+   TH2F* hTdiff = new TH2F("hTdiff",hTdiffTitle, nBin , Yrange[0], Yrange[1], 200, Xrange[0], Xrange[1]);
+   hTdiff->SetXTitle("Tpla(X)[mm]");
+   hTdiff->SetYTitle("Tdiff[ns]");
+   
+	TString hResolTitle;
+	hResolTitle.Form("Tavg Resolution vs TplaX. binWidth:%2d (%4.1f mm)", relBinWidth, (relBinWidth)*(Yrange[1]-Yrange[0])/nBin);
+	TH1F* hResol = new TH1F("hResol", hResolTitle, nBin, Yrange[0], Yrange[1]); 
+	hResol->SetXTitle("TplaX[mm]");
+   hResol->SetYTitle("Tavg Resol [ps]");
 
    TCanvas* cTplaResol = new TCanvas("cTplaResol", "Tpla resolution by SMWDC", 0, 0, 800, 600);   
    cTplaResol->Divide(1,2);
@@ -71,6 +85,7 @@ void tplaResol() {
             tdiff= V775Data->GetTDiff();
          }
       }
+      if(!TMath::Finite(tdiff)) continue;
       
       // Get MWDC X and A then project to Tpla
       Double_t TplaX = kInvalidD;
@@ -83,48 +98,67 @@ void tplaResol() {
          if ( TMath::Abs(a - x/z0)> 0.1 ) continue;
          TplaX = x + (z0Tpla-z0)*a;
       }
-      
+      if (!TMath::Finite(TplaX)) continue;     
       //printf(" %d | nHitV775:%d, tdiff:%10.5f | nHitSMWDC:%d, TplaX:%10.3f \n", eventID, nHitV775, tdiff, nHitSMWDC, TplaX);
       
+      hTdiff->Fill(TplaX,tdiff);
       
-      if (TMath::Finite(tdiff) && TMath::Finite(TplaX)){
-         hTdiff->Fill(tdiff, TplaX);
+//------------Clock      
+      clock.Stop("timer");
+      Double_t time = clock.GetRealTime("timer");
+      clock.Start("timer");
+      
+      if ( !shown ) {
+         if (fmod(time, 10) < 1 ){
+            printf( "%10d[%2d%%] |%3d min %5.2f sec | expect:%5.1fmin\n", 
+            eventID, 
+            TMath::Nint((eventID+1-firstEntry)*100./nEntries),
+            TMath::Floor(time/60), time - TMath::Floor(time/60)*60,
+            nEntries*time/(eventID+1-firstEntry)/60.);
+            shown = 1;
+         }
+      }else{
+         if (fmod(time, 10) > 9 ){
+            shown = 0;
+         }
       }
 
    }
-   
-   cTplaResol->cd(1);
-   hTdiff->Draw("colz");
-   cTplaResol->cd(2);
-   hTdiff->ProjectionX("test",slideBin[0],slideBin[1]);
-   Double_t TplaXWidth = (slideBin[1]-slideBin[0]+1)*(Yrange[1]-Yrange[0])/nBin;
-   TString testTitle;
-   testTitle.Form("ProjectX, TplaX = (%10.3f,%10.3f|%10.3f)",
-                  Yrange[0]+(slideBin[0]-1)*(Yrange[1]-Yrange[0])/nBin,
-                  Yrange[0]+(slideBin[1])*(Yrange[1]-Yrange[0])/nBin,
-                  TplaXWidth);
-   test->SetTitle(testTitle);
-   TF1 *fit = new TF1("fit", "gaus(0)", Xrange[0], Xrange[1]); 
-   fit->SetParameters(500, (Xrange[0]+Xrange[1])/2 , 0.5);
-   test->Fit("fit");
-   Double_t para[3];
-   fit->GetParameters(para);
-   hTdiff->ProjectionX("test2",nBin/4-1,nBin/4+1);
-   test2->Fit("gaus");
-   hTdiff->ProjectionX("test3",nBin*3/4-1,nBin*3/4+1);
-   test3->Fit("gaus");
-   test->Draw();
-   test2->Draw("same");
-   test3->Draw("same");
-   
-   TLatex text;
+
+	TLatex text;
    text.SetNDC();
    text.SetTextColor(1);
    TString textStr;
+   
+   cTplaResol->cd(1);
+   hTdiff->Draw("colz");
+
+   cTplaResol->cd(2);
+
+	TF1 *fit = new TF1("fit", "gaus(0)", Xrange[0], Xrange[1]);
+	Double_t para[3];
+
+   for ( Int_t relBinID = 1; relBinID <= nBin; relBinID += relBinWidth){
+   	hTdiff->ProjectionY("test",relBinID,relBinID+relBinWidth);
+   	Double_t TplaXPos   = Yrange[0] + (relBinID+relBinWidth/2.)*(Yrange[1]-Yrange[0])/nBin;
+   	Double_t TplaXWidth = (relBinWidth)*(Yrange[1]-Yrange[0])/nBin;
+   	Int_t peakBin=test->GetMaximumBin();
+   	fit->SetParameters(500, test->GetBinCenter(peakBin) , 0.5);
+   	test->Fit("fit", "Q");
+   	fit->GetParameters(para);
+   	Double_t resolution = TMath::Abs(TMath::Sqrt(TMath::Power(para[2],2)-TMath::Power(2*TplaXWidth/TplaBeta/cVaccum,2)))*1000.;
+   	
+   	if (TMath::Finite(resolution) && resolution < 800. && para[2] != 0.5) {
+   		printf(" bin:(%3d,%3d) TplaX: %7.1f, mean: %4.1f, sigma: %4.2f(%f), resol: %6.2f ps \n", relBinID, relBinID+relBinWidth, TplaXPos, para[1], para[2], fit->GetParError(2), resolution);
+   		hResol->Fill(TplaXPos,resolution);
+   		//hResol->SetBinError(relBinID*relBinWidth, fit->GetParError(2)*1000);
+   	}
+   }
+  
+   hResol->Draw("E");
+   
    textStr.Form("Tpla Beta:%4.2f",TplaBeta);
    text.DrawText(0.3, 0.7, textStr);
-   textStr.Form("Tavg Resol:%6.1f ps",TMath::Sqrt(TMath::Power(para[2],2)-TMath::Power(2*TplaXWidth/TplaBeta/cVaccum,2))*1000.);
-   text.DrawText(0.3, 0.65, textStr);
 
    return ;
 }

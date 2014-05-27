@@ -2,6 +2,9 @@
 #include "RelCalculator.h"
 #include "TBeamData.h"
 
+//TODO make the Brho be X-axis. 
+//TODO make the different from tof and calculated tof. 
+
 void tofusResol_ppac() {
    
    Int_t eventID;
@@ -144,6 +147,14 @@ Double_t BrhoBytof(Double_t *x, Double_t *para){
 
    Double_t arg = TMath::Sqrt(x[0]*x[0]*cVaccum*cVaccum - para[0]*para[0]);
    return para[1]*para[0]/para[2]/cVaccum/arg;
+
+}
+
+Double_t tofByBrho(Double_t *x, Double_t *para){
+
+  //Double_t Length, Double_t mass, , Int_t Z
+
+  Double_t arg ;
 
 }
 

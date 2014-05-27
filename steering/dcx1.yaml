@@ -75,6 +75,6 @@ Processor:
         - dcx1_x_dtdx
         - dcx1_u_dtdx
         - dcx1_v_dtdx 
-      OutputTransparency: 1
+      OutputTransparency: 0
           
 #==================================================      

@@ -2,21 +2,19 @@
 #include "RelCalculator.h"
 #include "TBeamData.h"
 
-void tplaSlew() {
+void tplaSlew2() {
    
    const char* rootfile="PrimaryData/ppAll.root";
    TString detector = "Tpla-L"; //Tpla-L
    TBeamData *beam = new TBeamData("proton");
-   Bool_t allentry  = 1;
+   Bool_t allentry  = 0;
    Int_t firstEntry = 0;
    Int_t nEntries=5000000;
    Double_t TplaBeta = 1/1.5;
    Double_t Qth = 100.;
-   Double_t XGate[2] = { -600,   2000}; //central, half-width
-   Double_t QGate[2] = {   00, 9900};
+   Double_t XGate[2] = { -600,   20}; //central, half-width
+   Double_t QGate[2] = {    0, 9000};
    
-   printf("\n >>>>> file: %s \n", rootfile); 
-
 //#######################################################   
    Double_t Principle_tof = tofByBrho(L_F3FH9,beam->fBrho, beam->fMass, beam->fZ);
    Int_t detectorID;
@@ -52,11 +50,8 @@ void tplaSlew() {
       TplaPMTPos[0] = 200;
       TplaPMTPos[1] = -1300;
       TplaMidPt = -950; 
-      //Qoffset[0] = -544; Qoffset[1] = -522;
-      //QGain[0]   = 1.15 ; QGain[1] = 1;
-
-      Qoffset[0] = 0; Qoffset[1] = 0;
-      QGain[0]   = 1 ; QGain[1] = 1;
+      Qoffset[0] = -544; Qoffset[1] = -522;
+      QGain[0]   = 1.15 ; QGain[1] = 1;
       Sign = -1;
       sigma[0] = 270; sigma[1] = 270;
       Woffset[0] = 0; Woffset[1] = 0;
@@ -81,44 +76,32 @@ void tplaSlew() {
       slewOffset = 10;
    }
    
-   TBenchmark clock;
-   clock.Reset();
-   clock.Start("timer");
-   Bool_t shown = 0;
+
 
 //========================================================    
 
    //gStyle->SetOptStat(0);
-   TH1F* ht1    = new TH1F("ht1", detector + " t1", 200, -240, -180);
-   TH1F* ht2    = new TH1F("ht2", detector + " t2", 200, -240, -180);
-   ht1->SetLineColor(4);
-   ht2->SetLineColor(2);
    TH1F* hQ1    = new TH1F("hQ1", "Q1", 200, 0, 4000);
    TH1F* hQ2    = new TH1F("hQ2", "Q2", 200, 0, 4000);
    hQ1->SetLineColor(4);
    hQ2->SetLineColor(2);
-
-   TH2F* hQ1Q2 = new TH2F("hQ1Q2", "Q2 vs Q1 g:TplaX", 200, 0, 4000, 200, 0, 4000);
+   
+   TH2F* hmwdcAX = new TH2F("hmwdcAX", "mwdc A vs X", 300, -1000, 200, 100, -1.5,  1);
    
    TString hTplaXgTitle;
    hTplaXgTitle.Form("(%7.1f, %7.1f)", XGate[0]-XGate[1], XGate[0]+XGate[1]);
    TH1F* hTplaX  = new TH1F("hTplaX" , "TplaX"+hTplaXgTitle        , 400, -1400, 300);
    TH1F* hTplaXg = new TH1F("hTplaXg", "TplaX g:TplaX"+hTplaXgTitle, 400, -1400, 300);
    hTplaXg->SetLineColor(2);
+
+   TH2F* hQ1tof1 = new TH2F("hQ1tof1", "Q1 vs t1-tof(tgt-Tpla) ", 100, -200, -150, 200, 0, 3500);
+   TH2F* hQ2tof2 = new TH2F("hQ2tof2", "Q2 vs t2-tof(tgt-Tpla) ", 100, -200, -150, 200, 0, 3500);
    
-   TH2F* hQ1tof1 = new TH2F("hQ1tof1", "Q1 vs (tavg - t1)", 100, -4, 8, 200, 0, 3500);
-   TH2F* hQ2tof2 = new TH2F("hQ2tof2", "Q2 vs (t2 - tavg)", 100, -4, 8, 200, 0, 3500);
-   
-   TString hQtofTitle;
-   hQtofTitle.Form("(%7.1f,%7.1f)", QGate[0], QGate[1]);
-   TH2F* hQ1tof1g = new TH2F("hQ1tof1g", "Q1 vs (tavg - t1) g:TplaX Q2"+hQtofTitle, 200, -4,  8, 200, 0, 3500);
-   TH2F* hQ2tof2g = new TH2F("hQ2tof2g", "Q2 vs (t2 - tavg) g:TplaX Q1"+hQtofTitle, 200, -4,  8, 200, 0, 3500);
-   
-   TH2F* hQ1tof1gSlew = new TH2F("hQ1tof1gSlew", "Q1 vs (tavg - t1) g:TplaX Slew", 200,  -4, 8, 200, 0, 3500);
-   TH2F* hQ2tof2gSlew = new TH2F("hQ2tof2gSlew", "Q2 vs (t2 - tavg) g:TplaX Slew", 200,  -4, 8, 200, 0, 3500);
+   TH2F* hQ1tof1g = new TH2F("hQ1tof1g", "Q1 vs t1-tof(tgt-Tpla) g:TplaX", 100, -200, -150, 200, 0, 3500);
+   TH2F* hQ2tof2g = new TH2F("hQ2tof2g", "Q2 vs t2-tof(tgt-Tpla) g:TplaX", 100, -200, -150, 200, 0, 3500);
    
    Int_t Xdiv = 3, Ydiv = 2;
-   TCanvas* cTplaSlew = new TCanvas("cTplaSlew", "Tpla Decay constant", 10, 30, 400*Xdiv, 400*Ydiv);   
+   TCanvas* cTplaSlew = new TCanvas("cTplaSlew", "Tpla Decay constant", 800, 30, 300*Xdiv, 300*Ydiv);   
    cTplaSlew->Divide(Xdiv, Ydiv);
 
    Int_t endEntry = firstEntry + nEntries;
@@ -132,39 +115,13 @@ void tplaSlew() {
 //##########################################################################   
    for( Int_t eventID = firstEntry; eventID < endEntry; eventID ++){
       tree->GetEntry(eventID); 
-
-      // Get MWDC X and A then project to Tpla
-      Double_t TplaX1 = kInvalidD;
-//      Double_t TplaX2 = kInvalidD;
-      Double_t x1, x2, a1, a2;
-      Int_t nHitSMWDC = hoge_L->GetEntriesFast();
-      for( Int_t p = 0; p < nHitSMWDC; p++){
-         art::TMWDCTrackingResult * smwdc = (art::TMWDCTrackingResult*)hoge_L->At(p);
-         art::TTrack * track = (art::TTrack*)smwdc->GetTrack();
-         x1 = track->GetX();
-         a1 = track->GetA();
-         if ( TMath::Abs(a1 - x1/z0)> 0.1 ) continue;
-         TplaX1 = x1 + (z0Tpla-z0)*a1;
-      }
-      if ( TMath::IsNaN(TplaX1) ) continue;
-      if ( TMath::Abs(TplaX1 - XGate[0])> XGate[1] ) continue;
-      
-/*      Int_t nHitSMWDC = hoge_R->GetEntriesFast();
-      for( Int_t p = 0; p < nHitSMWDC; p++){
-         art::TMWDCTrackingResult * smwdc = (art::TMWDCTrackingResult*)hoge_R->At(p);
-         art::TTrack * track = (art::TTrack*)smwdc->GetTrack();
-         x2 = track->GetX();
-         a2 = track->GetA();
-         if ( TMath::Abs(a2 - x2/z0)> 0.1 ) continue;
-         TplaX2 = x2 + (z0Tpla-z0)*a2;
-      }
-      if (TMath::IsNaN(TplaX2) ) continue;*/
       
       // Get Time and charge
       Double_t Q1 = kInvalidD, Q2 = kInvalidD;
       Double_t t1 = kInvalidD, t2 = kInvalidD;
       Double_t tFH9 = kInvalidD;
       Double_t tF3  = kInvalidD;
+      
       Int_t nHitV775 = hoge_V775->GetEntriesFast();
       for ( Int_t p = 0; p < nHitV775; p++){
          art::TTwoSidedPlasticData * V775Data = (art::TTwoSidedPlasticData*)hoge_V775->At(p);
@@ -183,71 +140,74 @@ void tplaSlew() {
       if ( TMath::IsNaN(Q1) || TMath::IsNaN(Q2)) continue;
       if ( Q2 > 6000 || Q1 > 6000) continue;
       
+      // Get MWDC X and A then project to Tpla
+      Double_t TplaX1 = kInvalidD;
+      Double_t TplaX2 = kInvalidD;
+      Double_t x1, x2, a1, a2;
+      Int_t nHitSMWDC = hoge_L->GetEntriesFast();
+      for( Int_t p = 0; p < nHitSMWDC; p++){
+         art::TMWDCTrackingResult * smwdc = (art::TMWDCTrackingResult*)hoge_L->At(p);
+         art::TTrack * track = (art::TTrack*)smwdc->GetTrack();
+         x1 = track->GetX();
+         a1 = track->GetA();
+         if ( TMath::Abs(a1 - x1/z0)> 0.1 ) continue;
+         TplaX1 = x1 + (z0Tpla-z0)*a1;
+      }
+      if ( TMath::IsNaN(TplaX1)) continue;
+      
+  /*    Int_t nHitSMWDC = hoge_R->GetEntriesFast();
+      for( Int_t p = 0; p < nHitSMWDC; p++){
+         art::TMWDCTrackingResult * smwdc = (art::TMWDCTrackingResult*)hoge_R->At(p);
+         art::TTrack * track = (art::TTrack*)smwdc->GetTrack();
+         x2 = track->GetX();
+         a2 = track->GetA();
+         if ( TMath::Abs(a2 - x2/z0)> 0.1 ) continue;
+         TplaX2 = x2 + (z0Tpla-z0)*a2;
+      }
+      if (TMath::IsNaN(TplaX2) ) continue;*/
        
-      ht1->Fill(t1);
-      ht2->Fill(t2);
       hQ1->Fill(Q1);
       hQ2->Fill(Q2);
       hTplaX->Fill(TplaX1);
- 
-      Double_t tofF3FH9 = tFH9 - tF3 - beam->fToffsetV775 + Principle_tof;
-      Double_t tof    = (t1+t2)/2 - tFH9 - tofF3FH9*LENGTH_RATIO_FH9_TGT; 
-      Double_t tavg   = (t1+t2)/2;     
+      hmwdcAX->Fill(x1, a1);
       
-      Double_t tof1 = tavg - t1;
-      Double_t tof2 = t2 - tavg;
+      Double_t tofF3FH9 = tFH9 - tF3 - beam->fToffsetV775 + Principle_tof;
+      Double_t ttgt     =  tFH9 + tofF3FH9*LENGTH_RATIO_FH9_TGT;
+      Double_t tofTgtTpla  = (t1+t2)/2 - ttgt; 
+      Double_t tavg   = (t1+t2)/2;     
+
+      //pp elastics 
+      
+      Double_t tof1 = t1 - ttgt - TMath::Sqrt(z0Tpla*Tpla + TplaX1*TplaX1);
+      Double_t tof2 = t2 - ttgt - TMath::Sqrt(z0Tpla*Tpla + TplaX1*TplaX1);
+
       hQ1tof1->Fill(tof1, Q1);
       hQ2tof2->Fill(tof2, Q2);
 
-      // Slew correction
-      Double_t t1Slew = t1 -  20.*TMath::Power(Q1,-0.5);
-      Double_t t2Slew = t2 -  20.*TMath::Power(Q2,-0.5);
-      Double_t tavgSlew = (t1Slew+t2Slew)/2;
-      Double_t tof1Slew = tavgSlew - t1Slew;
-      Double_t tof2Slew = t2Slew - tavgSlew;
+      Double_t tof1Slew = tavg - (t1 + 20./TMath::Power(Q1,0.5));
+      Double_t tof2Slew = t2 - 20./TMath::Power(Q2,0.5) - tavg;
       
       if ( TMath::Abs(TplaX1 - XGate[0])< XGate[1] ) {
-
-         hTplaXg->Fill(TplaX1);   
-
-         hQ1Q2->Fill(Q1,Q2);
-
-         hQ1tof1gSlew->Fill(tof1Slew, Q1);
-         hQ2tof2gSlew->Fill(tof2Slew, Q2);
-
          if ( Q2 > QGate[0] &&  Q2 < QGate[1]) hQ1tof1g->Fill(tof1, Q1);
          if ( Q1 > QGate[0] &&  Q1 < QGate[1]) hQ2tof2g->Fill(tof2, Q2);
-                  
-      }
+         hTplaXg->Fill(TplaX1);        
 
-      //------------Clock      
-      clock.Stop("timer");
-      Double_t time = clock.GetRealTime("timer");
-      clock.Start("timer");
-      
-      if ( !shown ) {
-         if (fmod(time, 10) < 1 ){
-            printf( "%10d[%2d%%] |%3d min %5.2f sec | expect:%5.1fmin\n", 
-            eventID, 
-            TMath::Nint((eventID+1-firstEntry)*100./nEntries),
-            TMath::Floor(time/60), time - TMath::Floor(time/60)*60,
-            nEntries*time/(eventID+1-firstEntry)/60.);
-            shown = 1;
-         }
-      }else{
-         if (fmod(time, 10) > 9 ){
-            shown = 0;
-         }
+         hQ1tof1g->Fill(tof1, Q1);
+         hQ2tof2g->Fill(tof2, Q2);
+         
       }
+   
+     
 
    }
 
+//##########################################################################   
    TLatex text;
    text.SetNDC();
    text.SetTextSize(0.04);
    TString textStr;
 
-/*   cTplaSlew->cd(1);
+   cTplaSlew->cd(1);
    hQ1->Draw();
    hQ2->Draw("same");
 
@@ -257,31 +217,31 @@ void tplaSlew() {
    text.SetTextColor(2);
    textStr.Form("Q2 offset:%7.2f, gain:%5.2f",Qoffset[1],QGain[1]);
    text.DrawText(0.3, 0.7, textStr);
-   
+  
    cTplaSlew->cd(2);
    hQ1tof1->Draw("colz");
-   
+
    cTplaSlew->cd(3);
-   hQ2tof2->Draw("colz");*/
+   hQ2tof2->Draw("colz");
    
-   cTplaSlew->cd(1);
+   cTplaSlew->cd(4);
    hTplaX->Draw("");
    hTplaXg->Draw("same");
 
-   cTplaSlew->cd(2);
+   cTplaSlew->cd(5);
    hQ1tof1g->Draw("colz");
    
-   cTplaSlew->cd(3);
+   cTplaSlew->cd(6);
    hQ2tof2g->Draw("colz");
    
-   cTplaSlew->cd(4);
-   hQ1Q2->Draw("colz");
+ /*  cTplaSlew->cd(7);
+   hX->Draw("colz");
    
-   cTplaSlew->cd(5);
+   cTplaSlew->cd(8);
    hQ1tof1gSlew->Draw("colz");
    
-   cTplaSlew->cd(6);
-   hQ2tof2gSlew->Draw("colz");
+   cTplaSlew->cd(9);
+   hQ2tof2gSlew->Draw("colz");*/
      
   
    return ;

@@ -1,8 +1,11 @@
 aliases:
-  - &output  phys14up.root
+# beware to overwrite !!!
+  - &output  phys23F.root
   
-  - &beamprm prm/kinematics/14O.yaml  
+#  - &beamprm prm/kinematics/14O.yaml  
 #  - &beamprm prm/kinematics/22O.yaml
+  - &beamprm prm/kinematics/23F.yaml
+#  - &beamprm prm/kinematics/25F.yaml
 
 #===========================================================
 Processor:
@@ -11,10 +14,10 @@ Processor:
 #  - include: RunsProtonOptics.yaml
 #  - include: RunsProtonUp.yaml
 #  - include: RunsProtonDown.yaml
-#  - include: RunsO22.yaml
+  - include: RunsO22.yaml
 #  - include: RunsO22Optics.yaml
 #  - include: RunsO14.yaml
-  - include: RunsO14Up.yaml
+#  - include: RunsO14Up.yaml
 #  - include: RunsO14Down.yaml
 #  - include: RunsO14Others.yaml
 #  - include: RunsO24.yaml
@@ -27,7 +30,7 @@ Processor:
 #============== PROCESSORS     =============================
   - include: coinReg.yaml
   - include: Gate_Initialtor.yaml
-  - include: Gate_coinReg.yaml
+#  - include: Gate_coinReg.yaml
   - include: plastic_V1190_prm.yaml
   - include: plastic_V1190_F3.yaml         # no branch output
   - include: plastic_V1190_FH9.yaml

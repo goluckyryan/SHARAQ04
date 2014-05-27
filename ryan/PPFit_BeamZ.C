@@ -3,7 +3,7 @@ Double_t TKA = 260;
 void PPFit_BeamZ(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t OPCM = 1){
 
    //TFile *f0 = new TFile ("ppelasticUp.root");
-   TFile *f0 = new TFile ("ppelasticDown.root");
+   TFile *f0 = new TFile ("PrimaryData/ppDown.root");
    TTree *recoil = (TTree*)f0->Get("recoil");
    
    TCanvas * cBeamZ = new TCanvas ("cBeamZ","cBeamZ", 1200,50,800,800);
