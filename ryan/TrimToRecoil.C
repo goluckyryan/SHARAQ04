@@ -14,7 +14,7 @@
 void TrimToRecoil() {
    
 //############################################################################   
-   const char* savefilename="Rphys25FDown.root";
+   const char* savefilename="Rphys14Up.root";
    //const char* rootfile="Data/phys14_1_43.root";
    //const char* rootfile="ppDown.root";
    const char* rootfile="Data/phys24Down.root";

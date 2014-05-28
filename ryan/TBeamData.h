@@ -86,7 +86,7 @@ void TBeamData::UseProjectile(TString str){
       fTofGate[0]  = -1446.; fTofGate[1]  = -1436.;
       fQGate[0]    =  5646.;  fQGate[1]   =  5930.;
       fToffsetV1190 = -1440.3;
-      fToffsetV775  = -302.16;
+      fToffsetV775  = -302.05;
       fToffset1 = 55.7;//14.62;
       fToffset2 = 57.1;//13.27;
       fppacOn  = 1;
