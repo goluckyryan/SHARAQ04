@@ -62,7 +62,7 @@ Processor:
       UseReactionPointCollection:   1   #s0XY
       UseIncidentAngleCollection:   1   #s0AB
       UsePolarizedMagnetCollection: 1
-      OutputTransparency:           0
+      OutputTransparency:           1
         
   - name: Recoil_R
     type: art::sh04::TRecoilProcessor
@@ -78,7 +78,7 @@ Processor:
       UseReactionPointCollection:   1
       UseIncidentAngleCollection:   1
       UsePolarizedMagnetCollection: 1
-      OutputTransparency:           0
+      OutputTransparency:           1
 
   - name: proc_p2p
     type: art::sh04::TP2PKinematicsProcessor

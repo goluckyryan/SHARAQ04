@@ -1,13 +1,13 @@
 aliases:
 #====== 22O runs
-  - &Res1 [ &residualO ResO,prm/pidDS/22o/o.dat]
-  - &Res2 [ &residualN ResF,prm/pidDS/22o/n.dat]
-  - &hist [hPID_DS,PID_DS;TOF;Charge,150,-130,-124,100,1000,2500]
+#  - &Res1 [ &residualO ResO,prm/pidDS/22o/o.dat]
+#  - &Res2 [ &residualN ResF,prm/pidDS/22o/n.dat]
+#  - &hist [hPID_DS,PID_DS;TOF;Charge,150,-130,-124,100,1000,2500]
 
 #====== 14O runs
-#  - &Res1 [ &residualN ResN,prm/pidDS/14o/n.dat]
-#  - &Res2 [ &residualC ResC,prm/pidDS/14o/c.dat]
-#  - &hist [hPID_DS,PID_DS;TOF;Charge,150,-130,-115,300,0,3000]
+  - &Res1 [ &residualN ResN,prm/pidDS/14o/n.dat]
+  - &Res2 [ &residualC ResC,prm/pidDS/14o/c.dat]
+  - &hist [hPID_DS,PID_DS;TOF;Charge,150,-130,-115,300,0,3000]
   
 #====== 24O runs
 #  - &Res1 [ &residualF ResF,prm/pidDS/24o/f.dat]

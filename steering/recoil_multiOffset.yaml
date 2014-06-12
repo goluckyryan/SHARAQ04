@@ -1,0 +1,723 @@
+aliases:
+  - &beamZ    0.
+#============== PROCESSORS     =============================
+Processor:
+  - name: smwdc_geometry
+    type: art::TParameterLoader
+    parameter:
+      Name:     SMWDC_geometry
+      Type:     art::sh04::TDetectorGeometry
+      FileName: prm/kinematics/geometry.yaml
+
+  - name: proc_beamz
+    type: art::sh04::TBeamZProcessor
+    parameter:
+      TrackL:             smwdc_L
+      TrackR:             smwdc_R
+      Geometry:           SMWDC_geometry
+      OutputCollection:   beamZ
+      OutputTransparency: 0
+
+  - name: proc_vertex
+    type: art::sh04::TReactionVertexProcessor
+    parameter:
+      TrackL:             smwdc_L
+      TrackR:             smwdc_R
+      S0Track:            S0img
+      Geometry:           SMWDC_geometry
+      OutputCollection:   vertex
+      OutputTransparency: 0
+                
+                
+#=========================== 0 offset                
+  - name: tpla_tof
+    type: art::sh04::TRecoilTOFProcessor
+    parameter:
+      OutputL:            tofL
+      OutputR:            tofR
+      OutputS0D:          tofS0D
+      F3PlasticColName:   plaV775
+      F3PlasticDetID:     2
+      FH9PlasticColName:  plaV775
+      FH9PlasticDetID:    3
+      S0DPlasticColName:  plaV775
+      S0DPlasticDetID:    4
+      TPlasticColName:    plaV775
+      TPlasticLDetID:     0
+      TPlasticRDetID:     1
+      BeamZ:              *beamZ
+      Shift:              0
+      OutputTransparency: 0
+
+  - name: Recoil_L
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_L
+      TrackCollection:  smwdc_L
+      TOFCollection:    tofL
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             0           # 0 = left, !0 = right
+      BeamZ:            *beamZ
+      UseReactionPointCollection:   1   #s0XY
+      UseIncidentAngleCollection:   1   #s0AB
+      UsePolarizedMagnetCollection: 1
+      OutputTransparency:           1
+        
+  - name: Recoil_R
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_R
+      TrackCollection:  smwdc_R
+      TOFCollection:    tofR
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             1
+      BeamZ:            *beamZ
+      UseReactionPointCollection:   1
+      UseIncidentAngleCollection:   1
+      UsePolarizedMagnetCollection: 1
+      OutputTransparency:           1
+
+  - name: proc_p2p
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p
+      RecoilL:            recoil_L
+      RecoilR:            recoil_R
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+#=========================== +100 ps offset                
+  - name: tpla_tof_p100
+    type: art::sh04::TRecoilTOFProcessor
+    parameter:
+      OutputL:            tofL_p100
+      OutputR:            tofR_p100
+      OutputS0D:          tofS0D_p100
+      F3PlasticColName:   plaV775
+      F3PlasticDetID:     2
+      FH9PlasticColName:  plaV775
+      FH9PlasticDetID:    3
+      S0DPlasticColName:  plaV775
+      S0DPlasticDetID:    4
+      TPlasticColName:    plaV775
+      TPlasticLDetID:     0
+      TPlasticRDetID:     1
+      BeamZ:              *beamZ
+      Shift:              0.1
+      OutputTransparency: 0
+
+  - name: Recoil_L_p100
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_L_p100
+      TrackCollection:  smwdc_L
+      TOFCollection:    tofL_p100
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             0           # 0 = left, !0 = right
+      BeamZ:            *beamZ
+      UseReactionPointCollection:   1   #s0XY
+      UseIncidentAngleCollection:   1   #s0AB
+      UsePolarizedMagnetCollection: 1
+      OutputTransparency:           1
+        
+  - name: Recoil_R_p100
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_R_p100
+      TrackCollection:  smwdc_R
+      TOFCollection:    tofR_p100
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             1
+      BeamZ:            *beamZ
+      UseReactionPointCollection:   1
+      UseIncidentAngleCollection:   1
+      UsePolarizedMagnetCollection: 1
+      OutputTransparency:           1
+
+  - name: proc_p2p_p100
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p100
+      RecoilL:            recoil_L_p100
+      RecoilR:            recoil_R_p100
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+#=========================== +200 ps offset                
+  - name: tpla_tof_p200
+    type: art::sh04::TRecoilTOFProcessor
+    parameter:
+      OutputL:            tofL_p200
+      OutputR:            tofR_p200
+      OutputS0D:          tofS0D_p200
+      F3PlasticColName:   plaV775
+      F3PlasticDetID:     2
+      FH9PlasticColName:  plaV775
+      FH9PlasticDetID:    3
+      S0DPlasticColName:  plaV775
+      S0DPlasticDetID:    4
+      TPlasticColName:    plaV775
+      TPlasticLDetID:     0
+      TPlasticRDetID:     1
+      BeamZ:              *beamZ
+      Shift:              0.2
+      OutputTransparency: 0
+
+  - name: Recoil_L_p200
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_L_p200
+      TrackCollection:  smwdc_L
+      TOFCollection:    tofL_p200
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             0           # 0 = left, !0 = right
+      BeamZ:            *beamZ
+      UseReactionPointCollection:   1   #s0XY
+      UseIncidentAngleCollection:   1   #s0AB
+      UsePolarizedMagnetCollection: 1
+      OutputTransparency:           1
+        
+  - name: Recoil_R_p200
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_R_p200
+      TrackCollection:  smwdc_R
+      TOFCollection:    tofR_p200
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             1
+      BeamZ:            *beamZ
+      UseReactionPointCollection:   1
+      UseIncidentAngleCollection:   1
+      UsePolarizedMagnetCollection: 1
+      OutputTransparency:           1
+
+  - name: proc_p2p_p200
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p200
+      RecoilL:            recoil_L_p200
+      RecoilR:            recoil_R_p200
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+#=========================== +300 ps offset                
+  - name: tpla_tof_p300
+    type: art::sh04::TRecoilTOFProcessor
+    parameter:
+      OutputL:            tofL_p300
+      OutputR:            tofR_p300
+      OutputS0D:          tofS0D_p300
+      F3PlasticColName:   plaV775
+      F3PlasticDetID:     2
+      FH9PlasticColName:  plaV775
+      FH9PlasticDetID:    3
+      S0DPlasticColName:  plaV775
+      S0DPlasticDetID:    4
+      TPlasticColName:    plaV775
+      TPlasticLDetID:     0
+      TPlasticRDetID:     1
+      BeamZ:              *beamZ
+      Shift:              0.3
+      OutputTransparency: 0
+
+  - name: Recoil_L_p300
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_L_p300
+      TrackCollection:  smwdc_L
+      TOFCollection:    tofL_p300
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             0           # 0 = left, !0 = right
+      BeamZ:            *beamZ
+      UseReactionPointCollection:   1   #s0XY
+      UseIncidentAngleCollection:   1   #s0AB
+      UsePolarizedMagnetCollection: 1
+      OutputTransparency:           1
+        
+  - name: Recoil_R_p300
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_R_p300
+      TrackCollection:  smwdc_R
+      TOFCollection:    tofR_p300
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             1
+      BeamZ:            *beamZ
+      UseReactionPointCollection:   1
+      UseIncidentAngleCollection:   1
+      UsePolarizedMagnetCollection: 1
+      OutputTransparency:           1
+
+  - name: proc_p2p_p300
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p300
+      RecoilL:            recoil_L_p300
+      RecoilR:            recoil_R_p300
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+#=========================== +400 ps offset                
+  - name: tpla_tof_p400
+    type: art::sh04::TRecoilTOFProcessor
+    parameter:
+      OutputL:            tofL_p400
+      OutputR:            tofR_p400
+      OutputS0D:          tofS0D_p400
+      F3PlasticColName:   plaV775
+      F3PlasticDetID:     2
+      FH9PlasticColName:  plaV775
+      FH9PlasticDetID:    3
+      S0DPlasticColName:  plaV775
+      S0DPlasticDetID:    4
+      TPlasticColName:    plaV775
+      TPlasticLDetID:     0
+      TPlasticRDetID:     1
+      BeamZ:              *beamZ
+      Shift:              0.4
+      OutputTransparency: 0
+
+  - name: Recoil_L_p400
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_L_p400
+      TrackCollection:  smwdc_L
+      TOFCollection:    tofL_p400
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             0           # 0 = left, !0 = right
+      BeamZ:            *beamZ
+      UseReactionPointCollection:   1   #s0XY
+      UseIncidentAngleCollection:   1   #s0AB
+      UsePolarizedMagnetCollection: 1
+      OutputTransparency:           1
+        
+  - name: Recoil_R_p400
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_R_p400
+      TrackCollection:  smwdc_R
+      TOFCollection:    tofR_p400
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             1
+      BeamZ:            *beamZ
+      UseReactionPointCollection:   1
+      UseIncidentAngleCollection:   1
+      UsePolarizedMagnetCollection: 1
+      OutputTransparency:           1
+
+  - name: proc_p2p_p400
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p400
+      RecoilL:            recoil_L_p400
+      RecoilR:            recoil_R_p400
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+#=========================== +500 ps offset                
+  - name: tpla_tof_p500
+    type: art::sh04::TRecoilTOFProcessor
+    parameter:
+      OutputL:            tofL_p500
+      OutputR:            tofR_p500
+      OutputS0D:          tofS0D_p500
+      F3PlasticColName:   plaV775
+      F3PlasticDetID:     2
+      FH9PlasticColName:  plaV775
+      FH9PlasticDetID:    3
+      S0DPlasticColName:  plaV775
+      S0DPlasticDetID:    4
+      TPlasticColName:    plaV775
+      TPlasticLDetID:     0
+      TPlasticRDetID:     1
+      BeamZ:              *beamZ
+      Shift:              0.5
+      OutputTransparency: 0
+
+  - name: Recoil_L_p500
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_L_p500
+      TrackCollection:  smwdc_L
+      TOFCollection:    tofL_p500
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             0           # 0 = left, !0 = right
+      BeamZ:            *beamZ
+      UseReactionPointCollection:   1   #s0XY
+      UseIncidentAngleCollection:   1   #s0AB
+      UsePolarizedMagnetCollection: 1
+      OutputTransparency:           1
+        
+  - name: Recoil_R_p500
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_R_p500
+      TrackCollection:  smwdc_R
+      TOFCollection:    tofR_p500
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             1
+      BeamZ:            *beamZ
+      UseReactionPointCollection:   1
+      UseIncidentAngleCollection:   1
+      UsePolarizedMagnetCollection: 1
+      OutputTransparency:           1
+
+  - name: proc_p2p_p500
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p500
+      RecoilL:            recoil_L_p500
+      RecoilR:            recoil_R_p500
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0      
+
+#=========================== -100 ps offset                
+  - name: tpla_tof_m100
+    type: art::sh04::TRecoilTOFProcessor
+    parameter:
+      OutputL:            tofL_m100
+      OutputR:            tofR_m100
+      OutputS0D:          tofS0D_m100
+      F3PlasticColName:   plaV775
+      F3PlasticDetID:     2
+      FH9PlasticColName:  plaV775
+      FH9PlasticDetID:    3
+      S0DPlasticColName:  plaV775
+      S0DPlasticDetID:    4
+      TPlasticColName:    plaV775
+      TPlasticLDetID:     0
+      TPlasticRDetID:     1
+      BeamZ:              *beamZ
+      Shift:              -0.1
+      OutputTransparency: 0
+
+  - name: Recoil_L_m100
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_L_m100
+      TrackCollection:  smwdc_L
+      TOFCollection:    tofL_m100
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             0           # 0 = left, !0 = right
+      BeamZ:            *beamZ
+      UseReactionPointCollection:   1   #s0XY
+      UseIncidentAngleCollection:   1   #s0AB
+      UsePolarizedMagnetCollection: 1
+      OutputTransparency:           1
+        
+  - name: Recoil_R_m100
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_R_m100
+      TrackCollection:  smwdc_R
+      TOFCollection:    tofR_m100
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             1
+      BeamZ:            *beamZ
+      UseReactionPointCollection:   1
+      UseIncidentAngleCollection:   1
+      UsePolarizedMagnetCollection: 1
+      OutputTransparency:           1
+
+  - name: proc_p2p_m100
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m100
+      RecoilL:            recoil_L_m100
+      RecoilR:            recoil_R_m100
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+#=========================== -200 ps offset                
+  - name: tpla_tof_m200
+    type: art::sh04::TRecoilTOFProcessor
+    parameter:
+      OutputL:            tofL_m200
+      OutputR:            tofR_m200
+      OutputS0D:          tofS0D_m200
+      F3PlasticColName:   plaV775
+      F3PlasticDetID:     2
+      FH9PlasticColName:  plaV775
+      FH9PlasticDetID:    3
+      S0DPlasticColName:  plaV775
+      S0DPlasticDetID:    4
+      TPlasticColName:    plaV775
+      TPlasticLDetID:     0
+      TPlasticRDetID:     1
+      BeamZ:              *beamZ
+      Shift:              -0.2
+      OutputTransparency: 0
+
+  - name: Recoil_L_m200
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_L_m200
+      TrackCollection:  smwdc_L
+      TOFCollection:    tofL_m200
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             0           # 0 = left, !0 = right
+      BeamZ:            *beamZ
+      UseReactionPointCollection:   1   #s0XY
+      UseIncidentAngleCollection:   1   #s0AB
+      UsePolarizedMagnetCollection: 1
+      OutputTransparency:           1
+        
+  - name: Recoil_R_m200
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_R_m200
+      TrackCollection:  smwdc_R
+      TOFCollection:    tofR_m200
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             1
+      BeamZ:            *beamZ
+      UseReactionPointCollection:   1
+      UseIncidentAngleCollection:   1
+      UsePolarizedMagnetCollection: 1
+      OutputTransparency:           1
+
+  - name: proc_p2p_m200
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m200
+      RecoilL:            recoil_L_m200
+      RecoilR:            recoil_R_m200
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+#=========================== -300 ps offset                
+  - name: tpla_tof_m300
+    type: art::sh04::TRecoilTOFProcessor
+    parameter:
+      OutputL:            tofL_m300
+      OutputR:            tofR_m300
+      OutputS0D:          tofS0D_m300
+      F3PlasticColName:   plaV775
+      F3PlasticDetID:     2
+      FH9PlasticColName:  plaV775
+      FH9PlasticDetID:    3
+      S0DPlasticColName:  plaV775
+      S0DPlasticDetID:    4
+      TPlasticColName:    plaV775
+      TPlasticLDetID:     0
+      TPlasticRDetID:     1
+      BeamZ:              *beamZ
+      Shift:              -0.3
+      OutputTransparency: 0
+
+  - name: Recoil_L_m300
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_L_m300
+      TrackCollection:  smwdc_L
+      TOFCollection:    tofL_m300
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             0           # 0 = left, !0 = right
+      BeamZ:            *beamZ
+      UseReactionPointCollection:   1   #s0XY
+      UseIncidentAngleCollection:   1   #s0AB
+      UsePolarizedMagnetCollection: 1
+      OutputTransparency:           1
+        
+  - name: Recoil_R_m300
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_R_m300
+      TrackCollection:  smwdc_R
+      TOFCollection:    tofR_m300
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             1
+      BeamZ:            *beamZ
+      UseReactionPointCollection:   1
+      UseIncidentAngleCollection:   1
+      UsePolarizedMagnetCollection: 1
+      OutputTransparency:           1
+
+  - name: proc_p2p_m300
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m300
+      RecoilL:            recoil_L_m300
+      RecoilR:            recoil_R_m300
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+#=========================== -400 ps offset                
+  - name: tpla_tof_m400
+    type: art::sh04::TRecoilTOFProcessor
+    parameter:
+      OutputL:            tofL_m400
+      OutputR:            tofR_m400
+      OutputS0D:          tofS0D_m400
+      F3PlasticColName:   plaV775
+      F3PlasticDetID:     2
+      FH9PlasticColName:  plaV775
+      FH9PlasticDetID:    3
+      S0DPlasticColName:  plaV775
+      S0DPlasticDetID:    4
+      TPlasticColName:    plaV775
+      TPlasticLDetID:     0
+      TPlasticRDetID:     1
+      BeamZ:              *beamZ
+      Shift:              -0.4
+      OutputTransparency: 0
+
+  - name: Recoil_L_m400
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_L_m400
+      TrackCollection:  smwdc_L
+      TOFCollection:    tofL_m400
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             0           # 0 = left, !0 = right
+      BeamZ:            *beamZ
+      UseReactionPointCollection:   1   #s0XY
+      UseIncidentAngleCollection:   1   #s0AB
+      UsePolarizedMagnetCollection: 1
+      OutputTransparency:           1
+        
+  - name: Recoil_R_m400
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_R_m400
+      TrackCollection:  smwdc_R
+      TOFCollection:    tofR_m400
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             1
+      BeamZ:            *beamZ
+      UseReactionPointCollection:   1
+      UseIncidentAngleCollection:   1
+      UsePolarizedMagnetCollection: 1
+      OutputTransparency:           1
+
+  - name: proc_p2p_m400
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m400
+      RecoilL:            recoil_L_m400
+      RecoilR:            recoil_R_m400
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+#=========================== +300 ps offset                
+  - name: tpla_tof_m500
+    type: art::sh04::TRecoilTOFProcessor
+    parameter:
+      OutputL:            tofL_m500
+      OutputR:            tofR_m500
+      OutputS0D:          tofS0D_m500
+      F3PlasticColName:   plaV775
+      F3PlasticDetID:     2
+      FH9PlasticColName:  plaV775
+      FH9PlasticDetID:    3
+      S0DPlasticColName:  plaV775
+      S0DPlasticDetID:    4
+      TPlasticColName:    plaV775
+      TPlasticLDetID:     0
+      TPlasticRDetID:     1
+      BeamZ:              *beamZ
+      Shift:              -0.5
+      OutputTransparency: 0
+
+  - name: Recoil_L_m500
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_L_m500
+      TrackCollection:  smwdc_L
+      TOFCollection:    tofL_m500
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             0           # 0 = left, !0 = right
+      BeamZ:            *beamZ
+      UseReactionPointCollection:   1   #s0XY
+      UseIncidentAngleCollection:   1   #s0AB
+      UsePolarizedMagnetCollection: 1
+      OutputTransparency:           1
+        
+  - name: Recoil_R_m500
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_R_m500
+      TrackCollection:  smwdc_R
+      TOFCollection:    tofR_m500
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             1
+      BeamZ:            *beamZ
+      UseReactionPointCollection:   1
+      UseIncidentAngleCollection:   1
+      UsePolarizedMagnetCollection: 1
+      OutputTransparency:           1
+
+  - name: proc_p2p_m500
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m500
+      RecoilL:            recoil_L_m500
+      RecoilR:            recoil_R_m500
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
