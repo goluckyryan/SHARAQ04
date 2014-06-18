@@ -1,24 +1,26 @@
+aliases:
+# beware to overwrite !!!
+  - &output  ppUp_0613.root
+ 
 Processor:
 #=============  DATA              ==========================
   - include: RunsProtonUp.yaml  #from #4 - #10
-        
 #============= Mapper and Timer ============================
   - include: Mapper_Timer.yaml    
 #============== PROCESSORS     =============================
- 
   - include: coinReg.yaml
   - include: plastic_V1190_prm.yaml
-  - include: plastic_V1190_F3.yaml
+  - include: plastic_V1190_F3.yaml         # no branch output
   - include: plastic_V1190_FH9.yaml
   - include: plastic_tof_US.yaml
-  - include: plastic_V775.yaml             #include tof_DS
-#  - include: TTD.yaml
-#  - include: nyoki.yaml
+  - include: plastic_V775.yaml             # include tof_DS
+#  - include: TTD.yaml                      # reuire plastic_V775 for tof
+#  - include: nyoki.yaml                    # reuire plastic_V775 for tof
   - include: plastic_V767_timeRef.yaml
   - include: plastic_V767.yaml              
-  - include: smwdc_l_PolyConvert.yaml       # replace smwdc_l_TableConvert.yaml
-  - include: smwdc_l_track.yaml
-  - include: smwdc_r_PolyConvert.yaml       # replace smwdc_l_TableConvert.yaml
+  - include: smwdc_l_PolyConvert.yaml     
+  - include: smwdc_l_track.yaml  
+  - include: smwdc_r_PolyConvert.yaml     
   - include: smwdc_r_track.yaml
 
   - name: proc_beam
@@ -26,12 +28,11 @@ Processor:
     parameter:
       Name:     beam
       Type:     art::sh04::TBeamParameter
-      FileName: prm/kinematics/ppcoin.yaml
+      FileName: prm/kinematics/proton.yaml
 
-  - include: recoil_ppcoin.yaml
-
+  - include: recoil_ppcoin.yaml      
 #============== Output     =============================
   - name: outputtree
     type: art::TOutputTreeProcessor
     parameter:
-      FileName: ppUp.root
+      FileName: *output

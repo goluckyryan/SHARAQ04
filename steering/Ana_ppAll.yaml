@@ -1,12 +1,13 @@
+aliases:
+# beware to overwrite !!!
+  - &output  ppAll_0617_mwdctime.root
+ 
 Processor:
 #=============  DATA              ==========================
-  - include: RunsProton.yaml   #8 - 15
-        
+  - include: RunsProton.yaml   #4 - 15
 #============= Mapper and Timer ============================
   - include: Mapper_Timer.yaml    
-    
 #============== PROCESSORS     =============================
-
   - include: coinReg.yaml
   - include: plastic_V1190_prm.yaml
   - include: plastic_V1190_F3.yaml
@@ -19,21 +20,22 @@ Processor:
   - include: plastic_V767.yaml              
   - include: smwdc_l_PolyConvert.yaml     
   - include: smwdc_l_track.yaml
+  - include: smwdc_l_track_gated.yaml
   - include: smwdc_r_PolyConvert.yaml      
   - include: smwdc_r_track.yaml
+  - include: smwdc_r_track_gated.yaml
 
-  - name: proc_beam
-    type: art::TParameterLoader
-    parameter:
-      Name:     beam
-      Type:     art::sh04::TBeamParameter
-      FileName: prm/kinematics/ppcoin.yaml
+#  - name: proc_beam
+#    type: art::TParameterLoader
+#    parameter:
+#      Name:     beam
+#      Type:     art::sh04::TBeamParameter
+#      FileName: prm/kinematics/proton.yaml
 
-  - include: recoil_ppcoin.yaml
-
+#  - include: recoil_ppcoin.yaml
 #============== Output     =============================
   - name: outputtree
     type: art::TOutputTreeProcessor
     parameter:
-      FileName: ppcoin8_15.root
+      FileName: *output
         

@@ -3,9 +3,10 @@
    gROOT->Reset();
    gROOT->ProcessLine(".!date");
    gStyle->SetOptStat(0);
+
+   TFile *f0 = new TFile ("ppAll_0617_mwdctime.root"); TTree *tree = (TTree*)f0->Get("tree");   
    
-   
-   TFile *f1 = new TFile ("PrimaryData/phys25F_multiOffset.root"); TTree *tree = (TTree*)f1->Get("tree");
+//   TFile *f1 = new TFile ("PrimaryData/ppAll_0613.root"); TTree *ppNew = (TTree*)f1->Get("tree");
 
 //   TFile *f1 = new TFile ("PrimaryData/phys25F_multiOffset.root","update"); TTree *tree = (TTree*)f1->Get("tree");
    
@@ -16,7 +17,7 @@
    
 //   TFile *f3 = new TFile ("RppAll.root"); TTree *ppold2 = (TTree*)f3->Get("recoil");
    
-   TBrowser B("test","test", 1500,900); 
+   TBrowser B("test","test", 900,600); 
 }
 
 /*

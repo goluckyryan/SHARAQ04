@@ -1,9 +1,10 @@
 void deleteSegBranch(){
    
-   const char* rootfile="25F_new.root";
-   const char* savefile="25F_newcopy.root";
+   const char* rootfile="PrimaryData/phys25F_multiOffset.root";
+   const char* savefile="PrimaryData/phys25F_multiOffset_trim.root";
    
 //==================================================      
+	Bool_t abort= 0;
    TFile *oldfile = new TFile(rootfile,"read");
    TTree *tree = (TTree*)oldfile->Get("tree");
    printf("======== Copy a root file with selected Branches ==========\n");
@@ -21,22 +22,28 @@ void deleteSegBranch(){
       onoff.ReadLine(cin);
       if ( onoff == "y" ) {
          BranchSwitch[i] = 1;
+      }else if (onoff = "a"){
+      	printf(" ========== abort! \n");
+      	abort = 1;
+      	break;
       }else{
          BranchSwitch[i] = 0;
       }
    }
    
-   tree->SetBranchStatus("*",0);
-   for( Int_t i = 0; i < nBranch ; i++){
-      tree->SetBranchStatus(BranchName[i],BranchSwitch[i]);
-   }
-   
-   TFile *newfile = new TFile(savefile, "recreate");
-   printf(" >>>> copying ..... \n");
-   TTree *newtree = tree->CloneTree();
-   
-   newtree->Print();
-   newfile->Write();
+   if ( aboor == 0 ){
+		tree->SetBranchStatus("*",0);
+		for( Int_t i = 0; i < nBranch ; i++){
+		   tree->SetBranchStatus(BranchName[i],BranchSwitch[i]);
+		}
+		
+		TFile *newfile = new TFile(savefile, "recreate");
+		printf(" >>>> copying ..... \n");
+		TTree *newtree = tree->CloneTree();
+		
+		newtree->Print();
+		newfile->Write();
+	}
    newfile->Close();
    oldfile->Close();
    

@@ -1,12 +1,13 @@
+aliases:
+# beware to overwrite !!!
+  - &output  ppDown_0613.root
+ 
 Processor:
 #=============  DATA              ==========================
   - include: RunsProtonDown.yaml
-
 #============= Mapper and Timer ============================
   - include: Mapper_Timer.yaml   
-
 #============== PROCESSORS     =============================
-
   - include: coinReg.yaml
   - include: plastic_V1190_prm.yaml
   - include: plastic_V1190_F3.yaml
@@ -27,13 +28,12 @@ Processor:
     parameter:
       Name:     beam
       Type:     art::sh04::TBeamParameter
-      FileName: prm/kinematics/ppcoin.yaml
+      FileName: prm/kinematics/proton.yaml
 
   - include: recoil_ppcoin.yaml
-
 #============== Output     =============================
   - name: outputtree
     type: art::TOutputTreeProcessor
     parameter:
-      FileName: ppDown.root
+      FileName: *output
         
