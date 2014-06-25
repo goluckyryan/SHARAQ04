@@ -15,14 +15,14 @@
 
 void PPElastics() {
   
-   const char* savefilename="test.root";
-   const char* rootfile="PrimaryData/ppDown.root";
+   const char* savefilename="RppDown_0613.root";
+   const char* rootfile="PrimaryData/ppDown_0613.root";
    TBeamData* beam = new TBeamData("proton");
    Bool_t allentry  = 1;
    Int_t firstEntry = 0;
    Int_t nEntries=100000;
    // Both Tpla,  gamma, tof_us,  0<tof<30, recoil,  E<400, |wbeamZ|<1000
-   Bool_t Gate[7] = {0, 0, 0, 0, 0, 0, 0};
+   Bool_t Gate[7] = {1, 0, 1, 1, 1, 0, 1};
    
    beam->Print();
    Double_t Principle_tof = tofByBrho(L_F3FH9,beam->fBrho, beam->fMass, beam->fZ);
@@ -65,8 +65,9 @@ void PPElastics() {
    Double_t theta1, theta2;
    Double_t phi1, phi2;
    Double_t beamZ1, beamZ2;
+   Double_t beamX1, beamX2;
    Double_t Sp, Sp2;
-   Double_t wbeamZ;
+   Double_t wbeamZ, wbeamX;
 
    TFile *savefile = new TFile(savefilename,"recreate");
    TTree *recoil; 
@@ -107,6 +108,9 @@ void PPElastics() {
    recoil->Branch("beamZ1",&beamZ1,"beamZ1/D");
    recoil->Branch("beamZ2",&beamZ2,"beamZ2/D");
    recoil->Branch("wbeamZ", &wbeamZ,"wbeamZ/D");
+   recoil->Branch("beamX1",&beamX1,"beamX1/D");
+   recoil->Branch("beamX2",&beamX2,"beamX2/D");
+   recoil->Branch("wbeamX", &wbeamX,"wbeamX/D");
    recoil->Branch("Sp",&Sp,"Sp/D");
    recoil->Branch("Sp2",&Sp2,"Sp2/D");
 
@@ -281,9 +285,15 @@ void PPElastics() {
       beamZ2 = recoil2->fBeamZ;
       Double_t ebeamZ1 = recoil1->feBeamZ;
       Double_t ebeamZ2 = recoil2->feBeamZ;
+
+      beamX1 = recoil1->fBeamX;
+      beamX2 = recoil2->fBeamX;
+      double ebeamX1 = recoil1->feBeamX;
+      double ebeamX2 = recoil2->feBeamX;
       
       // calculated min
       wbeamZ = (beamZ1/ebeamZ1/ebeamZ1+beamZ2/ebeamZ2/ebeamZ2)/(1/ebeamZ1/ebeamZ1+1/ebeamZ2/ebeamZ2);  
+      wbeamX = (beamX1/ebeamX1/ebeamX1+beamX2/ebeamX2/ebeamX2)/(1/ebeamX1/ebeamX1+1/ebeamX2/ebeamX2);  
       if ( Gate[6] && TMath::Abs(wbeamZ) > 1000 ) continue; // beamZ gate   
       count7++;     
 

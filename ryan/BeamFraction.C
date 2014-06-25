@@ -1,9 +1,9 @@
 #include "TBeamData.h"
 void BeamFraction() {
-   const char* rootfile="PrimaryData/phys24Up.root";
-   TBeamData *beam = new TBeamData("25F");
+   const char* rootfile="PrimaryData/ppOptics.root";
+   TBeamData *beam = new TBeamData("proton");
    
-   Bool_t allentry  = 0;
+   Bool_t allentry  = 1;
    Int_t firstEntry = 77200;
    Int_t nEntries   =22204819;
    
@@ -22,9 +22,13 @@ void BeamFraction() {
    
    TH1F * hPIDUS      = new TH1F("PIDUS"    , "PID upstream", 100, beam->fTofGate[0]-3,beam->fTofGate[1]+3);
    TH2F * hS0img      = new TH2F("S0img"    , "S0img"                , nBin, -30, 30, nBin, -30, 30);
+   hS0img->SetXTitle("X");
+   hS0img->SetYTitle("Y");
    TString hS0imgCrysTitle;
    hS0imgCrysTitle.Form("S0img Crystal (%4.2f,%4.2f)%5.2f", center[0],center[1],radius);
    TH2F * hS0imgCrys  = new TH2F("S0imgCrys", hS0imgCrysTitle        , nBin, -30, 30, nBin, -30, 30);
+   hS0imgCrys->SetXTitle("X");
+   hS0imgCrys->SetYTitle("Y");
    TH2F * hS0AB       = new TH2F("S0AB"     , "S0img A B"            , nBin, -0.1,  0.1, nBin, -0.1, 0.1);
    
 //###########################################################
@@ -70,12 +74,12 @@ void BeamFraction() {
    for( Int_t eventID = firstEntry; eventID < endEntry; eventID ++){
       tree->GetEntry(eventID);
    
-//--------------coin Reg Gate
-      if ( hoge_coinReg->Test(1) != 1 ) continue;
+//--------------coin Reg Gate 1 = FH9 trigger
+//      if ( hoge_coinReg->Test(1) != 1 ) continue;
       
 //----------------Get tof and charge upstream V1190
       Int_t nHit = hoge_us -> GetEntriesFast();
-      Double_t tof_usV1190, Q_usG;
+      Double_t tof_usV1190 = 0 , Q_usG = 0;
       Bool_t PID = 0;
       for( Int_t p = 0; p < nHit; p++){
          tofusdata = (art::TTimeDifference*)hoge_us->At(p) ;
@@ -152,7 +156,7 @@ void BeamFraction() {
    hS0img->Draw("colz");
    countText.Form("count:%d",countS0img);
    text.DrawText(0.15, 0.8, countText); 
-   text.DrawText(0.15, 0.85, rootfile); 
+   //   text.DrawText(0.15, 0.85, rootfile); 
    
    TLine line;
    Int_t nPt = 20;
@@ -163,12 +167,12 @@ void BeamFraction() {
                     center[1] + radius*TMath::Sin(2*TMath::Pi()*(i+1)/nPt));
    }
    
-   cBeamFract->cd(2);
+   cBeamFract->cd(3);
    hS0AB->Draw("colz");
    
-   cBeamFract->cd(3);
+   cBeamFract->cd(2);
    hS0imgCrys->Draw("colz");
-   countText.Form("count:%d[%4.1f%%]", countCrystal, countCrystal*100./countFH9);
+   countText.Form("count:%d[%4.1f%%]", countCrystal, countCrystal*100./countS0img);
    text.DrawText(0.15, 0.8, countText);
 
    cBeamFract->cd(4);

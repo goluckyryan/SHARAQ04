@@ -2,7 +2,7 @@
 Double_t TKA = 260;
 void PPFit_thetaOp(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t OPCM = 1){
 
-   TFile *f0 = new TFile ("ppelastic7_15.root");
+   TFile *f0 = new TFile ("test.root");
    TTree *recoil = (TTree*)f0->Get("recoil");
    
    TCanvas * cThetaOp = new TCanvas ("cThetaOp","cThetaOp", 1200,50,800,800);

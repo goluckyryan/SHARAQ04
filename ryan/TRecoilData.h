@@ -18,10 +18,10 @@ public:
    Double_t fTheta, fPhi;
    //Double_t fTheta_AB, fPhi_AB;
    TLorentzVector f4Vector;
-   Double_t fBeamZ;
+   Double_t fBeamZ, fBeamX;
    Bool_t  fOK;
    
-   Double_t feBeamZ;
+   Double_t feBeamZ, feBeamX;
 
    TRecoilData();
    ~TRecoilData();
@@ -51,6 +51,8 @@ TRecoilData::TRecoilData(){
    fPhi = kInvalidD;
    fBeamZ = kInvalidD;
    feBeamZ = kInvalidD;
+   fBeamX = kInvalidD;
+   feBeamX = kInvalidD;
    fOK  = 0;
    
    f4Vector.SetXYZM(0,0,0, mp);
@@ -74,13 +76,13 @@ void TRecoilData::SetKinetic(Int_t id, Double_t &tof, Double_t &x, Double_t &y, 
    Double_t Zmwdc, Xmwdc, Ymwdc; // lab frame coordiante
    if (id ==1) { // SMWDC-L
       PlaneAngle = mwdcAngleL;
-      Zmwdc = z0+ z0L;
-      Xmwdc = x + x0L;
+      Zmwdc = z0+ z0L;//-DbeamZ*cos(PlaneAngle*deg2rad);
+      Xmwdc = x + x0L;//+DbeamZ*sin(PlaneAngle*deg2rad);
       Ymwdc = y + y0L;
    }else if(id = 2){
       PlaneAngle = mwdcAngleR;
-      Zmwdc = z0+ z0R;
-      Xmwdc = x + x0R;
+      Zmwdc = z0+ z0R;//-DbeamZ*cos(PlaneAngle*deg2rad);
+      Xmwdc = x + x0R;//-DbeamZ*sin(PlaneAngle*deg2rad);
       Ymwdc = y + y0R;
    }else{
       PlaneAngle = 0;
@@ -94,7 +96,11 @@ void TRecoilData::SetKinetic(Int_t id, Double_t &tof, Double_t &x, Double_t &y, 
    fBeamZ = (a *Zmwdc - Xmwdc)/(a * cos + sin);
    feBeamZ = TMath::Sqrt(TMath::Power((Xmwdc*cos + Zmwdc*sin)/(a * cos + sin)*ea,2) + ex*ex)/(a * cos + sin);
    feBeamZ = TMath::Abs(feBeamZ);
-   
+
+   fBeamX = (a *Zmwdc - Xmwdc)/(a * sin - cos);
+   feBeamX = TMath::Sqrt(TMath::Power((Xmwdc*sin - Zmwdc*cos)/(a * sin - cos)*ea,2) + ex*ex)/(a * sin - cos);
+   feBeamX = TMath::Abs(feBeamX);   
+
    if( TMath::IsNaN(s0x) ) s0x = 0;
    if( TMath::IsNaN(s0y) ) s0y = 0;
    

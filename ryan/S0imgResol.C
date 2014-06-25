@@ -2,8 +2,8 @@
 
 void S0imgResol() {
 
-   const char* rootfile="Data/phys14Up.root";
-   Bool_t allentry  = 0;
+   const char* rootfile="PrimaryData/ppOptics.root";
+   Bool_t allentry  = 1;
    Int_t firstEntry = 3000000;
    Int_t nEntries   = 1000000;
    
@@ -20,19 +20,28 @@ void S0imgResol() {
    Double_t varBeta[4]; // =CoVar[4]*var
    Double_t sigma[4];
    
-   CoVar[0] = 6.567639144; 
-   CoVar[1] = 0.0000122454356; 
-   CoVar[2] = 18.73226659; 
-   CoVar[3] = 0.00003454508459;
-   
+   CoVar[0] = 5.63217; 
+   CoVar[1] = 0.0000106246; 
+   CoVar[2] = 17.7527; 
+   CoVar[3] = 0.0000338692;
+
+   gStyle->SetOptStat(0);
    //========= Histogram
    TCanvas* cS0Resol = new TCanvas("cS0Resol", "S0img Resol.", 100, 100, 600,600);
    cS0Resol->Divide(2,2);
    
    TH1F* hsigmaX = new TH1F("sigmaX", "sigma(X) [mm]", 100, 0, 5);
+   hsigmaX->SetXTitle("sigmaX [mm]");
+   //hsigmaX->SetYTitle("count / 0.05 mm");
    TH1F* hsigmaY = new TH1F("sigmaY", "sigma(Y) [mm]", 100, 0, 5);
-   TH1F* hsigmaA = new TH1F("sigmaA", "sigma(A) [mrad]", 100, 0, 20);
-   TH1F* hsigmaB = new TH1F("sigmaB", "sigma(B) [mrad]", 100, 0, 20);
+   hsigmaY->SetXTitle("sigmaY [mm]");
+   //hsigmaY->SetYTitle("count / 0.05 mm");
+   TH1F* hsigmaA = new TH1F("sigmaA", "sigma(A) [mrad]", 100, 0, 10);
+   hsigmaA->SetXTitle("sigmaA [mrad]");
+   //hsigmaA->SetYTitle("count / 0.1 mrad");
+   TH1F* hsigmaB = new TH1F("sigmaB", "sigma(B) [mrad]", 100, 0, 10);
+   hsigmaB->SetXTitle("sigmaB [mrad]");
+   //hsigmaB->SetYTitle("count / 0.1 mrad");
 
 //############################################################################
    art::TEventHeader *hoge_run;

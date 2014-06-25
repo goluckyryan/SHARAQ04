@@ -2,15 +2,21 @@
 {   gROOT->Reset();
    gStyle->SetOptStat(0);
    
-   const char * rootfile = "Rphys25FAll_test.root";
-   Double_t Xrange[2] = {40, 100};
-   Int_t   nbin = (Xrange[1]-Xrange[0]);
-   Double_t center[2]={0., 1.9}; //{0., 3.35}
-   Double_t radiusA = 11., radiusB = 15.;
-   Int_t width = 50;
-   Int_t startX = -10;
+   const char * rootfile = "test.root";
+   Double_t AngRange[2] = {70, 100};
+   Int_t   nbin = (AngRange[1]-AngRange[0])*2;
+   Bool_t S0imgExist = 0;
+   Bool_t ResExist = 0;
    
-   Int_t hMax = 50;
+   if ( S0imgExist ){
+   	Double_t center[2]={0., 1.9}; //{0., 3.35}
+   	Double_t radiusA = 11., radiusB = 15.;
+   }
+   Int_t widthZ = 50;
+   Int_t startZ = -15;
+   
+   Bool_t hAngAutoMax = 0; 
+   Int_t hAngMax = 5000;
    
    Double_t S0DtRange[2] = {-134, -126};
    Double_t S0DqRange[2] = {1000, 3500};
@@ -19,13 +25,16 @@
    TFile *f0 = new TFile (rootfile, "read");
    TTree *recoil = (TTree*)f0->Get("recoil");
    
-   Int_t xDiv = 3, yDiv = 3;
+   Int_t xDiv = 4, yDiv = 3;
    Double_t PadSize=300;
    TCanvas * cOpenAng = new TCanvas ("cOpenAng","cOpenAng", 0,0,PadSize*xDiv,PadSize*yDiv);
    cOpenAng->Divide(xDiv,yDiv);
-   TString hS0imgTitle;
-   hS0imgTitle.Form("S0img (%4.2f,%4.2f|%5.2f, %5.2f)", center[0], center[1], radiusA, radiusB);
-   TH2F * hS0img = new TH2F ("S0img", hS0imgTitle, 100,-20, 20, 100,  -20, 20);
+   
+   if ( S0imgExist ){
+   	TString hS0imgTitle;
+   	hS0imgTitle.Form("S0img (%4.2f,%4.2f|%5.2f, %5.2f)", center[0], center[1], radiusA, radiusB);
+   	TH2F * hS0img = new TH2F ("S0img", hS0imgTitle, 100,-20, 20, 100,  -20, 20);
+   }
    TH2F * hPIDDS = new TH2F ("PIDDS", "PID ds Res(0)", 100, S0DtRange[0], S0DtRange[1], 100, S0DqRange[0], S0DqRange[1]);
    
    const Int_t nhist = xDiv*yDiv;
@@ -38,13 +47,19 @@
    TString drawTitle;
    THStack hs("hs", "stack");
    
-//====================================   
-   TString crystalTitle;
-   crystalTitle.Form("TMath::Power(s0x-%4.2f,2) + TMath::Power(s0y-%4.2f,2) >= %6.2f", center[0], center[1], radiusA*radiusA);
-   TCut crystalA = crystalTitle;
-   crystalTitle.Form("TMath::Power(s0x-%4.2f,2) + TMath::Power(s0y-%4.2f,2) <= %6.2f", center[0], center[1], radiusB*radiusB);
-   TCut crystalB = crystalTitle;
-   
+//====================================  
+	TCut crystalA, crystalB; 
+   if ( S0imgExist ){
+   	TString crystalTitle;
+   	crystalTitle.Form("TMath::Power(s0x-%4.2f,2) + TMath::Power(s0y-%4.2f,2) >= %6.2f", center[0], center[1], radiusA*radiusA);
+   	crystalA = crystalTitle;
+   	crystalTitle.Form("TMath::Power(s0x-%4.2f,2) + TMath::Power(s0y-%4.2f,2) <= %6.2f", center[0], center[1], radiusB*radiusB);
+   	crystalB = crystalTitle;
+   }else{
+   	crystalA = "";
+   	crystalB = "";
+	}
+	
    TCut Etot = "E1+E2 >= 100";
    
    TCutG * ResO23F = new TCutG("ResO23F",6);
@@ -88,25 +103,36 @@
    ResC14O->SetPoint(5,-66.4,1956.2);
    ResC14O->SetPoint(6,-69.0,1648.8);
    
-   TCut ExtGate = crystalA + crystalB + Etot + "ResO25F";
+   
+   TCut ExtGate;
+   if ( ResExist ){
+	   ExtGate = crystalA + crystalB + Etot + "ResO25F";
+   }else{
+   	ExtGate = crystalA + crystalB + Etot;
+	}
    ExtGate.Print();
    
    for (Int_t i = 0; i <xDiv*yDiv -3; i++){
-      VarGateRange[0] = startX + width*(i-2);
-      VarGateRange[1] = startX + width*(i+1-2) ;
+      VarGateRange[0] = startZ + widthZ*(i-2);
+      VarGateRange[1] = startZ + widthZ*(i+1-2) ;
       VarGateTitle.Form("wbeamZ > %5d && wbeamZ < %5d", VarGateRange[0], VarGateRange[1]);
       
       VarGate.Clear();
       VarGate += VarGateTitle;
       VarGate.Print();
       histName.Form("hist[%d]",i);
-      hist[i] = new TH1F(histName, VarGateTitle, nbin, Xrange[0],Xrange[1]);
-      hist[i]->SetMaximum(hMax);
+      hist[i] = new TH1F(histName, VarGateTitle, nbin, AngRange[0],AngRange[1]);
+      if (hAngAutoMax)hist[i]->SetMaximum(hAngMax);
+      hist[i]->SetXTitle("OpenAng [degree]");
+      TString hAngYTitle;
+      hAngYTitle.Form("count / %3.1f degree",(AngRange[1]-AngRange[0])/nbin);
+      hist[i]->SetYTitle(hAngYTitle);
+      hist[i]->GetYaxis()->SetTitleOffset(1.5);
       hist[i]->SetMinimum(0);
       hist[i]->SetFillColor(i+1);
       
       histBeamZName.Form("histBeamZ[%d]",i);
-      histBeamZ[i] = new TH1F(histBeamZName, "beamZ", 200, -100, 200);
+      histBeamZ[i] = new TH1F(histBeamZName, "beamZ", 200, startZ + widthZ*(-2), startZ + widthZ*(xDiv*yDiv-5));
       histBeamZ[i]->SetFillColor(i+1);
       
       cOpenAng->cd(i+1);
@@ -120,35 +146,38 @@
       //hs.Add(hist[i]);
    }
    
+   TString Text;
+	TLatex text;
+   
    cOpenAng->cd(xDiv*yDiv-2);
    hs.Draw();
    cOpenAng->cd(xDiv*yDiv-1);
-   Int_t countS0img = recoil->Draw("s0y:s0x>>S0img", ExtGate, "colz");
-   TString Text;
-   TLatex text;
-   text.SetNDC();
-   text.SetTextColor(1);
-   Text.Form("count:%d",countS0img);
-   text.DrawText(0.15, 0.8, Text); 
-   TLine line;
-   Int_t nPt = 20;
-   for ( Int_t i = 0; i < nPt; i++){
-      line.DrawLine(center[0] + radiusA*TMath::Cos(2*TMath::Pi()*i/nPt),
-                    center[1] + radiusA*TMath::Sin(2*TMath::Pi()*i/nPt),
-                    center[0] + radiusA*TMath::Cos(2*TMath::Pi()*(i+1)/nPt),
-                    center[1] + radiusA*TMath::Sin(2*TMath::Pi()*(i+1)/nPt));
+   if ( S0imgExist ){
+		Int_t countS0img = recoil->Draw("s0y:s0x>>S0img", ExtGate, "colz");
+		text.SetNDC();
+		text.SetTextColor(1);
+		Text.Form("count:%d",countS0img);
+		text.DrawText(0.15, 0.8, Text); 
+		TLine line;
+		Int_t nPt = 20;
+		for ( Int_t i = 0; i < nPt; i++){
+		   line.DrawLine(center[0] + radiusA*TMath::Cos(2*TMath::Pi()*i/nPt),
+		                 center[1] + radiusA*TMath::Sin(2*TMath::Pi()*i/nPt),
+		                 center[0] + radiusA*TMath::Cos(2*TMath::Pi()*(i+1)/nPt),
+		                 center[1] + radiusA*TMath::Sin(2*TMath::Pi()*(i+1)/nPt));
+		}
+   	for ( Int_t i = 0; i < nPt; i++){
+      	line.DrawLine(center[0] + radiusB*TMath::Cos(2*TMath::Pi()*i/nPt),
+      	              center[1] + radiusB*TMath::Sin(2*TMath::Pi()*i/nPt),
+      	              center[0] + radiusB*TMath::Cos(2*TMath::Pi()*(i+1)/nPt),
+      	              center[1] + radiusB*TMath::Sin(2*TMath::Pi()*(i+1)/nPt));
+   	}
    }
-   for ( Int_t i = 0; i < nPt; i++){
-      line.DrawLine(center[0] + radiusB*TMath::Cos(2*TMath::Pi()*i/nPt),
-                    center[1] + radiusB*TMath::Sin(2*TMath::Pi()*i/nPt),
-                    center[0] + radiusB*TMath::Cos(2*TMath::Pi()*(i+1)/nPt),
-                    center[1] + radiusB*TMath::Sin(2*TMath::Pi()*(i+1)/nPt));
-   }
-   
    cOpenAng->cd(xDiv*yDiv);
-   recoil->Draw("QS0D:tofS0D>>PIDDS", ExtGate, "colz");
-   ResO25F->Draw("same");
-   
+   if ( ResExist ){
+   	recoil->Draw("QS0D:tofS0D>>PIDDS", ExtGate, "colz");
+   	ResO25F->Draw("same");
+   }
    cOpenAng->cd(1);
    text.DrawText(0.15, 0.8, rootfile); 
    text.DrawText(0.15, 0.75, "PID gated");

@@ -9,7 +9,7 @@ void MWDC_TimeGateAnalysis() {
    //const char* rootfile="phys14_45_67.root";
    Bool_t allentry  = 1;
    Int_t firstEntry = 0;
-   Int_t nEntries=500;
+   Int_t nEntries=50000;
    Bool_t histonoff = 1; // 0 = off 
    
 //############################################################################
@@ -20,23 +20,33 @@ void MWDC_TimeGateAnalysis() {
 
    if ( histonoff ){
       TCanvas * cMWDC = new TCanvas("cMWDC_TimeGate", "cMWDC_TimeGate", 100, 50, 800, 800);
-      cMWDC_TimeGate->Divide(2,2);
+      cMWDC_TimeGate->Divide(3,2);
       
       TH1F** hTL = new TH1F*[4];
+      TH1F** hTW = new TH1F*[4];
       TH1F** hTrackID = new TH1F*[4];
       TH1F** hSSR = new TH1F*[4];
+      TH1F** hValidPlane = new TH1F*[4];
       for (Int_t i = 0; i < 4; i++){
       	TString hTitle;
       	hTitle.Form("TL%1d",i);
       	hTL[i] = new TH1F(hTitle, hTitle, 200, -200, 200);
       	hTL[i] -> SetLineColor(i+1);
+      	hTitle.Form("TW%1d",i);
+      	hTW[i] = new TH1F(hTitle, hTitle, 300, -50, 250);
+      	hTW[i] -> SetLineColor(i+1);
       	hTitle.Form("TrackID-%d",i);
       	hTrackID[i] = new TH1F(hTitle, hTitle, 2, 0, 2);
       	hTrackID[i] -> SetLineColor(i+1);
       	hTitle.Form("SSR-%d",i);
       	hSSR[i] = new TH1F(hTitle, hTitle, 100, 0, 0.4);
       	hSSR[i] -> SetLineColor(i+1);
+      	hTitle.Form("ValidPlane-%d",i);
+      	hValidPlane[i] = new TH1F(hTitle, hTitle, 7, 0, 7);
+      	hValidPlane[i] -> SetLineColor(i+1);
       }
+      
+      TH2F * hTrackID2D = new TH2F("hTrackID2D", "hTrackID2D", 4, 1 ,5, 4, 1, 5);
       
    }
  
@@ -111,6 +121,7 @@ void MWDC_TimeGateAnalysis() {
          	xy[i] = (art::TMWDCTrackingResult*)hoge_L[i]->At(p);
          	trackID[i] = xy[i]->IsGood();
          	SSR[i] = xy[i]->GetSSR();
+         	Int_t NValidPlane = xy[i] -> GetNPlaneValid();
          	//printf(" gate:%1d, GoodTrack:%3d, SSR:%10.7f | ", i, xy[i]->IsGood(), xy[i]->GetSSR());
          	//printf("Adopted WireID:: ");
          	for(Int_t k = 0; k < 6; k++){
@@ -121,7 +132,17 @@ void MWDC_TimeGateAnalysis() {
       	}
       	hTrackID[i] -> Fill(trackID[i]);
       	hSSR[i] -> Fill(SSR[i]);
+      	hValidPlane[i] ->Fill(NValidPlane);
       }
+      
+      //-------------- Check the coincident of trackID;
+      for( int i = 0; i < 4; i++){
+      	for(int j = 0; j < 4; j++){
+      		int trackID2D = 0;
+      		if( trackID[i] == 1 && trackID[j] == 0) trackID2D = 1;
+      		hTrackID2D -> Fill(i+1, j+1, trackID2D);
+      	}
+   	}
       
 
       for ( int i = 0 ; i < 4; i ++){
@@ -159,7 +180,10 @@ void MWDC_TimeGateAnalysis() {
 		   			//printf("   matched (%1d)", i);
 		   			matched = 1;
 					}	
-					if ( matched ) hTL[i] -> Fill(AdoptedTL[i][k]);
+					if ( matched ) {
+						hTL[i] -> Fill(AdoptedTL[i][k]);
+						hTW[i] -> Fill(AdoptedTW[i][k]);
+					}
 				}
 			}
 			//printf("\n");
@@ -189,24 +213,45 @@ void MWDC_TimeGateAnalysis() {
       
    }
    
+   TLatex text;
+   text.SetNDC(1);
+   TString *textStr = new TString [4];
+   textStr[0].Form("no gate.");
+   textStr[1].Form("-130 < TL < 100");
+   textStr[2].Form("  70 < TW < 140");
+   textStr[3].Form("TL & TW gate.");
    
    if ( histonoff ){
       cMWDC_TimeGate->cd(1);
       for( Int_t i = 0; i < 4; i++){
       	hTL[i]->Draw("same");
+      	text.SetTextColor(i+1);
+      	text.DrawText(0.3,0.05*(i+1) + 0.1 ,textStr[i].Data());
       }
       
       cMWDC_TimeGate->cd(2);
       for( Int_t i = 0; i < 4; i++){
-      	hTrackID[i]->SetMaximum(totnumEntry);
-      	hTrackID[i]->Draw("same");
+      	hTW[i]->Draw("same");
       }
       
       cMWDC_TimeGate->cd(3);
       for( Int_t i = 0; i < 4; i++){
-         hSSR[i]->SetMaximum(30000);
+      	//hTrackID[i]->SetMaximum(totnumEntry);
+      	hTrackID[i]->Draw("same");
+      }
+      
+      cMWDC_TimeGate->cd(4);
+      for( Int_t i = 0; i < 4; i++){
       	hSSR[i]->Draw("same");
       }
+      
+      cMWDC_TimeGate->cd(5);
+      for( Int_t i = 0; i < 4; i++){
+      	hValidPlane[i]->Draw("same");
+      }
+      
+      cMWDC_TimeGate->cd(6);
+      hTrackID2D->Draw("colz");
    }
    
 //##############################################################################   
