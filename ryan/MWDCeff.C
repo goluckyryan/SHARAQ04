@@ -3,15 +3,16 @@ void MWDCeff() {
 
 //############################################################################  
    //const char* rootfile="ppDown.root"; 
-   const char* rootfile="ppcoin8_15.root";
+   const char* rootfile="PrimaryData/ppAll_0613.root";
    //const char* rootfile="/media/ResearchData/sharaq04/ppUp.root";
    //const char* rootfile="phys14_45_67.root";
    Bool_t ValidorTracked = 0; // 0 = Valid, 1 = tracked
    Bool_t allentry  = 0;
-   Int_t firstEntry = 3000000;
-   Int_t nEntries=500000;
+   Int_t firstEntry = 0;
+   Int_t nEntries=100000;
    Double_t Qgate = 800;
-   Bool_t histonoff = 0; // 0 = off 
+   Double_t Xgate[2] = {-600, -400};
+   Bool_t histonoff = 1; // 0 = off 
    
 //############################################################################
    TBenchmark clock;
@@ -31,7 +32,7 @@ void MWDCeff() {
    TH1F * htdiff2  = new TH1F("tdiff2", "Tdiff2", 100, -15, 15);
    htdiff1->SetLineColor(4);
    htdiff2->SetLineColor(2);
-   sd
+   
    TH2F * hQ1Plane = new TH2F("Q1Plane", "Q1 vs NValidPlane1", 7, 0, 7, 200, 0, 3000);
    TH2F * hQ2Plane = new TH2F("Q2Plane", "Q2 vs NValidPlane2", 7, 0, 7, 200, 0, 3000);
    
@@ -69,6 +70,7 @@ void MWDCeff() {
    
    art::TTwoSidedPlasticData * V775Data;
    art::TMWDCTrackingResult * xy1,* xy2;
+   art::TTrack * track1, * track2;
    
    Int_t countN6[3]; // 6 plane fired
    Int_t countN5comp[3]; 
@@ -117,13 +119,18 @@ void MWDCeff() {
 //---------Get SMWDC image, should be one 1 instance
       Int_t mwdcBoth = 0;
       if ( QTpla[0] > Qgate ){
-         countQ[0]++;
          Int_t nHit = hoge_L->GetEntriesFast();
          for( Int_t p = 0; p < nHit; p++){
             xy1 = (art::TMWDCTrackingResult*)hoge_L->At(p);
             if ( ValidorTracked == 1 && xy1 -> GetTrackingID() != 1) continue;
          
             Int_t NValidPlane = xy1 -> GetNPlaneValid();
+            //track1 = (art::TTrack *)xy1->GetTrack();
+            
+            //if ( track1->GetX() < Xgate[0] || track1->GetX() > Xgate[1] ) continue; 
+            
+            if (NValidPlane > 0 ) countQ[0]++;
+            
             if ( NValidPlane >= 5 ) mwdcBoth ++;
             if ( NValidPlane == 6 ) countN6[0] ++ ; // count for validPlane == 6
             if ( NValidPlane == 5 ) {  // count number of each plane for validPlane == 5
@@ -145,7 +152,6 @@ void MWDCeff() {
       }
       
       if ( QTpla[1] > Qgate ){
-         countQ[1]++;
          if ( QTpla[0] > Qgate) countQ[2] ++; 
          Int_t nHit = hoge_R->GetEntriesFast();
          for( Int_t p = 0; p < nHit; p++){
@@ -153,6 +159,12 @@ void MWDCeff() {
             if ( ValidorTracked == 1 && xy2 -> GetTrackingID() !=1 ) continue;
             
             Int_t NValidPlane = xy2 -> GetNPlaneValid();
+            //track2 = (art::TTrack *)xy2->GetTrack();
+            
+            //if ( track2->GetX() < Xgate[0] || track2->GetX() > Xgate[1] ) continue;
+            
+            if (NValidPlane > 0 ) countQ[1]++;
+            
             if ( NValidPlane >= 5 ) mwdcBoth ++;
             if ( NValidPlane == 6 ) countN6[1] ++ ; // count for validPlane == 6
             if ( NValidPlane == 5 ) {  // count number of each plane for validPlane == 5
@@ -176,7 +188,7 @@ void MWDCeff() {
       if (mwdcBoth == 2) countN6[2] ++;
       
 //------------Clock      
-/*      clock.Stop("timer");
+      clock.Stop("timer");
       Double_t time = clock.GetRealTime("timer");
       clock.Start("timer");
       
@@ -194,7 +206,7 @@ void MWDCeff() {
          if (fmod(time, 10) > 9 ){
             shown = 0;
          }
-      }*/
+      }
       
    }
    
@@ -213,6 +225,7 @@ void MWDCeff() {
       hNVPlane2->Draw();
    }
    
+   //##############  calculation efficiency
    Double_t eff[2][6];
    Double_t eff0[2] = {1,1};
    Double_t eff6[2] = {1,1};
@@ -251,6 +264,7 @@ void MWDCeff() {
    }else{
       printf("------------- Qgate:%f, Tracked Efficency \n", Qgate);   
    }
+   printf("------------- Xgate:(%5.0f,%5.0f)\n", Xgate[0], Xgate[1]);
    printf("countQ>%4d:%10d \t\t\t%10d \t\t\t%10d\n", TMath::Nint(Qgate),  countQ[0], countQ[1], countQ[2]);
    printf("count>=5   :%10d[%4.1f%%] \t\t%10d[%4.1f%%] \t\t%10d[%4.1f%%] \n"
                               ,countN6[0]+countN5tot[0],(countN6[0]+countN5tot[0])*100./countQ[0]
