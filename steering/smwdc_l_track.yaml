@@ -1,7 +1,7 @@
 # require : plastic_FH9.yaml
 #         : smwdc_l.ymal
 #           smwdc_l_XXXConvert.yaml
-# output : smwdc
+# output :  smwdc
 
 Processor:
   - name: mwdctrack_smwdc_L

@@ -4,13 +4,13 @@
    gROOT->ProcessLine(".!date");
    gStyle->SetOptStat(0);
 
-   TFile *f0 = new TFile ("PrimaryData/phys25F.root"); TTree *tree = (TTree*)f0->Get("tree");   
+//   TFile *f0 = new TFile ("PrimaryData/phys25F.root"); TTree *tree = (TTree*)f0->Get("tree");   
 
 //   TFile *f1 = new TFile ("PrimaryData/ppOptics.root"); TTree *ppNew = (TTree*)f1->Get("tree");   
 
-//   TFile *f1 = new TFile ("ppAll_0716_multiOffset.root"); TTree *tree = (TTree*)f1->Get("tree");
+   TFile *f1 = new TFile ("ppUp_0723.root"); TTree *tree = (TTree*)f1->Get("tree");
 
-//   TFile *f1 = new TFile ("PrimaryData/phys25F_multiOffset.root","update"); TTree *tree = (TTree*)f1->Get("tree");
+   TFile *f1 = new TFile ("PrimaryData/ppUp.root","update"); TTree *old = (TTree*)f1->Get("tree");
    
 //   TFile *f1 = new TFile ("RppAll_0714_multiOffset.root","update"); TTree *recoil = (TTree*)f1->Get("recoil");   
 //   f1->Close();
