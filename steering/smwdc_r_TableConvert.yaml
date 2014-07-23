@@ -48,7 +48,7 @@ Processor:
       - name: UseMultipleStartTiming
         value: 0
       - name: OutputTransparency
-        value: 0
+        value: 1
         
   - name: mwdc_smwdc_R_dtdx
     type: art::TMonotoneTableConverterGenerator

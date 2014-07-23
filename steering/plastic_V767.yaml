@@ -47,7 +47,8 @@ Processor:
   - name: plastic_cal_V767
     type: art::TTwoSidedPlasticCalibrationProcessor
     parameter:
-      InputCollection:    [plaV767_L_cal,plaV767_R_cal]
+      InputCollection1:   plaV767_L_cal
+      InputCollection2:   plaV767_R_cal
       OutputCollection:   plaV767
       DetIDRange:         [0,1]
       OutputTransparency: 1

@@ -1,12 +1,12 @@
 aliases:
 # beware to overwrite !!!
-  - &output  testSp2.root
+  - &output  test.root
  
-  - &beamprm prm/kinematics/proton.yaml     
+#  - &beamprm prm/kinematics/proton.yaml     
 #  - &beamprm prm/kinematics/14O.yaml  
 #  - &beamprm prm/kinematics/22O.yaml
 #  - &beamprm prm/kinematics/23F.yaml
-#  - &beamprm prm/kinematics/25F.yaml
+  - &beamprm prm/kinematics/25F.yaml
 
 #===========================================================
 Processor:
@@ -21,7 +21,7 @@ Processor:
 #  - include: RunsO14Up.yaml
 #  - include: RunsO14Down.yaml
 #  - include: RunsO14Others.yaml
-#  - include: RunsO24.yaml
+  - include: RunsO24.yaml
 #  - include: RunsO24_0001.yaml
 #  - include: RunsO24Optics.yaml
 #  - include: RunsO24Up.yaml
@@ -37,7 +37,7 @@ Processor:
   - include: plastic_V1190_FH9.yaml
   - include: plastic_tof_US.yaml
   - include: Gate_PID.yaml
-  - include: ppac.yaml
+  - include: ppac_old.yaml
 #  - include: dc91.yaml
 #  - include: dc91_track.yaml
   - include: plastic_V775.yaml             # include tof_DS

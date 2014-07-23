@@ -58,9 +58,8 @@ Processor:
   - name: plastic_cal_V775
     type: art::TTwoSidedPlasticCalibrationProcessor
     parameter:
-      InputCollection:
-       - plaV775_L_cal
-       - plaV775_R_cal
+      InputCollection1:   plaV775_L_cal
+      InputCollection2:   plaV775_R_cal
       OutputCollection:   plaV775
       DetIDRange:         [0,4]
       OutputTransparency: 0
@@ -76,3 +75,10 @@ Processor:
       OutputTransparency:     0
 
 #===========================================================
+# V775 is a common start TDC
+# t_FH9 = true_FH9 - t_common
+# t_X   = true_X   - t_common
+#
+# tof(X - FH9) = t_X - t_FH9 = true_X - true_FH9
+
+

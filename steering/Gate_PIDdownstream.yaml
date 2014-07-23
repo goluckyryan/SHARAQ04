@@ -5,15 +5,15 @@ aliases:
 #  - &hist [hPID_DS,PID_DS;TOF;Charge,150,-130,-124,100,1000,2500]
 
 #====== 14O runs
-  - &Res1 [ &residualN ResN,prm/pidDS/14o/n.dat]
-  - &Res2 [ &residualC ResC,prm/pidDS/14o/c.dat]
-  - &hist [hPID_DS,PID_DS;TOF;Charge,150,-130,-115,300,0,3000]
+#  - &Res1 [ &residualN ResN,prm/pidDS/14o/n.dat]
+#  - &Res2 [ &residualC ResC,prm/pidDS/14o/c.dat]
+#  - &hist [hPID_DS,PID_DS;TOF;Charge,150,-130,-115,300,0,3000]
   
 #====== 24O runs
-#  - &Res1 [ &residualF ResF,prm/pidDS/24o/f.dat]
-#  - &Res2 [ &residualO ResO,prm/pidDS/24o/o.dat]
-#  - &Res3 [ &residualO2 ResO2,prm/pidDS/24o/n.dat]
-#  - &hist [hPID_DS,PID_DS;TOF;Charge,150,-133,-124,300,500,3500] 
+  - &Res1 [ &residualF ResF,prm/pidDS/24o/f.dat]
+  - &Res2 [ &residualO ResO,prm/pidDS/24o/o.dat]
+  - &Res3 [ &residualO2 ResO2,prm/pidDS/24o/n.dat]
+  - &hist [hPID_DS,PID_DS;TOF;Charge,150,-133,-124,300,500,3500] 
   
 Processor:
   - name: proc_pidgate_downstream
@@ -26,7 +26,7 @@ Processor:
       Polygon:
           - *Res1
           - *Res2
-#          - *Res3
+          - *Res3
       HistogramOption: *hist
         
 #  - name: proc_stop_downstream

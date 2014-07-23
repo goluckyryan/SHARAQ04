@@ -1,6 +1,6 @@
 aliases:
 # beware to overwrite !!!
-  - &output  ppAll_0617_mwdctime.root
+  - &output  ppAll_0716_multiOffset.root
  
 Processor:
 #=============  DATA              ==========================
@@ -20,19 +20,20 @@ Processor:
   - include: plastic_V767.yaml              
   - include: smwdc_l_PolyConvert.yaml     
   - include: smwdc_l_track.yaml
-  - include: smwdc_l_track_gated.yaml
+#  - include: smwdc_l_track_gated.yaml
   - include: smwdc_r_PolyConvert.yaml      
   - include: smwdc_r_track.yaml
-  - include: smwdc_r_track_gated.yaml
+#  - include: smwdc_r_track_gated.yaml
 
-#  - name: proc_beam
-#    type: art::TParameterLoader
-#    parameter:
-#      Name:     beam
-#      Type:     art::sh04::TBeamParameter
-#      FileName: prm/kinematics/proton.yaml
+  - name: proc_beam
+    type: art::TParameterLoader
+    parameter:
+      Name:     beam
+      Type:     art::sh04::TBeamParameter
+      FileName: prm/kinematics/proton.yaml
 
 #  - include: recoil_ppcoin.yaml
+  - include: recoil_ppcoin_multiOffset.yaml
 #============== Output     =============================
   - name: outputtree
     type: art::TOutputTreeProcessor

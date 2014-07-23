@@ -46,7 +46,8 @@ Processor:
       TPlasticLDetID:     0
       TPlasticRDetID:     1
       BeamZ:              *beamZ
-      Shift:              0
+      ShiftL:             0
+      ShiftR:             0
       OutputTransparency: 0
 
   - name: Recoil_L
@@ -109,7 +110,8 @@ Processor:
       TPlasticLDetID:     0
       TPlasticRDetID:     1
       BeamZ:              *beamZ
-      Shift:              0.1
+      ShiftL:             0.1
+      ShiftR:             0.1
       OutputTransparency: 0
 
   - name: Recoil_L_p100

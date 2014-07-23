@@ -1,6 +1,7 @@
 aliases:
-  - &beamZ    0.
-  - &tofShift 0.
+  - &beamZ      0.
+  - &tofShift_L 0.
+  - &tofShift_R 0.
 #============== PROCESSORS     =============================
 Processor:
   - name: smwdc_geometry
@@ -35,7 +36,8 @@ Processor:
       TPlasticLDetID:     0
       TPlasticRDetID:     1
       BeamZ:              *beamZ
-      Shift:              *tofShift
+      ShiftL:             *tofShift_L
+      ShiftR:             *tofShift_R
       OutputTransparency: 0
 
   - name: Recoil_L

@@ -1,34 +1,26 @@
-# require : none
-# output : ppac
-
 Processor:
-  - name: ppac_prm_ch2ns
+  - name: ppac:ch2ns
     type: art::TParameterArrayLoader
     parameter:
-      Name:     prm_ppac_ch2ns
+      Name:     ppac_ch2ns
       Type:     art::TAffineConverter
       FileName: prm/ppac/ch2ns.dat
-
-  - name: ppac_prm_xconv
+      
+  - name: ppac:param
     type: art::TParameterArrayLoader
     parameter:
-      Name:     prm_ppac_xconv
-      Type:     art::TAffineConverter
-      FileName: prm/ppac/x.dat
-        
-  - name: ppac_prm_yconv
-    type: art::TParameterArrayLoader
-    parameter:
-      Name:     prm_ppac_yconv
-      Type:     art::TAffineConverter
-      FileName: prm/ppac/y.dat
-
+      Name:       prm_ppac
+      Type:       art::TPPACParameter
+      FileName:   prm/ppac/ppac.prm.yaml   
+      FileFormat: yaml
+      
   - name: ppac
     type: art::TPPACProcessor
     parameter:
       CatID:                2
-      TimingConverterArray: prm_ppac_ch2ns
-      XConverterArray:      prm_ppac_xconv
-      YConverterArray:      prm_ppac_yconv
-
-#======================================================
+      TimingConverterArray: ppac_ch2ns      
+      HasEachChConverter:   1
+      DoSeparatePPACs:      0
+      OutputTransparency:   0
+      ListOfPPACNames:      f6ppac
+        

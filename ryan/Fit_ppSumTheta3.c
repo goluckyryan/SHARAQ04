@@ -12,9 +12,9 @@ Int_t   nbin = (Xrange[1]-Xrange[0])*4;
 Double_t countRange[2] = {85.8, 88.0};
 
 //____________ Loading File
-TFile *f0 = new TFile ("ppelasticUp.root");
+TFile *f0 = new TFile ("RppUp_0613.root");
 TTree *recoilUp = (TTree*)f0->Get("recoil");
-TFile *f1 = new TFile ("ppelasticDown.root");
+TFile *f1 = new TFile ("RppDown_0613.root");
 TTree *recoilDown = (TTree*)f1->Get("recoil");
 
 //____________ create Canvas and histogram
@@ -28,6 +28,7 @@ TH1F * h2a = new TH1F("h2a",titleh2, nbin, Xrange[0], Xrange[1]);
 //========================================================================
 void Fit_ppSumTheta3(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t OPCM = 1){
    gStyle->SetOptFit(1111);
+   gStyle->SetOptStat(0);
    printf("=========================================\n");
    
    //______________Set the thetaCM and the corresponding thetaLab
@@ -42,8 +43,8 @@ void Fit_ppSumTheta3(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t O
    }
    
    //_____________ Gating for the histogram
-   TCut beamZGate1 = "wbeamZ >-20";
-   TCut beamZGate2 = "wbeamZ < 40";
+   TCut beamZGate1 = "wbeamZ >-50";
+   TCut beamZGate2 = "wbeamZ < 50";
    TString cut;
    if ( LR == 1){
       cut = "theta1";
@@ -345,6 +346,7 @@ Double_t fitFunction(const Double_t *x, const Double_t *para){
   Double_t arg[1];
   arg[0] = x[0] +para[3];
   return GausConSumTheta(arg,para) + Poly(x,&para[4]);
+  //return Gauss(arg,para) + Poly(x,&para[4]);
   
 }
 //===============================================================================

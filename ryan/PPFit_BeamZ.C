@@ -1,16 +1,16 @@
 #include "RelCalculator.h"
 Double_t TKA = 260;
 
-void PPFit_BeamZ(Int_t angle1 = 60, Int_t angle2 = 80, Int_t LR = 1, Int_t OPCM = 1){
+void PPFit_BeamZ(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t OPCM = 1){
 
-   TFile *f0 = new TFile ("RppUp_0613.root");
+   TFile *f0 = new TFile ("RppDown_0613.root");
    TTree *recoil = (TTree*)f0->Get("recoil");
    
    Double_t OpenAngGateRange[2] = {85, 90};
    Double_t sideGateExtL = 0;
    Double_t sideGateExtR = 0;
    
-   Double_t beamXGateRange[2] = {-40,40};
+   Double_t beamXGateRange[2] = {-400000,400000};
    
    //================ calculate theta 
    if (OPCM ==1 ){
@@ -26,6 +26,7 @@ void PPFit_BeamZ(Int_t angle1 = 60, Int_t angle2 = 80, Int_t LR = 1, Int_t OPCM 
       printf(" using Lab Frame Theta (%4.1f,%4.1f)\n",thetaOpRange[0], thetaOpRange[1]);
    }
    //===================Setting histogram
+   gStyle->SetOptStat(0);
    TCanvas * cBeamZ = new TCanvas ("cBeamZ","cBeamZ", 1200,50,800,800);
    cBeamZ->Divide(2,2);
    Double_t OpenAngGateRange_width = OpenAngGateRange[1] - OpenAngGateRange[0];
@@ -101,7 +102,7 @@ void PPFit_BeamZ(Int_t angle1 = 60, Int_t angle2 = 80, Int_t LR = 1, Int_t OPCM 
    TCut beamXGate;
    TString beamXGateTitle;
    beamXGateTitle.Form(" (beamX1 + beamX2) > %4.f && (beamX1 + beamX2)< %4.f", beamXGateRange[0]*2, beamXGateRange[1]*2);
-   beamXGate += beamXGateTitle;  
+   beamXGate = "";// beamXGateTitle;  
    
    CentralGate.Print();
    SideGate.Print();

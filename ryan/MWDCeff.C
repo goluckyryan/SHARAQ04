@@ -3,15 +3,15 @@ void MWDCeff() {
 
 //############################################################################  
    //const char* rootfile="ppDown.root"; 
-   const char* rootfile="PrimaryData/ppAll_0613.root";
+   const char* rootfile="PrimaryData/ppAll_0617_mwdctime.root";
    //const char* rootfile="/media/ResearchData/sharaq04/ppUp.root";
    //const char* rootfile="phys14_45_67.root";
-   Bool_t ValidorTracked = 0; // 0 = Valid, 1 = tracked
-   Bool_t allentry  = 0;
+   Bool_t allentry  = 1;
    Int_t firstEntry = 0;
-   Int_t nEntries=100000;
-   Double_t Qgate = 800;
-   Double_t Xgate[2] = {-600, -400};
+   Int_t nEntries=10000;
+   Double_t DTgate1[2] = {-40, 80};
+   Double_t DTgate2[2] = {-40, 80};
+   
    Bool_t histonoff = 1; // 0 = off 
    
 //############################################################################
@@ -21,24 +21,21 @@ void MWDCeff() {
    Bool_t shown = 0;
 
    if ( histonoff ){
+   	gStyle->SetOptStat(0);
       TCanvas * cMWDC = new TCanvas("cMWDC", "Charge of Tpla", 100, 50, 800, 800);
-      cMWDC->Divide(2,2);
-   }
-   TH1F * hQ1  = new TH1F("Q1", "Q1", 100, 0, 3000);
-   TH1F * hQ2  = new TH1F("Q2", "Q2", 100, 0, 3000);
-   hQ1->SetLineColor(4);
-   hQ2->SetLineColor(2);
-   TH1F * htdiff1  = new TH1F("tdiff1", "Tdiff1", 100, -15, 15);
-   TH1F * htdiff2  = new TH1F("tdiff2", "Tdiff2", 100, -15, 15);
-   htdiff1->SetLineColor(4);
-   htdiff2->SetLineColor(2);
-   
-   TH2F * hQ1Plane = new TH2F("Q1Plane", "Q1 vs NValidPlane1", 7, 0, 7, 200, 0, 3000);
-   TH2F * hQ2Plane = new TH2F("Q2Plane", "Q2 vs NValidPlane2", 7, 0, 7, 200, 0, 3000);
-   
-   TH1F * hNVPlane1 = new TH1F("NVPlane1", "NValidPlane 1", 7,0,7);
-   TH1F * hNVPlane2 = new TH1F("NVPlane2", "NValidPlane 2", 7,0,7);
-   
+      cMWDC->Divide(2,3);
+   	
+		TH2F * hDTX1 = new TH2F("hDTX1", "DT1 vs X1", 400, -1000,  200, 200, -17,  7);
+		TH2F * hDTX2 = new TH2F("hDTX2", "DT2 vs X2", 400,  -200, 1000, 200,  -9, 12);
+		
+		TH1F * hNVPlane1 = new TH1F("NVPlane1", "NValidPlane 1", 7,0,7);
+		TH1F * hNVPlane2 = new TH1F("NVPlane2", "NValidPlane 2", 7,0,7);
+		
+		TH1F * hGood1 = new TH1F("hGood1", "IsGood 1", 2, 0, 2);
+		hGood1->SetMinimum(0);
+		TH1F * hGood2 = new TH1F("hGood2", "IsGood 2", 2, 0, 2);
+		hGood2->SetMinimum(0);
+	}
  
 //############################################################################
    art::TEventHeader *hoge_run;
@@ -46,18 +43,17 @@ void MWDCeff() {
    TFile *f = new TFile(rootfile,"read");
    printf(">> %s <<< is loaded.\n",rootfile);
    TTree *tree = (TTree*)f->Get("tree");
-   //tree->Scan("plaV775.fID:plaV775.fQAve:smwdc_L.GetTrackingID():smwdc_L.fNPlaneValid:smwdc_L.fWireIDAdopted:smwdc_R.GetTrackingID():smwdc_R.fNPlaneValid:smwdc_R.fWireIDAdopted","","",nEntries+1,firstEntry);
    Int_t totnumEntry = tree->GetEntries();
    tree->SetBranchStatus("*",0);
    tree->SetBranchStatus("eventheader",1);
    tree->SetBranchStatus("plaV775",1);    //get charge and time
-   tree->SetBranchStatus("smwdc_L",1);
-   tree->SetBranchStatus("smwdc_R",1);
+   tree->SetBranchStatus("smwdc_L_TLgated",1);
+   tree->SetBranchStatus("smwdc_R_TLgated",1);
 
    tree->SetBranchAddress("eventheader",&hoge_run);
    tree->SetBranchAddress("plaV775",&hoge_V775);
-   tree->SetBranchAddress("smwdc_L",&hoge_L);
-   tree->SetBranchAddress("smwdc_R",&hoge_R);
+   tree->SetBranchAddress("smwdc_L_TLgated",&hoge_L);
+   tree->SetBranchAddress("smwdc_R_TLgated",&hoge_R);
 
 //############################################################################   
    Int_t endEntry = firstEntry + nEntries;
@@ -72,27 +68,20 @@ void MWDCeff() {
    art::TMWDCTrackingResult * xy1,* xy2;
    art::TTrack * track1, * track2;
    
-   Int_t countN6[3]; // 6 plane fired
-   Int_t countN5comp[3]; 
-   Int_t countN5[3][6];
-   Int_t countQ[3];
-   Int_t countN4[3];
-   Int_t countN3[3];
-   Int_t countN2[3];
-   Int_t countN1[3];
-   Int_t countN0[3];
+   Int_t countN6[2] = {0,0}; // 6 plane fired
+   Int_t countN5[2] = {0,0};
+   Int_t countN4[2] = {0,0};
+   Int_t countN3[2] = {0,0};
+   Int_t countN2[2] = {0,0};
+   Int_t countN1[2] = {0,0}; 
+   Int_t countN5comp[2][6]; // N5[i], i is missing plane
+   Int_t countQ[2] = {0,0}; // total hit from Tpla
+   Int_t countGood[2] = {0,0};
+   Int_t countBad[2] = {0,0};
    
-   for ( Int_t i = 0; i < 3; ++i ) {
-      countN6[i] = 0;
-      countN5comp[i] = 0;
-      countQ[i] = 0;
-      countN4[i] = 0;
-      countN3[i] = 0;
-      countN2[i] = 0;
-      countN1[i] = 0;
-      countN0[i] = 0;
+   for ( Int_t i = 0; i < 2; ++i ) {
       for (Int_t j = 0; j < 6; ++j ) {
-         countN5[i][j] = 0;
+         countN5comp[i][j] = 0;
       }
    } 
 
@@ -116,76 +105,84 @@ void MWDCeff() {
          tdiff[DetID]    = V775Data->GetTDiff();
       }
 
-//---------Get SMWDC image, should be one 1 instance
-      Int_t mwdcBoth = 0;
-      if ( QTpla[0] > Qgate ){
+//---------Get SMWDC image, should be one 1 instance  
+      if ( tdiff[0] > DTgate1[0] && tdiff[0] < DTgate1[1] ){
+      	
          Int_t nHit = hoge_L->GetEntriesFast();
+         Int_t NValidPlane = 0;
          for( Int_t p = 0; p < nHit; p++){
-            xy1 = (art::TMWDCTrackingResult*)hoge_L->At(p);
-            if ( ValidorTracked == 1 && xy1 -> GetTrackingID() != 1) continue;
          
-            Int_t NValidPlane = xy1 -> GetNPlaneValid();
-            //track1 = (art::TTrack *)xy1->GetTrack();
+            xy1 = (art::TMWDCTrackingResult*)hoge_L->At(p);      
+            NValidPlane = xy1 -> GetNPlaneValid();
+            if ( NValidPlane == 0) continue;
             
-            //if ( track1->GetX() < Xgate[0] || track1->GetX() > Xgate[1] ) continue; 
+            track1 = (art::TTrack *)xy1->GetTrack();
             
+            if ( xy1->IsGood()) {
+            	countGood[0] ++;
+            }else{
+            	countBad[0] ++;
+         	}
+         	
             if (NValidPlane > 0 ) countQ[0]++;
-            
-            if ( NValidPlane >= 5 ) mwdcBoth ++;
             if ( NValidPlane == 6 ) countN6[0] ++ ; // count for validPlane == 6
             if ( NValidPlane == 5 ) {  // count number of each plane for validPlane == 5
-               countN5comp[0]++;
+               countN5[0]++;
                for ( Int_t i = 0; i<6 ; i++){
-                  if (xy1->GetWireIDAdopted(i) == -1) countN5[0][i] ++; //missing
+                  if (xy1->GetWireIDAdopted(i) == -1) countN5comp[0][i] ++; //missing
                }
             }
             if ( NValidPlane == 4 ) countN4[0] ++;
             if ( NValidPlane == 3 ) countN3[0] ++;
             if ( NValidPlane == 2 ) countN2[0] ++;
             if ( NValidPlane == 1 ) countN1[0] ++;
-            if ( NValidPlane == 0 ) countN0[0] ++;
+            
          }
-         hQ1->Fill(QTpla[0]);
-         htdiff1->Fill(tdiff[0]+5);
-         hQ1Plane->Fill(NValidPlane, QTpla[0]);
-         hNVPlane1->Fill(NValidPlane);
+         if ( histonoff && NValidPlane > 0) {
+         	hDTX1->Fill(track1->GetX(), tdiff[0]);
+         	hNVPlane1->Fill(NValidPlane);
+         	hGood1->Fill(xy1->IsGood());
+         }
       }
       
-      if ( QTpla[1] > Qgate ){
-         if ( QTpla[0] > Qgate) countQ[2] ++; 
+      if ( tdiff[1] > DTgate2[0] && tdiff[1] < DTgate2[1] ){	
+      
          Int_t nHit = hoge_R->GetEntriesFast();
+         Int_t NValidPlane = 0;
          for( Int_t p = 0; p < nHit; p++){
-            xy2 = (art::TMWDCTrackingResult*)hoge_R->At(p);
-            if ( ValidorTracked == 1 && xy2 -> GetTrackingID() !=1 ) continue;
+         
+            xy2 = (art::TMWDCTrackingResult*)hoge_R->At(p);      
+            NValidPlane = xy2 -> GetNPlaneValid();
+            if ( NValidPlane == 0) continue;
             
-            Int_t NValidPlane = xy2 -> GetNPlaneValid();
-            //track2 = (art::TTrack *)xy2->GetTrack();
+            track2 = (art::TTrack *)xy2->GetTrack();
             
-            //if ( track2->GetX() < Xgate[0] || track2->GetX() > Xgate[1] ) continue;
+            if ( xy2->IsGood()) {
+            	countGood[1] ++;
+            }else{
+            	countBad[1] ++;
+         	}
             
             if (NValidPlane > 0 ) countQ[1]++;
-            
-            if ( NValidPlane >= 5 ) mwdcBoth ++;
             if ( NValidPlane == 6 ) countN6[1] ++ ; // count for validPlane == 6
             if ( NValidPlane == 5 ) {  // count number of each plane for validPlane == 5
-               countN5comp[1]++;
+               countN5[1]++;
                for ( Int_t i = 0; i<6 ; i++){
-                  if (xy2->GetWireIDAdopted(i) == -1) countN5[1][i] ++; // missing 
+                  if (xy2->GetWireIDAdopted(i) == -1) countN5comp[1][i] ++; //missing
                }
             }
             if ( NValidPlane == 4 ) countN4[1] ++;
             if ( NValidPlane == 3 ) countN3[1] ++;
             if ( NValidPlane == 2 ) countN2[1] ++;
             if ( NValidPlane == 1 ) countN1[1] ++;
-            if ( NValidPlane == 0 ) countN0[1] ++;
+            
          }
-         hQ2->Fill(QTpla[1]);
-         htdiff2->Fill(tdiff[1]);
-         hQ2Plane->Fill(NValidPlane, QTpla[1]);
-         hNVPlane2->Fill(NValidPlane);
+         if ( histonoff && NValidPlane > 0) {
+         	hDTX2->Fill(track2->GetX(), tdiff[1]);
+         	hNVPlane2->Fill(NValidPlane);
+         	hGood2->Fill(xy2->IsGood());
+         }
       }
-      
-      if (mwdcBoth == 2) countN6[2] ++;
       
 //------------Clock      
       clock.Stop("timer");
@@ -210,82 +207,88 @@ void MWDCeff() {
       
    }
    
+   //########### Draw Histogram
    if ( histonoff ){
+   	TLatex text;
+   	TString textstr;
+   	
       cMWDC->cd(1);
-      hQ1Plane->Draw("colz");
-      //hQ1->Draw();
-      //hQ2->Draw("same");
+      hDTX1->Draw("colz");
+      textstr.Form("%4.1f<DT<%4.1f, countQ:%6d", DTgate1[0],DTgate1[1], countQ[0]);
+      text.DrawText(-800,-15,textstr);
+      
       cMWDC->cd(2);
-      hQ2Plane->Draw("colz");
-      //htdiff1->Draw();
-      //htdiff2->Draw("same");
+      hDTX2->Draw("colz");
+      textstr.Form("%4.1f<DT<%4.1f, countQ:%6d", DTgate2[0],DTgate2[1], countQ[0]);
+      text.DrawText(0,-6,textstr);
+      
       cMWDC->cd(3);
       hNVPlane1->Draw();
+      text.SetTextAngle(90);
+//		text.SetTextSize(0.04);
+		text.DrawText(0.5,2,"gate out");
+		textstr.Form("%6d",countN1[0]); text.DrawText(1.5,countN6[0]/2,textstr);
+   	textstr.Form("%6d",countN2[0]); text.DrawText(2.5,countN6[0]/2,textstr);
+   	textstr.Form("%6d",countN3[0]); text.DrawText(3.5,countN6[0]/2,textstr);
+   	textstr.Form("%6d",countN4[0]); text.DrawText(4.5,countN6[0]/2,textstr);
+   	textstr.Form("%6d",countN5[0]); text.DrawText(5.5,countN6[0]/2,textstr);
+   	textstr.Form("%6d",countN6[0]); text.DrawText(6.5,countN6[0]/2,textstr);
+      
       cMWDC->cd(4);
       hNVPlane2->Draw();
-   }
+		text.DrawText(0.5,2,"gate out");
+		textstr.Form("%6d",countN1[1]); text.DrawText(1.5,countN6[1]/2,textstr);
+   	textstr.Form("%6d",countN2[1]); text.DrawText(2.5,countN6[1]/2,textstr);
+   	textstr.Form("%6d",countN3[1]); text.DrawText(3.5,countN6[1]/2,textstr);
+   	textstr.Form("%6d",countN4[1]); text.DrawText(4.5,countN6[1]/2,textstr);
+   	textstr.Form("%6d",countN5[1]); text.DrawText(5.5,countN6[1]/2,textstr);
+   	textstr.Form("%6d",countN6[1]); text.DrawText(6.5,countN6[1]/2,textstr);
+   	
+      cMWDC->cd(5);
+      hGood1->Draw();
+   	textstr.Form("%8d",countBad[0]) ; text.DrawText(0.5,countGood[0]/2, textstr);
+   	textstr.Form("%8d",countGood[0]); text.DrawText(1.5,countGood[0]/2, textstr);
+   	
+      cMWDC->cd(6);
+      hGood2->Draw();
+   	textstr.Form("%8d",countBad[1]) ; text.DrawText(0.5,countGood[1]/2, textstr);
+   	textstr.Form("%8d",countGood[1]); text.DrawText(1.5,countGood[1]/2, textstr);   
+	}
    
    //##############  calculation efficiency
-   Double_t eff[2][6];
-   Double_t eff0[2] = {1,1};
-   Double_t eff6[2] = {1,1};
-   Double_t eff5[2][6];
-   Double_t eff5tot[2] = {0,0};
-   Int_t countN5tot[2]={0,0};
-   Int_t totcount[2] = {0,0};
+   Double_t eff[2][6]; // efficiency of each plane e1, e2, e3, e4, e5, e6 
+   Double_t effgm[2] = {1,1}; // Geometric mean of efficiency = Power(e1 e2 e3 e4 e5 e6, 1/6);
+   Double_t effavg[2] = {0,0}; // average efficiency = 6*N6/(6*N6+N5)
+   Int_t N0[2] = {0,0}; // deduced N0, number of particle pass through ~ countQ;
+   
    for ( Int_t i = 0; i < 2; i++){ // L and R
       for ( Int_t j = 0; j < 6; j++){ // plane
-         eff[i][j] = countN6[i]*100./(countN6[i]+countN5[i][j]); // in %
-         eff6[i] = eff6[i]*eff[i][j]/100.; 
-         eff0[i] = eff0[i]*(1.-eff[i][j]/100.); 
-         countN5tot[i] += countN5[i][j];
-         eff5[i][j] = 1;
+         eff[i][j] = (double)countN6[i]/(countN6[i]+countN5comp[i][j]); // in decimal
+         effgm[i] = effgm[i]*eff[i][j]; 
+         printf("countN6[%1d]=%5d, countN5comp[%1d][%1d]=%5d, eff = %4.1f \n", i, countN6[i], i,j, countN5comp[i][j], eff[i][j]*100.);
       }
-      eff6[i] = eff6[i]*100.;
-      eff0[i] = eff0[i]*100.;
-      for ( Int_t j = 0; j < 6; j++){ // plane
-         for ( Int_t k = 0 ; k < 6; k ++){
-            if ( j == k) {
-               eff5[i][j] = eff5[i][j]*(1.-eff[i][k]/100.);
-            }else{
-               eff5[i][j] = eff5[i][j]*eff[i][k]/100.;
-            }
-         }
-         eff5[i][j] = eff5[i][j]*100.; // in %
-         eff5tot[i] += eff5[i][j]; // in %
-      }
-      totcount[i] = countN6[i]*100./eff6[i];
+      effgm[i]  = TMath::Power(effgm[i], 1/6);
+      effavg[i] = (double)6*countN6[i]/(6*countN6[i] + countN5[i]);
+      N0[i] = countN6[i]/effgm[i];
    }
   
    clock.Stop("timer");
    printf("============ finished|%10.3f sec = %10.3f min\n",clock.GetRealTime("timer"), clock.GetRealTime("timer")/60.);
-   if ( ValidorTracked == 0){
-      printf("------------- Qgate:%f, Fired Efficiency \n", Qgate);
-   }else{
-      printf("------------- Qgate:%f, Tracked Efficency \n", Qgate);   
-   }
-   printf("------------- Xgate:(%5.0f,%5.0f)\n", Xgate[0], Xgate[1]);
-   printf("countQ>%4d:%10d \t\t\t%10d \t\t\t%10d\n", TMath::Nint(Qgate),  countQ[0], countQ[1], countQ[2]);
-   printf("count>=5   :%10d[%4.1f%%] \t\t%10d[%4.1f%%] \t\t%10d[%4.1f%%] \n"
-                              ,countN6[0]+countN5tot[0],(countN6[0]+countN5tot[0])*100./countQ[0]
-                              ,countN6[1]+countN5tot[1],(countN6[1]+countN5tot[1])*100./countQ[0]
-                              ,countN6[2], countN6[2]*100./countQ[2]);
-   printf("countN6    :%10d[%4.1f%%] \t\t%10d[%4.1f%%] \n",  countN6[0],countN6[0]*100./countQ[0], countN6[1],countN6[1]*100./countQ[1]);
-   //printf("countN5comp:%10d \t\t\t%10d \n",  countN5comp[0], countN5comp[1]);
-   printf("countN5tot :%10d \t\t\t%10d \n",  countN5tot[0], countN5tot[1]);
+   printf("countQ     :%10d\t\t\t%10d \n", countQ[0], countQ[1]);
+   
+   printf("countN6    :%10d \t\t\t%10d \n",  countN6[0], countN6[1]);
+   printf("countN5    :%10d \t\t\t%10d \n",  countN5[0], countN5[1]);
    for ( Int_t i = 0; i < 6; i++){
-      printf("countN5[%1d] :%10d[%4.1f%%](%4.1f%%) \t%10d[%4.1f%%](%4.1f%%) \n", i,countN5[0][i], eff[0][i], eff5[0][i],countN5[1][i], eff[1][i] , eff5[1][i]);
+      printf("countN5[%1d] :%10d[%4.1f%%] \t%10d[%4.1f%%] \n", i,countN5comp[0][i], eff[0][i]*100.,countN5comp[1][i], eff[1][i]*100. );
    }
-   printf("eff6       :%10.2f%% \t\t%10.2f%% \t\t%10.2f%%\n",  eff6[0], eff6[1], eff6[0]*eff6[1]/100.);
-   printf("eff5tot    :%10.2f%% \t\t%10.2f%% \n",  eff5tot[0], eff5tot[1]);
-   printf("eff65      :%10.2f%% \t\t%10.2f%% \n",  eff6[0]+eff5tot[0], eff6[1]+eff5tot[1]);
-   printf("eff0       :%10.2f%% \t\t%10.2f%% \n",  eff0[0], eff0[1]);
-   printf("countQ[exp]:%10d[%4.1f%%] \t\t%10d[%4.1f%%] \n", totcount[0] ,totcount[0]*100./countQ[0] ,totcount[1] ,totcount[1]*100./countQ[1]);
-   printf("countN4    :%10d \t\t\t%10d \n",  countN4[0], countN4[1]);
-   printf("countN3    :%10d \t\t\t%10d \n",  countN3[0], countN3[1]);
-   printf("countN2    :%10d \t\t\t%10d \n",  countN2[0], countN2[1]);
-   printf("countN1    :%10d \t\t\t%10d \n",  countN1[0], countN1[1]);
-   printf("countN0    :%10d \t\t\t%10d \n",  countN0[0], countN0[1]);
+   printf("effgm      :%10.2f%% \t\t%10.2f%% \t\t%10.2f%%\n",  effgm[0]*100, effgm[1]*100, effgm[0]*effgm[1]*100);
+   printf("effavg     :%10.2f%% \t\t%10.2f%% \n",  effavg[0]*100, effavg[1]*100);
+   printf("countNtot  :%10d[%4.1f%%] \t\t%10d[%4.1f%%] \n", N0[0] ,N0[0]*100./countQ[0] ,N0[1] ,N0[1]*100./countQ[1]);
+   printf("countGood  :%10d[%4.1f%%] \t\t%10d[%4.1f%%] \n",  countGood[0], countGood[0]*100./countQ[0] , countGood[1], countGood[1]*100./countQ[1]);
+   //printf("countN4    :%10d \t\t\t%10d \n",  countN4[0], countN4[1]);
+   //printf("countN3    :%10d \t\t\t%10d \n",  countN3[0], countN3[1]);
+   //printf("countN2    :%10d \t\t\t%10d \n",  countN2[0], countN2[1]);
+   //printf("countN1    :%10d \t\t\t%10d \n",  countN1[0], countN1[1]);
 
    return ;
 }

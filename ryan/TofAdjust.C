@@ -10,25 +10,29 @@
 #include "TBeamData.h"
 #include "TRecoilData.h"
 #include "TLorentzVector.h" //(px, py, pz, E)
+/*****************************************************
+adjust tof L and R seperatly, and using Sp (gated by beamZ, opening angle, etc )
 
-void TrimToRecoil() {
+******************************************************/
+Double_t * AngleLen(int id, Double_t x, Double_t a, Double_t y, Double_t b, Double_t ex, Double_t ea);
+Double_t KE(Double_t tof, Double_t len);
+
+
+void TofAdjust() {
    
 //############################################################################   
-   const char* savefilename="RppAll_0613.root";
+   const char* savefilename="RppAll_0714_multiOffset.root";
    //const char* rootfile="Data/phys14_1_43.root";
-   const char* rootfile="PrimaryData/ppAll_0613.root";
+   const char* rootfile="PrimaryData/ppAll_0714_multiOffset.root";
    //const char* rootfile="Data/phys24Down.root";
    TBeamData *beam = new TBeamData("proton");
    Bool_t allentry  = 1;
    Int_t firstEntry = 0;
-   Int_t nEntries=10000000;
+   Int_t nEntries=10000;
    
    beam->Print();
    Double_t Principle_tof = tofByBrho(L_F3FH9,beam->fBrho, beam->fMass, beam->fZ);
    printf("---- Principle Tof: %10.3f ns\n", Principle_tof);
-   TBeamData target("proton");
-   target.SetKinetic(0, 0, 0);
-   TLorentzVector residual;
 //############################################################################
    TBenchmark clock;
    clock.Reset();
@@ -41,37 +45,31 @@ void TrimToRecoil() {
    Int_t runNum;
    // coinReg
    Int_t coinReg;
-   // ppac
-   Double_t ppacX, Brho, TKAppac;
    // S0img
    Double_t s0x, s0y;
    // get tof and charge upstream
    Double_t tof_usV1190, Q_usG;
    Double_t tof_usV775;
    //downstream V775
-   Double_t tof1, Q1;
-   Double_t tof2, Q2;
-   Double_t tofS0D, QS0D;
+   Double_t tof1[9], Q1;
+   Double_t tof2[9], Q2;
    // SMWDC X Y
-   Int_t NValidPlane1,NValidPlane2;
    Double_t x1, y1, a1, b1; // for smwdc-L
    Double_t x2, y2, a2, b2; // for smwdc-R
-   
-   TRecoilData * recoil1 = new TRecoilData();
-   TRecoilData * recoil2 = new TRecoilData();
+   Double_t len1, len2; // length
    
    //Nyoki
    
    // Phsyics
    Double_t TKAV775;
-   Double_t E1, E2;
+   Double_t E1[9], E2[9];
    Double_t theta1, theta2;
    Double_t phi1, phi2;
    Double_t beamZ1, beamZ2;
-   Double_t beamX1, beamX2;
-   Double_t Sp;
-   Double_t Sp2;
    Double_t wbeamZ;
+   Double_t beamX1, beamX2;
+   
+   Double_t Sp[81];
 
    TFile *savefile = new TFile(savefilename,"recreate");
    TTree *recoil; 
@@ -82,18 +80,9 @@ void TrimToRecoil() {
    recoil->Branch("tof_usV1190",&tof_usV1190,"tof_usV1190/D");
    recoil->Branch("tof_usV775",&tof_usV775,"tof_usV775/D");
    recoil->Branch("Q_us",&Q_usG,"Q_usG/D");
-   //recoil->Branch("NValidPlane1",&NValidPlane1,"NValidPlane1/I");
-   //recoil->Branch("NValidPlane2",&NValidPlane2,"NValidPlane2/I");
-   recoil->Branch("s0x", &s0x, "s0x/D");
-   recoil->Branch("s0y", &s0y, "s0y/D");
-   recoil->Branch("ppacX", &ppacX, "ppacX/D");
-   recoil->Branch("Brho",&Brho, "Brho/D");
-   recoil->Branch("TKAppac",&TKAppac,"TKAppac/D");
    recoil->Branch("TKAV775",&TKAV775,"TKAV775/D");
-   recoil->Branch("tofS0D", &tofS0D, "tofS0D/D");
-   recoil->Branch("QS0D", &QS0D, "QS0D/D");
-   recoil->Branch("tof1",&tof1,"tof1/D");
-   recoil->Branch("tof2",&tof2,"tof2/D");
+   recoil->Branch("tof1",tof1,"tof1[9]/D");
+   recoil->Branch("tof2",tof2,"tof2[9]/D");
    recoil->Branch("Q1",&Q1,"Q1/D");
    recoil->Branch("Q2",&Q2,"Q2/D");
    recoil->Branch("x1",&x1,"x1/D");
@@ -104,8 +93,10 @@ void TrimToRecoil() {
    recoil->Branch("a2",&a2,"a2/D");
    recoil->Branch("y2",&y2,"y2/D");
    recoil->Branch("b2",&b2,"b2/D");
-   recoil->Branch("E1",&E1,"E1/D");
-   recoil->Branch("E2",&E2,"E2/D");
+   recoil->Branch("len1",&len1,"len1/D");
+   recoil->Branch("len2",&len2,"len2/D");
+   recoil->Branch("E1",E1,"E1[9]/D");
+   recoil->Branch("E2",E2,"E2[9]/D");
    recoil->Branch("theta1",&theta1,"theta1/D");
    recoil->Branch("theta2",&theta2,"theta2/D");
    recoil->Branch("phi1",&phi1,"phi1/D");
@@ -115,8 +106,7 @@ void TrimToRecoil() {
    recoil->Branch("wbeamZ", &wbeamZ,"wbeamZ/D");
    recoil->Branch("beamX1",&beamX1,"beamX1/D");
    recoil->Branch("beamX2",&beamX2,"beamX2/D");
-   recoil->Branch("Sp",&Sp,"Sp/D");
-   recoil->Branch("Sp2",&Sp2,"Sp2/D");
+   recoil->Branch("Sp",Sp,"Sp[81]/D");
 
 //############################################################################
    art::TCoinRegData *hoge_coinReg;
@@ -129,8 +119,6 @@ void TrimToRecoil() {
    tree->SetBranchStatus("*",0);
    tree->SetBranchStatus("eventheader",1);
    tree->SetBranchStatus("coinReg",1);
-   if (beam->fppacOn) tree->SetBranchStatus("ppac",1);
-   if (beam->fName != "proton") tree->SetBranchStatus("S0img",1);
    tree->SetBranchStatus("plaV1190_FH9",1); //get charge for PID
    tree->SetBranchStatus("tof_US",1);
    tree->SetBranchStatus("plaV775",1);    //get charge and time
@@ -139,8 +127,6 @@ void TrimToRecoil() {
 
    tree->SetBranchAddress("eventheader",&hoge_run);
    tree->SetBranchAddress("coinReg",&hoge_coinReg);
-   if (beam->fppacOn) tree->SetBranchAddress("ppac",&hoge_ppac);
-   if (beam->fName != "proton") tree->SetBranchAddress("S0img",&hoge_S0img);
    tree->SetBranchAddress("plaV1190_FH9",&hoge_fh9);
    tree->SetBranchAddress("tof_US",&hoge_us);
    tree->SetBranchAddress("plaV775",&hoge_V775);
@@ -160,11 +146,13 @@ void TrimToRecoil() {
    art::TTwoSidedPlasticData * V775Data;
    art::TTimeDifference * tofusdata;
    art::TTwoSidedPlasticData * Qusdata;
-   art::TMWDCTrackingResult * xyS0,* xy1,* xy2;
-   art::TTrack * trackS0,* track1,* track2;
+   art::TMWDCTrackingResult * xy1,* xy2;
+   art::TTrack * track1,* track2;
+   
+   Double_t* output1L = new Double_t[7];
+   Double_t* output1R = new Double_t[7];
    
    gROOT->ProcessLine(".!date");
-   Int_t count0 = 0, count1=0, count2=0, count3=0, count4=0, count5=0, count6=0, count7=0;
 //##############################################################################
    for( eventID = firstEntry; eventID < endEntry; eventID ++){
       tree->GetEntry(eventID);
@@ -172,10 +160,8 @@ void TrimToRecoil() {
       // initialization
       coinReg = 0;
       tof_usV1190 = kInvalidD; Q_usG = kInvalidD;
-      tof1  = kInvalidD; Q1 = kInvalidD; 
-      tof2  = kInvalidD; Q2 = kInvalidD;
-      //tdiff1 = kInvalidD; tdiff2 = kInvalidD;
-      tofS0D= kInvalidD; QS0D = kInvalidD;
+      Q1 = kInvalidD; 
+      Q2 = kInvalidD;
       
 //----------------Get Event Number
       runNum = hoge_run->GetRunNumber();
@@ -188,7 +174,6 @@ void TrimToRecoil() {
          }else if ( k == 2){
             if ( hoge_coinReg->Test(2) == 1 ) {
                coinReg += 20;
-               count0++;
             }
          }else if ( k == 3){
             if ( hoge_coinReg->Test(3) == 1) coinReg += 40;
@@ -196,8 +181,6 @@ void TrimToRecoil() {
             if ( hoge_coinReg->Test(k) == 1) coinReg += 1;
          }
       }
-      //if( coinReg%10 != 0 ) continue;
-      //count0++;
       
 //---------------Get charge DS of Tpla and S0D
       Int_t TplaHit_check = 0;
@@ -212,10 +195,8 @@ void TrimToRecoil() {
 
       }
       if ( TplaHit_check !=2 ) continue;           // both Tpla hit timing gate // Part of ppcoin
-      count1 ++;
-      
+      if ( TMath::IsNaN(timeV775[0]) || TMath::IsNaN(timeV775[1]) || TMath::IsNaN(timeV775[2]) || TMath::IsNaN(timeV775[3]) ) continue;
       if ( Q_ds[0] < 500 || Q_ds[1] < 500) continue;  // gamma gate 
-      count2++;
       
 //----------------Get tof and charge upstream V1190
       nHit = hoge_us -> GetEntriesFast();
@@ -233,150 +214,100 @@ void TrimToRecoil() {
          PID = 1;
       }
       if ( PID == 0 ) continue;
-      count3++;
-//---------------------- PPAC;
-      if (beam->fppacOn){
-         nHit = hoge_ppac->GetEntriesFast();
-         for (Int_t p = 0; p < nHit; p++){
-            ppacData = (art::TPPACData*)hoge_ppac->At(p) ;
-            ppacX = ppacData->GetX();
-         }
-         Brho = beam->fBrho * (1 - ppacX/7500.);
-      }else{
-         Brho = beam->fBrho;
-      }      
-      TKAppac = TKAByBrho(Brho, beam->fMass, beam->fA, beam->fZ);
       
-//-------------------- Calculated TIme
+//---------Get SMWDC image, should be one 1 instance
+		Double_t ex1, ea1, ex2, ea2;
+      nHit = hoge_L->GetEntriesFast();
+      for( Int_t p = 0; p < nHit; p++){
+         xy1 = (art::TMWDCTrackingResult*)hoge_L->At(p);
+         Int_t TrackingID1  = xy1 -> GetTrackingID();
+         if ( TrackingID1 != 1) continue;
+         ex1 = xy1->GetSigma(0);
+         ea1 = xy1->GetSigma(1);
+         track1 = (art::TTrack*)xy1->GetTrack();
+         x1 = track1->GetX();
+         y1 = track1->GetY();
+         a1 = track1->GetA();
+         b1 = track1->GetB();
+      }
+      
+      nHit = hoge_R->GetEntriesFast();
+      for( Int_t p = 0; p < nHit; p++){
+         xy2 = (art::TMWDCTrackingResult*)hoge_R->At(p);
+         Int_t TrackingID2  = xy2 -> GetTrackingID();
+         if ( TrackingID2 != 1) continue;
+         ex2 = xy2->GetSigma(0);
+         ea2 = xy2->GetSigma(1);
+         track2 = (art::TTrack*)xy2->GetTrack();
+         x2 = track2->GetX();
+         y2 = track2->GetY();
+         a2 = track2->GetA();
+         b2 = track2->GetB();
+      }
+      
+//-------------------- Calculate Theta, Phi, beamZ, beamX
+
+		output1L = AngleLen(1, x1, a1, y1, b1, ex1, ea1);
+		if( TMath::IsNaN(output1L[0]) ) continue;
+		output1R = AngleLen(2, x2, a2, y2, b2, ex2, ea2);
+		if( TMath::IsNaN(output1R[0]) ) continue;
+
+		theta1 = output1L[0]*rad2deg;
+		phi1   = output1L[1]*rad2deg;
+		len1   = output1L[2];
+		
+		theta2 = output1R[0]*rad2deg;
+		phi2   = output1R[1]*rad2deg;
+		len2   = output1R[2];
+		
+		beamZ1 = output1L[3];
+      beamZ2 = output1R[3];
+      Double_t ebeamZ1 = output1L[4];
+      Double_t ebeamZ2 = output1R[4];
+      // calculated weighted average
+      wbeamZ = (beamZ1/ebeamZ1/ebeamZ1+beamZ2/ebeamZ2/ebeamZ2)/(1/ebeamZ1/ebeamZ1+1/ebeamZ2/ebeamZ2);  
+      
+      beamX1 = output1L[5];
+      beamX2 = output1R[5];
+      
+//-------------------- Calculated Time
       tof_usV1190 = tof_usV1190 - beam->fToffsetV1190 + Principle_tof;
       
       tof_usV775  = timeV775[3] - timeV775[2] - beam->fToffsetV775 + Principle_tof;
       //if (TMath::Abs(tof_usV775 - Principle_tof) > 20) continue;  // tof Gate
       
       TKAV775 = TKAByTof(L_F3FH9, tof_usV775, beam->fMass, beam->fA);
-      printf("%f, %f, %f, %f, %f \n", TKAV775, tof_usV775, timeV775[3], timeV775[2], beam->fToffsetV775);
+     // printf("%f, %f, %f, %f, %f \n", TKAV775, tof_usV775, timeV775[3], timeV775[2], beam->fToffsetV775);
       
       if ( TMath::IsNaN(TKAV775) || TKAV775 < 0 ) continue;    // TKA gate
       
       Double_t tref_tgt = timeV775[3] + (tof_usV775)*LENGTH_RATIO_FH9_TGT;// tof from Fh9 to tgt
       
-      //printf("%f, %f, %f, %f \n", timeV775[0],tref_tgt, beam->fToffset1);
+      Q1    = Q_ds[0]; Q2    = Q_ds[1];
       
-      tof1   = timeV775[0] - tref_tgt + beam->fToffset1 ; Q1    = Q_ds[0];
-      tof2   = timeV775[1] - tref_tgt + beam->fToffset2 ; Q2    = Q_ds[1];
-      tofS0D = timeV775[4] - tref_tgt ; 
+      for( Int_t i = 0; i <9; i++){
+	      tof1[i]   = timeV775[0] - tref_tgt + beam->fToffset1 + (i-4)*0.2; 
+   	   tof2[i]   = timeV775[1] - tref_tgt + beam->fToffset2 + (i-4)*0.2;
+   	   E1[i] = KE(tof1[i], len1);
+   	   E2[i] = KE(tof2[i], len2); 
+   	}     
       
-      if ( beam->fName == "14O" && runNum > 44){
-         QS0D = 1.75*Q_ds[4]-403.5;
-      }else{
-         QS0D = Q_ds[4];
-      }
-      
-      if ( TMath::IsNaN(tof1) || TMath::IsNaN(tof2) ) continue;         // tof gate
-      //if ( tof1 < 0 || tof1 > 30 || tof2 < 0 || tof2>30) continue;      // 
-      count4++;
-      //printf("%10.2f, %10.2f \n", tof1, tof2);
-      
-//---------Get S0img image, should be one 1 instance
-if (beam->fName != "proton") {
-      nHit = hoge_S0img->GetEntriesFast();
-      //Double_t s0a, s0b;
-      for( Int_t p = 0; p < nHit; p++){
-         xyS0 = (art::TMWDCTrackingResult*)hoge_S0img->At(p);
-         trackS0 = (art::TTrack*)xyS0->GetTrack();
-         s0x = trackS0->GetX();
-         s0y = trackS0->GetY();
-         //s0a = trackS0->GetA();
-         //s0b = trackS0->GetB();
-      }      
-      beam->SetKinetic(Brho, 0, 0);
-}
-      
-//---------Get SMWDC image, should be one 1 instance
-      nHit = hoge_L->GetEntriesFast();
-      for( Int_t p = 0; p < nHit; p++){
-         recoil1->TRecoilData();
-         xy1 = (art::TMWDCTrackingResult*)hoge_L->At(p);
-         //NValidPlane1 = xy1 -> GetNPlaneValid();
-         Int_t TrackingID1  = xy1 -> GetTrackingID();
-         Double_t ex1 = xy1->GetSigma(0);
-         Double_t ea1 = xy1->GetSigma(1);
-         track1 = (art::TTrack*)xy1->GetTrack();
-         x1 = track1->GetX();
-         y1 = track1->GetY();
-         a1 = track1->GetA();
-         b1 = track1->GetB();
-         if ( TrackingID1 != 1) continue;
-         recoil1->SetKinetic(1,tof1,x1,y1,a1,b1, s0x, s0y, 0.5, ex1, 0, ea1, 0);
-      }
-      nHit = hoge_R->GetEntriesFast();
-      for( Int_t p = 0; p < nHit; p++){
-         recoil2->TRecoilData();
-         xy2 = (art::TMWDCTrackingResult*)hoge_R->At(p);
-         //NValidPlane2 = xy2 -> GetNPlaneValid();
-         Int_t TrackingID2  = xy2 -> GetTrackingID();
-         Double_t ex2 = xy2->GetSigma(0);
-         Double_t ea2 = xy2->GetSigma(1);
-         track2 = (art::TTrack*)xy2->GetTrack();
-         x2 = track2->GetX();
-         y2 = track2->GetY();
-         a2 = track2->GetA();
-         b2 = track2->GetB();
-         if ( TrackingID2 != 1) continue;
-         recoil2->SetKinetic(2, tof2,x2,y2,a2,b2, s0x, s0y, 0.5, ex2, 0,ea2, 0);
-      }
-      
-      if (recoil1->fOK == 0 || recoil2->fOK == 0) continue;   // recoil gate
-      count5++;
-      
-      E1 = recoil1->fTKA;
-      E2 = recoil2->fTKA;
-      
-      if ( TMath::IsNaN(E1) || TMath::IsNaN(E2)  || E1 > 400 || E2 > 400) continue;   // energy gate
-      count6++;         
-      
-      beamZ1 = recoil1->fBeamZ;
-      beamZ2 = recoil2->fBeamZ;
-      Double_t ebeamZ1 = recoil1->feBeamZ;
-      Double_t ebeamZ2 = recoil2->feBeamZ;
-      
-      // calculated min
-      wbeamZ = (beamZ1/ebeamZ1/ebeamZ1+beamZ2/ebeamZ2/ebeamZ2)/(1/ebeamZ1/ebeamZ1+1/ebeamZ2/ebeamZ2);  
-      
-      beamX1 = recoil1->fBeamX;
-      beamX2 = recoil1->fBeamX;
-      
-      //if ( TMath::Abs(wbeamZ) > 1000 ) continue; // beamZ gate   
-      count7++;  
-      
-      //fl1 = recoil1->fFlightLength;
-      //fl2 = recoil2->fFlightLength;
-      theta1 = recoil1->fTheta;
-      theta2 = recoil2->fTheta;
-      phi1 = recoil1->fPhi;
-      phi2 = recoil2->fPhi;
-      
-      // beam 
-      Double_t gamma = TKAppac/mp + 1;
+//------------------- Sp 
+      Double_t gamma = TKAV775/mp + 1;
       Double_t beta  = TMath::Sqrt(1-1/gamma/gamma);
 
-      Sp = (1-gamma)*mp - gamma*(E1+E2)
-	         + beta*gamma*(
-                 (recoil1->fMomentum)*TMath::Cos(theta1) + 
-                 (recoil2->fMomentum)*TMath::Cos(theta2));
-                 
-      //Sp2 = Mass(Res*) - (Mass(Target) - proton) 
-      residual = beam->f4Vector + target.f4Vector - recoil1->f4Vector - recoil2->f4Vector;
-      //printf(" resiudal mass %10.4f", residual.M());
-      Sp2 = residual.M() - beam->fMass + mp;
-/*      Double_t Sp2 ;
-      Sp2  = TMath::Power(gamma*beam->fMass - E1 - E2 - mp,2);
-      Sp2 -= TMath::Power(beta*gamma*beam->fMass - recoil1->fMomentum*TMath::Cos(theta1)-recoil2->fMomentum*TMath::Cos(theta2),2);
-      Sp2 -= TMath::Power(recoil1->fMomentum*TMath::Sin(theta1)*TMath::Sin(phi1)-recoil2->fMomentum*TMath::Sin(theta2)*TMath::Sin(phi2),2);
-      Sp2 -= TMath::Power(recoil1->fMomentum*TMath::Sin(theta1)*TMath::Cos(phi1)-recoil2->fMomentum*TMath::Sin(theta2)*TMath::Cos(phi2),2);
-      Sp2  = TMath::Sqrt(Sp2) - beam->fMass + mp;
-      printf(" Sp - Sp2: %10.2f, %10.2f, %10.2f, %10.2f \n", Sp,Sp2, Sp2 , Sp-Sp2);
-*/
+		for( Int_t i = 0; i<9; i++){
+			for( Int_t j = 0; j<9; j++){
+			
+      		Sp[9*i+j] = (1-gamma)*mp - gamma*(E1[i]+E2[j])
+	   		      + beta*gamma*(
+      		           sqrt(2*mp*E1[i]+E1[i]*E1[i])*TMath::Cos(theta1*deg2rad) + 
+      		           sqrt(2*mp*E2[j]+E2[j]*E2[j])*TMath::Cos(theta2*deg2rad)
+      		        );
+      		//if (i==0 && j ==0 ) printf("===================== %d", eventID);      
+      		//printf("(%d,%d) tof1:%6.2f E1:%6.1f tof2:%6.2f E2:%6.1f Sp:%6.1f \n", i, j,  tof1[i], E1[i], tof2[j], E2[j], Sp[9*i+j]);
+      	}
+      }
 
 //----------- Fill        
       savefile->cd(); //set focus on this file
@@ -405,6 +336,9 @@ if (beam->fName != "proton") {
       
    }
   
+   delete output1L;
+   delete output1R;
+   
    savefile->cd();
    recoil->Write();
    savefile->Close();
@@ -412,14 +346,98 @@ if (beam->fName != "proton") {
 
    clock.Stop("timer");
    printf("============ finished|%10.3f sec --> %s\n",clock.GetRealTime("timer"),savefilename);
-   printf("             nEntries   :%10d \n", nEntries);
-   printf(" count   coinReg        :%10d [%4.1f%%] \n",  count0, count0*100./nEntries);
-   printf(" count both Tpla hit    :%10d [%4.1f%%] \n",  count1, count1*100./nEntries);
-   printf(" count both gamma Q<500 :%10d [%4.1f%%] \n",  count2, count2*100./nEntries);
-   printf(" count  PID_US          :%10d [%4.1f%%] \n",  count3, count3*100./nEntries);
-   printf(" count both tof valid   :%10d [%4.1f%%] \n",  count4, count4*100./nEntries);
-   printf(" count both recoil      :%10d [%4.1f%%] \n",  count5, count5*100./nEntries);
-   printf(" count both E<400       :%10d [%4.1f%%] \n",  count6, count6*100./nEntries);
-   printf(" count     wbeamZ       :%10d [%4.1f%%] \n",  count7, count7*100./nEntries);
    return ;
+}
+
+//#######################################################################################
+
+Double_t * AngleLen(int id, Double_t x, Double_t a, Double_t y, Double_t b, Double_t ex, Double_t ea){
+
+	Double_t * output = new Double_t[7];
+	output[0] = kInvalidD; // Theta
+	output[1] = kInvalidD; // Phi
+	output[2] = kInvalidD; // Length
+	output[3] = kInvalidD; // BeamZ
+	output[4] = kInvalidD; // eBeamZ
+	output[5] = kInvalidD; // BeamX
+	output[6] = kInvalidD; // eBeamX
+	
+	Double_t PlaneAngle;
+   Double_t Xpos, Ypos, Zpos;   // lab frame coordiante
+   Double_t Zmwdc, Xmwdc, Ymwdc; // lab frame coordiante
+   
+   if (id ==1) { // SMWDC-L
+      PlaneAngle = mwdcAngleL;
+      Zmwdc = z0+ z0L;//-DbeamZ*cos(PlaneAngle*deg2rad);
+      Xmwdc = x + x0L;//+DbeamZ*sin(PlaneAngle*deg2rad);
+      Ymwdc = y + y0L;
+   }else if(id = 2){
+      PlaneAngle = mwdcAngleR;
+      Zmwdc = z0+ z0R;//-DbeamZ*cos(PlaneAngle*deg2rad);
+      Xmwdc = x + x0R;//-DbeamZ*sin(PlaneAngle*deg2rad);
+      Ymwdc = y + y0R;
+   }else{
+      return output;
+   }
+   
+   PlaneAngle = PlaneAngle*deg2rad;
+   const Double_t cos = TMath::Cos(PlaneAngle);
+   const Double_t sin = TMath::Sin(PlaneAngle);
+   
+   if ( TMath::Abs(x) <10000 && TMath::Abs(y)<200){
+      Xpos = sin*Zmwdc + cos*Xmwdc;
+      Ypos = Ymwdc;
+      Zpos = cos*Zmwdc - sin*Xmwdc - DbeamZ;
+   }else{
+   	return output;
+   }
+
+	Double_t fFlightLength, fTheta, fPhi;
+   fFlightLength = TMath::Sqrt(Xpos*Xpos+Ypos*Ypos+Zpos*Zpos);
+   fFlightLength = fFlightLength*z0Tpla/Zmwdc;
+	
+	output[2] = fFlightLength;
+
+   fTheta = TMath::ATan2(TMath::Sqrt(Xpos*Xpos+Ypos*Ypos), Zpos);
+   // range -90 ~ 270
+   fPhi   = TMath::ATan2(Ypos,Xpos);
+   if (fPhi < -TMath::PiOver2()){
+      fPhi = fPhi + TMath::Pi()*2;
+   }else if (fPhi > 3*TMath::PiOver2()){
+      fPhi = fPhi - TMath::Pi()*2;
+   }
+   
+   output[0] = fTheta;
+   output[1] = fPhi;
+   
+
+	Double_t BeamZ, eBeamZ, BeamX, eBeamX;   
+   BeamZ = (a *Zmwdc - Xmwdc)/(a * cos + sin);
+   eBeamZ = TMath::Sqrt(TMath::Power((Xmwdc*cos + Zmwdc*sin)/(a * cos + sin)*ea,2) + ex*ex)/(a * cos + sin);
+   eBeamZ = TMath::Abs(eBeamZ);
+
+   BeamX = (a *Zmwdc - Xmwdc)/(a * sin - cos);
+   eBeamX = TMath::Sqrt(TMath::Power((Xmwdc*sin - Zmwdc*cos)/(a * sin - cos)*ea,2) + ex*ex)/(a * sin - cos);
+   eBeamX = TMath::Abs(eBeamX);   
+   
+	output[3] = BeamZ ;
+	output[4] = eBeamZ ;
+	output[5] = BeamX ;
+	output[6] = eBeamX ;
+
+	return output;
+
+}
+
+Double_t KE(Double_t tof, Double_t len){
+
+	if ( tof < z0Tpla / cVaccum ) return kInvalidD;
+
+	Double_t fBeta, fGamma, fTKA;
+	
+   fBeta  = len/cVaccum/tof;
+   fGamma = 1/sqrt(1-fBeta*fBeta);
+   fTKA   = (fGamma-1)*mp;
+
+	return fTKA;
 }

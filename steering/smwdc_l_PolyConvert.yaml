@@ -87,7 +87,7 @@ Processor:
       StartTimingCollection:  plaV767      
       StartTimingDetID:       0   # 0 for Tpla-L
       UseMultipleStartTiming: 0
-      OutputTransparency:     0       
+      OutputTransparency:     1       
                 
   - name: mwdc_smwdc_L
     type: art::TMWDCPlaneProcessor

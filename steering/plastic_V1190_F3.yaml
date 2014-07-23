@@ -45,9 +45,8 @@ Processor:
   - name: plastic_V1190_F3
     type: art::TTwoSidedPlasticCalibrationProcessor
     parameter:
-      InputCollection:
-       - plaV1190_F3_L_cal
-       - plaV1190_F3_R_cal
+      InputCollection1: plaV1190_F3_L_cal
+      InputCollection2: plaV1190_F3_R_cal
       OutputCollection: plaV1190_F3
       DetIDRange: [0,0]
 #     PositionConverterArray: prm_pla_tdiff2pos

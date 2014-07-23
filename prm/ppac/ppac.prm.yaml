@@ -1,0 +1,11 @@
+Type: art::TPPACParameter
+Contents:  
+  f6ppac:
+    ns2mm:       [-1.0765, 0.51795]
+    delayoffset: [-0.621 , 0.6115 ]
+    linecalib:   [0,0]
+    exchange:    1
+    reflectx:    1
+    geometry:    [0.,0.,0]
+    TXSumLimit:  [71.02, 81,32]
+    TYSumLimit:  [91.62, 101.08]

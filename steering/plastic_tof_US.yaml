@@ -17,4 +17,9 @@ Processor:
       OutputTransparency:     0
 
 #===========================================================
+# V1190 is a common start TDC.
+# t_FH9 = true_FH9 - t_common
+# t_F3  = true_F3  - t_common
+#
+# tof(F3 - FH9) = t_FH9 - t_F3   
 
