@@ -8,14 +8,15 @@
 
 //   TFile *f1 = new TFile ("PrimaryData/ppOptics.root"); TTree *ppNew = (TTree*)f1->Get("tree");   
 
-   TFile *f1 = new TFile ("ppUp_0723.root"); TTree *tree = (TTree*)f1->Get("tree");
+//   TFile *f1 = new TFile ("ppUp_0723.root"); TTree *tree = (TTree*)f1->Get("tree");
 
-   TFile *f1 = new TFile ("PrimaryData/ppUp.root","update"); TTree *old = (TTree*)f1->Get("tree");
-   
+
+	// update.
+//   TFile *f2 = new TFile ("ppDown_0723.root","update"); TTree *down = (TTree*)f2->Get("tree");   
 //   TFile *f1 = new TFile ("RppAll_0714_multiOffset.root","update"); TTree *recoil = (TTree*)f1->Get("recoil");   
 //   f1->Close();
     
-//   TFile *f2 = new TFile ("ppAll_0716_multiOffset.root"); TTree *recoil = (TTree*)f2->Get("tree");
+   TFile *f2 = new TFile ("ppAll_0724_multiOffset.root"); TTree *recoil = (TTree*)f2->Get("tree");
    
 //   TFile *f3 = new TFile ("RppUp_0613.root"); TTree *ppold = (TTree*)f3->Get("recoil");
    

@@ -1,6 +1,6 @@
 aliases:
 # beware to overwrite !!!
-  - &output  test.root
+  - &output  25F_0723.root
  
 #  - &beamprm prm/kinematics/proton.yaml     
 #  - &beamprm prm/kinematics/14O.yaml  
