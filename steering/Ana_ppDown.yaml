@@ -30,6 +30,8 @@ Processor:
       Type:     art::sh04::TBeamParameter
       FileName: prm/kinematics/proton.yaml
 
+  - include: smwdc_geo.yaml
+  - include: beamZ.yaml
   - include: recoil_ppcoin.yaml
 #============== Output     =============================
   - name: outputtree

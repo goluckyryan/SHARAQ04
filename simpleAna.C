@@ -6,11 +6,14 @@
 void simpleAna() {
    gStyle->SetOptStat(0);
    
-   TString name = "GetTrackingID()";
-   TString side = "L";
-	Int_t nBin = 3;
-	Double_t minX = -1;
-	Double_t maxX = 2;
+   TFile *f0 = new TFile ("25F_0728_smwdcGate.root"); TTree *tree = (TTree*)f0->Get("tree");   
+   
+   TString name = "fL";
+	TCut cut ="smwdc_L.fNPlaneValid";
+   TString side = "";
+	Int_t nBin = 300;
+	Double_t minX = -100;
+	Double_t maxX = 200;
 	
 	//###########################
 	if( gROOT->FindObject("h")){
@@ -23,12 +26,12 @@ void simpleAna() {
 	hTitle.Form("%s.%s",side.Data(),name.Data());
 	TH1F * h = new TH1F("h", hTitle, nBin, minX, maxX);
 	h->SetLineColor(kRed);
-	TH1F * hTL = new TH1F("hTL", "hTL", nBin, minX, maxX);
-	TH1F * hTW = new TH1F("hTW", "hTW", nBin, minX, maxX);
+	TH1F * hTL = new TH1F("hTL", hTitle, nBin, minX, maxX);
+	TH1F * hTW = new TH1F("hTW", hTitle, nBin, minX, maxX);
 	hTW->SetLineColor(kGreen); 
 	
 	TString branch, name1, name2, name3;
-	branch = "smwdc_"; // branch
+	branch = "beamZ"; // branch
 	name1 = branch + side + "." + name + ">>h";
 	name2 = branch + side + "_TLgated." + name + ">>hTL";
 	name3 = branch + side + "_TWgated." + name + ">>hTW";
@@ -36,8 +39,6 @@ void simpleAna() {
 	printf("%s\n", name1.Data());
 	printf("%s\n", name2.Data());
 	printf("%s\n", name3.Data());
-	
-	TCut cut = "";//"coinReg.Test(2)";
 	
 	tree->Draw(name1,cut,"");
 	tree->Draw(name2,cut,"same");
@@ -51,6 +52,7 @@ void simpleAna() {
    text.DrawText(0.2, 0.75, "TL");
    text.SetTextColor(kGreen);
    text.DrawText(0.2, 0.7, "TW");
-   
+   text.SetTextColor(kBlack);
+   text.DrawText(0.2, 0.65, cut.GetTitle());
 }
 

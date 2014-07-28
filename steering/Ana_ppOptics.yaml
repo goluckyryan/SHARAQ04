@@ -33,6 +33,8 @@ Processor:
       Type:     art::sh04::TBeamParameter
       FileName: prm/kinematics/ppcoin.yaml
 
+  - include: smwdc_geo.yaml
+  - include: beamZ.yaml
   - include: recoil.yaml
 
 #============== Output     =============================
