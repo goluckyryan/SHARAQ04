@@ -1,0 +1,8 @@
+#============== PROCESSORS     =============================
+Processor:
+  - name: smwdc_geometry
+    type: art::TParameterLoader
+    parameter:
+      Name:     SMWDC_geometry
+      Type:     art::sh04::TDetectorGeometry
+      FileName: prm/kinematics/geometry.yaml

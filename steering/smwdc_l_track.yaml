@@ -16,8 +16,8 @@ Processor:
           - smwdc_L_v2
       OutputCollection: smwdc_L
       NIteration: 5
-      TimingGate: [-99999,99999]
-      ChargeGate: [-99999,99999]
+      TimingGate: [-150,100]
+      ChargeGate: [20,10000]
       MAXSSR:     10.
 #==================================================      
 

@@ -1,6 +1,6 @@
 aliases:
 # beware to overwrite !!!
-  - &output  25F_0723.root
+  - &output  25F_0728_smwdcGate.root
  
 #  - &beamprm prm/kinematics/proton.yaml     
 #  - &beamprm prm/kinematics/14O.yaml  
@@ -55,8 +55,10 @@ Processor:
   - include: plastic_V767.yaml              
   - include: smwdc_l_PolyConvert.yaml     
   - include: smwdc_l_track.yaml  
+  - include: smwdc_l_track_gated.yaml
   - include: smwdc_r_PolyConvert.yaml     
   - include: smwdc_r_track.yaml
+  - include: smwdc_r_track_gated.yaml
 #  - include: smwdc_S1_TableConvert.yaml    # require nyoki
 #  - include: smwdc_S1_track.yaml
 
@@ -67,6 +69,9 @@ Processor:
       Type:     art::sh04::TBeamParameter
       FileName: *beamprm
 
+  - include: smwdc_geo.yaml
+  - include: beamZ.yaml
+  - include: vertex.yaml
   - include: recoil.yaml                   # set beamZ, angle correction
 #  - include: recoil_m500ps.yaml
 #  - include: recoil_multiOffset.yaml

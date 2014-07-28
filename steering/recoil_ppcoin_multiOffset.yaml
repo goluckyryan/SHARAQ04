@@ -2,22 +2,6 @@ aliases:
   - &beamZ    0.
 #============== PROCESSORS     =============================
 Processor:
-  - name: smwdc_geometry
-    type: art::TParameterLoader
-    parameter:
-      Name:     SMWDC_geometry
-      Type:     art::sh04::TDetectorGeometry
-      FileName: prm/kinematics/geometry.yaml
-
-  - name: proc_beamz
-    type: art::sh04::TBeamZProcessor
-    parameter:
-      TrackL:             smwdc_L
-      TrackR:             smwdc_R
-      Geometry:           SMWDC_geometry
-      OutputCollection:   beamZ
-      OutputTransparency: 0
-      
 #========================================= 0 offset      
   - name: tpla_tof
     type: art::sh04::TRecoilTOFProcessor

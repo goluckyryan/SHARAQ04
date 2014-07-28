@@ -3,32 +3,6 @@ aliases:
   - &tofShift -0.5  #time shift (tgt to Tpla)
 #============== PROCESSORS     =============================
 Processor:
-  - name: smwdc_geometry
-    type: art::TParameterLoader
-    parameter:
-      Name:     SMWDC_geometry
-      Type:     art::sh04::TDetectorGeometry
-      FileName: prm/kinematics/geometry.yaml
-
-  - name: proc_beamz
-    type: art::sh04::TBeamZProcessor
-    parameter:
-      TrackL:             smwdc_L
-      TrackR:             smwdc_R
-      Geometry:           SMWDC_geometry
-      OutputCollection:   beamZ
-      OutputTransparency: 0
-
-  - name: proc_vertex
-    type: art::sh04::TReactionVertexProcessor
-    parameter:
-      TrackL:             smwdc_L
-      TrackR:             smwdc_R
-      S0Track:            S0img
-      Geometry:           SMWDC_geometry
-      OutputCollection:   vertex
-      OutputTransparency: 0
-                
   - name: tpla_tof
     type: art::sh04::TRecoilTOFProcessor
     parameter:

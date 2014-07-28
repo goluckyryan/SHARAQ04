@@ -16,7 +16,7 @@ Processor:
           - smwdc_L_v2
       OutputCollection: smwdc_L_TLgated
       NIteration: 5
-      TimingGate: [-130,100]
+      TimingGate: [-150,100]
       ChargeGate: [-99999,99999]
       MAXSSR:     10.
 
@@ -33,23 +33,7 @@ Processor:
       OutputCollection: smwdc_L_TWgated
       NIteration: 5
       TimingGate: [-99999,99999]
-      ChargeGate: [100,170]
-      MAXSSR:     10.
-      
-  - name: mwdctrack_smwdc_L_TLTWgated
-    type: art::sh04::TSMWDCTrackingProcessor
-    parameter:
-      InputCollection:
-          - smwdc_L_x1
-          - smwdc_L_x2
-          - smwdc_L_u1
-          - smwdc_L_u2
-          - smwdc_L_v1
-          - smwdc_L_v2
-      OutputCollection: smwdc_L_TLTWgated
-      NIteration: 5
-      TimingGate: [-130,100]
-      ChargeGate: [100,170]
+      ChargeGate: [20,170]
       MAXSSR:     10.
 #==================================================      
 

@@ -1,0 +1,31 @@
+#============== PROCESSORS     =============================
+Processor:
+  - name: proc_vertex
+    type: art::sh04::TReactionVertexProcessor
+    parameter:
+      TrackL:             smwdc_L
+      TrackR:             smwdc_R
+      S0Track:            S0img
+      Geometry:           SMWDC_geometry
+      OutputCollection:   vertex
+      OutputTransparency: 0
+      
+  - name: proc_vertex_TLgated
+    type: art::sh04::TReactionVertexProcessor
+    parameter:
+      TrackL:             smwdc_L_TLgated
+      TrackR:             smwdc_R_TLgated
+      S0Track:            S0img
+      Geometry:           SMWDC_geometry
+      OutputCollection:   vertex_TLgated
+      OutputTransparency: 0
+
+  - name: proc_vertex_TWgated
+    type: art::sh04::TReactionVertexProcessor
+    parameter:
+      TrackL:             smwdc_L_TWgated
+      TrackR:             smwdc_R_TWgated
+      S0Track:            S0img
+      Geometry:           SMWDC_geometry
+      OutputCollection:   vertex_TWgated
+      OutputTransparency: 0

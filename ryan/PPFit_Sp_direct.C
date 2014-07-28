@@ -2,7 +2,7 @@
 #include "Fit_2Gauss.c"
 Double_t TKA = 260;
 
-void PPFit_Sp_direct(Int_t angle1 = 80, Int_t angle2 = 100, Int_t LR = 1, Int_t OPCM = 1){
+void PPFit_Sp_direct(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t OPCM = 1){
 
    const char* rootfile="ppAll_0724_multiOffset.root";
    TFile *f0 = new TFile (rootfile); TTree *tree = (TTree*)f0->Get("tree");
@@ -79,6 +79,13 @@ void PPFit_Sp_direct(Int_t angle1 = 80, Int_t angle2 = 100, Int_t LR = 1, Int_t 
    TH2F * hTAngL = new TH2F("hTAngL", "T1 vs theta1", 100,  0, 250, 100, 0, 250);
    TH2F * hTAngR = new TH2F("hTAngR", "T2 vs theta2", 140, 10,  80, 100, 0, 250);
    
+   TH1F * hPhi = new TH1F("hPhi", "Open(Phi)", 120, 150,210);
+   hPhi->SetMinimum(0);
+   hPhi->SetXTitle("phi1+phi2 [deg]");
+   TH1F * hPhibg = new TH1F("hPhibg", "Open(Phi)", 120, 150,210); 
+   hPhibg->SetMinimum(0);
+   hPhibg->SetLineColor(2);
+   
    TH1F * hbeamZ = new TH1F("hbeamZ", "beamZ", 100,-100,200);
    hbeamZ->SetMinimum(0);
    TH1F * hbeamZbg = new TH1F("hbeamZbg", "beamZ", 100,-100,200); 
@@ -148,7 +155,7 @@ void PPFit_Sp_direct(Int_t angle1 = 80, Int_t angle2 = 100, Int_t LR = 1, Int_t 
    tree->Draw("(p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()>>h1g",CentralGate && thetaGate && AuxGate2  && AuxGate);
    tree->Draw("(p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()>>h2g",SideGate && thetaGate && !AuxGate2  && AuxGate, "same");
    
-   h3g = HistSub(h1g, h2g, 86,1);
+   //h3g = HistSub(h1g, h2g, 86,1);
    
    Int_t CountTotal=h1g->GetEntries();
    Int_t CountBG = h2g->GetEntries();
@@ -168,7 +175,7 @@ void PPFit_Sp_direct(Int_t angle1 = 80, Int_t angle2 = 100, Int_t LR = 1, Int_t 
    printf("====== Central:%d, Side:%d => Signal:%d [%5.1f] \n",  CountTotal, CountBG, CountSignal, ErrorSignal);
    
    cSp->cd(2);
-   h3 = HistSub(h1, h2, 2, 7);
+   h3 = HistSub(h1, h2, 0, 10);
    
    cSp->cd(4);
    /*if (LR == 1){
@@ -186,11 +193,11 @@ void PPFit_Sp_direct(Int_t angle1 = 80, Int_t angle2 = 100, Int_t LR = 1, Int_t 
    
    //tree->Draw("p2p.fSp:(p2p.fRecoilL.E()+p2p.fRecoilR.E()-2*938.272)>>htest(100,0,350,100,-30,30)",CentralGate && thetaGate && AuxGate && AuxGate2, "colz");
   
-   //tree->Draw("abs(p2p.fRecoilL.Phi()-p2p.fRecoilR.Phi())*TMath::RadToDeg()>>htest1(100,150,210)", CentralGate && thetaGate && AuxGate2 && AuxGate, "");
-   //tree->Draw("abs(p2p.fRecoilL.Phi()-p2p.fRecoilR.Phi())*TMath::RadToDeg()>>htest2(100,150,210)", SideGate && thetaGate && !AuxGate2 && AuxGate, "same");
+   //tree->Draw("abs(p2p.fRecoilL.Phi()-p2p.fRecoilR.Phi())*TMath::RadToDeg()>>hPhi", CentralGate && thetaGate && AuxGate2 && AuxGate, "");
+   //tree->Draw("abs(p2p.fRecoilL.Phi()-p2p.fRecoilR.Phi())*TMath::RadToDeg()>>hPhibg", SideGate && thetaGate && AuxGate2 && AuxGate, "same");
   	
    tree->Draw("(p2p_zerom500.fRecoilL.E()+p2p_zerom500.fRecoilR.E()-2*938.272)>>hEsum",CentralGate && thetaGate && AuxGate && AuxGate2, "");
-   tree->Draw("(p2p_zerom500.fRecoilL.E()+p2p_zerom500.fRecoilR.E()-2*938.272)>>hEsumBG",SideGate && thetaGate && AuxGate && !AuxGate2, "same");
+   tree->Draw("(p2p_zerom500.fRecoilL.E()+p2p_zerom500.fRecoilR.E()-2*938.272)>>hEsumBG",SideGate && thetaGate && !AuxGate && !AuxGate2, "same");
   	
   	hEsumSub = HistSub(hEsum, hEsumBG, 260, 60);
    

@@ -8,7 +8,7 @@
 
 //   TFile *f1 = new TFile ("PrimaryData/ppOptics.root"); TTree *ppNew = (TTree*)f1->Get("tree");   
 
-//   TFile *f1 = new TFile ("ppUp_0723.root"); TTree *tree = (TTree*)f1->Get("tree");
+//   TFile *f1 = new TFile ("ppAll_0723_multiOffset.root"); TTree *tree1 = (TTree*)f1->Get("tree");
 
 
 	// update.
@@ -16,13 +16,27 @@
 //   TFile *f1 = new TFile ("RppAll_0714_multiOffset.root","update"); TTree *recoil = (TTree*)f1->Get("recoil");   
 //   f1->Close();
     
-   TFile *f2 = new TFile ("ppAll_0724_multiOffset.root"); TTree *recoil = (TTree*)f2->Get("tree");
+//   TFile *f2 = new TFile ("ppAll_0724_multiOffset.root"); TTree *tree2 = (TTree*)f2->Get("tree");
    
 //   TFile *f3 = new TFile ("RppUp_0613.root"); TTree *ppold = (TTree*)f3->Get("recoil");
    
-   TBrowser B("test","test", 900,600); 
+//   TBrowser B("test","test", 900,600); 
    
 //   ppNew->Draw("p2p.fSp>>h01(100,-50,50)","abs(beamZ.fAverage)<40 && abs((p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()-87.5)<2.5", "");
+
+
+	tree->Draw("smwdc_R_x1.fTiming>>h1(300,-200,400)","","");
+	tree->Draw("smwdc_R_x2.fTiming>>h2(300,-200,400)","","");
+	tree->Draw("smwdc_R_u1.fTiming>>h3(300,-200,400)","","");
+	tree->Draw("smwdc_R_u2.fTiming>>h4(300,-200,400)","","");
+	tree->Draw("smwdc_R_v1.fTiming>>h5(300,-200,400)","","");
+	tree->Draw("smwdc_R_v2.fTiming>>h6(300,-200,400)","","");
+	h3->SetLineColor(3);h3->Draw("");
+	h1->SetLineColor(1);h1->Draw("same");
+	h2->SetLineColor(2);h2->Draw("same");
+	h4->SetLineColor(4);h4->Draw("same");
+	h5->SetLineColor(5);h5->Draw("same");
+	h6->SetLineColor(6);h6->Draw("same");
 
 
 }
