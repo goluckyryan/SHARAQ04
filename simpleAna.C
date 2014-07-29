@@ -8,14 +8,19 @@ void simpleAna() {
    
    TFile *f0 = new TFile ("25F_0728_smwdcGate.root"); TTree *tree = (TTree*)f0->Get("tree");   
    
-   TString name = "fL";
-	TCut cut ="smwdc_L.fNPlaneValid";
+   TString name = "fZ";
+	TCut cut ="";
    TString side = "";
 	Int_t nBin = 300;
 	Double_t minX = -100;
 	Double_t maxX = 200;
 	
 	//###########################
+	if ( gROOT->FindObject("cSimple")){
+		delete cSimple;
+	}
+	TCanvas* cSimple = new TCanvas("cSimple", "cSimple", 2300, 100, 800, 600);
+	
 	if( gROOT->FindObject("h")){
 		delete h;
 		delete hTL;
@@ -31,7 +36,7 @@ void simpleAna() {
 	hTW->SetLineColor(kGreen); 
 	
 	TString branch, name1, name2, name3;
-	branch = "beamZ"; // branch
+	branch = "vertex"; // branch
 	name1 = branch + side + "." + name + ">>h";
 	name2 = branch + side + "_TLgated." + name + ">>hTL";
 	name3 = branch + side + "_TWgated." + name + ">>hTW";

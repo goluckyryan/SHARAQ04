@@ -4,7 +4,7 @@
    gROOT->ProcessLine(".!date");
    gStyle->SetOptStat(0);
 
-   TFile *f0 = new TFile ("25F_0728_smwdcGate.root"); TTree *tree = (TTree*)f0->Get("tree");   
+   TFile *f0 = new TFile ("25F_0728.root"); TTree *tree = (TTree*)f0->Get("tree");   
 
 //   TFile *f1 = new TFile ("PrimaryData/ppOptics.root"); TTree *ppNew = (TTree*)f1->Get("tree");   
 
@@ -25,12 +25,17 @@
 //   ppNew->Draw("p2p.fSp>>h01(100,-50,50)","abs(beamZ.fAverage)<40 && abs((p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()-87.5)<2.5", "");
 
 
-	tree->Draw("smwdc_R_x1.fCharge>>h1(100, -50, 300)","smwdc_R.fNPlaneValid","");
-	tree->Draw("smwdc_R_x2.fCharge>>h2(100, -50, 300)","smwdc_R.fNPlaneValid","");
-	tree->Draw("smwdc_R_u1.fCharge>>h3(100, -50, 300)","smwdc_R.fNPlaneValid","");
-	tree->Draw("smwdc_R_u2.fCharge>>h4(100, -50, 300)","smwdc_R.fNPlaneValid","");
-	tree->Draw("smwdc_R_v1.fCharge>>h5(100, -50, 300)","smwdc_R.fNPlaneValid","");
-	tree->Draw("smwdc_R_v2.fCharge>>h6(100, -50, 300)","smwdc_R.fNPlaneValid","");
+
+}
+
+/*
+
+//	tree->Draw("smwdc_L_x1.fTiming>>h1(100, -50, 300)","smwdc_L[0].fNPlaneValid","");
+//	tree->Draw("smwdc_L_x2.fTiming>>h2(100, -50, 300)","smwdc_L[0].fNPlaneValid","");
+//	tree->Draw("smwdc_L_u1.fTiming>>h3(100, -50, 300)","smwdc_L[0].fNPlaneValid","");
+	tree->Draw("smwdc_L_u2.fTiming>>h4(100, -50, 300)","smwdc_L[0].fNPlaneValid","");
+	tree->Draw("smwdc_L_v1.fTiming>>h5(100, -50, 300)","smwdc_L[0].fNPlaneValid","");
+	tree->Draw("smwdc_L_v2.fTiming>>h6(100, -50, 300)","smwdc_L[0].fNPlaneValid","");
 	h3->SetLineColor(3);h3->Draw("");
 	h1->SetLineColor(1);h1->Draw("same");
 	h2->SetLineColor(2);h2->Draw("same");
@@ -38,8 +43,6 @@
 	h5->SetLineColor(5);h5->Draw("same");
 	h6->SetLineColor(6);h6->Draw("same");
 
-
-}
    
 //   ppold->Draw("Sp>>hSP(100,-50,50)", "abs(wbeamZ)<50 && abs((theta1+theta2)*TMath::RadToDeg()-87.5)<2.5");
 /*   

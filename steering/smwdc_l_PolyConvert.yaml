@@ -101,6 +101,6 @@ Processor:
           - smwdc_L_u2_dtdx
           - smwdc_L_v1_dtdx
           - smwdc_L_v2_dtdx 
-      OutputTransparency: 0
+      OutputTransparency: 1
 
 #==================================================      

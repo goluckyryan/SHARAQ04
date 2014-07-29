@@ -9,20 +9,20 @@ Processor:
       OutputCollection:   beamZ
       OutputTransparency: 0
 
-  - name: proc_beamz_TLgated
-    type: art::sh04::TBeamZProcessor
-    parameter:
-      TrackL:             smwdc_L_TLgated
-      TrackR:             smwdc_R_TLgated
-      Geometry:           SMWDC_geometry
-      OutputCollection:   beamZ_TLgated
-      OutputTransparency: 0
+#  - name: proc_beamz_TLgated
+#    type: art::sh04::TBeamZProcessor
+#    parameter:
+#      TrackL:             smwdc_L_TLgated
+#      TrackR:             smwdc_R_TLgated
+#      Geometry:           SMWDC_geometry
+#      OutputCollection:   beamZ_TLgated
+#      OutputTransparency: 0
 
-  - name: proc_beamz_TWgated
-    type: art::sh04::TBeamZProcessor
-    parameter:
-      TrackL:             smwdc_L_TWgated
-      TrackR:             smwdc_R_TWgated
-      Geometry:           SMWDC_geometry
-      OutputCollection:   beamZ_TWgated
-      OutputTransparency: 0      
+#  - name: proc_beamz_TWgated
+#    type: art::sh04::TBeamZProcessor
+#    parameter:
+#      TrackL:             smwdc_L_TWgated
+#      TrackR:             smwdc_R_TWgated
+#      Geometry:           SMWDC_geometry
+#      OutputCollection:   beamZ_TWgated
+#      OutputTransparency: 0      
