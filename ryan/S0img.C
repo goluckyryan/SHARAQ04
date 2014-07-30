@@ -9,8 +9,7 @@ void S0img() {
    TStopwatch time;
    time.Reset();
    
-   const char* savefilename="Gated.root";
-   const char* rootfile="~/sharaq04/optics4027.root";
+   const char* rootfile="PrimaryData/ppOptics.root";
    Bool_t debugInfo = 0; //0 - false
    Bool_t allentry  = 1;
    nEntries = 10000;
