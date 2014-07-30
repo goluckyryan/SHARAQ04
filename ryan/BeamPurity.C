@@ -7,7 +7,7 @@
 #include <TClonesArray.h>
 #include "constant.h"
 #include "RelCalculator.h"
-#include "TBeamData.h"
+#include "Compress/TBeamData.h"
 
 void BeamPurity() {
 //================ Tree branch

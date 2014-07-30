@@ -1,6 +1,6 @@
 #include "RelCalculator.h"
 Double_t TKA = 260;
-void PPFit_thetaOp(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t OPCM = 1){
+void PPFit_OpenAng(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t OPCM = 1){
 
    TFile *f0 = new TFile ("test.root");
    TTree *recoil = (TTree*)f0->Get("recoil");

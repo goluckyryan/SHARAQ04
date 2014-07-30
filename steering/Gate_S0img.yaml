@@ -4,9 +4,9 @@ Processor:
     parameter:
       TrackingResult:  S0img
       Circle:     #gate name, Xpos, Ypos, Radius
-        - [target_r7_y0  , 1., 1.9 , 7.]
-        - [target_r8_y0  , 0., 1.9., 8.]
-        - [target_r7_y1.9, 0., 1.9, 7.]
+        - [target_r7_x1_y1.9  , 1., 1.9 , 7.]
+        - [target_r8_x0_y0  , 0., 1.9., 8.]
+        - [target_r7_x0_y1.9, 0., 1.9, 7.]
       HistogramOption: [hS0XY,hS0XY;X (mm);Y (mm),500,-25,25,500,-25,25]
         
 #  - name: proc_stop_S0img

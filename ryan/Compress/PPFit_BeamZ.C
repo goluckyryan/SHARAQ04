@@ -1,16 +1,16 @@
 #include "RelCalculator.h"
 Double_t TKA = 260;
 
-void PPFit_BeamZ_direct(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t OPCM = 1){
+void PPFit_BeamZ(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t OPCM = 1){
 
-   const char* rootfile="PrimaryData/ppUp_0723.root";
-   TFile *f0 = new TFile (rootfile); TTree *tree = (TTree*)f0->Get("tree");
+   TFile *f0 = new TFile ("RppDown_0613.root");
+   TTree *recoil = (TTree*)f0->Get("recoil");
    
-   Double_t OpenAngGateRange[2] = {84, 89};
+   Double_t OpenAngGateRange[2] = {85, 90};
    Double_t sideGateExtL = 0;
    Double_t sideGateExtR = 0;
    
-   printf("================> %s opened.\n", rootfile);
+   Double_t beamXGateRange[2] = {-400000,400000};
    
    //================ calculate theta 
    if (OPCM ==1 ){
@@ -79,10 +79,10 @@ void PPFit_BeamZ_direct(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_
    TString thetaGateTitle;
    //TString thetaGateTitle2;
    if ( LR == 1) {
-      thetaGateTitle.Form("p2p.fRecoilL.Theta()*TMath::RadToDeg() > %5.2f && p2p.fRecoilL.Theta()*TMath::RadToDeg() < %5.2f", thetaOpRange[0], thetaOpRange[1]);
+      thetaGateTitle.Form("theta1*TMath::RadToDeg() > %5.2f && theta1*TMath::RadToDeg() < %5.2f", thetaOpRange[0], thetaOpRange[1]);
       //thetaGateTitle2.Form("theta2*TMath::RadToDeg() > %5.2f && theta2*TMath::RadToDeg() < %5.2f", thetaOpRange2[0], thetaOpRange2[1]);
    }else{
-      thetaGateTitle.Form("p2p.fRecoilR.Theta()*TMath::RadToDeg() > %5.2f && p2p.fRecoilR.Theta()*TMath::RadToDeg() < %5.2f", thetaOpRange[0], thetaOpRange[1]);
+      thetaGateTitle.Form("theta2*TMath::RadToDeg() > %5.2f && theta2*TMath::RadToDeg() < %5.2f", thetaOpRange[0], thetaOpRange[1]);
       //thetaGateTitle2.Form("theta1*TMath::RadToDeg() > %5.2f && theta1*TMath::RadToDeg() < %5.2f", thetaOpRange2[0], thetaOpRange2[1]);
    }
    TCut thetaGate;
@@ -91,84 +91,51 @@ void PPFit_BeamZ_direct(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_
    //thetaGate2 += thetaGateTitle2;
    
    TString centralGateTitle, sideGateTitle;
-   centralGateTitle.Form("TMath::Abs((p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()-%5.2f)<%5.2f", OpenAngGateRange[0]+OpenAngGateRange_width/2, OpenAngGateRange_width/2);
-   sideGateTitle.Form("TMath::Abs((p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()-%5.2f)<%5.2f || TMath::Abs((p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()-%5.2f)<%5.2f",
+   centralGateTitle.Form("TMath::Abs((theta1+theta2)*TMath::RadToDeg()-%4.1f)<%4.1f", OpenAngGateRange[0]+OpenAngGateRange_width/2, OpenAngGateRange_width/2);
+   sideGateTitle.Form("TMath::Abs((theta1+theta2)*TMath::RadToDeg()-%4.1f)<%4.2f || TMath::Abs((theta1+theta2)*TMath::RadToDeg()-%4.1f)<%4.2f",
               OpenAngGateRange[0]-OpenAngGateRange_width/4 - sideGateExtL, OpenAngGateRange_width/4 + sideGateExtL, 
               OpenAngGateRange[1]+OpenAngGateRange_width/4 + sideGateExtR, OpenAngGateRange_width/4 + sideGateExtR);
    TCut CentralGate, SideGate;
    CentralGate += centralGateTitle;
    SideGate += sideGateTitle;
    
-   TCut AuxGate = "abs(abs(p2p.fRecoilL.Phi()-p2p.fRecoilR.Phi())*TMath::RadToDeg()-180)<7";
+   TCut beamXGate;
+   TString beamXGateTitle;
+   beamXGateTitle.Form(" (beamX1 + beamX2) > %4.f && (beamX1 + beamX2)< %4.f", beamXGateRange[0]*2, beamXGateRange[1]*2);
+   beamXGate = "";// beamXGateTitle;  
    
    CentralGate.Print();
    SideGate.Print();
    thetaGate.Print();
-   AuxGate.Print();
+   beamXGate.Print();
    
    
    //==============Calculate
    cBeamZ->cd(1);
-   tree->Draw("beamZ.fAverage>>h1",CentralGate && thetaGate && AuxGate);
-   tree->Draw("beamZ.fAverage>>h2",SideGate && thetaGate  && AuxGate, "same");
+   recoil->Draw("wbeamZ>>h1",CentralGate && thetaGate && beamXGate);
+   recoil->Draw("wbeamZ>>h2",SideGate && thetaGate  && beamXGate, "same");
    
    /*cBeamZ->cd(3);
-   tree->Draw("E2:E1>>hTAngL", CentralGate && thetaGate && thetaGate2 , "colz");
+   recoil->Draw("E2:E1>>hTAngL", CentralGate && thetaGate && thetaGate2 && beamXGate, "colz");
    
    cBeamZ->cd(6);
-   tree->Draw("E2:theta2*TMath::RadToDeg()>>hTAngR", CentralGate && thetaGate && thetaGate2 , "colz");
+   recoil->Draw("E2:theta2*TMath::RadToDeg()>>hTAngR", CentralGate && thetaGate && thetaGate2 && beamXGate, "colz");
    */ 
    cBeamZ->cd(3);
-   tree->Draw("(p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()>>h1g",CentralGate && thetaGate && AuxGate);
-   tree->Draw("(p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()>>h2g",SideGate && thetaGate && AuxGate, "same");
-   
-   Int_t CountTotal=h1g->GetEntries();
-   Int_t CountBG = h2g->GetEntries();
-   
-   Int_t CountSignal = CountTotal - CountBG;
-   Double_t ErrorSignal = sqrt((Double_t)CountTotal + (Double_t)CountBG);
-   TString countText;
-   TLatex *text = new TLatex();
-   text->SetNDC();
-   countText.Form("%5s%5d","Tot:", CountTotal);
-   text->DrawLatex(0.6, 0.85, countText);
-   countText.Form("%5s%5d", "BG:",CountBG);
-   text->DrawLatex(0.6, 0.8, countText);
-   countText.Form("%5s%5d[%3d]","Sig:", CountSignal, TMath::Nint(ErrorSignal));
-   text->DrawLatex(0.6, 0.75, countText);
-   
-   printf("====== Central:%d, Side:%d => Signal:%d [%5.1f] \n",  CountTotal, CountBG, CountSignal, ErrorSignal);
+   recoil->Draw("(theta1+theta2)*TMath::RadToDeg()>>h1g",CentralGate && thetaGate && beamXGate);
+   recoil->Draw("(theta1+theta2)*TMath::RadToDeg()>>h2g",SideGate && thetaGate && beamXGate, "same");
    
    cBeamZ->cd(2);
    h3 = HistSub(h1, h2);
    
    cBeamZ->cd(4);
    if (LR == 1){
-      tree->Draw("p2p.fRecoilL.Theta()*TMath::RadToDeg()>>hL", CentralGate && thetaGate && AuxGate);
-      tree->Draw("p2p.fRecoilR.Theta()*TMath::RadToDeg()>>hR", CentralGate && thetaGate && AuxGate, "same");
+      recoil->Draw("theta1*TMath::RadToDeg()>>hL", CentralGate && thetaGate && beamXGate);
+      recoil->Draw("theta2*TMath::RadToDeg()>>hR", CentralGate && thetaGate && beamXGate, "same");
    }else{
-      tree->Draw("p2p.fRecoilR.Theta()*TMath::RadToDeg()>>hR", CentralGate && thetaGate && AuxGate);
-      tree->Draw("p2p.fRecoilL.Theta()*TMath::RadToDeg()>>hL", CentralGate && thetaGate && AuxGate, "same");
+      recoil->Draw("theta2*TMath::RadToDeg()>>hR", CentralGate && thetaGate && beamXGate);
+      recoil->Draw("theta1*TMath::RadToDeg()>>hL", CentralGate && thetaGate && beamXGate, "same");
    }
-   
-   //================== Save as png
-   /*TImage *img = TImage::Create();
-   
-   img->FromPad(cBeamZ);
-   
-   TString imgName;
-   if (LR == 1){
-   	imgName.Form("L_");
-	}else{
-		imgName.Form("");
-	}
-   img->WriteImage();
-   
-   delete img;
-   
-   */
-   //delete cBeamZ;
-   
 }
 
 //#####################################################################
@@ -180,7 +147,7 @@ TH1F* HistSub(TH1F *hist1, TH1F *hist2){
    Double_t xx;
    Double_t countS = 0, countTot = 0, countBG = 0;
    // Count Range
-   Double_t countRangeSet[2] = {11, 18};//center, width
+   Double_t countRangeSet[2] = {15, 18};//center, width
    Double_t countRange[2] = {countRangeSet[0]-countRangeSet[1]*2, countRangeSet[0]+countRangeSet[1]*2};
    TString histName, histTitle;
    histName.Form("%s - %s",hist1->GetName(), hist2->GetName());
@@ -205,7 +172,7 @@ TH1F* HistSub(TH1F *hist1, TH1F *hist2){
    hout->Fit(fit);
    
    hout->Draw("E1");
-   printf("Count(%4.1f, %4.1f): Signal:%5d [%6.1f] | Total:%d, BG:%d \n",countRange[0], countRange[1], countS, TMath::Sqrt(countTot+countBG), countTot, countBG);
+   printf("Count(%4.1f, %4.1f): %5d [%6.1f] |%d, %d \n",countRange[0], countRange[1], countS, TMath::Sqrt(countTot+countBG), countTot, countBG);
 
    TLine *line1 = new TLine(countRange[0], hout->GetMinimum(), countRange[0], hout->GetMaximum());
    TLine *line2 = new TLine(countRange[1], hout->GetMinimum(), countRange[1], hout->GetMaximum());

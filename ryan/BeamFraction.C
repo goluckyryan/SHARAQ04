@@ -1,4 +1,4 @@
-#include "TBeamData.h"
+#include "Compress/TBeamData.h"
 void BeamFraction() {
    const char* rootfile="PrimaryData/ppOptics.root";
    TBeamData *beam = new TBeamData("proton");
@@ -21,16 +21,19 @@ void BeamFraction() {
    gStyle->SetOptStat(0);
    
    TH1F * hPIDUS      = new TH1F("PIDUS"    , "PID upstream", 100, beam->fTofGate[0]-3,beam->fTofGate[1]+3);
+   hPIDUS->SetXTitle("ToF(F3-FH9) [ns]");
+   hPIDUS->SetYTitle("Count");
    TH2F * hS0img      = new TH2F("S0img"    , "S0img"                , nBin, -30, 30, nBin, -30, 30);
-   hS0img->SetXTitle("X");
-   hS0img->SetYTitle("Y");
+   hS0img->SetXTitle("X [mm]");
+   hS0img->SetYTitle("Y [mm]");
    TString hS0imgCrysTitle;
    hS0imgCrysTitle.Form("S0img Crystal (%4.2f,%4.2f)%5.2f", center[0],center[1],radius);
    TH2F * hS0imgCrys  = new TH2F("S0imgCrys", hS0imgCrysTitle        , nBin, -30, 30, nBin, -30, 30);
-   hS0imgCrys->SetXTitle("X");
-   hS0imgCrys->SetYTitle("Y");
-   TH2F * hS0AB       = new TH2F("S0AB"     , "S0img A B"            , nBin, -0.1,  0.1, nBin, -0.1, 0.1);
-   
+   hS0imgCrys->SetXTitle("X [mm]");
+   hS0imgCrys->SetYTitle("Y [mm]");
+   TH2F * hS0AB       = new TH2F("S0AB"     , "S0img A B"            , nBin, -100,  100, nBin, -100, 100);
+   hS0AB->SetXTitle("A [mrad]");
+   hS0AB->SetYTitle("B [mrad]");
 //###########################################################
    TBenchmark clock;
    clock.Reset();
@@ -113,7 +116,7 @@ void BeamFraction() {
       if (trackID != 1) continue;
       countS0img++;
       hS0img->Fill(s0x,s0y);
-      hS0AB ->Fill(s0a,s0b);
+      hS0AB ->Fill(s0a*1000,s0b*1000);
       
       Double_t s0chmX = s0x + s0a*Zchm;
       Double_t s0chmY = s0y + s0b*Zchm;
@@ -155,7 +158,7 @@ void BeamFraction() {
    cBeamFract->cd(1);
    hS0img->Draw("colz");
    countText.Form("count:%d",countS0img);
-   text.DrawText(0.15, 0.8, countText); 
+   text.DrawText(0.05, 0.95, countText); 
    //   text.DrawText(0.15, 0.85, rootfile); 
    
    TLine line;
@@ -172,11 +175,11 @@ void BeamFraction() {
    
    cBeamFract->cd(2);
    hS0imgCrys->Draw("colz");
-   countText.Form("count:%d[%4.1f%%]", countCrystal, countCrystal*100./countS0img);
+   countText.Form("count:%d[%4.1f%%]", countCrystal, countCrystal*100./countFH9);
    text.DrawText(0.15, 0.8, countText);
 
    cBeamFract->cd(4);
    hPIDUS->Draw("colz");
    countText.Form("count:%d",countFH9);
-   text.DrawText(0.15, 0.8, countText);
+   text.DrawText(0.05, 0.95, countText);
 }

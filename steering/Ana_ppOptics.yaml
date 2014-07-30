@@ -1,22 +1,25 @@
+aliases:
+# beware to overwrite !!!
+  - &output  ppOptics_0729.root
+  
 Processor:
 #=============  DATA              ==========================
   - include: RunsProtonOptics.yaml
-
 #============= Mapper and Timer ============================
   - include: Mapper_Timer.yaml   
-    
 #============== PROCESSORS     =============================
-
   - include: coinReg.yaml
   - include: plastic_V1190_prm.yaml
   - include: plastic_V1190_F3.yaml
   - include: plastic_V1190_FH9.yaml
   - include: plastic_tof_US.yaml
-  - include: ppac.yaml
-  - include: dcx1.yaml
-  - include: dcx2.yaml
-  - include: S0img.yaml
   - include: plastic_V775.yaml             # include tof_DS
+  - include: dcx1x2_timeRef.yaml
+  - include: dcx1.yaml                     # using FH9_V775, but FH9_V775 in optics is off.
+#  - include: dcx1_track.yaml
+  - include: dcx2.yaml
+#  - include: dcx2_track.yaml
+  - include: S0img.yaml
 #  - include: TTD.yaml
 #  - include: nyoki.yaml
   - include: plastic_V767_timeRef.yaml
@@ -31,16 +34,17 @@ Processor:
     parameter:
       Name:     beam
       Type:     art::sh04::TBeamParameter
-      FileName: prm/kinematics/ppcoin.yaml
+      FileName: prm/kinematics/proton.yaml
 
   - include: smwdc_geo.yaml
   - include: beamZ.yaml
+  - include: vertex.yaml
   - include: recoil.yaml
 
 #============== Output     =============================
   - name: outputtree
     type: art::TOutputTreeProcessor
     parameter:
-      FileName: ppOptics.root
+      FileName: *output
 
         
