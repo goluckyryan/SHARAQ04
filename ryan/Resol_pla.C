@@ -2,9 +2,9 @@
 
 void Resol_pla() {
    
-   const char* rootfile="ppAll_0724_multiOffset.root";
-   const char* plaBranch= "plaV775"; Int_t plaDetID = 1;
-   const char* mwdcBranch = "smwdc_R";
+   const char* rootfile="ppAll_0731.root";
+   const char* plaBranch= "plaV775"; Int_t plaDetID = 0;
+   const char* mwdcBranch = "smwdc_L";
 
    Double_t PlaBeta = 0.66;
    
@@ -14,7 +14,7 @@ void Resol_pla() {
    
    Int_t nBin = 500;
    Int_t relBinWidth = 5;
-   Double_t MeanRange[2] = {0,800};
+   Double_t MeanRange[2] = {-1000,-200};
    
    Double_t maxResol = 1000; // ps
    
@@ -94,7 +94,7 @@ void Resol_pla() {
 	hResol->SetXTitle("pla(X)[mm]");
    hResol->SetYTitle("Tavg Resol [ps]");
 
-   TCanvas* cPlaResol = new TCanvas("cPlaResol", "Pla resolution by MWDC", 0, 0, 800, 600);   
+   TCanvas* cPlaResol = new TCanvas("cPlaResol", "Pla resolution by MWDC", 2000, 0, 800, 600);   
    cPlaResol->Divide(1,2);
    
    //**************************************
@@ -111,11 +111,14 @@ void Resol_pla() {
       
       // Get Tdiff
       Double_t tdiff = kInvalidD;
+      Double_t Q1 = kInvalidD;
       Int_t nHitpla = hoge_pla->GetEntriesFast();
       for ( Int_t p = 0; p < nHitpla; p++){
          art::TTwoSidedPlasticData * plaData = (art::TTwoSidedPlasticData*)hoge_pla->At(p);
          if ( plaData->GetDetID() == plaDetID){
-            tdiff= plaData->GetTDiff();
+				Q1   = plaData->GetQ1();//*2.33-850;
+				Q2   = plaData->GetQ2();
+            tdiff= plaData->GetTDiff()-1000./TMath::Power(Q1-450,1) + 1000./TMath::Power(Q2-450,1);
          }
       }
       if(!TMath::Finite(tdiff)) continue;
@@ -184,7 +187,7 @@ void Resol_pla() {
    	fit->GetParameters(para);
    	// resol = Sqrt( sigma^2 - (2*DeltaX/beta/c)^2 )
    	Double_t resolution = TMath::Abs(TMath::Sqrt(TMath::Power(para[2],2)-TMath::Power(2*PlaXWidth/PlaBeta/cVaccum,2)))*1000.; //ps
-   	Double_t err_resol = TMath::Abs(fit->GetParError(2)*para[2]/(resolution/1000.))*1000.; // ns
+   	Double_t err_resol = TMath::Abs(fit->GetParError(2)*para[2]/(resolution/1000.))*1000.; // ps
    	
    	if (TMath::Finite(resolution) && resolution < maxResol && para[2] != 0.5 && err_resol < resolution/2.) {
    		hResol->Fill(PlaXPos,resolution);
@@ -194,7 +197,7 @@ void Resol_pla() {
    			mean +=resolution;
    			meanErr += err_resol*err_resol;
    		}
-   		printf(" bin:(%3d,%3d) PlaX: %7.1f, mean: %4.1f, sigma: %5.2f(%f), resol: %6.2f(%5.2f) ps \n", relBinID, relBinID+relBinWidth, PlaXPos, para[1], para[2], fit->GetParError(2), resolution, err_resol);
+   		//printf(" bin:(%3d,%3d) PlaX: %7.1f, mean: %4.1f, sigma: %5.2f(%f), resol: %6.2f(%5.2f) ps \n", relBinID, relBinID+relBinWidth, PlaXPos, para[1], para[2], fit->GetParError(2), resolution, err_resol);
    		
    	}
    }

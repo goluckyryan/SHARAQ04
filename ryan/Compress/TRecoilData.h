@@ -129,9 +129,12 @@ void TRecoilData::SetKinetic(Int_t id, Double_t &tof, Double_t &x, Double_t &y, 
    fTKA   = (fGamma-1)*fMass/fA;
    fMomentum = fGamma*fBeta*fMass;
 
-   fTheta = TMath::ATan2(TMath::Sqrt(Xpos*Xpos+Ypos*Ypos), Zpos);
+   //fTheta = TMath::ATan2(TMath::Sqrt(Xpos*Xpos+Ypos*Ypos), Zpos);
    // range -90 ~ 270
-   fPhi   = TMath::ATan2(Ypos,Xpos);
+   //fPhi   = TMath::ATan2(Ypos,Xpos);
+   
+   fTheta = acos((cos - sin*a)/sqrt(a*a+b*b+1));
+   fPhi   = atan2(b,(sin + cos*a));
    if (fPhi < -TMath::PiOver2()){
       fPhi = fPhi + TMath::Pi()*2;
    }else if (fPhi > 3*TMath::PiOver2()){

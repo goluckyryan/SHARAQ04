@@ -1,10 +1,10 @@
 #include "constant.h"
 #include "RelCalculator.h"
-#include "TBeamData.h"
+#include "Compress/TBeamData.h"
 
 void tplaSlew2() {
    
-   const char* rootfile="PrimaryData/ppAll.root";
+   const char* rootfile="ppAll_0731.root";
    TString detector = "Tpla-L"; //Tpla-L
    TBeamData *beam = new TBeamData("proton");
    Bool_t allentry  = 0;

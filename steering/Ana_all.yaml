@@ -1,6 +1,6 @@
 aliases:
 # beware to overwrite !!!
-  - &output  25F_0728.root
+  - &output  25F_0807.root
  
 #  - &beamprm prm/kinematics/proton.yaml     
 #  - &beamprm prm/kinematics/14O.yaml  
@@ -38,8 +38,8 @@ Processor:
   - include: plastic_tof_US.yaml
   - include: Gate_PID.yaml
   - include: ppac_old.yaml
-#  - include: dc91.yaml
-#  - include: dc91_track.yaml
+  - include: dc91.yaml
+  - include: dc91_track.yaml
   - include: plastic_V775.yaml             # include tof_DS
   - include: dcx1x2_timeRef.yaml           # required for dcx1 and dcx2
   - include: dcx1.yaml
@@ -47,7 +47,7 @@ Processor:
   - include: dcx2.yaml
 #  - include: dcx2_track.yaml
   - include: S0img.yaml
-  - include: Gate_S0img.yaml
+#  - include: Gate_S0img.yaml
 #  - include: dcS0D.yaml                    
 #  - include: TTD.yaml                      # reuire plastic_V775 for tof
 #  - include: nyoki.yaml                    # reuire plastic_V775 for tof

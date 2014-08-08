@@ -1,10 +1,11 @@
-void Fit_Binomial(){
+void Fit_Binomial(const TH1F* htemp){
    gStyle->SetOptFit(1111);
    Int_t nPara = 2;
    Double_t Xrange[2] = {1,6};
    TF1 *fit = new TF1("fit", Binomial_dist, Xrange[0], Xrange[1], nPara); 
    fit->SetParameters(200000, 0.94);
-   htemp->Fit("fit","I");
+   htemp->Fit("fit","Q");
+   
 }
 
 Double_t Binomial_dist(Double_t *x, Double_t *para){

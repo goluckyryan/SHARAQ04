@@ -1,11 +1,11 @@
 #include "constant.h"
 #include "RelCalculator.h"
-#include "TBeamData.h"
+#include "Compress/TBeamData.h"
 
 void tplaSlew() {
    
-   const char* rootfile="PrimaryData/ppAll.root";
-   TString detector = "Tpla-L"; //Tpla-L
+   const char* rootfile="ppAll_0731.root";
+   TString detector = "Tpla-R"; //Tpla-L
    TBeamData *beam = new TBeamData("proton");
    Bool_t allentry  = 1;
    Int_t firstEntry = 0;
@@ -102,8 +102,8 @@ void tplaSlew() {
    
    TString hTplaXgTitle;
    hTplaXgTitle.Form("(%7.1f, %7.1f)", XGate[0]-XGate[1], XGate[0]+XGate[1]);
-   TH1F* hTplaX  = new TH1F("hTplaX" , "TplaX"+hTplaXgTitle        , 400, -1400, 300);
-   TH1F* hTplaXg = new TH1F("hTplaXg", "TplaX g:TplaX"+hTplaXgTitle, 400, -1400, 300);
+   TH1F* hTplaX  = new TH1F("hTplaX" , "TplaX"+hTplaXgTitle        , 400, TplaXRange[0],TplaXRange[1]);
+   TH1F* hTplaXg = new TH1F("hTplaXg", "TplaX g:TplaX"+hTplaXgTitle, 400, TplaXRange[0],TplaXRange[1]);
    hTplaXg->SetLineColor(2);
    
    TH2F* hQ1tof1 = new TH2F("hQ1tof1", "Q1 vs (tavg - t1)", 100, -4, 8, 200, 0, 3500);
@@ -113,12 +113,14 @@ void tplaSlew() {
    hQtofTitle.Form("(%7.1f,%7.1f)", QGate[0], QGate[1]);
    TH2F* hQ1tof1g = new TH2F("hQ1tof1g", "Q1 vs (tavg - t1) g:TplaX Q2"+hQtofTitle, 200, -4,  8, 200, 0, 3500);
    TH2F* hQ2tof2g = new TH2F("hQ2tof2g", "Q2 vs (t2 - tavg) g:TplaX Q1"+hQtofTitle, 200, -4,  8, 200, 0, 3500);
-   
+
+   TH2F* hSlew = new TH2F("hSlew", "Q1 vs Slew", 200, 0, 3500, 100, 0, 10);
+
    TH2F* hQ1tof1gSlew = new TH2F("hQ1tof1gSlew", "Q1 vs (tavg - t1) g:TplaX Slew", 200,  -4, 8, 200, 0, 3500);
    TH2F* hQ2tof2gSlew = new TH2F("hQ2tof2gSlew", "Q2 vs (t2 - tavg) g:TplaX Slew", 200,  -4, 8, 200, 0, 3500);
    
    Int_t Xdiv = 3, Ydiv = 2;
-   TCanvas* cTplaSlew = new TCanvas("cTplaSlew", "Tpla Decay constant", 10, 30, 400*Xdiv, 400*Ydiv);   
+   TCanvas* cTplaSlew = new TCanvas("cTplaSlew", "Tpla Slew", 10, 30, 400*Xdiv, 400*Ydiv);   
    cTplaSlew->Divide(Xdiv, Ydiv);
 
    Int_t endEntry = firstEntry + nEntries;
@@ -172,8 +174,8 @@ void tplaSlew() {
          if (  DetID == detectorID){
             t1   = V775Data->GetT1();
             t2   = V775Data->GetT2();
-            Q1   = (V775Data->GetQ1()+Qoffset[0])*QGain[0]+Qth;
-            Q2   = (V775Data->GetQ2()+Qoffset[1])*QGain[1]+Qth;         
+            Q1   = V775Data->GetQ1()*QGain[0]+Qoffset[0];
+            Q2   = V775Data->GetQ2()*QGain[1]+Qoffset[1];         
          }
          if ( DetID == 2 ) tF3  = V775Data->GetTAve();
          if ( DetID == 3 ) tFH9 = V775Data->GetTAve();
@@ -200,11 +202,17 @@ void tplaSlew() {
       hQ2tof2->Fill(tof2, Q2);
 
       // Slew correction
-      Double_t t1Slew = t1 -  20.*TMath::Power(Q1,-0.5);
-      Double_t t2Slew = t2 -  20.*TMath::Power(Q2,-0.5);
+      Double_t Cslew = 4000;
+      Double_t Pslew = 1;
+      Double_t slew1 = Cslew/TMath::Power(Q1,Pslew) ;
+      Double_t slew2 = Cslew/TMath::Power(Q2,Pslew) ;
+      Double_t t1Slew = t1 + slew1;
+      Double_t t2Slew = t2 + slew2;
       Double_t tavgSlew = (t1Slew+t2Slew)/2;
       Double_t tof1Slew = tavgSlew - t1Slew;
       Double_t tof2Slew = t2Slew - tavgSlew;
+
+      hSlew->Fill(Q1, slew1);
       
       if ( TMath::Abs(TplaX1 - XGate[0])< XGate[1] ) {
 
@@ -275,7 +283,8 @@ void tplaSlew() {
    hQ2tof2g->Draw("colz");
    
    cTplaSlew->cd(4);
-   hQ1Q2->Draw("colz");
+   //hQ1Q2->Draw("colz");
+   hSlew->Draw("colz");
    
    cTplaSlew->cd(5);
    hQ1tof1gSlew->Draw("colz");
@@ -286,10 +295,4 @@ void tplaSlew() {
   
    return ;
 }
-
-Double_t WalkFunction(Double_t Q, Double_t Q0, Double_t sigma, Double_t Qth){
-   //return sigma*(-TMath::Sqrt(2*TMath::Log(Q/Qth)) + TMath::Sqrt(2*TMath::Log(Q0/Qth)));
-   return sigma/TMath::Power(Q,0.5) ;
-}
-
 

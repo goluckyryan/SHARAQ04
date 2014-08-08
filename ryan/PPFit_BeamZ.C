@@ -1,9 +1,9 @@
 #include "RelCalculator.h"
 Double_t TKA = 260;
 
-void PPFit_BeamZ_direct(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t OPCM = 1){
+void PPFit_BeamZ(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t OPCM = 1){
 
-   const char* rootfile="PrimaryData/ppUp_0723.root";
+   const char* rootfile="ppAll_0731.root";
    TFile *f0 = new TFile (rootfile); TTree *tree = (TTree*)f0->Get("tree");
    
    Double_t OpenAngGateRange[2] = {84, 89};
@@ -27,6 +27,7 @@ void PPFit_BeamZ_direct(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_
    }
    //===================Setting histogram
    gStyle->SetOptStat(0);
+   if ( gROOT->FindObject("cBeamZ")) delete cBeamZ;
    TCanvas * cBeamZ = new TCanvas ("cBeamZ","cBeamZ", 1200,50,800,800);
    cBeamZ->Divide(2,2);
    Double_t OpenAngGateRange_width = OpenAngGateRange[1] - OpenAngGateRange[0];
@@ -38,7 +39,7 @@ void PPFit_BeamZ_direct(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_
    Int_t nBinH = TMath::Nint((DisplayRangeH[1]-DisplayRangeH[0])/3.);
    TH1F * h1 = new TH1F("h1",h1Title, nBinH, DisplayRangeH[0], DisplayRangeH[1]);
    h1->SetMinimum(0);
-   h1->SetXTitle("weigthed beamZ");
+   h1->SetXTitle("weigthed beamZ [mm]");
    h1->SetStats(1);
    TH1F * h2 = new TH1F("h2",h2Title, nBinH, DisplayRangeH[0], DisplayRangeH[1]);
    h2->SetMinimum(0);
@@ -48,8 +49,8 @@ void PPFit_BeamZ_direct(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_
    
    Double_t DisplayRangeG[2] = {80,96};
    Int_t nBinG = (DisplayRangeG[1]-DisplayRangeG[0])*8;
-   TH1F * h1g = new TH1F("h1g","gate", nBinG, DisplayRangeG[0], DisplayRangeG[1]);
-   h1g->SetXTitle("theta1+theta2");
+   TH1F * h1g = new TH1F("h1g","OpenAng Gate", nBinG, DisplayRangeG[0], DisplayRangeG[1]);
+   h1g->SetXTitle("theta1+theta2 [deg]");
    h1g->SetStats(0);
    TH1F * h2g = new TH1F("h2g","gate2", nBinG, DisplayRangeG[0], DisplayRangeG[1]);
    h2g->SetLineColor(2);
@@ -68,8 +69,10 @@ void PPFit_BeamZ_direct(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_
    TH1F * hL = new TH1F("hL", hLTitle,  ThetaBin, ThetaRange[0], ThetaRange[1]);
    TH1F * hR = new TH1F("hR", hRTitle,  ThetaBin, ThetaRange[0], ThetaRange[1]);
    hL->SetMinimum(0);
+   hL->SetXTitle("theta1 [deg]");
    hR->SetMinimum(0);
    hR->SetLineColor(2);
+   hR->SetXTitle("theta2 [deg]");
    
    TH2F * hTAngL = new TH2F("hTAngL", "T1 vs theta1", 100,  0, 250, 100, 0, 250);
    TH2F * hTAngR = new TH2F("hTAngR", "T2 vs theta2", 140, 10,  80, 100, 0, 250);
@@ -99,7 +102,7 @@ void PPFit_BeamZ_direct(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_
    CentralGate += centralGateTitle;
    SideGate += sideGateTitle;
    
-   TCut AuxGate = "abs(abs(p2p.fRecoilL.Phi()-p2p.fRecoilR.Phi())*TMath::RadToDeg()-180)<7";
+   TCut AuxGate = "";//"abs(abs(p2p.fRecoilL.Phi()-p2p.fRecoilR.Phi())*TMath::RadToDeg()-180)<7";
    
    CentralGate.Print();
    SideGate.Print();

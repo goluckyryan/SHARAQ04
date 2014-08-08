@@ -78,8 +78,8 @@ void TBeamData::UseProjectile(TString str){
       fQGate[0]    =  5000.;  fQGate[1]   =  6000.;
       fToffsetV1190 = -1444.1;
       fToffsetV775  = -306.88;
-      fToffset1 = 56.5; //56.7;//12.82
-      fToffset2 = 57.7; //57.9;//11.62
+      fToffset1 = 56.7; //56.7;//12.82
+      fToffset2 = 57.4; //57.9;//11.62
    }else if ( str == "14O"){
       fBrho = 4.2; // 4.217 in datasheet. 
       fMass = mO14; fZ    = 8; fA    = 14; 

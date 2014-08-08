@@ -3,13 +3,13 @@
 void TrimForReduce() {
    
 //############################################################################   
-   const char* savefilename="RppAll_0613.root";
+   const char* savefilename="R25F_0728.root";
    //const char* rootfile="Data/phys14_1_43.root";
-   const char* rootfile="PrimaryData/ppAll_0613.root";
+   const char* rootfile="25F_0728.root";
    //const char* rootfile="Data/phys24Down.root";
-   Bool_t allentry  = 1;
+   Bool_t allentry  = 0;
    Int_t firstEntry = 0;
-   Int_t nEntries=10000000;
+   Int_t nEntries=1000;
    
 //############################################################################
    TBenchmark clock;
@@ -23,35 +23,32 @@ void TrimForReduce() {
    Int_t runNum;
    // coinReg
    Int_t coinReg;
+   // gate
+   Int_t gate;
    // ppac
    Double_t ppacX, Brho, TKAppac;
    // S0img
    Double_t s0x, s0y;
    // get tof and charge upstream
-   Double_t tof_usV1190, Q_usG;
+   Double_t tof_usV1190, Q_us;
    Double_t tof_usV775;
    //downstream V775
    Double_t tof1, Q1;
    Double_t tof2, Q2;
    Double_t tofS0D, QS0D;
    // SMWDC X Y
-   Int_t NValidPlane1,NValidPlane2;
    Double_t x1, y1, a1, b1; // for smwdc-L
    Double_t x2, y2, a2, b2; // for smwdc-R
-   
-   TRecoilData * recoil1 = new TRecoilData();
-   TRecoilData * recoil2 = new TRecoilData();
    
    // Phsyics
    Double_t TKAV775;
    Double_t E1, E2;
    Double_t theta1, theta2;
    Double_t phi1, phi2;
-   Double_t beamZ1, beamZ2;
-   Double_t beamX1, beamX2;
+   Double_t beamZ1, beamZ2, wbeamZ;
+   Double_t vertexX, vertexY, vertexZ;
    Double_t Sp;
    Double_t Sp2;
-   Double_t wbeamZ;
 
    TFile *savefile = new TFile(savefilename,"recreate");
    TTree *recoil; 
@@ -61,9 +58,7 @@ void TrimForReduce() {
    recoil->Branch("coinReg",&coinReg,"coinReg/I");
    recoil->Branch("tof_usV1190",&tof_usV1190,"tof_usV1190/D");
    recoil->Branch("tof_usV775",&tof_usV775,"tof_usV775/D");
-   recoil->Branch("Q_us",&Q_usG,"Q_usG/D");
-   //recoil->Branch("NValidPlane1",&NValidPlane1,"NValidPlane1/I");
-   //recoil->Branch("NValidPlane2",&NValidPlane2,"NValidPlane2/I");
+   recoil->Branch("Q_us",&Q_us,"Q_us/D");
    recoil->Branch("s0x", &s0x, "s0x/D");
    recoil->Branch("s0y", &s0y, "s0y/D");
    recoil->Branch("ppacX", &ppacX, "ppacX/D");
@@ -93,39 +88,59 @@ void TrimForReduce() {
    recoil->Branch("beamZ1",&beamZ1,"beamZ1/D");
    recoil->Branch("beamZ2",&beamZ2,"beamZ2/D");
    recoil->Branch("wbeamZ", &wbeamZ,"wbeamZ/D");
-   recoil->Branch("beamX1",&beamX1,"beamX1/D");
-   recoil->Branch("beamX2",&beamX2,"beamX2/D");
+   recoil->Branch("vertexX",&vertexX,"vertexX/D");
+   recoil->Branch("vertexY",&vertexY,"vertexY/D");
    recoil->Branch("Sp",&Sp,"Sp/D");
    recoil->Branch("Sp2",&Sp2,"Sp2/D");
 
 //############################################################################
-   art::TCoinRegData *hoge_coinReg;
-   art::TEventHeader *hoge_run;
-   TClonesArray *hoge_ppac, *hoge_S0img, *hoge_fh9, *hoge_us, *hoge_V775, *hoge_L, *hoge_R;
+   
    TFile *f = new TFile(rootfile,"read");
    printf(">> %s <<< is loaded. ----> %s\n",rootfile, savefilename);
    TTree *tree = (TTree*)f->Get("tree");
    Int_t totnumEntry = tree->GetEntries();
+   
    tree->SetBranchStatus("*",0);
    tree->SetBranchStatus("eventheader",1);
    tree->SetBranchStatus("coinReg",1);
-   if (beam->fppacOn) tree->SetBranchStatus("ppac",1);
-   if (beam->fName != "proton") tree->SetBranchStatus("S0img",1);
+   tree->SetBranchStatus("gate",1);
+   tree->SetBranchStatus("ppac",1);
+   tree->SetBranchStatus("S0img",1);
    tree->SetBranchStatus("plaV1190_FH9",1); //get charge for PID
    tree->SetBranchStatus("tof_US",1);
    tree->SetBranchStatus("plaV775",1);    //get charge and time
    tree->SetBranchStatus("smwdc_L",1);
    tree->SetBranchStatus("smwdc_R",1);
-
+   tree->SetBranchStatus("beamZ",1);
+   tree->SetBranchStatus("vertex",1);
+   tree->SetBranchStatus("tofL",1);
+   tree->SetBranchStatus("tofR",1);
+   tree->SetBranchStatus("tofS0D",1);
+   tree->SetBranchStatus("p2p",1);
+   
+   art::TCoinRegData *hoge_coinReg;
+   art::TGateArray* hoge_gate;
+   art::TEventHeader *hoge_run;
+   TClonesArray *hoge_ppac, *hoge_S0img, *hoge_fh9, *hoge_us, *hoge_V775, *hoge_L, *hoge_R;
+   TClonesArray *hoge_beamZ, *hoge_vertex, *hoge_tofL, *hoge_tofR, *hoge_tofS0D;
+   art::sh04::TP2PKinematicsData *hoge_p2p;
+   
    tree->SetBranchAddress("eventheader",&hoge_run);
    tree->SetBranchAddress("coinReg",&hoge_coinReg);
-   if (beam->fppacOn) tree->SetBranchAddress("ppac",&hoge_ppac);
-   if (beam->fName != "proton") tree->SetBranchAddress("S0img",&hoge_S0img);
+   tree->SetBranchAddress("gate",&hoge_gate);
+   tree->SetBranchAddress("ppac",&hoge_ppac);
+   tree->SetBranchAddress("S0img",&hoge_S0img);
    tree->SetBranchAddress("plaV1190_FH9",&hoge_fh9);
    tree->SetBranchAddress("tof_US",&hoge_us);
    tree->SetBranchAddress("plaV775",&hoge_V775);
    tree->SetBranchAddress("smwdc_L",&hoge_L);
    tree->SetBranchAddress("smwdc_R",&hoge_R);
+   tree->SetBranchAddress("beamZ",&hoge_beamZ);
+   tree->SetBranchAddress("vertex",&hoge_vertex);
+   tree->SetBranchAddress("tofL",&hoge_tofL);
+   tree->SetBranchAddress("tofR",&hoge_tofR);
+   tree->SetBranchAddress("tofS0D",&hoge_tofS0D);
+   tree->SetBranchAddress("p2p",&hoge_p2p);
 
 //############################################################################   
    Int_t endEntry = firstEntry + nEntries;
@@ -138,13 +153,12 @@ void TrimForReduce() {
    
    art::TPPACData * ppacData;
    art::TTwoSidedPlasticData * V775Data;
-   art::TTimeDifference * tofusdata;
+   art::TTimeDifference * tofusdata, * tofL, * tofR, *tofS0D;
    art::TTwoSidedPlasticData * Qusdata;
    art::TMWDCTrackingResult * xyS0,* xy1,* xy2;
    art::TTrack * trackS0,* track1,* track2;
    
    gROOT->ProcessLine(".!date");
-   Int_t count0 = 0, count1=0, count2=0, count3=0, count4=0, count5=0, count6=0, count7=0;
 //##############################################################################
    for( eventID = firstEntry; eventID < endEntry; eventID ++){
       tree->GetEntry(eventID);
@@ -323,8 +337,8 @@ if (beam->fName != "proton") {
       // calculated min
       wbeamZ = (beamZ1/ebeamZ1/ebeamZ1+beamZ2/ebeamZ2/ebeamZ2)/(1/ebeamZ1/ebeamZ1+1/ebeamZ2/ebeamZ2);  
       
-      beamX1 = recoil1->fBeamX;
-      beamX2 = recoil1->fBeamX;
+      vertexX = recoil1->fBeamX;
+      vertexY = recoil1->fBeamX;
       
       //if ( TMath::Abs(wbeamZ) > 1000 ) continue; // beamZ gate   
       count7++;  

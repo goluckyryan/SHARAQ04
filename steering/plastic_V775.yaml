@@ -10,7 +10,7 @@ Processor:
     parameter:
       Name:     prm_pla_V775_L
       Type:     art::TAffineConverter
-      FileName: prm/plastic/V775_L_ch2ns.dat
+      FileName: prm/plastic/V775_L_ch2ns.dat # is negative for "common stop"
 
   - name: plaprm_v775_R
     type: art::TParameterArrayLoader
@@ -75,10 +75,15 @@ Processor:
       OutputTransparency:     0
 
 #===========================================================
-# V775 is a common start TDC
+#-------- common stop 
+# V775 is in a common stop mode
+# ch2ns is "-"
 # t_FH9 = true_FH9 - t_common
-# t_X   = true_X   - t_common
+# t_X   = true_X - t_common 
 #
-# tof(X - FH9) = t_X - t_FH9 = true_X - true_FH9
+# tof(X - FH9) = true_FH9 - true_X = t_FH9 - t_X
+#
+# change of reference
+# t_X(ref:FH9) = t_X - t_FH9 = true_X - true_FH9
 
 
