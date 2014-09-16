@@ -20,11 +20,13 @@ void BeamPurity() {
    Double_t tof_usV1190, Q_usG;
    
 //############################################################################   
-   const char* rootfile="Data/phys22Optics.root";
+   //const char* rootfile="PrimaryData/phys22Optics.root";
+   const char* rootfile="23F_0910_test.root";
    TBeamData *beam = new TBeamData("23F");
    Bool_t allentry  = 1;
    Int_t firstEntry = 0;
    Int_t nEntries=600000;
+   Int_t runRange[2] = {1, 1};
    
    beam->Print();
    Double_t Principle_tof = tofByBrho(L_F3FH9,beam->fBrho, beam->fMass, beam->fZ);
@@ -41,26 +43,34 @@ void BeamPurity() {
    cBeamRatio->Divide(2,1);
    
    TH2F * hPIDUS     = new TH2F("PIDUS", "PID up stream", 300, -1500, -1400, 300, 5000, 6500);
+   hPIDUS->SetXTitle("tof(F3-FH9) [ns]");
+   hPIDUS->SetYTitle("Charge(FH9) [a.u.]");
+   hPIDUS->GetYaxis()->SetTitleOffset(1.5);
    TH2F * hPIDUSbeam = new TH2F("PIDUSbeam", "PID up stream gated", 300, -1500, -1400, 300, 5000, 6500);
+   hPIDUSbeam->SetXTitle("tof(F3-FH9) [ns]");
+   hPIDUSbeam->SetYTitle("Charge(FH9) [a.u.]");
+   hPIDUSbeam->GetYaxis()->SetTitleOffset(1.5);
 
 //############################################################################
    art::TCoinRegData *hoge_coinReg;
    art::TEventHeader *hoge_run;
-   TClonesArray  *hoge_fh9, *hoge_us;
+   TClonesArray  *hoge_fh9, *hoge_us, *hoge_ds;
    TFile *f = new TFile(rootfile,"read");
    printf(">> %s <<< is loaded. \n",rootfile);
    TTree *tree = (TTree*)f->Get("tree");
    Int_t totnumEntry = tree->GetEntries();
    tree->SetBranchStatus("*",0);
-   tree->SetBranchStatus("eventheader",1);
+   tree->SetBranchStatus("eventheader0",1);
    tree->SetBranchStatus("coinReg",1);
    tree->SetBranchStatus("plaV1190_FH9",1); //get charge for PID
    tree->SetBranchStatus("tof_US",1);
+   //tree->SetBranchStatus("tof_DS",1);
 
-   tree->SetBranchAddress("eventheader",&hoge_run);
+   tree->SetBranchAddress("eventheader0",&hoge_run);
    tree->SetBranchAddress("coinReg",&hoge_coinReg);
    tree->SetBranchAddress("plaV1190_FH9",&hoge_fh9);
    tree->SetBranchAddress("tof_US",&hoge_us);
+   //tree->SetBranchAddress("tof_DS",&hoge_ds);
 
 //############################################################################   
    Int_t endEntry = firstEntry + nEntries;
@@ -103,6 +113,8 @@ void BeamPurity() {
 
 //----------------Get Event Number
       runNum = hoge_run->GetRunNumber();
+      if ( runNum < runRange[0]) continue; 
+      if ( runNum > runRange[1]) break;
 //----------------Get tof and charge upstream V1190
       //Double_t tof_us[40], Q_us[40];
       Bool_t PID = 0;
@@ -116,6 +128,7 @@ void BeamPurity() {
          Double_t tof_us    = tofusdata->GetTiming();
          Qusdata = (art::TTwoSidedPlasticData*) hoge_fh9->At(HitID-1);
          Double_t Q_us      = Qusdata->GetCharge();
+         //printf("%d, %f, %f \n", eventID, tof_us, Q_us);
          hPIDUS->Fill(tof_us, Q_us);
          if ( tof_us < beam->fTofGate[0] || tof_us> beam->fTofGate[1]) continue; //PID gate
          if ( Q_us < beam->fQGate[0] || Q_us > beam->fQGate[1]) continue; // PID gate
@@ -125,6 +138,7 @@ void BeamPurity() {
       }
       if ( PID == 0 ) continue;
       hPIDUSbeam->Fill(tof_usV1190, Q_usG);
+      
       count_PIDgate++;
       
 //------------Clock      

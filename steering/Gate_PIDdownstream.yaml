@@ -1,8 +1,9 @@
 aliases:
 #====== 22O runs
-#  - &Res1 [ &residualO ResO,prm/pidDS/22o/o.dat]
-#  - &Res2 [ &residualN ResF,prm/pidDS/22o/n.dat]
-#  - &hist [hPID_DS,PID_DS;TOF;Charge,150,-130,-124,100,1000,2500]
+  - &Res1 [ &residualO ResO,prm/pidDS/22o/o.dat]
+  - &Res2 [ &residualN ResN,prm/pidDS/22o/n.dat]
+  - &Res3 [ &residualO2 ResO2,prm/pidDS/22o/o2.dat]
+  - &hist [hPID_DS,PID_DS;TOF;Charge,150,-130,-124,100,1000,2500]
 
 #====== 14O runs
 #  - &Res1 [ &residualN ResN,prm/pidDS/14o/n.dat]
@@ -10,10 +11,10 @@ aliases:
 #  - &hist [hPID_DS,PID_DS;TOF;Charge,150,-130,-115,300,0,3000]
   
 #====== 24O runs
-  - &Res1 [ &residualF ResF,prm/pidDS/24o/f.dat]
-  - &Res2 [ &residualO ResO,prm/pidDS/24o/o.dat]
-  - &Res3 [ &residualO2 ResO2,prm/pidDS/24o/n.dat]
-  - &hist [hPID_DS,PID_DS;TOF;Charge,150,-133,-124,300,500,3500] 
+#  - &Res1 [ &residualF ResF,prm/pidDS/24o/f.dat]
+#  - &Res2 [ &residualO ResO,prm/pidDS/24o/o.dat]
+#  - &Res3 [ &residualO2 ResO2,prm/pidDS/24o/o2.dat]
+#  - &hist [hPID_DS,PID_DS;TOF;Charge,150,-133,-124,300,500,3500] 
   
 Processor:
   - name: proc_pidgate_downstream

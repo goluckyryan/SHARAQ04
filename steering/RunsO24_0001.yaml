@@ -4,4 +4,4 @@ Processor:
     parameter:
       OutputTransparency: 1
       InputFiles:
-          - /media/sh04HD/RawData/phys240001.ridf
+          - /media/sh04HD/RawData/phys240015.ridf

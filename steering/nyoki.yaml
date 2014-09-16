@@ -4,9 +4,11 @@
 
 Processor:
   - name: nyoki_prm
-    type: art::TAffineConverterArrayGenerator
+    type: art::TParameterArrayLoader
     parameter:
-      ParameterList: ["prm_nyoki_ch2ns","prm/nyoki/ch2ns.dat"]
+      Name:     prm_nyoki_ch2ns
+      Type:     art::TAffineConverter
+      FileName: prm/nyoki/ch2ns.dat
      
   - name: timeref_nyoki
     type: art::TTimeReferenceProcessor
@@ -36,7 +38,7 @@ Processor:
   - name: tof_S0D_to_D1
     type: art::TTimingSubtractionProcessor
     parameter:
-      InputCollection:        nyoki       # tof = [t] - tref
+      InputCollection:        nyoki   # tof = [t] - tref
       OutputCollection:       tof_D1
       StartTimingCollection:  plaV775     #  tof= t - [tref]
       StartTimingDetID:       4           # S0D

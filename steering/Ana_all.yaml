@@ -1,12 +1,12 @@
 aliases:
 # beware to overwrite !!!
-  - &output  25F_0807.root
+  - &output  23F_0914_all.root
  
 #  - &beamprm prm/kinematics/proton.yaml     
 #  - &beamprm prm/kinematics/14O.yaml  
 #  - &beamprm prm/kinematics/22O.yaml
-#  - &beamprm prm/kinematics/23F.yaml
-  - &beamprm prm/kinematics/25F.yaml
+  - &beamprm prm/kinematics/23F.yaml
+#  - &beamprm prm/kinematics/25F.yaml
 
 #===========================================================
 Processor:
@@ -15,13 +15,15 @@ Processor:
 #  - include: RunsProtonOptics.yaml
 #  - include: RunsProtonUp.yaml
 #  - include: RunsProtonDown.yaml
-#  - include: RunsO22.yaml
+  - include: RunsO22.yaml
+#  - include: RunsO22_single.yaml
+#  - include: RunsO22_clean.yaml
 #  - include: RunsO22Optics.yaml
 #  - include: RunsO14_0005.yaml
 #  - include: RunsO14Up.yaml
 #  - include: RunsO14Down.yaml
 #  - include: RunsO14Others.yaml
-  - include: RunsO24.yaml
+#  - include: RunsO24.yaml
 #  - include: RunsO24_0001.yaml
 #  - include: RunsO24Optics.yaml
 #  - include: RunsO24Up.yaml
@@ -36,18 +38,18 @@ Processor:
   - include: plastic_V1190_F3.yaml         # no branch output
   - include: plastic_V1190_FH9.yaml
   - include: plastic_tof_US.yaml
-  - include: Gate_PID.yaml
   - include: ppac_old.yaml
   - include: dc91.yaml
   - include: dc91_track.yaml
   - include: plastic_V775.yaml             # include tof_DS
+  - include: Gate_PID.yaml
   - include: dcx1x2_timeRef.yaml           # required for dcx1 and dcx2
   - include: dcx1.yaml
 #  - include: dcx1_track.yaml
   - include: dcx2.yaml
 #  - include: dcx2_track.yaml
   - include: S0img.yaml
-#  - include: Gate_S0img.yaml
+  - include: Gate_S0img.yaml
 #  - include: dcS0D.yaml                    
 #  - include: TTD.yaml                      # reuire plastic_V775 for tof
 #  - include: nyoki.yaml                    # reuire plastic_V775 for tof
@@ -73,7 +75,7 @@ Processor:
   - include: beamZ.yaml
   - include: vertex.yaml
   - include: recoil.yaml                   # set beamZ, angle correction
-#  - include: recoil_m500ps.yaml
+  - include: recoil_carbon.yaml
 #  - include: recoil_multiOffset.yaml
   - include: Gate_PIDdownstream.yaml
 #============== Output     =============================

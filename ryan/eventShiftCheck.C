@@ -3,44 +3,46 @@ void eventShiftCheck() {
    TStopwatch time;
    time.Reset();
 
-   Long64_t  shiftSM = 0;
-   Int_t    nShiftSM = 1;
+   Long64_t  shiftSM = -1;
+   Int_t    nShiftSM = 2;
    Long64_t *shiftEntrySM = new Long64_t[nShiftSM];
    
-   shiftEntrySM[0] =  76300;
-/*   shiftEntrySM[1] = 370400;
+   shiftEntrySM[0] = 184600;
+   shiftEntrySM[1] = 370400;
 /*   shiftEntrySM[2] = 3138700;
 /*   shiftEntrySM[3] = 4871600;
 /*   shiftEntrySM[4] = 4573900;
 /*   shiftEntrySM[5] = 5622900;
 /*   shiftEntrySM[6] = 2578400;
 */   
-   Long64_t  shiftF3 = 0;
-   Int_t    nShiftF3 = 1;
+   Long64_t  shiftF3 = -1;
+   Int_t    nShiftF3 = 3;
    Long64_t *shiftEntryF3 = new Long64_t[nShiftF3];
    
-   shiftEntryF3[0] =   86500;
-/*   shiftEntryF3[1] =  370400;
+   shiftEntryF3[0] =   86200;
+//   shiftEntryF3[1] =  184600;
+   shiftEntryF3[1] =  370400;
    shiftEntryF3[2] =  451900;
-*/
+
    
    int flag = 51; //chance of fail test, in case for accidental
    
-   const char* savefilename="phys22_clean_es.root";
-   const char* rootfile="/Data/phys22_clean.root";
+   const char* savefilename="phys22_es.root";
+   const char* rootfile="23F_es_norm_0002.root";
    Bool_t debugInfo = 0;
-   Bool_t plantTree = 1;
+   Bool_t plantTree = 0;
    Bool_t plothist  = 1;
-   Bool_t breakAtFail = 0;
+   Bool_t breakAtFail = 1;
    Bool_t endofdata   = 1; // if 0 , use endEntry, 1 use totnumEntry
-   Int_t  firstEntry  =   0000;
-   Int_t    endEntry  = firstEntry+  30000;
+   Int_t  firstEntry  = 0;
+   Int_t    endEntry  = firstEntry+  800000;
+   Int_t  RunRange[2] = {2,2};
    
    Double_t SMGate[2] = {-125, -100};
    Double_t F3Gate[2] = {-1465, -1458};
    
-   Int_t SMThershold = 80;
-   Int_t F3Thershold = 10;
+   Int_t SMThershold = 40;
+   Int_t F3Thershold = 20;
    
 //##################################################################   
    Int_t runNum;
@@ -115,6 +117,9 @@ void eventShiftCheck() {
    for( eventID = firstEntry; eventID < endEntry; eventID++){
       time.Continue();
       tree->GetEntry(eventID);  
+      
+      if ( hogeRun->GetRunNumber() < RunRange[0] ) continue;
+      if ( hogeRun->GetRunNumber() > RunRange[1] ) break;
 
       for (Int_t p = 0; p < 50; p++){
          tFH9V1190[p] = TMath::QuietNaN();
@@ -201,8 +206,9 @@ void eventShiftCheck() {
          t1->Fill();
       }
       
-      if( eventID%10000 ==0) printf(" event:%10d, %5.2f%% time:%10.2f sec |count_F3:%2d,count_SM:%2d\n"
+      if( eventID%10000 ==0) printf(" event:%10d(#%2d), %5.2f%% time:%10.2f sec |count_F3:%2d,count_SM:%2d\n"
                         ,eventID
+                        ,runNum
                         ,eventID*100./totnumEntry
                         ,time.RealTime()
                         ,count_F3
@@ -210,7 +216,7 @@ void eventShiftCheck() {
       
       if( eventID%100 == 0 && eventID != firstEntry){
          if ((count_F3 <= F3Thershold || count_SM <= SMThershold )&& flag > 0 ) {
-            printf("============count_F3:%3d,count_SM:%3d @ %10d f:%1d\n",count_F3,count_SM,eventID-100,flag); 
+            printf("============count_F3:%3d,count_SM:%3d @ %10d flag:%1d\n",count_F3,count_SM,eventID-100,flag); 
             flag = flag - 1;
             if (breakAtFail && flag == 0) break;
          }
@@ -222,7 +228,7 @@ void eventShiftCheck() {
       
    }
 ///================================================================================
-   printf("End of Run. endEvent:%10d(%5.2f) time:%10.2f sec \n",eventID, (Double_t)eventID*100/totnumEntry, time.RealTime());
+   printf("End of Run. endEvent:%10d(%5.2f%%) time:%10.2f sec \n",eventID, (Double_t)eventID*100/totnumEntry, time.RealTime());
    
    if (plothist){
       c1->cd(1); 

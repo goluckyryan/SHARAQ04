@@ -1,24 +1,22 @@
 #include "constant.h"
 #include "RelCalculator.h"
-#include "TBeamData.h"
+#include "Compress/TBeamData.h"
 
 void pidS0D() {
+
+   const char* rootfile="23F_0820.root";
+   TBeamData *beam = new TBeamData("23F");
    
-   //const char* rootfile="Data/phys24Optics.root";
-   const char* rootfile="Data/phys24Up.root";
-   TBeamData *beam = new TBeamData("25F");
-   Bool_t BeamTrigger = 1;
+   Bool_t BeamTrigger = 0;
    Bool_t ppcoin      = 0;
    Bool_t PIDUSGate   = 1;
+   
    Bool_t allentry    = 0;
-   Int_t firstEntry   =30000000;
-   Int_t nEntries     =10000000;
-   Int_t runRange[2] = {0,9999999};
-   
+   Int_t firstEntry   = 19239000;
+   Int_t nEntries     =  3000000;
+   Int_t runRange[2] = {46, 46};
+  
    beam->Print();
-   
-   Double_t tRange[2] = {-130-6, -125};
-   Double_t QRange[2] = {500, 3500};   
 
 //########################################################   
    Double_t Principle_tof = tofByBrho(L_F3FH9,beam->fBrho, beam->fMass, beam->fZ);
@@ -27,18 +25,25 @@ void pidS0D() {
    histTitle.Form("PID upstream (%s)", rootfile);
    if (BeamTrigger) histTitle += " Beam Trigger";
    if (ppcoin) histTitle+= " ppcoin";
+   if (PIDUSGate) histTitle += " PIDUS" + beam->fName;
+   
+   gStyle->SetOptStat(0);
    
    TH2F* hPIDUS = new TH2F("PID_US",histTitle,300, -1500, -1410, 300 , 4900, 6200);
-   hPIDUS->SetStats(0);
-   //TH2F* hPIDDS_S0D = new TH2F("hPIDDS_S0D","PID down stream",200, -74,-65, 200 , 500, 2500);
-   TH2F* hPIDDS_S0D = new TH2F("hPIDDS_S0D","PID down stream",200,tRange[0], tRange[1], 200 , QRange[0], QRange[1]);
-   //hPIDDS_S0D->SetXTitle("tof(FH9-S0D) before offset");
-   hPIDDS_S0D->SetXTitle("tof(tgt-S0D) before offset");
-   hPIDDS_S0D->SetYTitle("Q");
-   hPIDDS_S0D->SetStats(0);
+   hPIDUS->SetXTitle("tof before offset [ns]");
+   hPIDUS->SetYTitle("Q(FH9)");	
+   TH1F* hCoinReg = new TH1F("hCoinReg", "Coin Reg", 3, 0, 3);
+   hCoinReg->SetXTitle("0 = others, 1 = Beam, 2 = ppcoin");
    
-   TCanvas* cPidS0D = new TCanvas("cPidS0D", "PID", 0, 0, 800, 400);
-   cPidS0D->Divide(2,1);
+   TH2F* hPIDDS_S0D = new TH2F("hPIDDS_S0D","PID down stream",300, -130,-125, 300 , 1200, 2500);
+   hPIDDS_S0D->SetXTitle("tof before offset [ns]");
+   hPIDDS_S0D->SetYTitle("Q");
+   TH2F* hPIDDS_S0Dppcoin = new TH2F("hPIDDS_S0Dppcoin","PID DS ppcoin",300, -130, -125, 300 ,1200, 2500);
+   hPIDDS_S0Dppcoin->SetXTitle("tof before offset [ns]");
+   hPIDDS_S0Dppcoin->SetYTitle("Q");
+   
+   TCanvas* cPidS0D = new TCanvas("cPidS0D", "PID", 0, 0, 800, 800);
+   cPidS0D->Divide(2,2);
 
 //#####################################################
    TBenchmark clock;
@@ -72,14 +77,13 @@ void pidS0D() {
       firstEntry = 0;
       nEntries = totnumEntry;
    }
-   if ( firstEntry+nEntries > totnumEntry) nEntries = totnumEntry - firstEntry;
    
    Int_t hitIDFH9[50], hitID[50];
    Double_t QAveFH9[50], tof[50];
    Double_t QAveV775[5];
    Double_t tAveV775[5];
-   Bool_t firstcheck = 1;
    Int_t firstRun, lastRun, firstEvID, lastEvID;
+   Bool_t firstcheck = 1;
    
    printf("File:%s ==== TotnumEntry:%d, 1stEntry:%d, nEntries:%d[%4.1f%%]\n"
                  , rootfile
@@ -88,7 +92,6 @@ void pidS0D() {
                  , nEntries
                  , nEntries*100./totnumEntry);
    if(BeamTrigger) printf(".. BeamTrigger.\n");
-   if(ppcoin) printf(".. PPcoin.\n");
    if(PIDUSGate) printf(".. PID upstream gate.\n");
    
 //#############################################################   
@@ -97,9 +100,8 @@ void pidS0D() {
       
       Int_t runNum = hoge_run->GetRunNumber();
       if ( runNum < runRange[0]) continue; 
+      //if ( runNum == 19 ) continue; 
       if ( runNum > runRange[1]) break;
-      //if ( runNum == ) break;
-      
       if ( firstcheck) {
          firstRun = runNum;
          firstEvID = eventID;
@@ -108,9 +110,9 @@ void pidS0D() {
       lastRun = runNum;
       lastEvID = eventID;
       
-      if ( BeamTrigger && hoge_coinReg->Test(1) != 1 ) continue; 
-      if ( ppcoin && hoge_coinReg->Test(2) != 1 ) continue; 
-      
+//      if ( BeamTrigger && hoge_coinReg->Test(1) != 1 ) continue; 
+//      if ( ppcoin && hoge_coinReg->Test(2) != 1 ) continue; 
+  	    
       for( Int_t p = 0; p <50; p++){
          hitIDFH9[p] = -1;
          hitID[p]    = -2;
@@ -143,7 +145,9 @@ void pidS0D() {
       Bool_t PIDcheck = 0;
       for (Int_t p = 0; p < nHit1; p++){
          for (Int_t q = 0; q< nHit2; q++){
+         	//printf(" %d, %d \n", hitIDFH9[p], hitID[q]);
             if (hitIDFH9[p] == hitID[q]){
+               //printf("PID US : %f, %f \n", tof[q], QAveFH9[p]);
                if ( PIDUSGate && (tof[q] < beam->fTofGate[0] || tof[q] > beam->fTofGate[1])) continue; //PID gate
                if ( PIDUSGate && (QAveFH9[p] < beam->fQGate[0] || QAveFH9[p] > beam->fQGate[1])) continue; // PID gate
                PIDcheck = 1;
@@ -164,10 +168,23 @@ void pidS0D() {
       if ( tAveV775[3] == -1e5 ) continue;    
          
       Double_t tofF3FH9 = tAveV775[3] - tAveV775[2] - beam->fToffsetV775 + Principle_tof;
-      Double_t tofS0D   = tAveV775[4] - tAveV775[3] - tofF3FH9 * LENGTH_RATIO_FH9_TGT ;;
+      Double_t tofS0D   = tAveV775[4] - tAveV775[3] - tofF3FH9 * LENGTH_RATIO_FH9_TGT ;
       
+      if (hoge_coinReg->Test(2) == 1 ){
+      	hPIDDS_S0Dppcoin->Fill(tofS0D,QAveV775[4]);
+      } 
       hPIDDS_S0D->Fill(tofS0D,QAveV775[4]);
-
+      
+      // coinReg
+      if( hoge_coinReg->Test(1) == 1){
+      	hCoinReg->Fill(1);
+   	}else if (hoge_coinReg->Test(2) == 1){
+   		hCoinReg->Fill(2);
+		}else{
+			hCoinReg->Fill(0);
+		}
+	
+		//printf("PID DS : %d, %f \n", tofS0D, QAveV775[4]);
 //------------Clock      
       clock.Stop("timer");
       Double_t timer = clock.GetRealTime("timer");
@@ -197,17 +214,17 @@ void pidS0D() {
    TLatex text;
    text.SetNDC();
    text.SetTextColor(1);
-   text.SetTextSize(0.05);
    TString textStr;
-   if (PIDUSGate){
-      textStr = "PIDUS=" + beam->fName;
-      text.DrawText(0.15, 0.25, textStr);
-   }
    textStr.Form("event:(%d[#%d],%d[#%d])",firstEvID, firstRun, lastEvID, lastRun) ;
    text.DrawText(0.15, 0.2, textStr);
    
    cPidS0D->cd(2);
+   hCoinReg->Draw();
+   
+   cPidS0D->cd(3);
    hPIDDS_S0D->Draw("colz");
+   cPidS0D->cd(4);
+   hPIDDS_S0Dppcoin->Draw("colz");
 
    return ;
 }

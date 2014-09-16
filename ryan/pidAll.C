@@ -1,20 +1,20 @@
 #include "constant.h"
 #include "RelCalculator.h"
-#include "TBeamData.h"
+#include "Compress/TBeamData.h"
 
 void pidAll() {
+
+   const char* rootfile="23F_0910_test.root";
+   TBeamData *beam = new TBeamData("23F");
    
-   //const char* rootfile="Data/phys22_clean.root";
-   //const char* rootfile="Data/phys24Down.root";
-   const char* rootfile="Data/phys24Up.root";
-   TBeamData *beam = new TBeamData("25F");
-   Bool_t allentry    = 0;
    Bool_t BeamTrigger = 0;
    Bool_t ppcoin      = 0;
    Bool_t PIDUSGate   = 0;
-   Int_t firstEntry   = 1888087;
-   Int_t nEntries     =1000000;
-   Int_t runRange[2] = {0, 100};
+   
+   Bool_t allentry    = 1;
+   Int_t firstEntry   = 0;
+   Int_t nEntries     = 60000000;
+   Int_t runRange[2] = {1, 1};
   
    beam->Print();
 
@@ -27,20 +27,20 @@ void pidAll() {
    if (ppcoin) histTitle+= " ppcoin";
    if (PIDUSGate) histTitle += " PIDUS" + beam->fName;
    
+   gStyle->SetOptStat(0);
+   
    TH2F* hPIDUS = new TH2F("PID_US",histTitle,300, -1500, -1410, 300 , 4900, 6200);
-   hPIDUS->SetStats(0);
+   hPIDUS->SetXTitle("tof before offset [ns]");
+   hPIDUS->SetYTitle("Q(FH9)");	
    TH2F* hPIDDS_S0D = new TH2F("hPIDDS_S0D","PID down stream",300, -135,-124, 300 , 1200, 3500);
-   hPIDDS_S0D->SetXTitle("tof before offset");
+   hPIDDS_S0D->SetXTitle("tof before offset [ns]");
    hPIDDS_S0D->SetYTitle("Q");
-   hPIDDS_S0D->SetStats(0);
    TH2F* hPIDDS_TplaL = new TH2F("hPIDDS_TplaL","PID Tpla-L",100, -60, -20, 300 ,500, 2500);
-   hPIDDS_TplaL->SetXTitle("tof before offset");
+   hPIDDS_TplaL->SetXTitle("tof before offset [ns]");
    hPIDDS_TplaL->SetYTitle("Q");
-   hPIDDS_TplaL->SetStats(0);
    TH2F* hPIDDS_TplaR = new TH2F("hPIDDS_TplaR","PID Tpla-R",100, -60, -20, 300 ,500, 2500);
-   hPIDDS_TplaR->SetXTitle("tof before offset");
+   hPIDDS_TplaR->SetXTitle("tof before offset [ns]");
    hPIDDS_TplaR->SetYTitle("Q");
-   hPIDDS_TplaR->SetStats(0);
    
    TCanvas* cPidAll = new TCanvas("cPidAll", "PID", 0, 0, 800, 800);
    cPidAll->Divide(2,2);
@@ -58,13 +58,13 @@ void pidAll() {
    TTree *pid = (TTree*)f->Get("tree");
    Int_t totnumEntry = pid->GetEntries();
    pid->SetBranchStatus("*",0);
-   pid->SetBranchStatus("eventheader",1);
+   pid->SetBranchStatus("eventheader0",1);
    pid->SetBranchStatus("coinReg",1);
    pid->SetBranchStatus("plaV1190_FH9",1);
    pid->SetBranchStatus("tof_US",1);
    pid->SetBranchStatus("plaV775",1);
      
-   pid->SetBranchAddress("eventheader",&hoge_run);  
+   pid->SetBranchAddress("eventheader0",&hoge_run);  
    pid->SetBranchAddress("coinReg",&hoge_coinReg);
    pid->SetBranchAddress("plaV1190_FH9",&hoge_FH9);
    pid->SetBranchAddress("tof_US",&hoge_tof);
@@ -145,7 +145,9 @@ void pidAll() {
       Bool_t PIDcheck = 0;
       for (Int_t p = 0; p < nHit1; p++){
          for (Int_t q = 0; q< nHit2; q++){
+         	//printf(" %d, %d \n", hitIDFH9[p], hitID[q]);
             if (hitIDFH9[p] == hitID[q]){
+               //printf("PID US : %f, %f \n", tof[q], QAveFH9[p]);
                if ( PIDUSGate && (tof[q] < beam->fTofGate[0] || tof[q] > beam->fTofGate[1])) continue; //PID gate
                if ( PIDUSGate && (QAveFH9[p] < beam->fQGate[0] || QAveFH9[p] > beam->fQGate[1])) continue; // PID gate
                PIDcheck = 1;
@@ -176,7 +178,8 @@ void pidAll() {
       hPIDDS_TplaR->Fill(tof2,QAveV775[1]);
       //if( TMath::Finite(tofS0D) ) 
       hPIDDS_S0D->Fill(tofS0D,QAveV775[4]);
-
+	
+		//printf("PID DS : %d, %f \n", tofS0D, QAveV775[4]);
 //------------Clock      
       clock.Stop("timer");
       Double_t timer = clock.GetRealTime("timer");

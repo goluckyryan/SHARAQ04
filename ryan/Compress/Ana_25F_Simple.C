@@ -1,5 +1,5 @@
 #include "TBeamData.h"
-#include "RelCalculator.h"
+#include "../RelCalculator.h"
 
 void Ana_25F_Simple() {
    const char* rootfile="Rphys25FAll.root";
@@ -17,8 +17,8 @@ void Ana_25F_Simple() {
    
    Double_t center[2]={0, 0}; 
    Double_t Aradius = 0., radius = 8.;
-   Double_t beamZRange[2]     = { -60, 120 }; // min, max , central gate
-   Double_t beamZRangeSide[2] = { -60, 120 };
+   Double_t beamZRange[2]     = { -60, 60 }; // min, max , central gate
+   Double_t beamZRangeSide[2] = { -100, 120 };
    Int_t EtotGateMin = 100;
    Double_t OpAngGateRange[2]={83,10}; // central, half-width
    

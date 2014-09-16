@@ -1,5 +1,5 @@
 #include "TBeamData.h"
-#include "RelCalculator.h"
+#include "../RelCalculator.h"
 
 void Ana_23F_Simple() {
    const char* rootfile="Rphys23Fclean.root";
@@ -15,15 +15,15 @@ void Ana_23F_Simple() {
    TCanvas* cAna = new TCanvas("cAna", "Analysis", 600, 500, padSize*Xdiv, padSize*Ydiv);
    cAna->Divide(Xdiv,Ydiv);
    
-   Double_t center[2]={0, 0}; 
+   Double_t center[2]={0, 1.9}; 
    Double_t radius = 8.;
-   Double_t beamZRange[2]     = { -5, 40 }; // min, max , central gate
+   Double_t beamZRange[2]     = { -10, 40 }; // min, max , central gate
    Double_t beamZRangeSide[2] = { -50, 100 };
    Int_t EtotGateMin = 100;
    Double_t OpAngGateRange[2]={80,10}; // central, half-width
    
    Int_t SpnBin = 50;
-   Double_t SpRange[2] = {-50, 100}; //MeV
+   Double_t SpRange[2] = {-60, 140}; //MeV
    Int_t OpenAngBin = 30;
    Double_t OpenAngRange[2]={OpAngGateRange[0]-OpAngGateRange[1]-2,OpAngGateRange[0]+OpAngGateRange[1]+2};
 
@@ -223,7 +223,7 @@ void Ana_23F_Simple() {
    recoil->Draw("Sp2>>Sp3",SignalGate ,"");
    recoil->Draw("Sp2>>Sp3bg",BGGate ,"same");
    line.SetLineColor(6);
-   line.DrawLine(beam->fSp, 0, beam->fSp, hSp3->GetMaximum());
+   line.DrawLine(beam->fSp, 0, beam->fSp, hSp3->GetMaximum()); //23F Sp(proton)
    line.DrawLine(beam->fSp + 23.26, 0, beam->fSp + 23.26, hSp3->GetMaximum()); // 22O Sp(proton)
    line.SetLineColor(7);
    line.DrawLine(beam->fSp + 6.85, 0, beam->fSp + 6.85, hSp3->GetMaximum()); // 22O Sp(neutron)

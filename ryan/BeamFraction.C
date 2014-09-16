@@ -1,11 +1,11 @@
 #include "Compress/TBeamData.h"
 void BeamFraction() {
-   const char* rootfile="PrimaryData/ppOptics.root";
-   TBeamData *beam = new TBeamData("proton");
+   const char* rootfile="23F_0906_optics.root";
+   TBeamData *beam = new TBeamData("23F");
    
    Bool_t allentry  = 1;
-   Int_t firstEntry = 77200;
-   Int_t nEntries   =22204819;
+   Int_t firstEntry = 0;
+   Int_t nEntries   =5000000;
    
    Double_t Zchm = -111.; // -111 = cooling chamber entrance, -222 is beam pipe, +55 NMR coil
    Double_t center[2]={0, 1.9};
@@ -78,7 +78,7 @@ void BeamFraction() {
       tree->GetEntry(eventID);
    
 //--------------coin Reg Gate 1 = FH9 trigger
-//      if ( hoge_coinReg->Test(1) != 1 ) continue;
+      if ( hoge_coinReg->Test(1) != 1 ) continue;
       
 //----------------Get tof and charge upstream V1190
       Int_t nHit = hoge_us -> GetEntriesFast();
@@ -158,7 +158,7 @@ void BeamFraction() {
    cBeamFract->cd(1);
    hS0img->Draw("colz");
    countText.Form("count:%d",countS0img);
-   text.DrawText(0.05, 0.95, countText); 
+   text.DrawText(0.15, 0.8, countText); 
    //   text.DrawText(0.15, 0.85, rootfile); 
    
    TLine line;
@@ -175,11 +175,12 @@ void BeamFraction() {
    
    cBeamFract->cd(2);
    hS0imgCrys->Draw("colz");
-   countText.Form("count:%d[%4.1f%%]", countCrystal, countCrystal*100./countFH9);
+//   countText.Form("count:%d[%4.1f%%]", countCrystal, countCrystal*100./countFH9);
+   countText.Form("count:%d", countCrystal);
    text.DrawText(0.15, 0.8, countText);
 
    cBeamFract->cd(4);
    hPIDUS->Draw("colz");
    countText.Form("count:%d",countFH9);
-   text.DrawText(0.05, 0.95, countText);
+   text.DrawText(0.15, 0.8, countText);
 }

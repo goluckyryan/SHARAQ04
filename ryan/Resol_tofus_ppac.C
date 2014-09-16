@@ -1,43 +1,45 @@
 #include "constant.h"
 #include "RelCalculator.h"
-#include "TBeamData.h"
+#include "Compress/TBeamData.h"
 
-//TODO make the Brho be X-axis. 
-//TODO make the different from tof and calculated tof. 
-
-void tofusResol_ppac() {
+void Resol_tofus_ppac() {
    
    Int_t eventID;
    Long64_t totnumEntry;
    
-   const char* rootfile="PrimaryData/phys14Up.root";
-   TString detector = "V775"; // either V1190 or V775
-   TBeamData *beam = new TBeamData("14O");
+   const char* rootfile="23F_0808_optics.root";
+   TString detector = "V1190"; // either V1190 or V775
+   TBeamData *beam = new TBeamData("23F");
    Double_t PathLength = L_F3FH9+000;
    
-   Bool_t S0Gate = 0;
-   Double_t AGate = 0.01;
-   Double_t BGate = 0.02;
+   Bool_t S0Gate = 1;
+   Double_t AGate = 0.005;
+   Double_t BGate = 0.005;
    
    Bool_t allentry  = 0;
    Int_t firstEntry = 0;
-   Int_t nEntries=3000000;
-   Int_t nBin = 220;
-   Double_t slideBin[2] = {129,131};
+   Int_t nEntries=5000000;
+   Int_t nBin = 200;
+   Int_t BinWidth = 3; // should be odd number
 
 //============================================
-   Double_t Yrange[2] = {beam->fBrho-0.1, beam->fBrho+0.1};
+   gStyle->SetOptStat(0);
+   Double_t Xrange[2] = {beam->fBrho-0.07, beam->fBrho+0.07};
    Double_t principle_tof = tofByBrho(PathLength, beam->fBrho, beam->fMass,beam->fZ);
-   Double_t lineBrho = Yrange[0]+(slideBin[0]+slideBin[1])*(Yrange[1]-Yrange[0])/nBin/2;
-   Double_t lineTof = tofByBrho(PathLength, lineBrho, beam->fMass, beam->fZ);
    
    TString hTofPPACTitle;
    hTofPPACTitle.Form("%s | tof_us(%s) vs PPAC(X)",rootfile, detector.Data());  
-   TH2F* hTofPPAC = new TH2F("hTofPPAC",hTofPPACTitle,300, principle_tof-5, principle_tof+5, nBin , Yrange[0], Yrange[1]);
-   hTofPPAC->SetXTitle("Tof us[ns]");
-   hTofPPAC->SetYTitle("beam->fBrho");
+   TH2F* hTofPPAC = new TH2F("hTofPPAC",hTofPPACTitle, nBin , Xrange[0], Xrange[1], 300, principle_tof-5, principle_tof+5);
+   hTofPPAC->SetYTitle("Tof us[ns]");
+   hTofPPAC->SetXTitle("B_{#rho} [Tm]");
+   
+   TString hTdiffBrhoTitle;
+   hTdiffBrhoTitle.Form("Tof(B_{#rho}) - Tof(mean) | binWidth:%1d = BrhoWidth:%7.5f", BinWidth, hTofPPAC->GetBinWidth(1)*BinWidth);
+   TH1F* hTdiffBrho = new TH1F("hTdiffBrho", hTdiffBrhoTitle, nBin , Xrange[0], Xrange[1]);
+   hTdiffBrho->SetXTitle("B_{#rho} [Tm]");
+   hTdiffBrho->SetYTitle("#Delta(ToF) [ns]");
 
-   TCanvas* ctofPPAC = new TCanvas("ctofPPAC", "tof upstream by PPAC", 1000, 0, 800, 600);   
+   TCanvas* ctofPPAC = new TCanvas("ctofPPAC", "tof upstream by PPAC", 1000, 0, 800, 800);   
    ctofPPAC->Divide(1,2);
 //============================================
    TClonesArray *hoge_tof, *hoge_ppac, *hoge_S0img;
@@ -108,10 +110,10 @@ void tofusResol_ppac() {
       for (Int_t p = 0; p < nHit1; p++){
          for (Int_t q = 0; q< nHit2; q++){
             if (detector == "V1190"){
-               hTofPPAC->Fill(tof[q]- beam->fToffsetV1190 +principle_tof,beam->fBrho*(1+ppacX[p]/7500));
+               hTofPPAC->Fill(beam->fBrho*(1+ppacX[p]/7500),tof[q]- beam->fToffsetV1190 +principle_tof);
             }else{
                if (detID[q] == 2){
-                  hTofPPAC->Fill(tof[q]+ beam->fToffsetV775 +principle_tof,beam->fBrho*(1+ppacX[p]/7500));
+                  hTofPPAC->Fill(beam->fBrho*(1+ppacX[p]/7500),tof[q]+ beam->fToffsetV775 +principle_tof);
                }
             }
          }
@@ -133,56 +135,62 @@ void tofusResol_ppac() {
    
    strText.Form("S0AB Gated. |A|<%5.3f , |B|<%5.3f", AGate, BGate);
    if( S0Gate) text.DrawText(0.2, 0.2, strText);
-
-   TF1 *func = new TF1("func", BrhoBytof, principle_tof-5, principle_tof+5, 4); 
+	strText.Form("B_{#rho}:%5.3f Tm", beam->fBrho);
+	text.DrawLatex(0.2,0.8, strText); 
+	
+   TF1 *func = new TF1("func", testFunc, Xrange[0], Xrange[1], 3); 
    func->SetParameters( PathLength, beam->fMass, beam->fZ); 
    func->SetLineColor(4);  
    func->SetLineWidth(1);
    func->Draw("same"); 
 
-   TF1 *func1 = new TF1("func1", BrhoBytof, principle_tof-5, principle_tof+5, 4); 
+   TF1 *func1 = new TF1("func1", testFunc, Xrange[0], Xrange[1], 3); 
    func1->SetParameters( PathLength+100, beam->fMass, beam->fZ); 
    func1->SetLineColor(6);  
    func1->Draw("same"); 
+   text.SetTextColor(6);
+   text.DrawText(0.6, 0.6,"PatheLength + 100 mm");
 
-   TF1 *func2 = new TF1("func2", BrhoBytof, principle_tof-5, principle_tof+5, 4); 
+   TF1 *func2 = new TF1("func2", testFunc, Xrange[0], Xrange[1], 3); 
    func2->SetParameters( PathLength-100, beam->fMass, beam->fZ); 
-   func2->SetLineColor(6);  
+   func2->SetLineColor(7);  
    func2->Draw("same"); 
+   text.SetTextColor(7);
+   text.DrawText(0.2, 0.4,"PatheLength - 100 mm");
    
+   /*
    TLine lineA;
    lineA.SetLineColor(1);
-   lineA.DrawLine(principle_tof-5, Yrange[0]+(slideBin[0]-1)*(Yrange[1]-Yrange[0])/nBin, 
-                  principle_tof+5, Yrange[0]+(slideBin[0]-1)*(Yrange[1]-Yrange[0])/nBin);
+   lineA.DrawLine( hTofPPAC->GetBinLowEdge(nBin/2), principle_tof-5,
+                   hTofPPAC->GetBinLowEdge(nBin/2), principle_tof+5);
    TLine lineB;
    lineB.SetLineColor(1);
-   lineB.DrawLine( principle_tof-5, Yrange[0]+(slideBin[1])*(Yrange[1]-Yrange[0])/nBin,
-                   principle_tof+5, Yrange[0]+(slideBin[1])*(Yrange[1]-Yrange[0])/nBin);
-
+   lineB.DrawLine( hTofPPAC->GetBinLowEdge(nBin/2+BinWidth), principle_tof-5,
+                   hTofPPAC->GetBinLowEdge(nBin/2+BinWidth), principle_tof+5);
+	*/
    ctofPPAC->cd(2);
-   hTofPPAC->ProjectionX("test",slideBin[0],slideBin[1]);
-   TString testTitle;
-   testTitle.Form("ProjectX, beam->fBrho = (%10.6f,%10.6f|%10.6f)",
-                  Yrange[0]+(slideBin[0]-1)*(Yrange[1]-Yrange[0])/nBin,
-                  Yrange[0]+(slideBin[1])*(Yrange[1]-Yrange[0])/nBin,
-                  (slideBin[1]-slideBin[0]+1)*(Yrange[1]-Yrange[0])/nBin);
-   test->SetTitle(testTitle);
-   test->Draw();
-   test->Fit("gaus");
    
-   Double_t mean = test->GetFunction("gaus")->GetParameter(1);
-   Double_t sigma = test->GetFunction("gaus")->GetParameter(2);
+   for( Int_t binID = 1; binID < nBin-2 ; binID += BinWidth){
+   	hTofPPAC->ProjectionY("test",binID,binID+BinWidth);
+   	if(test->GetEntries() < 200 ) continue;
+   	test->Fit("gaus","Q");
+   	
+   	Double_t testBrho = (hTofPPAC->GetBinLowEdge(binID) + hTofPPAC->GetBinLowEdge(binID + BinWidth))/2;
+   	Double_t testTof = tofByBrho(PathLength, testBrho, beam->fMass, beam->fZ);
    
-   strText.Form("Mean:%6.2f(%5.3f)",mean, sigma);
-   text.DrawText(0.2, 0.6, strText );
+   	Double_t mean = test->GetFunction("gaus")->GetParameter(1);
+   	Double_t sigma = test->GetFunction("gaus")->GetParameter(2);
+   	
+   	if(sigma > 0.5) continue;
+   	
+   	//printf("nEntries:%d, Bin:(%d[%5.3f],%d[%5.3f]) D:%7.5f, testBrho:%5.3f \n", test->GetEntries(), binID, hTofPPAC->GetBinLowEdge(binID), binID + BinWidth, hTofPPAC->GetBinLowEdge(binID + BinWidth) , hTofPPAC->GetBinWidth(1), testBrho);
+   	
+   	hTdiffBrho->Fill(testBrho, mean-testTof);
+   	hTdiffBrho->SetBinError(hTdiffBrho->FindBin(testBrho), sigma);
+   }
    
-   strText.Form("th_Mean:%6.2f, diff:%5.3f",lineTof, TMath::Abs(lineTof-mean));
-   text.DrawText(0.2, 0.5, strText );
+   hTdiffBrho->Draw("E");
    
-   TLine line1;
-   line1.SetLineColor(2);
-   printf("Brho = %f, tof = %f \n", lineBrho, lineTof);
-   line1.DrawLine(lineTof,  0, lineTof,  140); 
 
    return ;
 }
@@ -199,14 +207,15 @@ Double_t BrhoBytof(Double_t *x, Double_t *para){
 
 }
 
-Double_t tofByBrho(Double_t *x, Double_t *para){
+Double_t testFunc(Double_t *x, Double_t *para){
 
   //para[0] = Length
   //para[1] = Mass
   //para[2] = Z
 
-  Double_t alpha = para[2]*x[0]/cVaccum/para[1]; // alpha = gamma*beta
-  Double_t beta = alpah/TMath::Sqrt(1+alpha*alpha);
+  Double_t alpha = para[2]*x[0]*cVaccum/para[1]; // alpha = gamma*beta
+  Double_t beta = alpha/TMath::Sqrt(1+alpha*alpha);
+  
   return para[0]/cVaccum/beta;
 
 }

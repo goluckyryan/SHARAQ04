@@ -2,7 +2,7 @@
 #ifndef TBEAMDATA_H
 #define TBEAMDATA_H
 
-#include "constant.h"
+#include "../constant.h"
 #include "TLorentzVector.h" //(px, py, pz, E)
 
 class TBeamData{
@@ -118,11 +118,12 @@ void TBeamData::UseProjectile(TString str){
       fMass = mF23; fZ    = 9; fA    = 23; 
       fTofGate[0]  = -1465.; fTofGate[1]  = -1461.;
       fQGate[0]    =  5767.;  fQGate[1]   =  6060.;
-      fToffsetV1190 = -1462.88;
-      fToffsetV775  = -324.58;
+      fToffsetV1190 = -1462.88+0.2;
+      fToffsetV775  = -324.58+0.2;
       fToffset1 = 56.6;
       fToffset2 = 57.7;
       fSp = 13.26;
+      fppacOn   = 1;
       
    }else if ( str == "25F"){
       fBrho = 7.1315;

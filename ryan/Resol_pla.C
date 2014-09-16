@@ -2,19 +2,19 @@
 
 void Resol_pla() {
    
-   const char* rootfile="ppAll_0731.root";
-   const char* plaBranch= "plaV775"; Int_t plaDetID = 0;
-   const char* mwdcBranch = "smwdc_L";
+   const char* rootfile="25F_0807.root";
+   const char* plaBranch= "plaV775"; Int_t plaDetID = 1;
+   const char* mwdcBranch = "smwdc_R";
 
    Double_t PlaBeta = 0.66;
    
-   Bool_t allentry  = 1;
+   Bool_t allentry  = 0;
    Int_t firstEntry = 0;
-   Int_t nEntries=1000000;
+   Int_t nEntries=5000000;
    
    Int_t nBin = 500;
    Int_t relBinWidth = 5;
-   Double_t MeanRange[2] = {-1000,-200};
+   Double_t MeanRange[2] = {200,1000};
    
    Double_t maxResol = 1000; // ps
    
@@ -77,13 +77,12 @@ void Resol_pla() {
    	}
    }
    //**************************************
-   printf("====== Pla: %s, DetID:%d \n", plaBranch, plaDetID);
-   printf("====== mwdc: %s \n", mwdcBranch);
+   printf("====== Pla: %s, DetID:%d, mwdc: %s \n", plaBranch, plaDetID, mwdcBranch);
    
    //**************************************
    gStyle->SetOptStat(0);
    TString hTdiffTitle;
-   hTdiffTitle.Form("%s(tdiff) vs %s(X by %s)", plaName.Data(), plaName.Data(), mwdcBranch);  
+   hTdiffTitle.Form("%s | %s(tdiff) vs %s(X by %s)",rootfile, plaName.Data(), plaName.Data(), mwdcBranch);  
    TH2F* hTdiff = new TH2F("hTdiff",hTdiffTitle, nBin , XRange[0], XRange[1], 200, TDiffRange[0], TDiffRange[1]);
    hTdiff->SetXTitle("pla(X)[mm]");
    hTdiff->SetYTitle("Tdiff[ns]");
@@ -112,6 +111,7 @@ void Resol_pla() {
       // Get Tdiff
       Double_t tdiff = kInvalidD;
       Double_t Q1 = kInvalidD;
+      Double_t Q2 = kInvalidD;
       Int_t nHitpla = hoge_pla->GetEntriesFast();
       for ( Int_t p = 0; p < nHitpla; p++){
          art::TTwoSidedPlasticData * plaData = (art::TTwoSidedPlasticData*)hoge_pla->At(p);

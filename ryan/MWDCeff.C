@@ -2,12 +2,12 @@
 void MWDCeff() {
 
 //############################################################################  
-  //const char* rootfile="PrimaryData/ppUp_0723.root"; 
-   const char* rootfile="ppAll_0731.root"; 
+   const char* rootfile="PrimaryData/phys23F.root"; 
+   //const char* rootfile="25F_0807.root"; 
    
-   Bool_t allentry  = 0;
+   Bool_t allentry  = 1;
    Int_t firstEntry = 0;
-   Int_t nEntries=100000;
+   Int_t nEntries=1000000;
 
    Bool_t TplaGate = 0;
 
@@ -27,7 +27,9 @@ void MWDCeff() {
    cMWDC->Divide(4,2);
 
    gStyle->SetOptStat(0);
-   TH1F * hQL  = new TH1F("hQL", "QL", 300, 0, 3000);
+   TString hQLTitle;
+   hQLTitle.Form("%s | TDiff Gate:%d | QL", rootfile, TplaGate);
+   TH1F * hQL  = new TH1F("hQL", hQLTitle, 300, 0, 3000);
    TH1F * hQR  = new TH1F("hQR", "QR", 300, 0, 3000);
  
    TH1F * hQLg  = new TH1F("hQLg", "QL gate:ValidPlane==0", 300, 0, 3000);
@@ -47,13 +49,16 @@ void MWDCeff() {
    
    TCut cutL = "";
    TCut cutR = "";
+   TCut cutLR = "";
    if(TplaGate){
-     cutL = "abs(plaV775[2].fTDiff+4)<1";
-     cutR = "abs(plaV775[3].fTDiff-2)<1";
+     cutL = "TMath::Abs(plaV775.fTDiff+4)<1";
+     cutR = "TMath::Abs(plaV775.fTDiff-2)<1";
+     cutLR = "TMath::Abs(plaV775[2].fTDiff+4)<1 && TMath::Abs(plaV775[3].fTDiff-2)<1";
    }
 
    cutL.Print();
    cutR.Print();
+   cutLR.Print();
 //############################################################################   
    
    cMWDC->cd(1);
@@ -77,7 +82,7 @@ void MWDCeff() {
    tree->Draw("smwdc_R[0].IsGood()>>hGoodR", "plaV775.GetDetID()==1 && smwdc_R[0].fNPlaneValid" && cutR, "",nEntries, firstEntry); 
 
    cMWDC->cd(4);
-   tree->Draw("smwdc_R[0].IsGood():smwdc_L[0].IsGood()>>hGood", "plaV775.GetDetID()<=1 && smwdc_L[0].fNPlaneValid && smwdc_R[0].fNPlaneValid" && cutL && cutR, "colz", nEntries, firstEntry);
+   tree->Draw("smwdc_R[0].IsGood():smwdc_L[0].IsGood()>>hGood", "plaV775.GetDetID()<=1 && smwdc_L[0].fNPlaneValid && smwdc_R[0].fNPlaneValid" && cutLR, "colz", nEntries, firstEntry);
 
 //###############################################################################   
    TLatex text;
@@ -117,17 +122,17 @@ void MWDCeff() {
    fitL->SetParameters(hVPL->GetEntries(), 0.94);
    hVPL->Fit("fitL","Q");
    text.SetTextColor(kBlue);
-   textStr.Form("Eff_{fire}:%5.2f%%",100.*fitL->GetParameter(1));text.DrawLatex(0.2,0.7, textStr);
+   textStr.Form("Eff_{fire}:%5.2f%%(%5.2f%%)",100.*fitL->GetParameter(1),100.*fitL->GetParError(1));text.DrawLatex(0.2,0.7, textStr);
    textStr.Form("N_{0}(exp):%.0f",hVPL->GetEntries());text.DrawLatex(0.2,0.6, textStr);
-   textStr.Form("N_{0}(fit):%.0f",fitL->GetParameter(0));text.DrawLatex(0.2,0.55, textStr);   
+   textStr.Form("N_{0}(fit):%.0f(%.0f)",fitL->GetParameter(0),fitL->GetParError(0));text.DrawLatex(0.2,0.55, textStr);   
    
    cMWDC->cd(6);
    TF1 *fitR = new TF1("fitR", Binomial_dist, 1, 6, 2); 
    fitR->SetParameters(hVPR->GetEntries(), 0.94);
    hVPR->Fit("fitR","Q");
-   textStr.Form("Eff_{fire}:%5.2f%%",100.*fitR->GetParameter(1));text.DrawLatex(0.2,0.7, textStr);
+   textStr.Form("Eff_{fire}:%5.2f%%(%5.2f%%)",100.*fitR->GetParameter(1),100.*fitR->GetParError(1));text.DrawLatex(0.2,0.7, textStr);
    textStr.Form("N_{0}(exp):%.0f",hVPR->GetEntries());text.DrawLatex(0.2,0.6, textStr);
-   textStr.Form("N_{0}(fit):%.0f",fitR->GetParameter(0));text.DrawLatex(0.2,0.55, textStr);
+   textStr.Form("N_{0}(fit):%.0f(%.0f)",fitR->GetParameter(0), fitR->GetParError(0));text.DrawLatex(0.2,0.55, textStr);
 
    Int_t countGoodL, countGoodR;
    countGoodL=hGoodL->GetBinContent(2);

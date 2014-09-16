@@ -2,8 +2,8 @@
 #ifndef TRECOILDATA_H
 #define TRECOILDATA_H
 
-#include "constant.h"
-#include "RelCalculator.h"
+#include "../constant.h"
+#include "../RelCalculator.h"
 #include "TLorentzVector.h" //(px, py, pz, E)
 
 class TRecoilData{

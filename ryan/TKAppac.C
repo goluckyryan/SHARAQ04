@@ -7,18 +7,18 @@
 #include <TClonesArray.h>
 #include "constant.h"
 #include "RelCalculator.h"
-#include "TBeamData.h"
+#include "Compress/TBeamData.h"
 
 void TKAppac() {
    
 //############################################################################   
-   const char* rootfile="Data/phys24Up.root";
+   const char* rootfile="23F_0808_optics.root";
    //const char* rootfile="ppDown.root";
    //const char* rootfile="Data/phys2.root";
-   TBeamData *beam  = new TBeamData("25F");
-   Bool_t allentry  = 0;
-   Int_t firstEntry =  700;
-   Int_t nEntries   = 1000000;
+   TBeamData *beam  = new TBeamData("23F");
+   Bool_t allentry  = 1;
+   Int_t firstEntry =  0;
+   Int_t nEntries   = 10000;
    
    beam->Print();
    Double_t Principle_tof = tofByBrho(L_F3FH9,beam->fBrho, beam->fMass, beam->fZ);
@@ -37,10 +37,11 @@ void TKAppac() {
    cTKAppac->Divide(2,2);
    
    TString hBrhoTitle;
-   hBrhoTitle.Form("Brho (%s), %s", rootfile, beam->fName.Data());
+   hBrhoTitle.Form("B_{#rho} (%s), %s", rootfile, beam->fName.Data());
    
-   TH1F* hBrho = new TH1F("Brho", hBrhoTitle, 100, beam->fBrho-0.2, beam->fBrho+0.2);
-   TH1F* hTKAppac  = new TH1F("TKAppac" , "TKA by ppac", 100, beam->fTKA-6, beam->fTKA+6);
+   TH1F* hBrho = new TH1F("Brho", hBrhoTitle, 200, beam->fBrho-0.1, beam->fBrho+0.1);
+//   TH1F* hBrho = new TH1F("Brho", hBrhoTitle, 100, 6, 7);
+   TH1F* hTKAppac  = new TH1F("TKAppac" , "TKA by ppac", 200, beam->fTKA-6, beam->fTKA+6);
    TH1F* hTKAV1190 = new TH1F("TKAV1190", "TKA by V1190", 200, beam->fTKA-6, beam->fTKA+6);
    TH1F* hTKAV775  = new TH1F("TKAV775" , "TKA by V775", 200, beam->fTKA-6, beam->fTKA+6);
    hTKAppac->SetLineColor(1);
@@ -64,6 +65,7 @@ void TKAppac() {
    printf(">> %s <<< is loaded. \n",rootfile);
    TTree *tree = (TTree*)f->Get("tree");
    Int_t totnumEntry = tree->GetEntries();
+   
    tree->SetBranchStatus("*",0);
    tree->SetBranchStatus("eventheader",1);
    tree->SetBranchStatus("coinReg",1);
@@ -132,13 +134,14 @@ void TKAppac() {
       if ( PID == 0 ) continue;
 
 //---------------------- PPAC;
-      Double_t Brho, ppacX;
+      Double_t Brho = kInvalidD, ppacX = kInvalidD;
       if (beam->fppacOn){
          nHit = hoge_ppac->GetEntriesFast();
          for (Int_t p = 0; p < nHit; p++){
             ppacData = (art::TPPACData*)hoge_ppac->At(p) ;
             ppacX = ppacData->GetX();
-         }
+         }      
+         if ( TMath::IsNaN(ppacX)) continue; 
          Brho = beam->fBrho * (1 - ppacX/7500.);
       }else{
          Brho = beam->fBrho;
@@ -201,9 +204,9 @@ void TKAppac() {
    hTKAppacV775->Draw("colz"); 
    //hTKADiff->Draw();
    cTKAppac->cd(4);
-   hTKAV1190->Draw("");
+   hTKAppac->Draw("");
+   hTKAV1190->Draw("same");
    hTKAV775->Draw("same");
-   hTKAppac->Draw("same");
    
    line.DrawLine(Principle_TKA, 0, Principle_TKA, hTKAppac->GetMaximum());
    
