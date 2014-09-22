@@ -14,10 +14,10 @@ Processor:
           - smwdc_R_u2
           - smwdc_R_v1
           - smwdc_R_v2
-      OutputCollection: smwdc_R_TLgated
+      OutputCollection: smwdc_R_gated1
       NIteration: 5
       TimingGate: [-150,100]
-      ChargeGate: [-99999,99999]
+      ChargeGate: [50,10000]
       MAXSSR:     10.
 
   - name: mwdctrack_smwdc_R_TWgated
@@ -30,10 +30,10 @@ Processor:
           - smwdc_R_u2
           - smwdc_R_v1
           - smwdc_R_v2
-      OutputCollection: smwdc_R_TWgated
+      OutputCollection: smwdc_R_gated2
       NIteration: 5
-      TimingGate: [-99999,99999]
-      ChargeGate: [20,10000]
+      TimingGate: [-150,100]
+      ChargeGate: [-100,10000]
       MAXSSR:     10.
 #==================================================      
 

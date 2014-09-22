@@ -1,0 +1,81 @@
+# require : non
+# output : plaND
+
+Processor:    
+  - name: plaprm_ND_F_ch2ns
+    type: art::TParameterArrayLoader
+    parameter:
+      Name:     prm_pla_ND_F_ch2ns
+      Type:     art::TAffineConverter
+      FileName: prm/plastic/V1190_ND_F_ch2ns.dat  # is negative for "common stop"
+
+  - name: plaprm_ND_B_ch2ns
+    type: art::TParameterArrayLoader
+    parameter:
+      Name:    prm_pla_ND_B_ch2ns
+      Type:    art::TAffineConverter
+      FileName: prm/plastic/V1190_ND_B_ch2ns.dat
+
+  - name: timeref_ND
+    type: art::TTimeReferenceProcessor
+    parameter:
+      RefConfig: [11, 20, 41, 10, 0]
+      SegConfig: [11, 20, 41, 10]
+
+  - name: plastic_ND_F_raw
+    type: art::TTimingChargeMappingProcessor
+    parameter:
+      CatID:              48
+      TimingTypeID:       0
+      ChargeType:         1   #1 = QDC
+      ChargeTypeID:       2
+      OutputCollection:   plaND_F_raw
+      OutputTransparency: 0
+        
+  - name: plastic_ND_F_cal
+    type: art::TTimingChargeCalibrationProcessor
+    parameter:
+      InputCollection:      plaND_F_raw
+      OutputCollection:     plaND_F_cal
+      TimingConverterArray: prm_pla_ND_F_ch2ns
+      OutputTransparency:   0
+
+  - name: plastic_ND_B_raw
+    type: art::TTimingChargeMappingProcessor
+    parameter:
+      CatID:              48
+      TimingTypeID:       1
+      ChargeType:         1
+      ChargeTypeID:       3
+      OutputCollection:   plaND_B_raw
+      OutputTransparency: 0
+        
+  - name: plastic_ND_B_cal
+    type: art::TTimingChargeCalibrationProcessor
+    parameter:
+      InputCollection:      plaND_B_raw
+      OutputCollection:     plaND_B_cal
+      TimingConverterArray: prm_pla_ND_B_ch2ns
+      OutputTransparency:   0
+
+  - name: plastic_ND_cal
+    type: art::TTwoSidedPlasticCalibrationProcessor
+    parameter:
+      InputCollection1:   plaND_F_cal
+      InputCollection2:   plaND_B_cal
+      OutputCollection:   plaND
+      DetIDRange:         [0,40]
+      OutputTransparency: 0
+
+#  - name: tof_DownStream
+#    type: art::TTimingSubtractionProcessor
+#    parameter:
+#      InputCollection:        plaV775     # tof = [t] - tref
+#      OutputCollection:       tof_DS
+#      StartTimingCollection:  plaV775     #  tof= t - [tref]
+#      StartTimingDetID:       3
+#      UseMultipleStartTiming: 1
+#      OutputTransparency:     0
+
+#===========================================================
+

@@ -2,13 +2,14 @@
 void MWDCeff() {
 
 //############################################################################  
-   const char* rootfile="PrimaryData/phys23F.root"; 
-   //const char* rootfile="25F_0807.root"; 
+//   const char* rootfile="PrimaryData/phys23F.root"; 
+   const char* rootfile="23F_0916_all.root"; 
    
-   Bool_t allentry  = 1;
+   Bool_t allentry  = 0;
    Int_t firstEntry = 0;
-   Int_t nEntries=1000000;
+   Int_t nEntries=100000;
 
+   Int_t threshold = 700;
    Bool_t TplaGate = 0;
 
 //############################################################################
@@ -47,42 +48,45 @@ void MWDCeff() {
 
    TH2F * hGood = new TH2F("hGood", "IsGood() L and R", 2, 0, 2, 2, 0, 2);
    
+   TCut aux = "gate.Test(0)";
    TCut cutL = "";
    TCut cutR = "";
    TCut cutLR = "";
    if(TplaGate){
-     cutL = "TMath::Abs(plaV775.fTDiff+4)<1";
-     cutR = "TMath::Abs(plaV775.fTDiff-2)<1";
-     cutLR = "TMath::Abs(plaV775[2].fTDiff+4)<1 && TMath::Abs(plaV775[3].fTDiff-2)<1";
+     cutL = "TMath::Abs(plaV775.fTDiff+4)<2";
+     cutR = "TMath::Abs(plaV775.fTDiff-2)<2";
+     cutLR = "TMath::Abs(plaV775[2].fTDiff+4)<2 && TMath::Abs(plaV775[3].fTDiff-2)<2";
    }
 
    cutL.Print();
    cutR.Print();
    cutLR.Print();
+
 //############################################################################   
    
    cMWDC->cd(1);
-   tree->Draw("plaV775.fCharge>>hQL", "plaV775.GetDetID()==0 && smwdc_L[0].fNPlaneValid" && cutL, "", nEntries, firstEntry);
-   tree->Draw("plaV775.fCharge>>hQLg", "plaV775.GetDetID()==0 && smwdc_L[0].fNPlaneValid==0" && cutL, "same", nEntries, firstEntry);
+   tree->Draw("plaV775.fCharge>>hQL", "plaV775.GetDetID()==0 && smwdc_L[0].fNPlaneValid" && cutL && aux, "", nEntries, firstEntry);
+   tree->Draw("plaV775.fCharge>>hQLg", "plaV775.GetDetID()==0 && smwdc_L[0].fNPlaneValid==0" && cutL && aux, "same", nEntries, firstEntry);
 
    cMWDC->cd(2);
-   tree->Draw("smwdc_L[0].fNPlaneValid>>hVPL", "plaV775.GetDetID()==0 && smwdc_L[0].fNPlaneValid" && cutL, "", nEntries, firstEntry);
+   tree->Draw("smwdc_L[0].fNPlaneValid>>hVPL", "plaV775.GetDetID()==0 && smwdc_L[0].fNPlaneValid" && cutL && aux, "", nEntries, firstEntry);
 
    cMWDC->cd(3);
-   tree->Draw("smwdc_L[0].IsGood()>>hGoodL", "plaV775.GetDetID()==0 && smwdc_L[0].fNPlaneValid" && cutL,"", nEntries, firstEntry); 
+   tree->Draw("smwdc_L[0].IsGood()>>hGoodL", "plaV775.GetDetID()==0 && smwdc_L[0].fNPlaneValid" && cutL && aux,"", nEntries, firstEntry); 
 
    cMWDC->cd(5);
-   tree->Draw("plaV775.fCharge>>hQR", "plaV775.GetDetID()==1 && smwdc_R[0].fNPlaneValid" && cutR, "",  nEntries, firstEntry);
-   tree->Draw("plaV775.fCharge>>hQRg", "plaV775.GetDetID()==1 && smwdc_R[0].fNPlaneValid==0" && cutR, "same", nEntries, firstEntry);
+   tree->Draw("plaV775.fCharge>>hQRg", "plaV775.GetDetID()==1 && smwdc_R[0].fNPlaneValid==0" && cutR && aux, "",  nEntries, firstEntry);
+   tree->Draw("plaV775.fCharge>>hQR", "plaV775.GetDetID()==1 && smwdc_R[0].fNPlaneValid" && cutR && aux, "same", nEntries, firstEntry);
 
    cMWDC->cd(6);
-   tree->Draw("smwdc_R[0].fNPlaneValid>>hVPR", "plaV775.GetDetID()==1 && smwdc_R[0].fNPlaneValid" && cutR, "", nEntries, firstEntry);
+   tree->Draw("smwdc_R[0].fNPlaneValid>>hVPR", "plaV775.GetDetID()==1 && smwdc_R[0].fNPlaneValid" && cutR && aux, "", nEntries, firstEntry);
 
    cMWDC->cd(7);
-   tree->Draw("smwdc_R[0].IsGood()>>hGoodR", "plaV775.GetDetID()==1 && smwdc_R[0].fNPlaneValid" && cutR, "",nEntries, firstEntry); 
+   tree->Draw("smwdc_R[0].IsGood()>>hGoodR", "plaV775.GetDetID()==1 && smwdc_R[0].fNPlaneValid" && cutR && aux, "",nEntries, firstEntry); 
 
    cMWDC->cd(4);
-   tree->Draw("smwdc_R[0].IsGood():smwdc_L[0].IsGood()>>hGood", "plaV775.GetDetID()<=1 && smwdc_L[0].fNPlaneValid && smwdc_R[0].fNPlaneValid" && cutLR, "colz", nEntries, firstEntry);
+   // incorrect cout. a event may be count twice or count once.
+   tree->Draw("smwdc_R[0].IsGood():smwdc_L[0].IsGood()>>hGood", "plaV775.GetDetID()<=1 && smwdc_L[0].fNPlaneValid && smwdc_R[0].fNPlaneValid" && cutLR && aux, "colz", nEntries, firstEntry);
 
 //###############################################################################   
    TLatex text;
@@ -95,25 +99,25 @@ void MWDCeff() {
    Int_t countPlaL800, countPlaL;
    Int_t countPlaR800, countPlaR;
    
-   countPlaL800 = hQLg->GetEntries() - hQLg->Integral(1, 80);
+   countPlaL800 = hQLg->GetEntries() - hQLg->Integral(1, threshold/10);
    countPlaL    = hQL->GetEntries();
 
-   countPlaR800 = hQRg->GetEntries() - hQRg->Integral(1, 80);
+   countPlaR800 = hQRg->GetEntries() - hQRg->Integral(1, threshold/10);
    countPlaR    = hQR->GetEntries();
 
    cMWDC->cd(1);
    text.SetTextColor(kBlue);
    textStr.Form("mwdc fired:%d",countPlaL);text.DrawText(0.5,0.7, textStr);
    text.SetTextColor(kRed);
-   textStr.Form("Q>800:%d",countPlaL800);text.DrawText(0.3,0.2, textStr);
-   line.DrawLine(800,0,800,hQL->GetMaximum()/2);
+   textStr.Form("Q>%d:%d",threshold,countPlaL800);text.DrawText(0.5,0.6, textStr);
+   line.DrawLine(threshold,0,threshold,hQL->GetMaximum()/2);
 
    cMWDC->cd(5);
    text.SetTextColor(kBlue);
    textStr.Form("mwdc fired:%d",countPlaR);text.DrawText(0.5,0.7, textStr);
    text.SetTextColor(kRed);
-   textStr.Form("Q>800:%d",countPlaR800);text.DrawText(0.3,0.2, textStr);
-   line.DrawLine(800,0,800,hQR->GetMaximum()/2);
+   textStr.Form("Q>%d:%d",threshold,countPlaR800);text.DrawText(0.5,0.6, textStr);
+   line.DrawLine(threshold,0,threshold,hQR->GetMaximum()/2);
 
 
 
@@ -163,10 +167,10 @@ void MWDCeff() {
    
 
 
-   Double_t fireEffPlaL = 1.-1.*countPlaL800/countPlaL, fireEffPlaR = 1.-1.*countPlaR800/countPlaR;
+   Double_t fireEffPlaL = 1.*countPlaL/(countPlaL+countPlaL800), fireEffPlaR = 1.*countPlaR/(countPlaR+countPlaR800);
    Int_t N0expL = hVPL->GetEntries(), N0expR = hVPR->GetEntries();
    Int_t N0fitL = fitL->GetParameter(0), N0fitR = fitR->GetParameter(0);
-   Double_t fireEffL = fitL->GetParameter(1), fireEffR = fitR->GetParameter(1);
+   Double_t fireEffL = 1-TMath::Power(1-fitL->GetParameter(1),6), fireEffR = 1-TMath::Power(1-fitR->GetParameter(1),6);
    Double_t trackEffL = 1.*countGoodL/hGoodL->GetEntries(), trackEffR = 1.*countGoodR/hGoodR->GetEntries();
    Double_t DetEffL = fireEffL*trackEffL, DetEffR = fireEffR*trackEffR;
    

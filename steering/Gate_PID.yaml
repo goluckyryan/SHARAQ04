@@ -5,19 +5,34 @@ aliases:
   - &PIDGate [ &nuclide 23F,-1465.,5767.,-1461.,6060.]
 #  - &PIDGate [ &nuclide 25F,-1461.,5750.,-1453.,6013.]
 Processor:
-  - name: proc_pidgate_US_V1190
+#  - name: proc_pidgate_US_V1190
+#    type: art::TPIDGateProcessor
+#    parameter:
+#      TimingArray:        tof_US
+#      TimingDetID:        0
+#      ChargeArray:        plaV1190_FH9
+#      ChargeDetID:        0
+#      Rectangle:          
+#        - *PIDGate
+#        - [22O, -1448,5665,-144,5905]
+#      HistogramOption:    [hPIDv1190,PID;ToF(v1190);Charge,1000,-1500,-1420,600,5000,6500]
+#      OutputTransparency: 0          
+
+  - name: proc_pidgate_US_V775
     type: art::TPIDGateProcessor
     parameter:
-      TimingArray:        tof_US
-      TimingDetID:        0
-      ChargeArray:        plaV1190_FH9
-      ChargeDetID:        0
-      Rectangle:          *PIDGate
-      HistogramOption:    [hPIDv1190,PID;TOF(v1190);Charge,1000,-1500,-1420,600,5000,6500]
-      OutputTransparency: 0          
+      TimingArray:        tof_DS
+      TimingDetID:        2
+      ChargeArray:        plaV775
+      ChargeDetID:        2
+      Rectangle:
+        - [23F, 322,770,328,1000] 
+        - [22O, 305,700,310,900]
+      HistogramOption:     [hPIDv775,PID;-ToF(v775);Charge(F3)v775, 1000, 290, 340, 600, 0, 1500]
+      OutputTransparency:  0
       
-#  - name: proc_stop_US
-#    type: art::TGateStopProcessor
-#    parameter:
-#      GateName: *nuclide
+  - name: proc_stop_US
+    type: art::TGateStopProcessor
+    parameter:
+      GateName: 23F
 #===========================================================

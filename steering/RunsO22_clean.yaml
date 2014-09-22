@@ -6,9 +6,9 @@ Processor:
       OutputTransparency: 1
       InputFiles:
 #          - /media/sh04HD/RawData/phys220005.ridf # DCX2 off
-          - /media/sh04HD/RawData/phys220008.ridf
-          - /media/sh04HD/RawData/phys220011.ridf
-          - /media/sh04HD/RawData/phys220019.ridf  # the tof is diff.
+#          - /media/sh04HD/RawData/phys220008.ridf
+#          - /media/sh04HD/RawData/phys220011.ridf
+#          - /media/sh04HD/RawData/phys220019.ridf  # the tof is diff.
           - /media/sh04HD/RawData/phys220023.ridf   # beam trigger on
           - /media/sh04HD/RawData/phys220024.ridf
           - /media/sh04HD/RawData/phys220025.ridf

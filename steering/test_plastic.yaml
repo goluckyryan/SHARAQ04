@@ -11,6 +11,7 @@ Processor:
   - include: plastic_V775.yaml
   - include: plastic_V767_timeRef.yaml
   - include: plastic_V767.yaml
+  - include: plastic_ND.yaml
 #  - include: TTD.yaml
 #  - include: nyoki.yaml
 

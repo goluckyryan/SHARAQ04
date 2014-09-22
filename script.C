@@ -1,10 +1,14 @@
 {
-   gROOT->Reset();
-   gROOT->ProcessLine(".!date");
-   gStyle->SetOptStat(0);
+  gROOT->Reset();
+  gROOT->ProcessLine(".!date");
+  gStyle->SetOptStat(0);
    
-   TFile *f0 = new TFile ("23F_0912_all.root"); TTree *tree1 = (TTree*)f0->Get("tree");   
-   TFile *f1 = new TFile ("23F_0914_all.root"); TTree *tree2 = (TTree*)f1->Get("tree");
+  TFile *f0 = new TFile ("23F_0920_pid_ppcoin_hist.root"); //TTree *tree1 = (TTree*)f0->Get("tree");  
+
+   //TCut PIDds = "nyoki.fID==7 && TMath::Abs(nyoki.fCharge-2950)<450";
+  // TCut PID23f = "TMath::Abs(plaV1190_FH9.fCharge-5913)<147 && TMath::Abs(tof_US.fTiming+1463)<2";
+    
+   //   TFile *f1 = new TFile ("23F_0914_all.root"); TTree *tree2 = (TTree*)f1->Get("tree");
 //   TFile *f2 = new TFile ("Rphys23Fclean.root","read"); TTree *recoil = (TTree*)f2->Get("recoil");   
 
 	// update.
@@ -12,7 +16,7 @@
 //   TFile *f1 = new TFile ("RppAll_0714_multiOffset.root","update"); TTree *recoil = (TTree*)f1->Get("recoil");   
 //   f0->Close();
 
-   TBrowser B("test","test", 900,600); 
+//  TBrowser B("test","test", 900,600); 
    
    
 //============= Temp analysis   

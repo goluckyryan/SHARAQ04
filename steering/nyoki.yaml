@@ -3,12 +3,19 @@
 #          tof_D1
 
 Processor:
-  - name: nyoki_prm
+  - name: nyoki_prm_ch2ns
     type: art::TParameterArrayLoader
     parameter:
       Name:     prm_nyoki_ch2ns
       Type:     art::TAffineConverter
       FileName: prm/nyoki/ch2ns.dat
+      
+  - name: nyoki_prm_ch2q
+    type: art::TParameterArrayLoader
+    parameter:
+      Name:     prm_nyoki_ch2q
+      Type:     art::TAffineConverter
+      FileName: prm/nyoki/ch2q.dat
      
   - name: timeref_nyoki
     type: art::TTimeReferenceProcessor
@@ -21,11 +28,11 @@ Processor:
     parameter:
       CatID:              48
       TimingTypeID:       0       #colnumber of map file[0=first]
-      TrailingComesFirst: 0       # 0 negative voltage TDC
-      ChargeType:         1
+      TrailingComesFirst: 1       # 0 negative voltage TDC
+      ChargeType:         1       # 1 seems to be OK, but it is V1190.
       ChargeTypeID:       1
       OutputCollection:   nyoki_raw
-      OutputTransparency: 1                       # 1 = no output
+      OutputTransparency: 0                       # 1 = no output
 
   - name: plastic_nyoki_cal
     type: art::TTimingChargeCalibrationProcessor
@@ -33,6 +40,7 @@ Processor:
       InputCollection:      nyoki_raw
       OutputCollection:     nyoki
       TimingConverterArray: prm_nyoki_ch2ns
+      ChargeConverterArray: prm_nyoki_ch2q
       OutputTransparency:   0
 
   - name: tof_S0D_to_D1

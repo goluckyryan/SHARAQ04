@@ -3,7 +3,7 @@ aliases:
   - &Res1 [ &residualO ResO,prm/pidDS/22o/o.dat]
   - &Res2 [ &residualN ResN,prm/pidDS/22o/n.dat]
   - &Res3 [ &residualO2 ResO2,prm/pidDS/22o/o2.dat]
-  - &hist [hPID_DS,PID_DS;TOF;Charge,150,-130,-124,100,1000,2500]
+  - &hist [hPID_DS,PID_DS;TOF;Charge,300,-130,-124,300,1000,2500]
 
 #====== 14O runs
 #  - &Res1 [ &residualN ResN,prm/pidDS/14o/n.dat]

@@ -9,8 +9,10 @@ void Ana(){
    TCanvas * cAna = new TCanvas("cAna", "Ana", 0,0 , 1200, 800);
    cAna->Divide(3,2);
    
-   
-   TCut common = "gate.Test(3) && gate.Test(4)";
+   TCut PIDds = "nyoki.fID==7 && TMath::Abs(nyoki.fCharge-2950)<450";
+   TCut PID23f = "TMath::Abs(plaV1190_FH9.fCharge-5913)<147 && TMath::Abs(tof_US.fTiming+1463)<2";
+   TCut common = "gate.Test(4)" + PID23f ;
+  
    TCut VertexZ = "TMath::Abs(vertex.fZ-12)<26";
    TCut VertexZ2 = "(TMath::Abs(vertex.fZ+38)<24 || TMath::Abs(vertex.fZ-70)<32)";
    //TCut OpenAng = "TMath::Abs((p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()-80)<10";

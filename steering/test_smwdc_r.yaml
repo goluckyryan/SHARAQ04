@@ -1,16 +1,19 @@
 Processor:
-  - include: RunsO14.yaml
+  - include: RunsO22.yaml
   
   - include: Mapper_Timer.yaml    
         
 #===========================================================
   - include: coinReg.yaml
-#  - include: plastic_V775.yaml
+  - include: plastic_V775.yaml
   - include: plastic_V767_timeRef.yaml
   - include: plastic_V767.yaml
 #  - include: smwdc_r_TableConvert.yaml
+  - include: smwdc_l_PolyConvert.yaml
+  - include: smwdc_l_track.yaml
   - include: smwdc_r_PolyConvert.yaml
   - include: smwdc_r_track.yaml
+  - include: smwdc_r_track_gated.yaml
 #  - include: smwdc_r_cal.yaml #no coinReg gate
       
 #==================================================      

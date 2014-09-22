@@ -18,12 +18,17 @@ Processor:
 #  - include: plastic_V767.yaml
   - include: Gate_PID.yaml
   - include: nyoki.yaml                    # reuire plastic_V775 for tof
-  - include: smwdc_S1_TableConvert.yaml    # require nyoki
 #  - include: smwdc_S1_track.yaml
 #  - include: smwdc_S1_cal.yaml #no coinReg gate
+
+  - name: projection
+    type: art::TTreeProjectionProcessor
+    parameter:
+      Type:  art::TTreeProjection
+      FileName: steering/hist_dsPID.yaml
       
 #==================================================      
   - name: outputtree
     type: art::TOutputTreeProcessor
     parameter:
-      FileName: test_smwdc_S1.root
+      FileName: test_nyoki.root

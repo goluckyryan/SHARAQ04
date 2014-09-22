@@ -105,22 +105,22 @@ void Slew() {
    TH1F* hDecay = new TH1F("hDecay", "Decay constant [mm]", 100, 1000, 5000);
    
    Double_t Range[2] = {-10, 10};
-   TH2F* hQ1t1 = new TH2F("hQ1t1", "Q1 vs T1 " , 100, Range[0], Range[1], 100, QRange[0], QRange[1]);
-   TH2F* hQ2t2 = new TH2F("hQ2t2", "Q2 vs T2 " , 100, Range[0], Range[1], 100, QRange[0], QRange[1]);
+   TH2F* hQ1w1 = new TH2F("hQ1t1", "Q1 vs w1 " , 100, Range[0], Range[1], 100, QRange[0], QRange[1]);
+   TH2F* hQ2w2 = new TH2F("hQ2t2", "Q2 vs w2 " , 100, Range[0], Range[1], 100, QRange[0], QRange[1]);
 
    TH2F* hSlew1 = new TH2F("hSlew1", "Q vs |Slew|", 100, QRange[0], QRange[1], 100, 0, 10);
    TH2F* hSlew2 = new TH2F("hSlew2", "Q vs |Slew|", 100, QRange[0], QRange[1], 100, 0, 10);
    
-   TH2F* hQ1t1Slew = new TH2F("hQ1t1Slew", "Q1 vs tavg | Slew", 100, Range[0], Range[1], 100, QRange[0], QRange[1]);
-   TH2F* hQ2t2Slew = new TH2F("hQ2t2Slew", "Q2 vs tavg | Slew", 100, Range[0], Range[1], 100, QRange[0], QRange[1]);
+   TH2F* hQ1w1Slew = new TH2F("hQ1t1Slew", "Q1 vs w1 | Slew", 100, Range[0], Range[1], 100, QRange[0], QRange[1]);
+   TH2F* hQ2w2Slew = new TH2F("hQ2t2Slew", "Q2 vs w2 | Slew", 100, Range[0], Range[1], 100, QRange[0], QRange[1]);
 
    TH1F* hOpenAng = new TH1F("hOpenAng", "OpenAng", 100, 80, 92);
    TH1F* hOpenAng2 = new TH1F("hOpenAng2", "OpenAng2", 100, 80, 92);
    
-   TH2F* hPlaXt1 = new TH2F("hPlaXt1", "PlaX vs t1", 100, Range[0], Range[1], 100, PlaXRange[0], PlaXRange[1]);
+   TH2F* hPlaXw1 = new TH2F("hPlaXt1", "PlaX vs w1", 100, Range[0], Range[1], 100, PlaXRange[0], PlaXRange[1]);
    TH2F* hPlaXQ1 = new TH2F("hPlaXQ1", "PlaX vs Q1", 100, QRange[0], QRange[1], 100 , PlaXRange[0], PlaXRange[1]);
 
-	TH2F* hPlaXt2 = new TH2F("hPlaXt2", "PlaX vs t2", 100, Range[0], Range[1], 100, PlaXRange[0], PlaXRange[1]);
+	TH2F* hPlaXw2 = new TH2F("hPlaXt2", "PlaX vs w2", 100, Range[0], Range[1], 100, PlaXRange[0], PlaXRange[1]);
    TH2F* hPlaXQ2 = new TH2F("hPlaXQ2", "PlaX vs Q2", 100, QRange[0], QRange[1], 100 , PlaXRange[0], PlaXRange[1]);
 
    Int_t Xdiv = 5, Ydiv = 3;
@@ -233,8 +233,8 @@ void Slew() {
          
       
       //printf("---- %.2f(%.2f), %.2f(%.2f), %.2f, %.2f, %.2f, %.2f\n", t1, Q1, t2, Q2, tF3, tFH9, tofF3FH9, tTgt);   
-      t1  = t1 - tTgt + 62 - tof - Sign*PlaX/PlaBeta/cVaccum;  // L = 62, R = 60
-      t2  = t2 - tTgt + 51 - tof + Sign*PlaX/PlaBeta/cVaccum ; // L = 51, R = 55
+      Double_t w1 = t1 - tTgt + 62 - tof - Sign*PlaX/PlaBeta/cVaccum;  // L = 62, R = 60
+      Double_t w2 = t2 - tTgt + 55 - tof + Sign*PlaX/PlaBeta/cVaccum ; // L = 51, R = 55
       tFH9 = tFH9 - tTgt;
       tF3  = tF3 - tTgt;
       //printf("               %.2f, %.2f \n", t1, t2);
@@ -251,20 +251,20 @@ void Slew() {
       hQ2E2->Fill(E,Q2);
       hDecay->Fill(a);
  
-      Double_t tavg = (t1+t2)/2;
+      Double_t tavg = (w1+w2)/2;
       
       // Slew correction
       Double_t Cslew1 = 500;
 	   Double_t Pslew1 = 0.9;
-	   Double_t Kslew1 = 300;
+	   Double_t Kslew1 = 400;
       Double_t Cslew2 = 500;
 	   Double_t Pslew2 = 0.9;
-	   Double_t Kslew2 = 300;
+	   Double_t Kslew2 = 400;
       Double_t slew1 = Cslew1/TMath::Power(Q1-Kslew1,Pslew1) ;
       Double_t slew2 = Cslew2/TMath::Power(Q2-Kslew2,Pslew2) ;
-      Double_t t1Slew = t1 - slew1;
-      Double_t t2Slew = t2 - slew2;
-      Double_t tavgSlew = (t1Slew+t2Slew)/2;
+      Double_t w1Slew = w1 - slew1;
+      Double_t w2Slew = w2 - slew2;
+      Double_t tavgSlew = (w1Slew+w2Slew)/2;
 
       hSlew1->Fill(Q1, TMath::Abs(slew1));
       hSlew2->Fill(Q2, TMath::Abs(slew2));
@@ -272,17 +272,17 @@ void Slew() {
 
       hQ1Q2->Fill(Q1,Q2);
 
-      hQ1t1Slew->Fill(t1Slew, Q1);
-      hQ2t2Slew->Fill(t2Slew, Q2);
+      hQ1w1Slew->Fill(w1Slew, Q1);
+      hQ2w2Slew->Fill(w2Slew, Q2);
       
-      hPlaXt1->Fill(t1, PlaX);
+      hPlaXw1->Fill(w1, PlaX);
       hPlaXQ1->Fill(Q1, PlaX);
       
-      hPlaXt2->Fill(t2, PlaX);
+      hPlaXw2->Fill(w2, PlaX);
       hPlaXQ2->Fill(Q2, PlaX);
 
-      hQ1t1->Fill(t1, Q1);
-      hQ2t2->Fill(t2, Q2);
+      hQ1w1->Fill(w1, Q1);
+      hQ2w2->Fill(w2, Q2);
 
 
       //------------Clock      
@@ -361,7 +361,7 @@ void Slew() {
    
    text.SetTextColor(2);
    text.SetTextSize(0.08);
-   textStr.Form("W = #frac{%.0f}{{}^{%.1f}#sqrt{Q-%.0f}}",Cslew1,Pslew1, Kslew1);
+   textStr.Form("W = #frac{%.0f}{ {Q-%.0f}^{%.1f} }",Cslew1,Kslew1, Pslew1);
    text.DrawLatex(0.15, 0.7, textStr);
    
    
@@ -386,15 +386,15 @@ void Slew() {
    hQ2t2->Draw("colz");
    
    TString walkfun2;
-   walkfun2.Form("TMath::Power(%.2f/(x-6), 1./%.2f)+%.2f",Cslew2, Pslew2, Kslew2);
-   TF1* walk2 = new TF1("walk2", walkfun2, -10, 2);
+   walkfun2.Form("TMath::Power(%.2f/(x+1), 1./%.2f)+%.2f",Cslew2, Pslew2, Kslew2);
+   TF1* walk2 = new TF1("walk2", walkfun2, -1, 15);
    walk2->Draw("same");
 
    
    cSlew->cd(10);
    hQ2t2Slew->Draw("colz");
    text.SetTextColor(2);
-   textStr.Form("W = #frac{%.0f}{{}^{%.1f}#sqrt{Q-%.0f}}",Cslew2,Pslew2, Kslew2);
+   textStr.Form("W = #frac{%.0f}{{Q-%.0f}^{%.1f}}",Cslew2,Kslew2, Pslew2);
    text.DrawLatex(0.15, 0.7, textStr);
 
   
