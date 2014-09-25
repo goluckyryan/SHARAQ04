@@ -14,7 +14,7 @@ const Double_t me = 0.5109989;
 const Double_t mO14 = 13044.836324;
 const Double_t mO22 = 20498.065598;
 const Double_t mO24 = 22370.839976;
-const Double_t mF23 = 21423.094276;
+const Double_t mF23 = 21423.077578;
 const Double_t mF25 = 23294.025362;
 
 const Double_t deg2rad=0.01745329251;

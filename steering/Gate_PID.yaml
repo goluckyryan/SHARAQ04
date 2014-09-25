@@ -2,7 +2,7 @@ aliases:
 #  - &PIDGate [ &nuclide 14O,-1446,5646,-1436,5930]
 #  - &PIDGate [ &nuclide 22O,-1448,5665,-1444,5905]
 #  - &PIDGate [ &nuclide 24O,-1442.,5657., -1433., 5915.]
-  - &PIDGate [ &nuclide 23F,-1465.,5767.,-1461.,6060.]
+#  - &PIDGate [ &nuclide 23F,-1465.,5767.,-1461.,6060.]
 #  - &PIDGate [ &nuclide 25F,-1461.,5750.,-1453.,6013.]
 Processor:
 #  - name: proc_pidgate_US_V1190
@@ -26,9 +26,11 @@ Processor:
       ChargeArray:        plaV775
       ChargeDetID:        2
       Rectangle:
-        - [23F, 322,770,328,1000] 
-        - [22O, 305,700,310,900]
-      HistogramOption:     [hPIDv775,PID;-ToF(v775);Charge(F3)v775, 1000, 290, 340, 600, 0, 1500]
+        - [23F, 318,770,323,1000] 
+        - [22O, 302,700,306,900]
+        - [19N, 306.3, 675.8, 310, 843.6]
+        - [8Li, 312.2, 457, 316, 590.7]
+      HistogramOption:     [hPIDv775,PID;-ToF(v775);Charge(F3)v775, 1000, 280, 340, 600, 200, 1500]
       OutputTransparency:  0
       
   - name: proc_stop_US
