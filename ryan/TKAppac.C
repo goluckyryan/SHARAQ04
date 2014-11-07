@@ -12,13 +12,13 @@
 void TKAppac() {
    
 //############################################################################   
-   const char* rootfile="23F_0808_optics.root";
+   const char* rootfile="23F_0925_optics.root";
    //const char* rootfile="ppDown.root";
    //const char* rootfile="Data/phys2.root";
    TBeamData *beam  = new TBeamData("23F");
    Bool_t allentry  = 1;
    Int_t firstEntry =  0;
-   Int_t nEntries   = 10000;
+   Int_t nEntries   = 100000;
    
    beam->Print();
    Double_t Principle_tof = tofByBrho(L_F3FH9,beam->fBrho, beam->fMass, beam->fZ);
@@ -41,9 +41,11 @@ void TKAppac() {
    
    TH1F* hBrho = new TH1F("Brho", hBrhoTitle, 200, beam->fBrho-0.1, beam->fBrho+0.1);
 //   TH1F* hBrho = new TH1F("Brho", hBrhoTitle, 100, 6, 7);
-   TH1F* hTKAppac  = new TH1F("TKAppac" , "TKA by ppac", 200, beam->fTKA-6, beam->fTKA+6);
-   TH1F* hTKAV1190 = new TH1F("TKAV1190", "TKA by V1190", 200, beam->fTKA-6, beam->fTKA+6);
-   TH1F* hTKAV775  = new TH1F("TKAV775" , "TKA by V775", 200, beam->fTKA-6, beam->fTKA+6);
+   TH1F* hTKAppac  = new TH1F("TKAppac" , "TKA by ppac", 240, beam->fTKA-6, beam->fTKA+6);
+   hTKAppac->SetXTitle("TKA [MeV / nucleon]");
+   hTKAppac->SetYTitle("count / 50 keV/nucleon");
+   TH1F* hTKAV1190 = new TH1F("TKAV1190", "TKA by V1190", 240, beam->fTKA-6, beam->fTKA+6);
+   TH1F* hTKAV775  = new TH1F("TKAV775" , "TKA by V775", 240, beam->fTKA-6, beam->fTKA+6);
    hTKAppac->SetLineColor(1);
    hTKAV1190->SetLineColor(2);
    hTKAV775->SetLineColor(4);
@@ -69,14 +71,16 @@ void TKAppac() {
    tree->SetBranchStatus("*",0);
    tree->SetBranchStatus("eventheader",1);
    tree->SetBranchStatus("coinReg",1);
-   if (beam->fppacOn) tree->SetBranchStatus("ppac",1);
+   //if (beam->fppacOn) 
+   tree->SetBranchStatus("ppac",1);
    tree->SetBranchStatus("plaV1190_FH9",1); //get charge for PID
    tree->SetBranchStatus("tof_US",1);
    tree->SetBranchStatus("plaV775",1);    //get charge and time
 
    tree->SetBranchAddress("eventheader",&hoge_run);
    tree->SetBranchAddress("coinReg",&hoge_coinReg);
-   if (beam->fppacOn) tree->SetBranchAddress("ppac",&hoge_ppac);
+   //if (beam->fppacOn) 
+   tree->SetBranchAddress("ppac",&hoge_ppac);
    tree->SetBranchAddress("plaV1190_FH9",&hoge_fh9);
    tree->SetBranchAddress("tof_US",&hoge_us);
    tree->SetBranchAddress("plaV775",&hoge_V775);
@@ -135,7 +139,7 @@ void TKAppac() {
 
 //---------------------- PPAC;
       Double_t Brho = kInvalidD, ppacX = kInvalidD;
-      if (beam->fppacOn){
+      //if (beam->fppacOn){
          nHit = hoge_ppac->GetEntriesFast();
          for (Int_t p = 0; p < nHit; p++){
             ppacData = (art::TPPACData*)hoge_ppac->At(p) ;
@@ -143,9 +147,9 @@ void TKAppac() {
          }      
          if ( TMath::IsNaN(ppacX)) continue; 
          Brho = beam->fBrho * (1 - ppacX/7500.);
-      }else{
-         Brho = beam->fBrho;
-      }      
+      //}else{
+      //   Brho = beam->fBrho;
+      //}      
       Double_t TKAppac = TKAByBrho(Brho, beam->fMass, beam->fA, beam->fZ);
       
       hBrho->Fill(Brho);
@@ -202,7 +206,8 @@ void TKAppac() {
    hBrhoTKAV775->Draw("colz"); 
    cTKAppac->cd(3);
    hTKAppacV775->Draw("colz"); 
-   //hTKADiff->Draw();
+   hTKADiff->Draw();
+   
    cTKAppac->cd(4);
    hTKAppac->Draw("");
    hTKAV1190->Draw("same");

@@ -1,0 +1,38 @@
+Processor:
+  - name: ridfevent
+    type: art::TRIDFEventStore
+    parameter:
+      OutputTransparency: 1
+      InputFiles:
+          - /media/sh04HD/RawData/smwdc/tplacal6001.ridf 
+  
+  - include: Mapper_Timer.yaml   
+#===========================================================       
+  - name: plastic_V775_L_raw
+    type: art::TTimingChargeMappingProcessor
+    parameter:
+      CatID:              9
+      TimingTypeID:       0
+      ChargeType:         1   #1 = QDC
+      ChargeTypeID:       2
+      OutputCollection:   plaV775_L_raw
+      OutputTransparency: 0
+        
+
+  - name: plastic_V775_R_raw
+    type: art::TTimingChargeMappingProcessor
+    parameter:
+      CatID:              9
+      TimingTypeID:       1
+      ChargeType:         1
+      ChargeTypeID:       3
+      OutputCollection:   plaV775_R_raw
+      OutputTransparency: 0
+
+#===========================================================
+
+  - name: outputtree
+    type: art::TOutputTreeProcessor
+    parameter:
+      FileName: time_Cali.root
+

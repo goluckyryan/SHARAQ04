@@ -4,35 +4,37 @@ void Ana(){
    gROOT->ProcessLine(".!date");
    gStyle->SetOptStat(0);
  
-   TFile *f1 = new TFile ("23F_0914_all.root"); TTree *tree = (TTree*)f1->Get("tree");
+   TFile *f1 = new TFile ("23F_1010.root"); TTree *tree = (TTree*)f1->Get("tree");
+	gROOT->ProcessLine("listg tree");
 
    TCanvas * cAna = new TCanvas("cAna", "Ana", 0,0 , 1200, 800);
    cAna->Divide(3,2);
    
-   TCut PIDds = "nyoki.fID==7 && TMath::Abs(nyoki.fCharge-2950)<450";
+   TCut nyoki = "nyoki.fCharge>1500 && nyoki.fCharge<2800";
+   TCut nyokiID = "nyoki.fID == 9";
    TCut PID23f = "TMath::Abs(plaV1190_FH9.fCharge-5913)<147 && TMath::Abs(tof_US.fTiming+1463)<2";
-   TCut common = "gate.Test(4)" + PID23f ;
+   TCut common = "gate.Test(4) && gate.Test(7)" ;//+ nyoki + nyokiID;
   
-   TCut VertexZ = "TMath::Abs(vertex.fZ-12)<26";
-   TCut VertexZ2 = "(TMath::Abs(vertex.fZ+38)<24 || TMath::Abs(vertex.fZ-70)<32)";
+   TCut VertexZ = "TMath::Abs(vertex.fZ-14)<34";
+   TCut VertexZ2 = "(TMath::Abs(vertex.fZ+44)<24 || TMath::Abs(vertex.fZ-80)<36)";
    //TCut OpenAng = "TMath::Abs((p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()-80)<10";
    
   
-  	TCut gate = common + VertexZ;
+  	TCut gate = common + VertexZ ;
   	TCut side = common + VertexZ2;
   	
   	gate.Print();
   	side.Print();
   	
-  	TH1F * hSp = new TH1F("hSp", "Seperation energy", 50, -40, 110);
+  	TH1F * hSp = new TH1F("hSp", "Seperation energy", 80, -40, 120);
   	hSp->SetMinimum(0);
   	hSp->SetXTitle("Sp [MeV]");
-  	hSp->SetYTitle("count / 3 MeV");
-  	TH1F * hSpBG = new TH1F("hSpBG", "Sp", 50, -40, 110);
+  	hSp->SetYTitle("count / 2 MeV");
+  	TH1F * hSpBG = new TH1F("hSpBG", "Sp", 80, -40, 120);
    hSpBG->SetLineColor(2);
-   TH1F * hSpSub = new TH1F("hSpSub", "Sp2", 50, -40, 110);
+   TH1F * hSpSub = new TH1F("hSpSub", "Sp2", 80, -40, 120);
   	hSpSub->SetXTitle("Sp [MeV]");
-  	hSpSub->SetYTitle("count / 3 MeV");
+  	hSpSub->SetYTitle("count / 2 MeV");
   	//hSpSub->SetMinimum(0);
   	
   	TH1F * hOpenAng = new TH1F("hOpenAng", "OpenAng", 60, 40, 100);
@@ -52,33 +54,37 @@ void Ana(){
   	
    cAna->cd(1);
    tree->Draw("vertex.fZ>>hvZc(150,-100,200)", common);
-   printf("Draw(vertex.fZ, common) ... done \n");
+   gROOT->ProcessLine(".!date"); printf("Draw(vertex.fZ, common) ... done \n");
+   tree->Draw("vertex.fZ>>hvZ",gate,"same");   
+   gROOT->ProcessLine(".!date"); printf("Draw(vertex.fZ, gate) ... done \n");
+   tree->Draw("vertex.fZ>>hvZBG",side,"same");
+   gROOT->ProcessLine(".!date"); printf("Draw(vertex.fZ, side) ... done \n");
+   
    
    cAna->cd(2);
-   tree->Draw("vertex.fZ>>hvZ",gate,"");   
-   printf("Draw(vertex.fZ, gate) ... done \n");
-   tree->Draw("vertex.fZ>>hvZBG",side,"same");
-   printf("Draw(vertex.fZ, side) ... done \n");
+   tree->Draw("(p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()>>hOpenAng",gate);
+   gROOT->ProcessLine(".!date"); printf("Draw(openAngle, gate) ... done \n");
+   tree->Draw("(p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()>>hOpenAngBG",side,"same");
+   gROOT->ProcessLine(".!date"); printf("Draw(openAngle, side) ... done \n");
    
    cAna->cd(3);
-   tree->Draw("(p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()>>hOpenAng",gate);
-   printf("Draw(openAngle, gate) ... done \n");
-   tree->Draw("(p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()>>hOpenAngBG",side,"same");
-   printf("Draw(openAngle, side) ... done \n");
-   
-   cAna->cd(4);
    hOpenAngSub = HistSub(hOpenAng, hOpenAngBG);
    hOpenAngSub->Draw();
    
+   cAna->cd(4);	
+   tree->Draw("p2p.fSp>>hSpn(80,-40,120)", "gate.Test(6) " && VertexZ && nyoki);
+   gROOT->ProcessLine(".!date"); printf("Draw(Sp, gate && nyoki) ... done \n");
+   
+   
    cAna->cd(5);
    tree->Draw("p2p.fSp>>hSp",gate);
-   printf("Draw(Sp, gate) ... done \n");
+   gROOT->ProcessLine(".!date"); printf("Draw(Sp, gate) ... done \n");
    tree->Draw("p2p.fSp>>hSpBG",side, "same");
-   printf("Draw(Sp, side) ... done \n");   
+   gROOT->ProcessLine(".!date"); printf("Draw(Sp, side) ... done \n");   
    
   	cAna->cd(6);
   	hSpSub = HistSub(hSp, hSpBG);
-  	hSpSub->SetYTitle("count / 3 MeV");
+  	hSpSub->SetYTitle("count / 2 MeV");
   	hSpSub->Draw("");
   	
   	

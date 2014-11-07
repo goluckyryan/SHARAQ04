@@ -1,0 +1,49 @@
+Processor:
+  - name: ridfevent
+    type: art::TRIDFEventStore
+#    type: art::TRIDFEventShifter
+    parameter:
+      OutputTransparency: 1
+      InputFiles:
+#          - /media/sh04HD/RawData/optics3001.ridf  #Brho = 6.9
+#          - /media/sh04HD/RawData/optics3005.ridf  # 7.1 
+#          - /media/sh04HD/RawData/bldtune3005.ridf # 6.7288
+#          - /media/sh04HD/RawData/optics3007.ridf  # 6.5288
+#          - /media/sh04HD/RawData/optics3008.ridf  # 6.5288
+#          - /media/sh04HD/RawData/optics3009.ridf  # 6.5288
+#          - /media/sh04HD/RawData/optics3011.ridf  # 6.3288
+#          - /media/sh04HD/RawData/optics3012.ridf  # 6.0288
+#          - /media/sh04HD/RawData/optics3013.ridf  # 5.7288
+#          - /media/sh04HD/RawData/optics3014.ridf  # 5.7288
+#          - /media/sh04HD/RawData/optics3015.ridf  # 5.5288
+
+#=================== 137 Cs
+#          - /media/sh04HD/RawData/s1test3003.ridf     
+#          - /media/sh04HD/RawData/s1test3005.ridf
+#          - /media/sh04HD/RawData/s1test3007.ridf
+#          - /media/sh04HD/RawData/s1test3009.ridf
+#          - /media/sh04HD/RawData/s1test3011.ridf     
+#          - /media/sh04HD/RawData/s1test3013.ridf     
+#          - /media/sh04HD/RawData/s1test3015.ridf     
+#          - /media/sh04HD/RawData/s1test3017.ridf     
+#          - /media/sh04HD/RawData/s1test3019.ridf     
+#          - /media/sh04HD/RawData/s1test3021.ridf     
+#          - /media/sh04HD/RawData/s1test3023.ridf     
+#          - /media/sh04HD/RawData/s1test3025.ridf     
+#          - /media/sh04HD/RawData/s1test3027.ridf
+#          - /media/sh04HD/RawData/s1test3029.ridf
+#=================== 60 Co
+          - /media/sh04HD/RawData/s1test3004.ridf     
+          - /media/sh04HD/RawData/s1test3006.ridf
+          - /media/sh04HD/RawData/s1test3008.ridf
+          - /media/sh04HD/RawData/s1test3010.ridf
+          - /media/sh04HD/RawData/s1test3012.ridf     
+          - /media/sh04HD/RawData/s1test3014.ridf     
+          - /media/sh04HD/RawData/s1test3016.ridf     
+          - /media/sh04HD/RawData/s1test3018.ridf     
+          - /media/sh04HD/RawData/s1test3020.ridf     
+          - /media/sh04HD/RawData/s1test3022.ridf     
+          - /media/sh04HD/RawData/s1test3024.ridf     
+          - /media/sh04HD/RawData/s1test3026.ridf     
+          - /media/sh04HD/RawData/s1test3028.ridf
+          - /media/sh04HD/RawData/s1test3030.ridf

@@ -1,102 +1,259 @@
-alias:
-#  pid23f: TMath::Abs(plaV1190_FH9.fCharge-5913)<147 && TMath::Abs(tof_US.fTiming+1463)<2  
-  vertexCut: TMath::Abs(vertex.fZ-12)<30
-  pidds: TMath::Abs(nyoki.fCharge-3500)<500
-
 group:
-  - name: test
-    title: test_group
+  - name: ds_PID
+    title: down stream PID
     contents:
-    - name: PIDup
-      title: PID upstream| PID(F) ppcoin
-      x: [tof_US.fTiming, 1000, -1480,-1420]
-      y: [plaV1190_FH9.fCharge, 400, 5000, 6200]
-    - name: s0img
-      title: s0img XY| PID(F) ppcoin
-      x: [S0img.fTrack.fX, 200,-20,20]
-      y: [S0img.fTrack.fY, 200,-20,20]
-    - name: vertex_ZX
-      title: vertex.Z vs vertex.X | PID(F) ppcoin
-      x: [vertex.fX, 200, -20, 20]
-      y: [vertex.fZ, 200, -50, 200]
-    - name: vertex_Z
-      title: vertex.Z| PID(F) ppcoin crystal = common
-      x: [vertex.fZ, 200, -50, 200]
-      cut: gate.Test(0) && gate.Test(4)
+    - name: nyoki_8_F_en
+      title: Nyoki_8 vs EventNumber | 23F & ppcoin
+      x: [eventheader.fEventNumber, 100, 0, 5000000]
+      y: [nyoki.fCharge, 100, 500, 4500]
+      cut: gate.Test(0) && nyoki.fID==8
+    - name: nyoki_8_F_run
+      title: Nyoki_8 vs RunNumber | 23F & ppcoin
+      x: [eventheader.fRunNumber, 50, 0, 50]
+      y: [nyoki.fCharge, 100, 500, 4500]
+      cut: gate.Test(0) && nyoki.fID==8
+      
+    - name: nyoki_8_O_en
+      title: Nyoki_8 vs EventNumber | 22O & ppcoin
+      x: [eventheader.fEventNumber, 100, 0, 5000000]
+      y: [nyoki.fCharge, 100, 500, 4500]
+      cut: gate.Test(1) && nyoki.fID==8
+    - name: nyoki_8_O_run
+      title: Nyoki_8 vs RunNumber | 22O & ppcoin
+      x: [eventheader.fRunNumber, 50, 0, 50]
+      y: [nyoki.fCharge, 100, 500, 4500]
+      cut: gate.Test(1) && nyoki.fID==8
+      
+#    - name: PIDup_F
+#      title: PID upstream | PID(23F)
+#      x: [tof_US.fTiming, 1000, -1480,-1420]
+#      y: [plaV1190_FH9.fCharge, 400, 4500, 6200]
+#      cut: gate.Test("23F")
+#    - name: PIDup_O
+#      title: PID upstream | PID(22O)
+#      x: [tof_US.fTiming, 1000, -1480,-1420]
+#      y: [plaV1190_FH9.fCharge, 400, 4500, 6200]
+#      cut: gate.Test("22O")
+#    - name: PIDup_N
+#      title: PID upstream | PID(19N)
+#      x: [tof_US.fTiming, 1000, -1480,-1420]
+#      y: [plaV1190_FH9.fCharge, 400, 4500, 6200]
+#      cut: gate.Test("19N")
+#    - name: PIDup_Li
+#      title: PID upstream | PID(8Li)
+#      x: [tof_US.fTiming, 1000, -1480,-1420]
+#      y: [plaV1190_FH9.fCharge, 400, 4500, 6200]
+#      cut: gate.Test("8Li")
+      
+#    - name: PID_s0d_F
+#      title: PID ds S0D | PID(23F)
+#      x: ["tofS0D[0].fTiming", 100, -130, -124]
+#      y: ["plaV775[4].fCharge",300, 1000, 2500]
+#      cut: gate.Test(0) 
+#    - name: PID_s0d_F_nyoki
+#      title: PID ds S0D | PID(23F) & 3000<nyoki.Q<4000
+#     x: ["tofS0D[0].fTiming", 100, -130, -124]
+#      y: ["plaV775[4].fCharge", 300, 1000, 2500]
+#      cut: gate.Test(0) && pidds
+
+#    - name: PID_s0d_O
+#      title: PID ds S0D | PID(22O)
+#      x: ["tofS0D[0].fTiming", 100, -130, -124]
+#      y: ["plaV775[4].fCharge",300, 1000, 2500]
+#      cut: gate.Test(1) 
+#    - name: PID_s0d_nyoki
+#      title: PID ds S0D | PID(22O) & 3000<nyoki.Q<4000
+#      x: ["tofS0D[0].fTiming", 100, -130, -124]
+#      y: ["plaV775[4].fCharge", 300, 1000, 2500]
+#      cut: gate.Test(1) && pidds
+      
     - name: nyoki_q_F
-      title: nyoki Charge| PID(F) ppcoin
-      x: [nyoki.fCharge, 400, 1000, 5000]
+      title: nyoki Charge | PID(23F)
+      x: [nyoki.fCharge, 500,   0, 4500]
       cut: gate.Test(0)
-    - name: PID_s0d
-      title: PID ds S0D| common
-      x: ["tofS0D[0].fTiming", 100, -130, -124]
-      y: [plaV775.fCharge, 300, 1000, 2500]
-      cut: gate.Test(0) && gate.Test(4) && plaV775.fID==4
-    - name: PID_s0d_2
-      title: PID ds S0D 2| common
-      x: ["tofS0D[0].fTiming", 100, -130, -124]
-      y: ["plaV775[4].fCharge",300, 1000, 2500]
-      cut: gate.Test(0) && gate.Test(4) 
-    - name: PID_s0d_nyoki
-      title: PID ds S0D| common & nyoki
-      x: ["tofS0D[0].fTiming", 100, -130, -124]
-      y: ["plaV775[4].fCharge", 300, 1000, 2500]
-      cut: gate.Test(0) && gate.Test(4) && pidds
-#    - name: nyoki_q_O
-#      title: nyoki Charge PID(O)
-#      x: [nyoki.fCharge, 400, 1000, 5000]
-#      cut: gate.Test(1)
-    - name: p2p_1
-      title: Sp | common & vertex.Z
-      x: [p2p.fSp, 50, -40, 110]
-      cut: gate.Test(0) && gate.Test(4) && vertexCut
-    - name: p2p_2
-      title: Sp | common & vertex.Z & nyoki
-      x: [p2p.fSp, 50, -40, 110]
-      cut: gate.Test(0) && gate.Test(4) && pidds && vertexCut
-    - name: p2p_2_HD
-      title: Sp HD | common & vertex.Z & nyoki
-      x: [p2p.fSp, 150, -40, 110]
-      cut: gate.Test(0) && coinReg.Test(2) && gate.Test(4) && pidds && vertexCut
-    - name: nyoki_Sp
-      title: nyoki_Sp| common & vertex.Z
-      x: [p2p.fSp, 50, -40, 110]
-      y: [nyoki.fCharge, 100, 0, 5000]
-      cut: gate.Test(0) && coinReg.Test(2) && gate.Test(4) && vertexCut
-    - name: nyoki_Sp_6
-      title: nyoki_Sp_6| common & vertex.Z
-      x: [p2p.fSp, 50, -40, 110]
-      y: [nyoki.fCharge, 100, 0, 5000]
-      cut: gate.Test(0) && gate.Test(4) && vertexCut && nyoki.fID==6
-    - name: nyoki_Sp_7
-      title: nyoki_Sp_7| common & vertex.Z
-      x: [p2p.fSp, 50, -40, 110]
-      y: [nyoki.fCharge, 100, 0, 5000]
-      cut: gate.Test(0) && gate.Test(4) && vertexCut && nyoki.fID==7
-    - name: nyoki_Sp_8
-      title: nyoki_Sp_8| common & vertex.Z
-      x: [p2p.fSp, 50, -40, 110]
-      y: [nyoki.fCharge, 100, 0, 5000]
-      cut: gate.Test(0) && gate.Test(4) && vertexCut && nyoki.fID==8
-    - name: nyoki_Sp_9
-      title: nyoki_Sp_9| common & vertex.Z
-      x: [p2p.fSp, 50, -40, 110]
-      y: [nyoki.fCharge, 100, 0, 5000]
-      cut: gate.Test(0) && gate.Test(4) && vertexCut && nyoki.fID==9
-    - name: nyoki_6
-      title: nyoki_6 HD| common & vertex.Z
-      x: [p2p.fSp, 150, -40, 110]
-      cut: gate.Test(0) && gate.Test(4) && vertexCut && nyoki.fID==6 && pidds
-    - name: nyoki_7
-      title: nyoki_7 HD| common & vertex.Z
-      x: [p2p.fSp, 150, -40, 110]
-      cut: gate.Test(0) && gate.Test(4) && vertexCut && nyoki.fID==7 && pidds
-    - name: nyoki_8
-      title: nyoki_8 HD| common & vertex.Z
-      x: [p2p.fSp, 150, -40, 110]
-      cut: gate.Test(0) && gate.Test(4) && vertexCut && nyoki.fID==8 && pidds
-    - name: nyoki_9
-      title: nyoki_9 HD| common & vertex.Z
-      x: [p2p.fSp, 150, -40, 110]
-      cut: gate.Test(0) && gate.Test(4) && vertexCut && nyoki.fID==9 && pidds
-    
+    - name: nyoki_q_O
+      title: nyoki Charge | PID(22O)
+      x: [nyoki.fCharge, 500,   0, 4500]
+      cut: gate.Test(1)
+    - name: nyoki_q_N
+      title: nyoki Charge | PID(19N)
+      x: [nyoki.fCharge, 500,   0, 4500]
+      cut: gate.Test(2)
+    - name: nyoki_q_Li
+      title: nyoki Charge | PID(8Li)
+      x: [nyoki.fCharge, 500,   0, 4500]
+      cut: gate.Test(3)
+
+    - name: nyoki_q_id
+      title: nyoki charge vs ID
+      x: [nyoki.fCharge, 500, 0, 4500]
+      y: [nyoki.fID, 14, 0, 14]
+             
+    - name: nyoki_F
+      title: nyoki Q vs ID | PID(23F)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      y: [nyoki.fID, 14, 0, 14]
+      cut: gate.Test(0)                  
+    - name: nyoki_O
+      title: nyoki Q vs ID | PID(22O)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      y: [nyoki.fID, 14, 0, 14]
+      cut: gate.Test(1)                  
+    - name: nyoki_N
+      title: nyoki Q vs ID | PID(19N)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      y: [nyoki.fID, 14, 0, 14]
+      cut: gate.Test(2)                  
+    - name: nyoki_Li
+      title: nyoki Q vs ID | PID(8Li)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      y: [nyoki.fID, 14, 0, 14]
+      cut: gate.Test(3)                  
+      
+    - name: nyoki_3_F
+      title: nyoki_3 | PID(23F)
+      x: [nyoki.fCharge, 100, 0, 4500]
+      cut: gate.Test(0) && nyoki.fID==3      
+    - name: nyoki_4_F
+      title: nyoki_4 | PID(23F)
+      x: [nyoki.fCharge, 100, 0, 4500]
+      cut: gate.Test(0) && nyoki.fID==4      
+    - name: nyoki_5_F
+      title: nyoki_5 | PID(23F)
+      x: [nyoki.fCharge, 250, 0, 4500]
+      cut: gate.Test(0) && nyoki.fID==5      
+    - name: nyoki_6_F
+      title: nyoki_6 | PID(23F)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      cut: gate.Test(0) && nyoki.fID==6
+    - name: nyoki_7_F
+      title: nyoki_7 | PID(23F)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      cut: gate.Test(0) && nyoki.fID==7
+    - name: nyoki_8_F
+      title: nyoki_8 | PID(23F)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      cut: gate.Test(0) && nyoki.fID==8
+    - name: nyoki_9_F
+      title: nyoki_9 | PID(23F)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      cut: gate.Test(0) && nyoki.fID==9
+    - name: nyoki_10_F
+      title: nyoki_10 | PID(23F)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      cut: gate.Test(0) && nyoki.fID==10
+    - name: nyoki_11_F
+      title: nyoki_11 | PID(23F)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      cut: gate.Test(0) && nyoki.fID==11
+
+    - name: nyoki_3_O
+      title: nyoki_3 | PID(22O)
+      x: [nyoki.fCharge, 100, 0, 4500]
+      cut: gate.Test(1) && nyoki.fID==3      
+    - name: nyoki_4_O
+      title: nyoki_4 | PID(22O)
+      x: [nyoki.fCharge, 100, 0, 4500]
+      cut: gate.Test(1) && nyoki.fID==4   
+    - name: nyoki_5_O
+      title: nyoki_5 | PID(22O)
+      x: [nyoki.fCharge, 250, 0, 4500]
+      cut: gate.Test(1) && nyoki.fID==5      
+    - name: nyoki_6_O
+      title: nyoki_6 | PID(22O)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      cut: gate.Test(1) && nyoki.fID==6
+    - name: nyoki_7_O
+      title: nyoki_7 | PID(22O)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      cut: gate.Test(1) && nyoki.fID==7
+    - name: nyoki_8_O
+      title: nyoki_8 | PID(22O)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      cut: gate.Test(1) && nyoki.fID==8
+    - name: nyoki_9_O
+      title: nyoki_9 | PID(22O)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      cut: gate.Test(1) && nyoki.fID==9
+    - name: nyoki_10_O
+      title: nyoki_10 | PID(22O)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      cut: gate.Test(1) && nyoki.fID==10
+    - name: nyoki_11_O
+      title: nyoki_11 | PID(22O)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      cut: gate.Test(1) && nyoki.fID==11      
+      
+    - name: nyoki_3_N
+      title: nyoki_3 | PID(19N)
+      x: [nyoki.fCharge, 100, 0, 4500]
+      cut: gate.Test(2) && nyoki.fID==3      
+    - name: nyoki_4_N
+      title: nyoki_4 | PID(19N)
+      x: [nyoki.fCharge, 100, 0, 4500]
+      cut: gate.Test(2) && nyoki.fID==4   
+    - name: nyoki_5_N
+      title: nyoki_5 | PID(19N)
+      x: [nyoki.fCharge, 250, 0, 4500]
+      cut: gate.Test(2) && nyoki.fID==5      
+    - name: nyoki_6_N
+      title: nyoki_6 | PID(19N)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      cut: gate.Test(2) && nyoki.fID==6
+    - name: nyoki_7_N
+      title: nyoki_7 | PID(19N)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      cut: gate.Test(2) && nyoki.fID==7
+    - name: nyoki_8_N
+      title: nyoki_8 | PID(19N)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      cut: gate.Test(2) && nyoki.fID==8
+    - name: nyoki_9_N
+      title: nyoki_9 | PID(19N)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      cut: gate.Test(2) && nyoki.fID==9
+    - name: nyoki_10_N
+      title: nyoki_10 | PID(19N)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      cut: gate.Test(2) && nyoki.fID==10
+    - name: nyoki_11_N
+      title: nyoki_11 | PID(19N)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      cut: gate.Test(2) && nyoki.fID==11       
+      
+    - name: nyoki_3_Li
+      title: nyoki_3 | PID(8Li)
+      x: [nyoki.fCharge, 100, 0, 4500]
+      cut: gate.Test(3) && nyoki.fID==3      
+    - name: nyoki_4_Li
+      title: nyoki_4 | PID(8Li)
+      x: [nyoki.fCharge, 100, 0, 4500]
+      cut: gate.Test(3) && nyoki.fID==4   
+    - name: nyoki_5_Li
+      title: nyoki_5 | PID(8Li)
+      x: [nyoki.fCharge, 250, 0, 4500]
+      cut: gate.Test(3) && nyoki.fID==5      
+    - name: nyoki_6_Li
+      title: nyoki_6 | PID(8Li)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      cut: gate.Test(3) && nyoki.fID==6
+    - name: nyoki_7_Li
+      title: nyoki_7 | PID(8Li)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      cut: gate.Test(3) && nyoki.fID==7
+    - name: nyoki_8_Li
+      title: nyoki_8 | PID(8Li)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      cut: gate.Test(3) && nyoki.fID==8
+    - name: nyoki_9_Li
+      title: nyoki_9 | PID(8Li)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      cut: gate.Test(3) && nyoki.fID==9
+    - name: nyoki_10_Li
+      title: nyoki_10 | PID(8Li)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      cut: gate.Test(3) && nyoki.fID==10
+    - name: nyoki_11_Li
+      title: nyoki_11 | PID(8Li)
+      x: [nyoki.fCharge, 500, 0, 4500]
+      cut: gate.Test(3) && nyoki.fID==11 

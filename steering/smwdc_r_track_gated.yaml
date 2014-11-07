@@ -4,6 +4,22 @@
 # output :  smwdc
 
 Processor:
+  - name: mwdctrack_smwdc_R_noIt
+    type: art::sh04::TSMWDCTrackingProcessor
+    parameter:
+      InputCollection:
+          - smwdc_R_x1
+          - smwdc_R_x2
+          - smwdc_R_u1
+          - smwdc_R_u2
+          - smwdc_R_v1
+          - smwdc_R_v2
+      OutputCollection: smwdc_R_noIt
+      NIteration: 0
+      TimingGate: [-150,100]
+      ChargeGate: [20,10000]
+      MAXSSR:     10.
+      
   - name: mwdctrack_smwdc_R_TLgated
     type: art::sh04::TSMWDCTrackingProcessor
     parameter:
@@ -14,10 +30,10 @@ Processor:
           - smwdc_R_u2
           - smwdc_R_v1
           - smwdc_R_v2
-      OutputCollection: smwdc_R_gated1
+      OutputCollection: smwdc_R_TLgated
       NIteration: 5
       TimingGate: [-150,100]
-      ChargeGate: [50,10000]
+      ChargeGate: [-9000,90000]
       MAXSSR:     10.
 
   - name: mwdctrack_smwdc_R_TWgated
@@ -30,10 +46,10 @@ Processor:
           - smwdc_R_u2
           - smwdc_R_v1
           - smwdc_R_v2
-      OutputCollection: smwdc_R_gated2
+      OutputCollection: smwdc_R_TWgated
       NIteration: 5
-      TimingGate: [-150,100]
-      ChargeGate: [-100,10000]
+      TimingGate: [-9000,90000]
+      ChargeGate: [20,10000]
       MAXSSR:     10.
 #==================================================      
 

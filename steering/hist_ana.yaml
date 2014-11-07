@@ -1,0 +1,247 @@
+alias:
+  vertexCut: TMath::Abs(vertex.fZ-10)<60
+  pidds: nyoki.fCharge>1500
+  pre_common: gate.Test(0) && coinReg.Test(2)
+  common : gate.Test(0) && coinReg.Test(2) && gate.Test(4) 
+
+group:
+  - name: Analysis
+    title: Analysis
+    contents:      
+    - name: PIDup
+      title: PID upstream
+      x: [tof_US.fTiming, 1000, -1480,-1420]
+      y: [plaV1190_FH9.fCharge, 400, 5000, 6200]
+    - name: PIDup_23F
+      title: PID upstream | PID(23F)
+      x: [tof_US.fTiming, 1000, -1480,-1420]
+      y: [plaV1190_FH9.fCharge, 400, 5000, 6200]
+      cut: gate.Test(0)
+    - name: PIDup_23F_ppcoin
+      title: PID upstream | PID(23F) && ppcoin
+      x: [tof_US.fTiming, 1000, -1480,-1420]
+      y: [plaV1190_FH9.fCharge, 400, 5000, 6200]
+      cut: pre_common
+    
+    - name: s0img_beam
+      title: S0img | PID(23F) & beam
+      x: [S0img.fTrack.fX, 200, -20, 20]
+      y: [S0img.fTrack.fY, 200, -20, 20]   
+      cut: gate.Test(0) && coinReg.Test(1) 
+    - name: s0img_ppcoin
+      title: S0img | PID(23F) & ppcoin
+      x: [S0img.fTrack.fX, 200, -20, 20]
+      y: [S0img.fTrack.fY, 200, -20, 20]
+      cut: gate.Test(0) && coinReg.Test(2) 
+    - name: s0img_ver
+      title: S0img | PID(23F) & ppcoin & vertex.Z
+      x: [S0img.fTrack.fX, 200, -20, 20]
+      y: [S0img.fTrack.fY, 200, -20, 20]   
+      cut: pre_common & vertexCut  
+    - name: s0img
+      title: S0img | PID(23F) & ppcoin & nyoki
+      x: ["S0img[0].fTrack.fX", 200, -20, 20]
+      y: ["S0img[0].fTrack.fY", 200, -20, 20]   
+      cut: pre_common & pidds
+      
+    - name: vertex_ZX
+      title: vertex.Z vs vertex.X | PID(23F) & ppcoin
+      x: [vertex.fX, 200, -20, 20]
+      y: [vertex.fZ, 200, -50, 200]
+    - name: vertex_Z
+      title: vertex.Z| common
+      x: [vertex.fZ, 200, -50, 200]
+      cut: common
+    - name: vertex_Z_nyoki
+      title: vertex.Z| common && nyoki
+      x: ["vertex[0].fZ", 200, -50, 200]
+      cut: common && pidds
+        
+    - name: PID_s0d
+      title: PID ds S0D | common
+      x: ["tofS0D[0].fTiming", 100, -127, -120]
+      y: ["plaV775[4].fCharge",250,    0, 2500]
+      cut: common 
+    - name: PID_s0d_nyoki
+      title: PID ds S0D | common & nyoki
+      x: ["tofS0D[0].fTiming", 100, -127, -120]
+      y: ["plaV775[4].fCharge", 250,   0, 2500]
+      cut: common && pidds
+      
+    - name: nyoki_q_id_F
+      title: nyoki Q vs ID | common
+      x: [nyoki.fCharge, 100, 500, 4500]
+      y: [nyoki.fID, 14, 0, 14]
+      cut: common
+    - name: nyoki_S0D
+      title: nyoki Q vs ID | common & S0D(O)
+      x: [nyoki.fCharge, 100, 500, 4500]
+      y: [nyoki.fID, 14, 0, 14]
+      cut: common && gate.Test(7)
+    - name: nyoki_q_F
+      title: nyoki Charge | common
+      x: [nyoki.fCharge, 500, 500, 4500]
+      cut: common
+      
+    - name: p2p_1
+      title: Sp | common & vertex.Z
+      x: [p2p.fSp, 40, -40, 120]
+      cut: common && vertexCut
+    - name: p2p_2
+      title: Sp | common & nyoki
+      x: [p2p.fSp, 40, -40, 120]
+      cut: common && pidds
+    - name: p2p_2_HD
+      title: Sp HD | common & nyoki
+      x: [p2p.fSp, 160, -40, 120]
+      cut: common && pidds
+    - name: p2p_2_long
+      title: Sp | common & nyoki
+      x: [p2p.fSp, 300, -100, 200]
+      cut: common && pidds
+    - name: p2p_3
+      title: Sp | common & vertex.Z & nyoki
+      x: [p2p.fSp, 40, -40, 120]
+      cut: common && pidds && vertexCut
+    - name: p2p_3_HD
+      title: Sp HD | common & vertex.Z & nyoki
+      x: [p2p.fSp, 160, -40, 120]
+      cut: common && pidds && vertexCut
+    - name: p2p_3_long
+      title: Sp | common & vertex.Z & nyoki
+      x: [p2p.fSp, 300, -100, 200]
+      cut: common && pidds && vertexCut
+    - name: nyoki_Sp
+      title: nyoki_Sp| common & vertex.Z
+      x: [p2p.fSp, 40, -40, 120]
+      y: [nyoki.fCharge, 100, 0, 5000]
+      cut: common && vertexCut
+      
+    - name: nyoki_Sp_3
+      title: nyoki_Sp_3| common & vertex.Z
+      x: [p2p.fSp, 40, -40, 120]
+      y: [nyoki.fCharge, 100, 0, 5000]
+      cut: common && vertexCut && nyoki.fID==3
+    - name: nyoki_Sp_4
+      title: nyoki_Sp_4| common & vertex.Z
+      x: [p2p.fSp, 40, -40, 120]
+      y: [nyoki.fCharge, 100, 0, 5000]
+      cut: common && vertexCut && nyoki.fID==4
+    - name: nyoki_Sp_5
+      title: nyoki_Sp_5| common & vertex.Z
+      x: [p2p.fSp, 40, -40, 120]
+      y: [nyoki.fCharge, 100, 0, 5000]
+      cut: common && vertexCut && nyoki.fID==5      
+    - name: nyoki_Sp_6
+      title: nyoki_Sp_6| common & vertex.Z
+      x: [p2p.fSp, 40, -40, 120]
+      y: [nyoki.fCharge, 100, 0, 5000]
+      cut: common && vertexCut && nyoki.fID==6
+    - name: nyoki_Sp_7
+      title: nyoki_Sp_7| common & vertex.Z
+      x: [p2p.fSp, 40, -40, 120]
+      y: [nyoki.fCharge, 100, 0, 5000]
+      cut: common && vertexCut && nyoki.fID==7
+    - name: nyoki_Sp_8
+      title: nyoki_Sp_8| common & vertex.Z
+      x: [p2p.fSp, 40, -40, 120]
+      y: [nyoki.fCharge, 100, 0, 5000]
+      cut: common && vertexCut && nyoki.fID==8
+    - name: nyoki_Sp_9
+      title: nyoki_Sp_9| common & vertex.Z
+      x: [p2p.fSp, 40, -40, 120]
+      y: [nyoki.fCharge, 100, 0, 5000]
+      cut: common && vertexCut && nyoki.fID==9
+    - name: nyoki_Sp_10
+      title: nyoki_Sp_10| common & vertex.Z
+      x: [p2p.fSp, 40, -40, 120]
+      y: [nyoki.fCharge, 100, 0, 5000]
+      cut: common && vertexCut && nyoki.fID==10
+    - name: nyoki_Sp_11
+      title: nyoki_Sp_11| common & vertex.Z
+      x: [p2p.fSp, 40, -40, 120]
+      y: [nyoki.fCharge, 100, 0, 5000]
+      cut: common && vertexCut && nyoki.fID==11
+    - name: nyoki_Sp_12
+      title: nyoki_Sp_11| common & vertex.Z
+      x: [p2p.fSp, 40, -40, 120]
+      y: [nyoki.fCharge, 100, 0, 5000]
+      cut: common && vertexCut && nyoki.fID==12
+
+
+    - name: nyoki_3
+      title: nyoki_3 HD| common & vertex.Z
+      x: [p2p.fSp, 160, -40, 120]
+      cut: common && vertexCut && nyoki.fID==3 && pidds
+    - name: nyoki_4
+      title: nyoki_4 HD| common & vertex.Z
+      x: [p2p.fSp, 160, -40, 120]
+      cut: common && vertexCut && nyoki.fID==4 && pidds
+    - name: nyoki_5
+      title: nyoki_5 HD| common & vertex.Z
+      x: [p2p.fSp, 160, -40, 120]
+      cut: common && vertexCut && nyoki.fID==5 && pidds
+    - name: nyoki_6
+      title: nyoki_6 HD| common & vertex.Z
+      x: [p2p.fSp, 160, -40, 120]
+      cut: common && vertexCut && nyoki.fID==6 && pidds
+    - name: nyoki_7
+      title: nyoki_7 HD| common & vertex.Z
+      x: [p2p.fSp, 160, -40, 120]
+      cut: common && vertexCut && nyoki.fID==7 && pidds
+    - name: nyoki_8
+      title: nyoki_8 HD| common & vertex.Z
+      x: [p2p.fSp, 160, -40, 120]
+      cut: common && vertexCut && nyoki.fID==8 && pidds
+    - name: nyoki_9
+      title: nyoki_9 HD| common & vertex.Z
+      x: [p2p.fSp, 160, -40, 120]
+      cut: common && vertexCut && nyoki.fID==9 && pidds
+    - name: nyoki_10
+      title: nyoki_10 HD| common & vertex.Z
+      x: [p2p.fSp, 160, -40, 120]
+      cut: common && vertexCut && nyoki.fID==10 && pidds
+    - name: nyoki_11
+      title: nyoki_11 HD| common & vertex.Z
+      x: [p2p.fSp, 160, -40, 120]
+      cut: common && vertexCut && nyoki.fID==11 && pidds
+    - name: nyoki_12
+      title: nyoki_12 HD| common & vertex.Z
+      x: [p2p.fSp, 160, -40, 120]
+      cut: common && vertexCut && nyoki.fID==12 && pidds
+      
+      
+    - name: Sp_central
+      title: Sp | common & S0D(O) && |vertex.Z-10|<30
+      x: [p2p.fSp, 50, -40, 110]
+      cut: common && gate.Test(9) && TMath::Abs(vertex.fZ-12)<26
+    - name: Sp_side
+      title: Sp | common & S0D(O) && side
+      x: [p2p.fSp, 50, -40, 110]
+      cut: common && gate.Test(9) && (TMath::Abs(vertex.fZ+38)<24 || TMath::Abs(vertex.fZ-70)<32)
+      
+    - name: mwdc_L_npv
+      title: MWDC-L FiredPlane | PID(23F) & ppcoin
+      x: [smwdc_L.fNPlaneValid, 6, 1, 7]
+      cut: pre_common
+    - name: mwdc_R_npv
+      title: MWDC-R FiredPlane | PID(23F) & ppcoin
+      x: [smwdc_R.fNPlaneValid, 6, 1, 7]
+      cut: pre_common
+    - name: mwdc_L_good
+      title: MWDC-L tracked | PID(23F) & ppcoin & firedPlane!=0
+      x: [smwdc_L.IsGood(), 2, 0, 2]
+      cut: pre_common && smwdc_L.fNPlaneValid!=0
+    - name: mwdc_R_good
+      title: MWDC-R tracked | PID(23F) & ppcoin & firedPlane!=0
+      x: [smwdc_R.IsGood(), 2, 0, 2]
+      cut: pre_common && smwdc_R.fNPlaneValid!=0
+      
+    - name: tplaL_tof
+      title: tofL | common
+      x: [tofL.fTiming, 300, 0, 30]
+      cut: common
+    - name: tplaR_tof
+      title: tofR | common
+      x: [tofR.fTiming, 300, 0, 30]
+      cut: common

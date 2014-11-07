@@ -8,6 +8,7 @@ all units are: mm, ns, MeV
 #include <TMath.h>
 
 const Double_t cVaccum=299.792458; //speed of light [mm/ns]
+const Double_t mu = 931.5;
 const Double_t mp = 938.272;
 const Double_t mn = 939.565;
 const Double_t me = 0.5109989;

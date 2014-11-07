@@ -1,9 +1,9 @@
 #include "RelCalculator.h"
-Double_t TKA = 260;
+Double_t TKA = 258.5062;
 
-void PPFit_BeamZ(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t OPCM = 1){
+void PPFit_BeamZ(Int_t angle1 = 60, Int_t angle2 = 70, Int_t LR = 1, Int_t OPCM = 0){
 
-   const char* rootfile="ppAll_0731.root";
+   const char* rootfile="ppAll_1105.root";
    TFile *f0 = new TFile (rootfile); TTree *tree = (TTree*)f0->Get("tree");
    
    Double_t OpenAngGateRange[2] = {84, 89};
@@ -144,6 +144,7 @@ void PPFit_BeamZ(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t OPCM 
    
    cBeamZ->cd(2);
    h3 = HistSub(h1, h2);
+   
    
    cBeamZ->cd(4);
    if (LR == 1){

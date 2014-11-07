@@ -2,21 +2,23 @@
 
 void Resol_pla() {
    
-   const char* rootfile="25F_0807.root";
-   const char* plaBranch= "plaV775"; Int_t plaDetID = 1;
-   const char* mwdcBranch = "smwdc_R";
+//   const char* rootfile="23F_0922.root";
+   const char* rootfile="23F_0924_run08.root";
+
+   const char* plaBranch= "plaV1190_FH9"; Int_t plaDetID = 0;
+   const char* mwdcBranch = "dc91";
 
    Double_t PlaBeta = 0.66;
    
    Bool_t allentry  = 0;
    Int_t firstEntry = 0;
-   Int_t nEntries=5000000;
+   Int_t nEntries=      500000;
    
    Int_t nBin = 500;
    Int_t relBinWidth = 5;
-   Double_t MeanRange[2] = {200,1000};
+   Double_t MeanRange[2] = {-20,20};
    
-   Double_t maxResol = 1000; // ps
+   Double_t maxResol = 500; // ps
    
    printf("\n >>>>> file: %s \n", rootfile); 
 
@@ -27,14 +29,17 @@ void Resol_pla() {
    Bool_t shown = 0;
    
    //**************************************
+   //art::TGateArray *hoge_gate;
    TClonesArray *hoge_pla, *hoge_MWDC;
    TFile *f = new TFile(rootfile,"read");
    TTree *tree = (TTree*)f->Get("tree");
    Int_t totnumEntry = tree->GetEntries();
    tree->SetBranchStatus("*",0);
    tree->SetBranchStatus(plaBranch,1);
+   //tree->SetBranchStatus("gate",1);
    tree->SetBranchAddress(plaBranch,&hoge_pla);
-      
+   //tree->SetBranchAddress("gate", &hoge_gate);
+   
    Double_t TDiffRange[2];
    Double_t XRange[2];
    Double_t mwdc_z0, dis_mwdc_pla;
@@ -65,15 +70,15 @@ void Resol_pla() {
       mwdc_z0 = 0;
       dis_mwdc_pla = 150;
       XRange[0] = -60;
-      XRange[1] = 80;
+      XRange[1] = 60;
       if (plaBranch == "plaV1190_FH9"){
    		TDiffRange[0] = -4;
-      	TDiffRange[1] = 6;
+      	TDiffRange[1] = 4;
       	plaName = "Pla-FH9";
    	}else{
-   		TDiffRange[0] = -4;
-      	TDiffRange[1] = 6;
-      	plaName = "Pla-F3";
+   		TDiffRange[0] = 30;
+      	TDiffRange[1] = 40;
+      	plaName = "Pla-FH9 V775";
    	}
    }
    //**************************************
@@ -92,9 +97,12 @@ void Resol_pla() {
 	TH1F* hResol = new TH1F("hResol", hResolTitle, nBin, XRange[0], XRange[1]); 
 	hResol->SetXTitle("pla(X)[mm]");
    hResol->SetYTitle("Tavg Resol [ps]");
+   
+   TH2F* hMean = new TH2F("hMean", "Mean vs PlaX" , nBin, XRange[0], XRange[1], 200, TDiffRange[0], TDiffRange[1]); 
 
-   TCanvas* cPlaResol = new TCanvas("cPlaResol", "Pla resolution by MWDC", 2000, 0, 800, 600);   
-   cPlaResol->Divide(1,2);
+   TCanvas* cPlaResol = new TCanvas("cPlaResol", "Pla resolution by MWDC", 2000, 0, 800, 900);   
+   cPlaResol->Divide(1,3);
+   
    
    //**************************************
    Int_t endEntry = firstEntry + nEntries;
@@ -107,9 +115,12 @@ void Resol_pla() {
    
    for( Int_t eventID = firstEntry; eventID < endEntry; eventID ++){
       tree->GetEntry(eventID); 
-      
+
+      //if( hoge_gate->Test(0) != 1) continue;
+
       // Get Tdiff
       Double_t tdiff = kInvalidD;
+      //Double_t tavg = kInvalidD;
       Double_t Q1 = kInvalidD;
       Double_t Q2 = kInvalidD;
       Int_t nHitpla = hoge_pla->GetEntriesFast();
@@ -118,10 +129,10 @@ void Resol_pla() {
          if ( plaData->GetDetID() == plaDetID){
 				Q1   = plaData->GetQ1();//*2.33-850;
 				Q2   = plaData->GetQ2();
-            tdiff= plaData->GetTDiff()-1000./TMath::Power(Q1-450,1) + 1000./TMath::Power(Q2-450,1);
+                tdiff= plaData->GetTDiff();//-1000./TMath::Power(Q1-450,1) + 1000./TMath::Power(Q2-450,1);
          }
       }
-      if(!TMath::Finite(tdiff)) continue;
+      if(!TMath::Finite(tdiff) ) continue;
       
       // Get MWDC X and A then project to Tpla
       Double_t PlaX = kInvalidD;
@@ -171,7 +182,8 @@ void Resol_pla() {
 
    cPlaResol->cd(2);
 
-	TF1 *fit = new TF1("fit", "gaus(0)", TDiffRange[0], TDiffRange[1]);
+   	TF1 *fit = new TF1("fit", "gaus(0)", TDiffRange[0], TDiffRange[1]);
+   //TF1 *fit = new TF1("fit", "gaus(0)", 40, 43);
 	Double_t para[3];
 
 	Double_t mean = 0;
@@ -191,6 +203,7 @@ void Resol_pla() {
    	
    	if (TMath::Finite(resolution) && resolution < maxResol && para[2] != 0.5 && err_resol < resolution/2.) {
    		hResol->Fill(PlaXPos,resolution);
+   		hMean->Fill(PlaXPos, para[1]);
    		hResol->SetBinError(hResol->FindBin(PlaXPos),err_resol);
    		if ( PlaXPos > MeanRange[0] && PlaXPos < MeanRange[1] ){
 	   		count ++;
@@ -207,6 +220,10 @@ void Resol_pla() {
    TString textStr;
    textStr.Form("Mean (%.0f mm, %.0f mm) Tavg Resol.:%.2f(%.2f) ps", MeanRange[0], MeanRange[1], mean/count, TMath::Sqrt(meanErr)/count);
    text.DrawText(0.2, 0.2, textStr);
+   
+	cPlaResol->cd(3);
+	hMean->Draw("colz");
+	
 
    return ;
 }

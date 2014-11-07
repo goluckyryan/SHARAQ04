@@ -1,18 +1,19 @@
 Processor:        
 #  - include: RunsO14.yaml
 #  - include: RunsO22.yaml
-#  - include: RunsO22_single.yaml
-  - include: RunsO22_clean.yaml
+  - include: RunsO22_single.yaml
+#  - include: RunsO22_clean.yaml
   
 #============= Mapper and Timer ============================
   - include: Mapper_Timer.yaml    
 #============== PROCESSORS     =============================
   - include: coinReg.yaml
   - include: Gate_Initialtor.yaml
-  - include: plastic_V1190_prm.yaml
-  - include: plastic_V1190_F3.yaml         # no branch output
-  - include: plastic_V1190_FH9.yaml
-  - include: plastic_tof_US.yaml
+#  - include: Gate_coinReg.yaml
+#  - include: plastic_V1190_prm.yaml
+#  - include: plastic_V1190_F3.yaml         # no branch output
+#  - include: plastic_V1190_FH9.yaml
+#  - include: plastic_tof_US.yaml
   - include: plastic_V775.yaml
 #  - include: plastic_V767_timeRef.yaml
 #  - include: plastic_V767.yaml
@@ -20,6 +21,33 @@ Processor:
   - include: nyoki.yaml                    # reuire plastic_V775 for tof
 #  - include: smwdc_S1_track.yaml
 #  - include: smwdc_S1_cal.yaml #no coinReg gate
+
+#  - name: proc_beam
+#    type: art::TParameterLoader
+#    parameter:
+#      Name:     beam
+#      Type:     art::sh04::TBeamParameter
+#      FileName: prm/kinematics/23F.yaml
+
+#  - name: tpla_tof
+#    type: art::sh04::TRecoilTOFProcessor
+#    parameter:
+#      OutputL:            tofL
+#      OutputR:            tofR
+#      OutputS0D:          tofS0D
+#      F3PlasticColName:   plaV775
+#      F3PlasticDetID:     2
+#      FH9PlasticColName:  plaV775
+#      FH9PlasticDetID:    3
+#      S0DPlasticColName:  plaV775
+#      S0DPlasticDetID:    4
+#      TPlasticColName:    plaV775
+#      TPlasticLDetID:     0
+#      TPlasticRDetID:     1
+#      BeamZ:              0
+#      ShiftL:             0
+#      ShiftL:             0 
+#      OutputTransparency: 0
 
   - name: projection
     type: art::TTreeProjectionProcessor

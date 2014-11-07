@@ -1,13 +1,15 @@
-void Fit_2Gauss(TH1F* hFit, Double_t minX, Double_t maxX, Double_t mag1, Double_t x1, Double_t sigma1, Double_t mag2, Double_t x2, Double_t sigma2){
+void Fit_2Gauss(TH1F* hFit, Double_t mag1, Double_t x1, Double_t sigma1, Double_t mag2, Double_t x2, Double_t sigma2){
    gStyle->SetOptFit(1111);
    const Int_t nPara = 6;
+   const Double_t minX = -50;
+   const Double_t maxX = 100;
    TF1 *fit = new TF1("fit", fitFunction,  minX, maxX, nPara); 
    fit->SetParameters(mag1,  x1, sigma1,
                       mag2,  x2, sigma2);
-   fit->SetParLimits(1, -5,5); // x1
-   fit->SetParLimits(2, 0,10);   // sigma1
-   fit->SetParLimits(4, -15,0); // x2
-   fit->SetParLimits(5, 0,10);   // sigma2
+   fit->SetParLimits(1, 0,15); // x1
+   fit->SetParLimits(2, 0,50);   // sigma1
+   fit->SetParLimits(4, 20,60); // x2
+   fit->SetParLimits(5, 0,50);   // sigma2
    //fit->FixParameter(1,0);
    //fit->FixParameter(4,0);
    hFit->Fit("fit");

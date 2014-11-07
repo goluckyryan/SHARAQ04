@@ -8,7 +8,7 @@ void BeamFraction() {
    Int_t nEntries   =5000000;
    
    Double_t Zchm = -111.; // -111 = cooling chamber entrance, -222 is beam pipe, +55 NMR coil
-   Double_t center[2]={0, 1.9};
+   Double_t center[2]={0.4, 1.8};
    Double_t radius = 7.;
    
    beam->Print();
@@ -23,7 +23,7 @@ void BeamFraction() {
    TH1F * hPIDUS      = new TH1F("PIDUS"    , "PID upstream", 100, beam->fTofGate[0]-3,beam->fTofGate[1]+3);
    hPIDUS->SetXTitle("ToF(F3-FH9) [ns]");
    hPIDUS->SetYTitle("Count");
-   TH2F * hS0img      = new TH2F("S0img"    , "S0img"                , nBin, -30, 30, nBin, -30, 30);
+   TH2F * hS0img      = new TH2F("S0img"    , "S0img X Y"                , nBin, -30, 30, nBin, -30, 30);
    hS0img->SetXTitle("X [mm]");
    hS0img->SetYTitle("Y [mm]");
    TString hS0imgCrysTitle;
@@ -170,10 +170,10 @@ void BeamFraction() {
                     center[1] + radius*TMath::Sin(2*TMath::Pi()*(i+1)/nPt));
    }
    
-   cBeamFract->cd(3);
+   cBeamFract->cd(2);
    hS0AB->Draw("colz");
    
-   cBeamFract->cd(2);
+   cBeamFract->cd(3);
    hS0imgCrys->Draw("colz");
 //   countText.Form("count:%d[%4.1f%%]", countCrystal, countCrystal*100./countFH9);
    countText.Form("count:%d", countCrystal);

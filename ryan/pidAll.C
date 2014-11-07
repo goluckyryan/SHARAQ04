@@ -4,7 +4,7 @@
 
 void pidAll() {
 
-   const char* rootfile="23F_0910_test.root";
+   const char* rootfile="23F_1105_optics.root";
    TBeamData *beam = new TBeamData("23F");
    
    Bool_t BeamTrigger = 0;
@@ -13,8 +13,8 @@ void pidAll() {
    
    Bool_t allentry    = 1;
    Int_t firstEntry   = 0;
-   Int_t nEntries     = 60000000;
-   Int_t runRange[2] = {1, 1};
+   Int_t nEntries     = 500;
+   Int_t runRange[2] = {1000, 2000};
   
    beam->Print();
 
@@ -29,10 +29,13 @@ void pidAll() {
    
    gStyle->SetOptStat(0);
    
-   TH2F* hPIDUS = new TH2F("PID_US",histTitle,300, -1500, -1410, 300 , 4900, 6200);
-   hPIDUS->SetXTitle("tof before offset [ns]");
-   hPIDUS->SetYTitle("Q(FH9)");	
-   TH2F* hPIDDS_S0D = new TH2F("hPIDDS_S0D","PID down stream",300, -135,-124, 300 , 1200, 3500);
+   //TH2F* hPIDUS = new TH2F("PID_US",histTitle,300, -1500, -1410, 300 , 4900, 6200);
+   //hPIDUS->SetXTitle("tof before offset [ns]");
+   //hPIDUS->SetYTitle("Q(FH9)");	
+   TH2F* hPIDUS = new TH2F("PID_US",histTitle,400, 2.2, 3.2, 300 , 4800, 6200);
+   hPIDUS->SetXTitle("A/Q");
+   hPIDUS->SetYTitle("Q [a.u.]");	
+   TH2F* hPIDDS_S0D = new TH2F("hPIDDS_S0D","PID down stream",300, -128,-120, 300 , 1200, 3500);
    hPIDDS_S0D->SetXTitle("tof before offset [ns]");
    hPIDDS_S0D->SetYTitle("Q");
    TH2F* hPIDDS_TplaL = new TH2F("hPIDDS_TplaL","PID Tpla-L",100, -60, -20, 300 ,500, 2500);
@@ -58,14 +61,14 @@ void pidAll() {
    TTree *pid = (TTree*)f->Get("tree");
    Int_t totnumEntry = pid->GetEntries();
    pid->SetBranchStatus("*",0);
-   pid->SetBranchStatus("eventheader0",1);
-   pid->SetBranchStatus("coinReg",1);
+   pid->SetBranchStatus("eventheader",1);
+   //pid->SetBranchStatus("coinReg",1);
    pid->SetBranchStatus("plaV1190_FH9",1);
    pid->SetBranchStatus("tof_US",1);
    pid->SetBranchStatus("plaV775",1);
      
-   pid->SetBranchAddress("eventheader0",&hoge_run);  
-   pid->SetBranchAddress("coinReg",&hoge_coinReg);
+   pid->SetBranchAddress("eventheader",&hoge_run);  
+   //pid->SetBranchAddress("coinReg",&hoge_coinReg);
    pid->SetBranchAddress("plaV1190_FH9",&hoge_FH9);
    pid->SetBranchAddress("tof_US",&hoge_tof);
    pid->SetBranchAddress("plaV775",&hoge_V775); 
@@ -151,7 +154,13 @@ void pidAll() {
                if ( PIDUSGate && (tof[q] < beam->fTofGate[0] || tof[q] > beam->fTofGate[1])) continue; //PID gate
                if ( PIDUSGate && (QAveFH9[p] < beam->fQGate[0] || QAveFH9[p] > beam->fQGate[1])) continue; // PID gate
                PIDcheck = 1;
-               hPIDUS->Fill(tof[q],QAveFH9[p]);
+               tof[q] = tof[q] - beam->fToffsetV1190 + 382.18;
+               Double_t beta = L_F3FH9/cVaccum/tof[q];
+               Double_t gamma = 1./TMath::Sqrt(1-beta*beta);
+               //hPIDUS->Fill(tof[q],QAveFH9[p]);
+               Double_t AQ = cVaccum*beam->fBrho/mu/gamma/beta;
+               //Double_t Zvalue = 0.0073*QAveFH9[p]-33.6;
+               hPIDUS->Fill(AQ,QAveFH9[p]);
             }
          }
       }

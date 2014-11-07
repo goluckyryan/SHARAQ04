@@ -32,7 +32,7 @@ Processor:
       ChargeType:         1       # 1 seems to be OK, but it is V1190.
       ChargeTypeID:       1
       OutputCollection:   nyoki_raw
-      OutputTransparency: 0                       # 1 = no output
+      OutputTransparency: 1                       # 1 = no output
 
   - name: plastic_nyoki_cal
     type: art::TTimingChargeCalibrationProcessor

@@ -3,7 +3,7 @@ void MWDCeff() {
 
 //############################################################################  
 //   const char* rootfile="PrimaryData/phys23F.root"; 
-   const char* rootfile="23F_0916_all.root"; 
+   const char* rootfile="test_smwdc.root"; 
    
    Bool_t allentry  = 0;
    Int_t firstEntry = 0;

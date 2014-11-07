@@ -1,7 +1,7 @@
 aliases:
-  - &beamZ      160
-  - &tofShift_L 0.  #time shift (tgt to Tpla)
-  - &tofShift_R -0.5  #time shift (tgt to Tpla)
+  - &beamZc      170.
+  - &tofShift_Lc  0.  #time shift (tgt to Tpla)
+  - &tofShift_Rc -0.5  #time shift (tgt to Tpla)
 #============== PROCESSORS     =============================
 Processor:
   - name: tpla_tof_c
@@ -19,9 +19,9 @@ Processor:
       TPlasticColName:    plaV775
       TPlasticLDetID:     0
       TPlasticRDetID:     1
-      BeamZ:              *beamZ
-      ShiftL:             *tofShift_L
-      ShiftL:             *tofShift_R 
+      BeamZ:              *beamZc
+      ShiftL:             *tofShift_Lc
+      ShiftL:             *tofShift_Rc 
       OutputTransparency: 1
 
   - name: Recoil_L_c
@@ -34,10 +34,10 @@ Processor:
       Vertex:           vertex
       Geometry:         SMWDC_geometry
       Side:             0           # 0 = left, !0 = right
-      BeamZ:            *beamZ
-      UseReactionPointCollection:   1   #s0XY
-      UseIncidentAngleCollection:   1   #s0AB
-      UsePolarizedMagnetCollection: 1
+      BeamZ:            *beamZc
+      UseReactionPointCorrection:   1   #s0XY
+      UseIncidentAngleCorrection:   1   #s0AB
+      UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1   #store in p2p.fRecoilL
         
   - name: Recoil_R_c
@@ -50,10 +50,10 @@ Processor:
       Vertex:           vertex
       Geometry:         SMWDC_geometry
       Side:             1
-      BeamZ:            *beamZ
-      UseReactionPointCollection:   1
-      UseIncidentAngleCollection:   1
-      UsePolarizedMagnetCollection: 1
+      BeamZ:            *beamZc
+      UseReactionPointCorrection:   1
+      UseIncidentAngleCorrection:   1
+      UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1
 
   - name: proc_p2p_c

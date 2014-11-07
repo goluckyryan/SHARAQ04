@@ -118,8 +118,8 @@ void TBeamData::UseProjectile(TString str){
       fMass = mF23; fZ    = 9; fA    = 23; 
       fTofGate[0]  = -1465.; fTofGate[1]  = -1461.;
       fQGate[0]    =  5767.;  fQGate[1]   =  6060.;
-      fToffsetV1190 = -1462.88;
-      fToffsetV775  = -321.35;
+      fToffsetV1190 = -1462.88 + 0.1;
+      fToffsetV775  = -321.35 + 0.1;
       fToffset1 = 58.7;
       fToffset2 = 60.1;
       fSp = 13.26;

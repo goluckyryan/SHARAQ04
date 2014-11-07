@@ -1,7 +1,7 @@
 Processor:
   - name: ridfevent
-    type: art::TRIDFEventStore
-#    type: art::TRIDFEventShifter
+#    type: art::TRIDFEventStore
+    type: art::TRIDFEventShifter
     parameter:
       OutputTransparency: 1
       InputFiles:
@@ -27,13 +27,13 @@ Processor:
 #          - /media/sh04HD/RawData/phys220020.ridf
 #          - /media/sh04HD/RawData/phys220021.ridf 
 #          - /media/sh04HD/RawData/phys220022.ridf 
-          - /media/sh04HD/RawData/phys220023.ridf # beam trigger on #//clean
+#          - /media/sh04HD/RawData/phys220023.ridf # beam trigger on #//clean
 #          - /media/sh04HD/RawData/phys220024.ridf #//clean
 #          - /media/sh04HD/RawData/phys220025.ridf #//clean
 #          - /media/sh04HD/RawData/phys220026.ridf #//clean
 #          - /media/sh04HD/RawData/phys220027.ridf 
 #          - /media/sh04HD/RawData/phys220028.ridf 
-#          - /media/sh04HD/RawData/phys220029.ridf #//clean
+##          - /media/sh04HD/RawData/phys220029.ridf #//clean, only beam trigger
 #          - /media/sh04HD/RawData/phys220030.ridf 
 #          - /media/sh04HD/RawData/phys220031.ridf #//clean
 #          - /media/sh04HD/RawData/phys220032.ridf 
@@ -41,16 +41,16 @@ Processor:
 #          - /media/sh04HD/RawData/phys220034.ridf
 #          - /media/sh04HD/RawData/phys220035.ridf 
 #          - /media/sh04HD/RawData/phys220036.ridf
-#          - /media/sh04HD/RawData/phys220037.ridf #######spin-dwon #//clean
-#          - /media/sh04HD/RawData/phys220038.ridf #//clean
-#          - /media/sh04HD/RawData/phys220039.ridf
-#          - /media/sh04HD/RawData/phys220040.ridf
-#          - /media/sh04HD/RawData/phys220041.ridf
-#          - /media/sh04HD/RawData/phys220042.ridf
-#          - /media/sh04HD/RawData/phys220043.ridf #//clean
-#          - /media/sh04HD/RawData/phys220044.ridf #//clean
-#          - /media/sh04HD/RawData/phys220045.ridf
-#          - /media/sh04HD/RawData/phys220046.ridf #//clean       
+          - /media/sh04HD/RawData/phys220037.ridf #######spin-dwon #//clean
+          - /media/sh04HD/RawData/phys220038.ridf #//clean
+          - /media/sh04HD/RawData/phys220039.ridf
+          - /media/sh04HD/RawData/phys220040.ridf
+          - /media/sh04HD/RawData/phys220041.ridf
+          - /media/sh04HD/RawData/phys220042.ridf
+          - /media/sh04HD/RawData/phys220043.ridf #//clean
+##          - /media/sh04HD/RawData/phys220044.ridf #//clean, DCX2 off
+          - /media/sh04HD/RawData/phys220045.ridf
+          - /media/sh04HD/RawData/phys220046.ridf #//clean       
       ParameterDirList:
           - conf/eventshift/shvmism
           - conf/eventshift/shvmif3

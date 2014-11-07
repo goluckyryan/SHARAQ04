@@ -4,16 +4,16 @@
 
 void pidUS_v1190_v775() {
 
-   const char* rootfile="test.root";
+   const char* rootfile="23F_0924_run08_46.root";
    TBeamData *beam = new TBeamData("23F");
    
    Bool_t BeamTrigger = 0;
    Bool_t ppcoin      = 0;
    Bool_t PIDUSGate   = 0;
    
-   Bool_t allentry    = 1;
+   Bool_t allentry    = 0;
    Int_t firstEntry   = 0;
-   Int_t nEntries     = 60000000;
+   Int_t nEntries     = 500000;
    Int_t runRange[2] = {1, 1};
   
    beam->Print();
@@ -57,14 +57,14 @@ void pidUS_v1190_v775() {
    TTree *pid = (TTree*)f->Get("tree");
    Int_t totnumEntry = pid->GetEntries();
    pid->SetBranchStatus("*",0);
-   pid->SetBranchStatus("eventheader0",1);
-   pid->SetBranchStatus("coinReg",1);
+   pid->SetBranchStatus("eventheader",1);
+   //pid->SetBranchStatus("coinReg",1);
    pid->SetBranchStatus("plaV1190_FH9",1);
    pid->SetBranchStatus("tof_US",1);
    pid->SetBranchStatus("plaV775",1);
      
-   pid->SetBranchAddress("eventheader0",&hoge_run);  
-   pid->SetBranchAddress("coinReg",&hoge_coinReg);
+   pid->SetBranchAddress("eventheader",&hoge_run);  
+   //pid->SetBranchAddress("coinReg",&hoge_coinReg);
    pid->SetBranchAddress("plaV1190_FH9",&hoge_FH9);
    pid->SetBranchAddress("tof_US",&hoge_tof);
    pid->SetBranchAddress("plaV775",&hoge_V775); 

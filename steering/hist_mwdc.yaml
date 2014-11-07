@@ -1,0 +1,221 @@
+#alias:
+#  tpla: plaV775.fTDiff
+
+group:
+  - name: mwdc_L
+    title: mwdc_L_check
+    contents:      
+    - name:  plaV767_t
+      title: PlaV767 Time
+      x: [plaV767.fTiming, 150, -250, -100]
+      cut: "plaV767.fID==0"
+
+    - name:  L_Traw
+      title: MWDC-L Raw Time
+      x: [smwdc_L_cal.fTiming, 500, -500, 0]
+
+    - name:  L_DT
+      title: MWDC-L Drift Time
+      x: [smwdc_L_DT.fTiming, 370, -170, 200]
+      
+    - name:  L_DT_tracked
+      title: MWDC-L Drift Time | Tracked
+      x: [smwdc_L.fDriftTimeAdopted, 370, -170, 200]    
+      
+    - name:  L_DT_id
+      title: MWDC-L Drift Time vs ID
+      x: [smwdc_L_DT.fTiming, 370, -170, 200]
+      y: [smwdc_L_DT.fID, 288, 0 , 288]
+    
+    - name:  L_DL_t
+      title: MWDC-L Drift Length | Tracked
+      x: [TMath::Abs(smwdc_L.fDriftLengthOriginal), 300, 0, 13]
+    
+    - name:  L_DLnew_t
+      title: MWDC-L Drift Length Corrected | Tracked
+      x: [TMath::Abs(smwdc_L.fDriftLengthAdopted), 300, 0, 13]
+    
+    - name:  L_DTDL_tracked
+      title: MWDC-L DT-DL corrected | Tracked
+      x: [smwdc_L.fDriftTimeAdopted, 300, -150, 160]
+      y: [smwdc_L.fDriftLengthAdopted, 300, 0, 13]
+      
+    - name:  L_TW
+      title: MWDC-L Energy Loss
+      x: [smwdc_L_DT.fCharge, 300, -100, 300]
+    
+    - name:  L_TW_tracked
+      title: MWDC-L Energy Loss | Tracked
+      x: [smwdc_L.fChargeAdopted, 300, -100, 300]
+      
+    - name:  L_TW_TL
+      title: MWDC-L Energy Loss vd Drift-time
+      y: [smwdc_L_DT.fCharge, 300, -100, 300]
+      x: [smwdc_L_DT.fTiming, 300, -150, 150]
+    
+    - name:  L_TW_TL_tracked
+      title: MWDC-L Energy Loss vd Drift-time | Tracked
+      y: [smwdc_L.fChargeAdopted, 300, -100, 300]
+      x: [smwdc_L.fDriftTimeAdopted, 300, -150, 150]     
+      
+    - name: L_npv
+      title: MWDC-L FiredPlane 
+      x: [smwdc_L.fNPlaneValid, 6, 1, 7]
+      
+    - name: L_good
+      title: MWDC-L tracked | firedPlane!=0
+      x: [smwdc_L.IsGood(), 2, 0, 2]
+      cut: "smwdc_L.fNPlaneValid != 0"
+      
+    - name: L_DLA
+      title: MWDC-L Adopted Drift Length
+      x: [smwdc_L.fDriftLengthAdopted, 200, 0, 15]  
+      
+    - name: L_DLA_id
+      title: MWDC-L Adopted Drift Length vs WireID
+      x: [smwdc_L.fWireIDAdopted, 55, 0, 55]
+      y: [smwdc_L.fDriftLengthAdopted, 200, 0, 15]  
+    
+    - name: L_ssr
+      title: MWDC-L SSR
+      x: [smwdc_L.fSSR, 100, 0, 0.5]
+    
+    - name: L_sX
+      title: MWDC-L Sigma(X)
+      x: [smwdc_L.GetSigma(0), 100, 0, 1]
+    - name: L_sA
+      title: MWDC-L Sigma(A)
+      x: [smwdc_L.GetSigma(1)*1000, 100, 0, 10]
+    - name: L_sY
+      title: MWDC-L Sigma(Y)
+      x: [smwdc_L.GetSigma(2), 100, 0, 1]
+    - name: L_sB
+      title: MWDC-L Sigma(B)
+      x: [smwdc_L.GetSigma(3)*1000, 100, 0, 30]
+      
+    - name:  L_XA_0it
+      title: MWDC-L A vs X | 0 iteration
+      x: [smwdc_L_noIt.fTrack.fX, 400, -1000, 200]
+      y: [smwdc_L_noIt.fTrack.fA, 400, -1.5, 1]
+    - name:  L_XA_5it
+      title: MWDC-L A vs X | 5 iteration
+      x: [smwdc_L.fTrack.fX, 400, -1000, 200]
+      y: [smwdc_L.fTrack.fA, 400, -1.5, 1]
+
+#===================================================
+  - name: mwdc_R
+    title: mwdc_R_check
+    contents:      
+    - name:  plaV767_t
+      title: PlaV767 Time
+      x: [plaV767.fTiming, 150, -250, -100]
+      cut: "plaV767.fID==0"
+
+    - name:  R_Traw
+      title: MWDC-R Raw Time
+      x: [smwdc_R_cal.fTiming, 500, -500, 0]
+
+    - name:  R_DT
+      title: MWDC-R Drift Time
+      x: [smwdc_R_DT.fTiming, 370, -170, 200]
+      
+    - name:  R_DT_tracked
+      title: MWDC-R Drift Time | Tracked
+      x: [smwdc_R.fDriftTimeAdopted, 370, -170, 200]    
+      
+    - name:  R_DT_id
+      title: MWDC-R Drift Time vs ID
+      x: [smwdc_R_DT.fTiming, 370, -170, 200]
+      y: [smwdc_R_DT.fID, 288, 0 , 288]
+    
+    - name:  R_DL_t
+      title: MWDC-R Drift Length | Tracked
+      x: [TMath::Abs(smwdc_R.fDriftLengthOriginal), 300, 0, 13]
+    
+    - name:  R_DLnew_t
+      title: MWDC-R Drift Length Corrected | Tracked
+      x: [TMath::Abs(smwdc_R.fDriftLengthAdopted), 300, 0, 13]
+    
+    - name:  R_DTDL_tracked
+      title: MWDC-R DT-DL corrected | Tracked
+      x: [smwdc_R.fDriftTimeAdopted, 300, -150, 160]
+      y: [smwdc_R.fDriftLengthAdopted, 300, 0, 13]
+      
+    - name:  R_TW
+      title: MWDC-R Energy Loss
+      x: [smwdc_R_DT.fCharge, 300, -100, 300]
+    
+    - name:  R_TW_tracked
+      title: MWDC-R Energy Loss | Tracked
+      x: [smwdc_R.fChargeAdopted, 300, -100, 300]
+      
+    - name:  R_TW_TL
+      title: MWDC-R Energy Loss vd Drift-time
+      y: [smwdc_R_DT.fCharge, 300, -100, 300]
+      x: [smwdc_R_DT.fTiming, 300, -150, 150]
+    
+    - name:  R_TW_TL_tracked
+      title: MWDC-R Energy Loss vd Drift-time | Tracked
+      y: [smwdc_R.fChargeAdopted, 300, -100, 300]
+      x: [smwdc_R.fDriftTimeAdopted, 300, -150, 150]     
+      
+    - name: R_npv
+      title: MWDC-R FiredPlane 
+      x: [smwdc_R.fNPlaneValid, 6, 1, 7]
+      
+    - name: R_good
+      title: MWDC-R tracked | firedPlane!=0
+      x: [smwdc_R.IsGood(), 2, 0, 2]
+      cut: "smwdc_R.fNPlaneValid != 0"
+      
+    - name: R_DLA
+      title: MWDC-R Adopted Drift Length
+      x: [smwdc_R.fDriftLengthAdopted, 200, 0, 15]  
+      
+    - name: R_DLA_id
+      title: MWDC-R Adopted Drift Length vs WireID
+      x: [smwdc_R.fWireIDAdopted, 55, 0, 55]
+      y: [smwdc_R.fDriftLengthAdopted, 200, 0, 15]  
+    
+    - name: R_ssr
+      title: MWDC-R SSR
+      x: [smwdc_R.fSSR, 100, 0, 0.5]
+    
+    - name: R_sX
+      title: MWDC-R Sigma(X)
+      x: [smwdc_R.GetSigma(0), 100, 0, 1]
+    - name: R_sA
+      title: MWDC-R Sigma(A)
+      x: [smwdc_R.GetSigma(1)*1000, 100, 0, 10]
+    - name: R_sY
+      title: MWDC-R Sigma(Y)
+      x: [smwdc_R.GetSigma(2), 100, 0, 1]
+    - name: R_sB
+      title: MWDC-R Sigma(B)
+      x: [smwdc_R.GetSigma(3)*1000, 100, 0, 20]
+      
+    - name:  R_XA_0it
+      title: MWDC-R A vs X | 0 iteration
+      x: [smwdc_R_noIt.fTrack.fX, 400, -200, 1000]
+      y: [smwdc_R_noIt.fTrack.fA, 400, -0.5, 1.5]
+    - name:  R_XA_5it
+      title: MWDC-R A vs X | 5 iteration
+      x: [smwdc_R.fTrack.fX, 400, -200, 1000]
+      y: [smwdc_R.fTrack.fA, 400, -0.5, 1.5]
+#===================================================
+  - name: mwdc_LR
+    title: mwdc_LR_check
+    contents:      
+    - name:  beamZ_TWTL
+      title: beamZ TW TL gated
+      x: [beamZ.fAverage, 400, -100, 300]
+
+    - name:  beamZ_TL
+      title: beamZ TL gated
+      x: [beamZ_TLgated.fAverage, 400, -100, 300]
+
+    - name:  beamZ_TW
+      title: beamZ TW gated
+      x: [beamZ_TWgated.fAverage, 400, -100, 300]
+      
+

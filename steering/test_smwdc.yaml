@@ -1,22 +1,36 @@
 Processor:
 #  - include: RunsProton.yaml
-  - include: RunsO14.yaml
+#  - include: RunsO14.yaml
+  - include: RunsO22_single.yaml
   
   - include: Mapper_Timer.yaml    
         
 #===========================================================
   - include: coinReg.yaml
-#  - include: plastic_V775.yaml
+  - include: plastic_V775.yaml
   - include: plastic_V767_timeRef.yaml
   - include: plastic_V767.yaml
 #  - include: smwdc_l_TableConvert.yaml 
   - include: smwdc_l_PolyConvert.yaml
   - include: smwdc_l_track.yaml
+  - include: smwdc_l_track_gated.yaml
 #  - include: smwdc_l_cal.yaml #no coinReg gate
+  - include: smwdc_r_PolyConvert.yaml
+  - include: smwdc_r_track.yaml
+  - include: smwdc_r_track_gated.yaml
+     
+  - include: smwdc_geo.yaml    
+  - include: beamZ.yaml
+
+  - name: projection
+    type: art::TTreeProjectionProcessor
+    parameter:
+      Type:  art::TTreeProjection
+      FileName: steering/hist_mwdc.yaml
       
 #==================================================      
   - name: outputtree
     type: art::TOutputTreeProcessor
     parameter:
-      FileName: test.root
+      FileName: test_smwdc.root
 

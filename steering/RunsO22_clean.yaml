@@ -6,20 +6,20 @@ Processor:
       OutputTransparency: 1
       InputFiles:
 #          - /media/sh04HD/RawData/phys220005.ridf # DCX2 off
-#          - /media/sh04HD/RawData/phys220008.ridf
+          - /media/sh04HD/RawData/phys220008.ridf
 #          - /media/sh04HD/RawData/phys220011.ridf
 #          - /media/sh04HD/RawData/phys220019.ridf  # the tof is diff.
-          - /media/sh04HD/RawData/phys220023.ridf   # beam trigger on
-          - /media/sh04HD/RawData/phys220024.ridf
-          - /media/sh04HD/RawData/phys220025.ridf
-          - /media/sh04HD/RawData/phys220026.ridf
-          - /media/sh04HD/RawData/phys220029.ridf
-          - /media/sh04HD/RawData/phys220031.ridf
-          - /media/sh04HD/RawData/phys220037.ridf   #spin-dwon 
-          - /media/sh04HD/RawData/phys220038.ridf
-          - /media/sh04HD/RawData/phys220043.ridf
-          - /media/sh04HD/RawData/phys220044.ridf
-          - /media/sh04HD/RawData/phys220046.ridf         
+#          - /media/sh04HD/RawData/phys220023.ridf   # beam trigger on
+#          - /media/sh04HD/RawData/phys220024.ridf
+#          - /media/sh04HD/RawData/phys220025.ridf
+#          - /media/sh04HD/RawData/phys220026.ridf
+#          - /media/sh04HD/RawData/phys220029.ridf  # only Beam trigger 
+#          - /media/sh04HD/RawData/phys220031.ridf
+#          - /media/sh04HD/RawData/phys220037.ridf   #spin-dwon 
+#          - /media/sh04HD/RawData/phys220038.ridf
+#          - /media/sh04HD/RawData/phys220043.ridf
+#          - /media/sh04HD/RawData/phys220044.ridf
+#          - /media/sh04HD/RawData/phys220046.ridf         
 
 
 #      - name: ParameterDirList 

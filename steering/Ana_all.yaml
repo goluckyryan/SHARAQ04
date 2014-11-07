@@ -1,6 +1,6 @@
 aliases:
 # beware to overwrite !!!
-  - &output test.root
+  - &output 23F_1106.root
  
 #  - &beamprm prm/kinematics/proton.yaml     
 #  - &beamprm prm/kinematics/14O.yaml  
@@ -16,8 +16,11 @@ Processor:
 #  - include: RunsProtonUp.yaml
 #  - include: RunsProtonDown.yaml
   - include: RunsO22.yaml
+#  - include: RunsO22_up.yaml
+#  - include: RunsO22_down.yaml
 #  - include: RunsO22_single.yaml
 #  - include: RunsO22_clean.yaml
+#  - include: RunsO22_nyoki.yaml
 #  - include: RunsO22Optics.yaml
 #  - include: RunsO14_0005.yaml
 #  - include: RunsO14Up.yaml
@@ -39,8 +42,8 @@ Processor:
   - include: plastic_V1190_FH9.yaml
   - include: plastic_tof_US.yaml
 #  - include: ppac_old.yaml
-  - include: dc91.yaml
-  - include: dc91_track.yaml
+#  - include: dc91.yaml
+#  - include: dc91_track.yaml
   - include: plastic_V775.yaml             # include tof_DS
   - include: Gate_PID.yaml
   - include: dcx1x2_timeRef.yaml           # required for dcx1 and dcx2
@@ -79,11 +82,11 @@ Processor:
 #  - include: recoil_multiOffset.yaml
   - include: Gate_PIDdownstream.yaml
 
-  - name: projection
-    type: art::TTreeProjectionProcessor
-    parameter:
-      Type:  art::TTreeProjection
-      FileName: steering/hist.yaml
+#  - name: projection
+#    type: art::TTreeProjectionProcessor
+#    parameter:
+#      Type:  art::TTreeProjection
+#      FileName: steering/hist_ana.yaml
 
 #============== Output     =============================
   - name: outputtree

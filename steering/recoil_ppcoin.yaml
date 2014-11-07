@@ -1,7 +1,7 @@
 aliases:
   - &beamZ      0.
-  - &tofShift_L 0.
-  - &tofShift_R -0.5
+  - &tofShift_L 0.0
+  - &tofShift_R 0.0
 #============== PROCESSORS     =============================
 Processor:      
   - name: tpla_tof
@@ -33,9 +33,9 @@ Processor:
       Geometry:         SMWDC_geometry
       Side:             0           # 0 = left, !0 = right
       BeamZ:            *beamZ
-      UseReactionPointCollection:   0   # s0XY
-      UseIncidentAngleCollection:   0   # s0AB
-      UsePolarizedMagnetCollection: 0
+      UseReactionPointCorrection:   0   # s0XY
+      UseIncidentAngleCorrection:   0   # s0AB
+      UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1   #copied to p2p
         
   - name: Recoil_R
@@ -47,9 +47,9 @@ Processor:
       Geometry:         SMWDC_geometry
       Side:             1
       BeamZ:            *beamZ
-      UseReactionPointCollection:   0
-      UseIncidentAngleCollection:   0
-      UsePolarizedMagnetCollection: 0
+      UseReactionPointCorrection:   0
+      UseIncidentAngleCorrection:   0
+      UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1   #copied to p2p
 
   - name: proc_p2p

@@ -6,7 +6,7 @@
 void simpleAna() {
    gStyle->SetOptStat(0);
    
-   TFile *f0 = new TFile ("25F_0728_smwdcGate.root"); TTree *tree = (TTree*)f0->Get("tree");   
+   TFile *f0 = new TFile ("23F_0922.root"); TTree *tree = (TTree*)f0->Get("tree");   
    
    TString name = "fZ";
 	TCut cut ="";
@@ -48,7 +48,7 @@ void simpleAna() {
 	tree->Draw(name1,cut,"");
 	tree->Draw(name2,cut,"same");
 	tree->Draw(name3,cut,"same");
-	
+	/*
 	TLatex text;
    text.SetNDC();
    text.SetTextColor(kRed);
@@ -59,5 +59,6 @@ void simpleAna() {
    text.DrawText(0.2, 0.7, "TW");
    text.SetTextColor(kBlack);
    text.DrawText(0.2, 0.65, cut.GetTitle());
+    */
 }
 

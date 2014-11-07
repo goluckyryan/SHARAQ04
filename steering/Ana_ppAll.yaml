@@ -1,6 +1,6 @@
 aliases:
 # beware to overwrite !!!
-  - &output  ppAll_0731.root
+  - &output  ppAll_1106_OpenCorr.root
  
 Processor:
 #=============  DATA              ==========================
