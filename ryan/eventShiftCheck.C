@@ -28,7 +28,7 @@ void eventShiftCheck() {
    int flag = 51; //chance of fail test, in case for accidental
    
    const char* savefilename="phys22_es.root";
-   const char* rootfile="23F_es_norm_0002.root";
+   const char* rootfile="23F_1204_eventShift.root";
    Bool_t debugInfo = 0;
    Bool_t plantTree = 0;
    Bool_t plothist  = 1;
@@ -36,7 +36,7 @@ void eventShiftCheck() {
    Bool_t endofdata   = 1; // if 0 , use endEntry, 1 use totnumEntry
    Int_t  firstEntry  = 0;
    Int_t    endEntry  = firstEntry+  800000;
-   Int_t  RunRange[2] = {2,2};
+   Int_t  RunRange[2] = {1,1};
    
    Double_t SMGate[2] = {-125, -100};
    Double_t F3Gate[2] = {-1465, -1458};
@@ -50,7 +50,8 @@ void eventShiftCheck() {
    Double_t tFH9V775;
    Double_t tF3V1190[50];
    Double_t tDiffF3[50], tDiffSM[50];
-   Int_t nHitFH9V1190, nHitF3V1190;
+   Double_t tNyoki[14];
+   Int_t nHitFH9V1190, nHitF3V1190, nHitNyoki;
    Int_t eventID;
    Int_t nCom;
    Int_t count_F3 = 0, count_SM = 0;
@@ -71,7 +72,7 @@ void eventShiftCheck() {
    }
 
    art::TEventHeader *hogeRun;
-   TClonesArray *hogeFH9V1190, *hogeV775, *hogeF3V1190;
+   TClonesArray *hogeFH9V1190, *hogeV775, *hogeF3V1190, *hogeNyoki;
    TFile *f = new TFile(rootfile,"read");
    TTree *tree = (TTree*)f->Get("tree");
    Int_t totnumEntry = tree->GetEntries();
@@ -82,11 +83,13 @@ void eventShiftCheck() {
    tree->SetBranchStatus("plaV1190_FH9",1);
    tree->SetBranchStatus("plaV1190_F3",1);
    tree->SetBranchStatus("plaV775",1);
+   tree->SetBranchStatus("nyoki",1);
 
    tree->SetBranchAddress("eventheader",&hogeRun);
    tree->SetBranchAddress("plaV1190_FH9",&hogeFH9V1190);
    tree->SetBranchAddress("plaV775",&hogeV775);
    tree->SetBranchAddress("plaV1190_F3",&hogeF3V1190);
+   tree->SetBranchAddress("nyoki",&hogeNyoki);  
    
    if (endofdata) endEntry = totnumEntry;
    
@@ -98,7 +101,7 @@ void eventShiftCheck() {
       TH2F* h1 = new TH2F("es","event Shift FH9 V1190 vs V775", 200, -500, -300, 200, -400,-100);
       h1->SetXTitle("V1190");
       h1->SetYTitle("V775");
-      TH1F* h3 = new TH1F("tdiffFH9","FH9 t(V1190)-t(V775)", 200, -140,-90);
+      TH1F* h2 = new TH1F("tdiffFH9","FH9 t(V1190)-t(V775)", 200, -140,-90);
       
       TH2F* h4 = new TH2F("es39",h4_title, 200, -440, -340, 200, 1000,1100);
       h4->SetXTitle("V1190(FH9)");
@@ -107,8 +110,11 @@ void eventShiftCheck() {
       TH1F* h6 = new TH1F("count_SM","count_SM",100, 0, 100);
       TH1F* h7 = new TH1F("count_F3","count_F3",100, 0, 100);
       
-      TCanvas* c1 = new TCanvas("c1", "check", 50, 50, 900, 600);
-      c1->Divide(3,2);  
+      TH2F* ha = new TH2F("es","event Shift Nyoki V1190 ", 200, -500, -300, 200, -400,-100);
+      
+      
+      TCanvas* c1 = new TCanvas("c1", "check", 50, 50, 900, 900);
+      c1->Divide(3,3);  
       c1->SetGridx(1); c1->SetGridy(1);
    }
    
@@ -162,7 +168,7 @@ void eventShiftCheck() {
             if (debugInfo ) printf(" Filled  tFH9V1190:%10.4f  tFH9V775:%10.4f \n",tFH9V1190[p],tFH9V775);
             if (plothist){
                h1->Fill(tFH9V1190[p],tFH9V775);
-               h3->Fill(tFH9V1190[p]-tFH9V775);
+               h2->Fill(tFH9V1190[p]-tFH9V775);
             }
             tDiffSM[p] = tFH9V1190[p]-tFH9V775;
             if(tDiffSM[p]> SMGate[0] && tDiffSM[p] < SMGate[1]) count_SM = count_SM + 1;
@@ -234,9 +240,9 @@ void eventShiftCheck() {
       c1->cd(1); 
       h1->Draw("colz");
       c1->cd(2);
-      h3->Draw();
-      TLine *line1 = new TLine(SMGate[0],0, SMGate[0], h3->GetMaximum());
-      TLine *line2 = new TLine(SMGate[1],0, SMGate[1], h3->GetMaximum());
+      h2->Draw();
+      TLine *line1 = new TLine(SMGate[0],0, SMGate[0], h2->GetMaximum());
+      TLine *line2 = new TLine(SMGate[1],0, SMGate[1], h2->GetMaximum());
       line1->SetLineColor(3);
       line2->SetLineColor(3);
       line1->SetLineWidth(2);

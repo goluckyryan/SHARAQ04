@@ -1,0 +1,880 @@
+alias:
+  pid23F : gate.Test(8) && gate.Test(0)
+  pid22O : gate.Test(9) && gate.Test(1)
+  pid20N : gate.Test(10) && gate.Test(2)
+  pid16C : gate.Test(11) && gate.Test(3)
+  pid13B : gate.Test(12) && gate.Test(4)
+  pid10Be : gate.Test(13) && gate.Test(5)
+  pid8Li : gate.Test(14) && gate.Test(6)
+  pid7Li : gate.Test(15) && gate.Test(7)
+  common : TMath::Abs(tof_D1.fTiming-34)<10
+  Apid23F : coinReg.Test(2) && gate.Test(0)
+  Apid22O : coinReg.Test(2) && gate.Test(1)
+  Apid8Li : coinReg.Test(2) && gate.Test(6)
+  Acommon : coinReg.Test(2)
+  Aux : gate.Test(8)
+  
+  
+#=========================================================
+group:
+  - name: Nyoki_Analysis
+    title: PID downstream
+    contents:
+    - name: pidS0D
+      title: PID S0D beam
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, 0,4512]
+      cut: common && plaV775.fID==4
+    - name: pidS0D_23F
+      title: PID S0D beam (23F)
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, 0,4512]
+      cut: pid23F && plaV775.fID==4
+    - name: pidS0D_22O
+      title: PID S0D beam (22O)
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, 0,4512]
+      cut: pid22O && plaV775.fID==4
+    - name: pidS0D_20N
+      title: PID S0D beam (20N)
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, 0,4512]
+      cut: pid20N && plaV775.fID==4
+    - name: pidS0D_16C
+      title: PID S0D beam (16C)
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, 0,4512]
+      cut: pid16C && plaV775.fID==4
+    - name: pidS0D_13B
+      title: PID S0D beam (13B)
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, 0,4512]
+      cut: pid13B && plaV775.fID==4
+    - name: pidS0D_10B
+      title: PID S0D beam (10B)
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, 0,4512]
+      cut: pid10Be && plaV775.fID==4
+    - name: pidS0D_8Li
+      title: PID S0D beam (8Li)
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, 0,4512]
+      cut: pid8Li && plaV775.fID==4
+    - name: pidS0D_7Li
+      title: PID S0D beam (7Li)
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, 0,4512]
+      cut: pid7Li && plaV775.fID==4     
+#=========================================================
+    - name: pidNall
+      title: PID Nyoki-all beam
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: common
+    - name: pidN00
+      title: PID Nyoki-0 beam
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==0 && common
+    - name: pidN01
+      title: PID Nyoki-1 beam
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==1 && common
+    - name: pidN02
+      title: PID Nyoki-2 beam
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==2 && common
+    - name: pidN03
+      title: PID Nyoki-3 beam
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==3 && common
+    - name: pidN04
+      title: PID Nyoki-4 beam
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==4 && common
+    - name: pidN05
+      title: PID Nyoki-5 beam
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==5 && common
+    - name: pidN06
+      title: PID Nyoki-6 beam
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==6 && common
+    - name: pidN07
+      title: PID Nyoki-7 beam
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==7 && common
+    - name: pidN08
+      title: PID Nyoki-8 beam
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==8 && common
+    - name: pidN09
+      title: PID Nyoki-9 beam
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==9 && common
+    - name: pidN10
+      title: PID Nyoki-10 beam
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==10 && common
+#    - name: pidN11
+#      title: PID Nyoki-11 beam
+#      x: [tof_D1.fTiming, 200, 26, 46]
+#      y: [nyoki.fCharge, 200, 511, 2212  ]
+#      cut: nyoki.fID==11 && common
+#    - name: pidN12
+#      title: PID Nyoki-12 beam
+#      x: [tof_D1.fTiming, 200, 26, 46]
+#      y: [nyoki.fCharge, 200,    511, 2212  ]
+#      cut: nyoki.fID==12 && common
+#    - name: pidN13
+#      title: PID Nyoki-13 beam
+#      x: [tof_D1.fTiming, 200, 26, 46]
+#      y: [nyoki.fCharge, 200,    511, 2212  ]
+#      cut: nyoki.fID==13 && common
+#========================================================= nyoki-5 beam
+    - name: n5beam
+      title: PID Nyoki-5 beam
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==5 && common
+    - name: n5beam23F
+      title: PID Nyoki-5 beam (23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==5 && pid23F
+    - name: n5beam22O
+      title: PID Nyoki-5 beam (22O)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==5 && pid22O
+    - name: n5beam20N
+      title: PID Nyoki-5 beam (20N)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==5 && pid20N
+    - name: n5beam16C
+      title: PID Nyoki-5 beam (16C)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==5 && pid16C
+    - name: n5beam13B
+      title: PID Nyoki-5 beam (13B)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==5 && pid13B
+    - name: n5beam10Be
+      title: PID Nyoki-5 beam (10Be)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==5 && pid10Be
+    - name: n5beam8Li
+      title: PID Nyoki-5 beam (8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==5 && pid8Li   
+    - name: n5beam7Li
+      title: PID Nyoki-5 beam (7Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==5 && pid7Li 
+#========================================================= nyoki-6 beam
+    - name: n6beam
+      title: PID Nyoki-6 beam
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==6 && common
+    - name: n6beam23F
+      title: PID Nyoki-6 beam (23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==6 && pid23F
+    - name: n6beam22O
+      title: PID Nyoki-6 beam (22O)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==6 && pid22O
+    - name: n6beam20N
+      title: PID Nyoki-6 beam (20N)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==6 && pid20N
+    - name: n6beam16C
+      title: PID Nyoki-6 beam (16C)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==6 && pid16C
+    - name: n6beam13B
+      title: PID Nyoki-6 beam (13B)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==6 && pid13B
+    - name: n6beam10Be
+      title: PID Nyoki-6 beam (10Be)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==6 && pid10Be
+    - name: n6beam8Li
+      title: PID Nyoki-6 beam (8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==6 && pid8Li   
+    - name: n6beam7Li
+      title: PID Nyoki-6 beam (7Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==6 && pid7Li 
+#========================================================= nyoki-7 beam
+    - name: n7beam
+      title: PID Nyoki-7 beam
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==7 && common
+    - name: n7beam23F
+      title: PID Nyoki-7 beam (23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==7 && pid23F
+    - name: n7beam22O
+      title: PID Nyoki-7 beam (22O)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==7 && pid22O
+    - name: n7beam20N
+      title: PID Nyoki-7 beam (20N)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==7 && pid20N
+    - name: n7beam16C
+      title: PID Nyoki-7 beam (16C)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==7 && pid16C
+    - name: n7beam13B
+      title: PID Nyoki-7 beam (13B)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==7 && pid13B
+    - name: n7beam10Be
+      title: PID Nyoki-7 beam (10Be)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==7 && pid10Be
+    - name: n7beam8Li
+      title: PID Nyoki-7 beam (8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==7 && pid8Li   
+    - name: n7beam7Li
+      title: PID Nyoki-7 beam (7Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==7 && pid7Li 
+#========================================================= nyoki-8 beam
+    - name: n8beam
+      title: PID Nyoki-8 beam
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==8 && common
+    - name: n8beam23F
+      title: PID Nyoki-8 beam (23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==8 && pid23F
+    - name: n8beam22O
+      title: PID Nyoki-8 beam (22O)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==8 && pid22O
+    - name: n8beam20N
+      title: PID Nyoki-8 beam (20N)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==8 && pid20N
+    - name: n8beam16C
+      title: PID Nyoki-8 beam (16C)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==8 && pid16C
+    - name: n8beam13B
+      title: PID Nyoki-8 beam (13B)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==8 && pid13B
+    - name: n8beam10Be
+      title: PID Nyoki-8 beam (10Be)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==8 && pid10Be
+    - name: n8beam8Li
+      title: PID Nyoki-8 beam (8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==8 && pid8Li   
+    - name: n8beam7Li
+      title: PID Nyoki-8 beam (7Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==8 && pid7Li 
+#========================================================= beam 23F
+    - name: pidNall_beam23F
+      title: PID Nyoki-all beam(23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: pid23F
+    - name: pidNall_beam23F_sod23F
+      title: PID Nyoki-all beam(23F) S0D(23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: pid23F && Aux   
+    - name: pidS0D_23F_Aux
+      title: PID S0D beam S0D(23F)
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, 0,4512]
+      cut: Aux && plaV775.fID==4
+    - name: pidN00_beam23F
+      title: PID Nyoki-0 beam(23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==0 && pid23F
+    - name: pidN01_beam23F
+      title: PID Nyoki-1 beam(23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==1 && pid23F
+    - name: pidN02_beam23F
+      title: PID Nyoki-2 beam(23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==2 && pid23F
+    - name: pidN03_beam23F
+      title: PID Nyoki-3 beam(23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==3 && pid23F
+    - name: pidN04_beam23F
+      title: PID Nyoki-4 beam(23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==4 && pid23F
+    - name: pidN05_beam23F
+      title: PID Nyoki-5 beam(23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==5 && pid23F
+    - name: pidN06_beam23F
+      title: PID Nyoki-6 beam(23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==6 && pid23F
+    - name: pidN07_beam23F
+      title: PID Nyoki-7 beam(23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==7 && pid23F
+    - name: pidN08_beam23F
+      title: PID Nyoki-8 beam(23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==8 && pid23F
+    - name: pidN09_beam23F
+      title: PID Nyoki-9 beam(23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==9 && pid23F
+    - name: pidN10_beam23F
+      title: PID Nyoki-10 beam(23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==10 && pid23F
+#    - name: pidN11_beam23F
+#      title: PID Nyoki-11 beam(23F)
+#      x: [tof_D1.fTiming, 200, 26, 46]
+#      y: [nyoki.fCharge, 200, 511, 2212  ]
+#      cut: nyoki.fID==11 && pid23F
+#    - name: pidN12_beam23F
+#      title: PID Nyoki-12 beam(23F)
+#      x: [tof_D1.fTiming, 200, 26, 46]
+#      y: [nyoki.fCharge, 200,    511, 2212  ]
+#      cut: nyoki.fID==12 && pid23F
+#    - name: pidN13_beam23F
+#      title: PID Nyoki-13 beam(23F)
+#      x: [tof_D1.fTiming, 200, 26, 46]
+#      y: [nyoki.fCharge, 200,    511, 2212  ]
+#      cut: nyoki.fID==13 && pid23F
+#========================================================= beam 22O
+    - name: pidNall_beam22O
+      title: PID Nyoki-all beam(22O)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: pid22O   
+    - name: pidN00_beam22O
+      title: PID Nyoki-0 beam(22O)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==0 && pid22O
+    - name: pidN01_beam22O
+      title: PID Nyoki-1 beam(22O)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==1 && pid22O
+    - name: pidN02_beam22O
+      title: PID Nyoki-2 beam(22O)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==2 && pid22O
+    - name: pidN03_beam22O
+      title: PID Nyoki-3 beam(22O)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==3 && pid22O
+    - name: pidN04_beam22O
+      title: PID Nyoki-4 beam(22O)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==4 && pid22O
+    - name: pidN05_beam22O
+      title: PID Nyoki-5 beam(22O)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==5 && pid22O
+    - name: pidN06_beam22O
+      title: PID Nyoki-6 beam(22O)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==6 && pid22O
+    - name: pidN07_beam22O
+      title: PID Nyoki-7 beam(22O)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==7 && pid22O
+    - name: pidN08_beam22O
+      title: PID Nyoki-8 beam(22O)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==8 && pid22O
+    - name: pidN09_beam22O
+      title: PID Nyoki-9 beam(22O)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==9 && pid22O
+    - name: pidN10_beam22O
+      title: PID Nyoki-10 beam(22O)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==10 && pid22O
+#    - name: pidN11_beam22O
+#      title: PID Nyoki-11 beam(22O)
+#      x: [tof_D1.fTiming, 200, 26, 46]
+#      y: [nyoki.fCharge, 200, 511, 2212  ]
+#      cut: nyoki.fID==11 && pid22O
+#    - name: pidN12_beam22O
+#      title: PID Nyoki-12 beam(22O)
+#      x: [tof_D1.fTiming, 200, 26, 46]
+#      y: [nyoki.fCharge, 200,    511, 2212  ]
+#      cut: nyoki.fID==12 && pid22O
+#    - name: pidN13_beam22O
+#      title: PID Nyoki-13 beam(22O)
+#      x: [tof_D1.fTiming, 200, 26, 46]
+#      y: [nyoki.fCharge, 200,    511, 2212  ]
+#      cut: nyoki.fID==13 && pid22O
+#=========================================================
+    - name: pidNall_beam8Li
+      title: PID Nyoki-all beam(8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: pid8Li
+    - name: pidN00_beam8Li
+      title: PID Nyoki-0 beam(8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==0 && pid8Li
+    - name: pidN01_beam8Li
+      title: PID Nyoki-1 beam(8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==1 && pid8Li
+    - name: pidN02_beam8Li
+      title: PID Nyoki-2 beam(8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==2 && pid8Li
+    - name: pidN03_beam8Li
+      title: PID Nyoki-3 beam(8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==3 && pid8Li
+    - name: pidN04_beam8Li
+      title: PID Nyoki-4 beam(8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==4 && pid8Li
+    - name: pidN05_beam8Li
+      title: PID Nyoki-5 beam(8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==5 && pid8Li
+    - name: pidN06_beam8Li
+      title: PID Nyoki-6 beam(8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==6 && pid8Li
+    - name: pidN07_beam8Li
+      title: PID Nyoki-7 beam(8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==7 && pid8Li
+    - name: pidN08_beam8Li
+      title: PID Nyoki-8 beam(8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==8 && pid8Li
+    - name: pidN09_beam8Li
+      title: PID Nyoki-9 beam(8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==9 && pid8Li
+    - name: pidN10_beam8Li
+      title: PID Nyoki-10 beam(8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==10 && pid8Li
+#    - name: pidN11_beam8Li
+#      title: PID Nyoki-11 beam(8Li)
+#      x: [tof_D1.fTiming, 200, 26, 46]
+#      y: [nyoki.fCharge, 200, 511, 2212  ]
+#      cut: nyoki.fID==11 && pid8Li
+#    - name: pidN12_beam8Li
+#      title: PID Nyoki-12 beam(8Li)
+#      x: [tof_D1.fTiming, 200, 26, 46]
+#      y: [nyoki.fCharge, 200,    511, 2212  ]
+#      cut: nyoki.fID==12 && pid8Li
+#    - name: pidN13_beam8Li
+#      title: PID Nyoki-13 beam(8Li)
+#      x: [tof_D1.fTiming, 200, 26, 46]
+#      y: [nyoki.fCharge, 200,    511, 2212  ]
+#      cut: nyoki.fID==13 && pid8Li
+#========================================================= ppcoin
+    - name: pidS0D_pp
+      title: PID S0D ppcoin
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, 0,4512]
+      cut: Acommon && plaV775.fID==4
+    - name: pidNall_pp
+      title: PID Nyoki-all ppcoin
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: Acommon
+    - name: pidN00_pp
+      title: PID Nyoki-0 ppcoin
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==0 && Acommon
+    - name: pidN01_pp
+      title: PID Nyoki-1 ppcoin
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==1 && Acommon
+    - name: pidN02_pp
+      title: PID Nyoki-2 ppcoin
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==2 && Acommon
+    - name: pidN03_pp
+      title: PID Nyoki-3 ppcoin
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==3 && Acommon
+    - name: pidN04_pp
+      title: PID Nyoki-4 ppcoin
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==4 && Acommon
+    - name: pidN05_pp
+      title: PID Nyoki-5 ppcoin
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==5 && Acommon
+    - name: pidN06_pp
+      title: PID Nyoki-6 ppcoin
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==6 && Acommon
+    - name: pidN07_pp
+      title: PID Nyoki-7 ppcoin
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==7 && Acommon
+    - name: pidN08_pp
+      title: PID Nyoki-8 ppcoin
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==8 && Acommon
+    - name: pidN09_pp
+      title: PID Nyoki-9 ppcoin
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==9 && Acommon
+    - name: pidN10_pp
+      title: PID Nyoki-10 ppcoin
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==10 && Acommon
+#    - name: pidN11_pp
+#      title: PID Nyoki-11 ppcoin
+#      x: [tof_D1.fTiming, 200, 26, 46]
+#      y: [nyoki.fCharge, 200, 511, 2212  ]
+#      cut: nyoki.fID==11 && Acommon
+#    - name: pidN12_pp
+#      title: PID Nyoki-12 ppcoin
+#      x: [tof_D1.fTiming, 200, 26, 46]
+#      y: [nyoki.fCharge, 200,    511, 2212  ]
+#      cut: nyoki.fID==12 && Acommon
+#    - name: pidN13_pp
+#      title: PID Nyoki-13 ppcoin
+#      x: [tof_D1.fTiming, 200, 26, 46]
+#      y: [nyoki.fCharge, 200,    511, 2212  ]
+#      cut: nyoki.fID==13 && Acommon
+#=========================================================
+    - name: pidS0D_pp23F
+      title: PID S0D ppcoin(23F)
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, 0,4512]
+      cut: Apid23F && plaV775.fID==4
+    - name: pidNall_pp23F
+      title: PID Nyoki-all ppcoin(23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: Apid23F    
+    - name: pidN00_pp23F
+      title: PID Nyoki-0 ppcoin(23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==0 && Apid23F
+    - name: pidN01_pp23F
+      title: PID Nyoki-1 ppcoin(23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==1 && Apid23F
+    - name: pidN02_pp23F
+      title: PID Nyoki-2 ppcoin(23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==2 && Apid23F
+    - name: pidN03_pp23F
+      title: PID Nyoki-3 ppcoin(23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==3 && Apid23F
+    - name: pidN04_pp23F
+      title: PID Nyoki-4 ppcoin(23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==4 && Apid23F
+    - name: pidN05_pp23F
+      title: PID Nyoki-5 ppcoin(23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==5 && Apid23F
+    - name: pidN06_pp23F
+      title: PID Nyoki-6 ppcoin(23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==6 && Apid23F
+    - name: pidN07_pp23F
+      title: PID Nyoki-7 ppcoin(23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==7 && Apid23F
+    - name: pidN08_pp23F
+      title: PID Nyoki-8 ppcoin(23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==8 && Apid23F
+    - name: pidN09_pp23F
+      title: PID Nyoki-9 ppcoin(23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==9 && Apid23F
+    - name: pidN10_pp23F
+      title: PID Nyoki-10 ppcoin(23F)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==10 && Apid23F
+#    - name: pidN11_pp23F
+#      title: PID Nyoki-11 ppcoin(23F)
+#      x: [tof_D1.fTiming, 200, 26, 46]
+#      y: [nyoki.fCharge, 200, 511, 2212  ]
+#      cut: nyoki.fID==11 && Apid23F
+#    - name: pidN12_pp23F
+#      title: PID Nyoki-12 ppcoin(23F)
+#      x: [tof_D1.fTiming, 200, 26, 46]
+#      y: [nyoki.fCharge, 200,    511, 2212  ]
+#      cut: nyoki.fID==12 && Apid23F
+#    - name: pidN13_pp23F
+#      title: PID Nyoki-13 ppcoin(23F)
+#      x: [tof_D1.fTiming, 200, 26, 46]
+#      y: [nyoki.fCharge, 200,    511, 2212  ]
+#      cut: nyoki.fID==13 && Apid23F
+#=========================================================   
+    - name: pidNall_pp22O
+      title: PID Nyoki-all ppcoin(22O)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: Apid22O
+    - name: pidN00_pp22O
+      title: PID Nyoki-0 ppcoin(22O)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==0 && Apid22O
+    - name: pidN01_pp22O
+      title: PID Nyoki-1 ppcoin(22O)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==1 && Apid22O
+    - name: pidN02_pp22O
+      title: PID Nyoki-2 ppcoin(22O)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==2 && Apid22O
+    - name: pidN03_pp22O
+      title: PID Nyoki-3 ppcoin(22O)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==3 && Apid22O
+    - name: pidN04_pp22O
+      title: PID Nyoki-4 ppcoin(22O)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==4 && Apid22O
+    - name: pidN05_pp22O
+      title: PID Nyoki-5 ppcoin(22O)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==5 && Apid22O
+    - name: pidN06_pp22O
+      title: PID Nyoki-6 ppcoin(22O)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==6 && Apid22O
+    - name: pidN07_pp22O
+      title: PID Nyoki-7 ppcoin(22O)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==7 && Apid22O
+    - name: pidN08_pp22O
+      title: PID Nyoki-8 ppcoin(22O)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==8 && Apid22O
+    - name: pidN09_pp22O
+      title: PID Nyoki-9 ppcoin(22O)
+      x: [tof_D1.fTiming, 200, 31, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==9 && Apid22O
+    - name: pidN10_pp22O
+      title: PID Nyoki-10 ppcoin(22O)
+      x: [tof_D1.fTiming, 200, 31, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==10 && Apid22O
+#    - name: pidN11_pp22O
+#      title: PID Nyoki-11 ppcoin(22O)
+#      x: [tof_D1.fTiming, 200, 26, 46]
+#      y: [nyoki.fCharge, 200, 511, 2212  ]
+#      cut: nyoki.fID==11 && Apid22O
+#    - name: pidN12_pp22O
+#      title: PID Nyoki-12 ppcoin(22O)
+#      x: [tof_D1.fTiming, 200, 26, 46]
+#      y: [nyoki.fCharge, 200,    511, 2212  ]
+#      cut: nyoki.fID==12 && Apid22O
+#    - name: pidN13_pp22O
+#      title: PID Nyoki-13 ppcoin(22O)
+#      x: [tof_D1.fTiming, 200, 26, 46]
+#      y: [nyoki.fCharge, 200,    511, 2212  ]
+#      cut: nyoki.fID==13 && Apid22O
+#=========================================================
+    - name: pidNall_pp8Li
+      title: PID Nyoki-all ppcoin(8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: Apid8Li    
+    - name: pidN00_pp8Li
+      title: PID Nyoki-0 ppcoin(8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==0 && Apid8Li
+    - name: pidN01_pp8Li
+      title: PID Nyoki-1 ppcoin(8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==1 && Apid8Li
+    - name: pidN02_pp8Li
+      title: PID Nyoki-2 ppcoin(8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==2 && Apid8Li
+    - name: pidN03_pp8Li
+      title: PID Nyoki-3 ppcoin(8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==3 && Apid8Li
+    - name: pidN04_pp8Li
+      title: PID Nyoki-4 ppcoin(8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==4 && Apid8Li
+    - name: pidN05_pp8Li
+      title: PID Nyoki-5 ppcoin(8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==5 && Apid8Li
+    - name: pidN06_pp8Li
+      title: PID Nyoki-6 ppcoin(8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==6 && Apid8Li
+    - name: pidN07_pp8Li
+      title: PID Nyoki-7 ppcoin(8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==7 && Apid8Li
+    - name: pidN08_pp8Li
+      title: PID Nyoki-8 ppcoin(8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==8 && Apid8Li
+    - name: pidN09_pp8Li
+      title: PID Nyoki-9 ppcoin(8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==9 && Apid8Li
+    - name: pidN10_pp8Li
+      title: PID Nyoki-10 ppcoin(8Li)
+      x: [tof_D1.fTiming, 200, 26, 46]
+      y: [nyoki.fCharge, 200, 511, 2212  ]
+      cut: nyoki.fID==10 && Apid8Li
+#    - name: pidN11_pp8Li
+#      title: PID Nyoki-11 ppcoin(8Li)
+#      x: [tof_D1.fTiming, 200, 26, 46]
+#      y: [nyoki.fCharge, 200, 511, 2212  ]
+#      cut: nyoki.fID==11 && Apid8Li
+#    - name: pidN12_pp8Li
+#      title: PID Nyoki-12 ppcoin(8Li)
+#      x: [tof_D1.fTiming, 200, 26, 46]
+#      y: [nyoki.fCharge, 200,    511, 2212  ]
+#      cut: nyoki.fID==12 && Apid8Li
+#    - name: pidN13_pp8Li
+#      title: PID Nyoki-13 ppcoin(8Li)
+#      x: [tof_D1.fTiming, 200, 26, 46]
+#      y: [nyoki.fCharge, 200,    511, 2212  ]
+#      cut: nyoki.fID==13 && Apid8Li
+

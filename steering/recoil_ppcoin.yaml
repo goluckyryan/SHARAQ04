@@ -1,7 +1,7 @@
 aliases:
   - &beamZ      0.
-  - &tofShift_L 0.0
-  - &tofShift_R 0.0
+  - &tofShift_L 0.4
+  - &tofShift_R 0.4
 #============== PROCESSORS     =============================
 Processor:      
   - name: tpla_tof

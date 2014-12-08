@@ -1,11 +1,11 @@
 #include "constant.h"
 #include "RelCalculator.h"
-#include "TBeamData.h"
+#include "Compress/TBeamData.h"
 
 void S0DplaAna() {
    
    //const char* rootfile="Data/phys22_clean.root";
-   const char* rootfile="Data/phys22_clean.root";
+   const char* rootfile="PrimaryData/phys22_clean.root";
    TBeamData *beam = new TBeamData("23F");
    Bool_t BeamTrigger = 0;
    Bool_t ppcoin      = 0;

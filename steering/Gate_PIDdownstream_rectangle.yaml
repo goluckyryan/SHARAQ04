@@ -1,0 +1,27 @@
+
+Processor:
+  - name: proc_pidgate_S0D
+    type: art::TPIDGateProcessor
+    parameter:
+      TimingArray:        tof_DS
+      TimingDetID:        4
+      ChargeArray:        plaV775
+      ChargeDetID:        4
+      Rectangle:
+        - [s0d_23F, -70.0, 1666, -69.0, 2030] 
+        - [s0d_22O, -67.2, 1550, -66.5, 1900]
+        - [s0d_20N, -66.0, 1393, -65.0, 1796]
+        - [s0d_16C, -68.7, 1180, -67.6, 1550]
+        - [s0d_13B, -69.8,  940, -68.5, 1368]
+        - [s0d_10Be, -71.3, 758, -69.9, 1147]
+        - [s0d_8Li, -69.6,  622, -68.1,  985]
+        - [s0d_7Li, -74.1,  486, -72.1,  972]
+      HistogramOption:     [hPID_S0D,PID S0D; ToF(v775);Charge(S0D), 200, -76, -60, 200,  0, 4000]
+      OutputTransparency:  0        
+#  - name: proc_stop_downstream
+#    type: art::TGateStopProcessor
+#    parameter:
+#      - name: GateName
+#        value: *residualO
+
+#===========================================================

@@ -4,17 +4,17 @@
 
 void pidS0D() {
 
-   const char* rootfile="23F_0820.root";
+   const char* rootfile="23F_1117_nyoki.root";
    TBeamData *beam = new TBeamData("23F");
    
    Bool_t BeamTrigger = 0;
    Bool_t ppcoin      = 0;
    Bool_t PIDUSGate   = 1;
    
-   Bool_t allentry    = 0;
-   Int_t firstEntry   = 19239000;
-   Int_t nEntries     =  3000000;
-   Int_t runRange[2] = {46, 46};
+   Bool_t allentry    = 1;
+   Int_t firstEntry   = 0;
+   Int_t nEntries     = 100000;
+   Int_t runRange[2] = {0, 46};
   
    beam->Print();
 
@@ -35,7 +35,7 @@ void pidS0D() {
    TH1F* hCoinReg = new TH1F("hCoinReg", "Coin Reg", 3, 0, 3);
    hCoinReg->SetXTitle("0 = others, 1 = Beam, 2 = ppcoin");
    
-   TH2F* hPIDDS_S0D = new TH2F("hPIDDS_S0D","PID down stream",300, -130,-125, 300 , 1200, 2500);
+   TH2F* hPIDDS_S0D = new TH2F("hPIDDS_S0D","PID down stream",300, -127,-120, 300 , 1200, 2500);
    hPIDDS_S0D->SetXTitle("tof before offset [ns]");
    hPIDDS_S0D->SetYTitle("Q");
    TH2F* hPIDDS_S0Dppcoin = new TH2F("hPIDDS_S0Dppcoin","PID DS ppcoin",300, -130, -125, 300 ,1200, 2500);

@@ -28,13 +28,16 @@ void pidAll() {
    if (PIDUSGate) histTitle += " PIDUS" + beam->fName;
    
    gStyle->SetOptStat(0);
+
+   TCanvas* cPidAll = new TCanvas("cPidAll", "PID", 2000, 0, 800, 800);
+   cPidAll->Divide(1,1);
    
    //TH2F* hPIDUS = new TH2F("PID_US",histTitle,300, -1500, -1410, 300 , 4900, 6200);
    //hPIDUS->SetXTitle("tof before offset [ns]");
    //hPIDUS->SetYTitle("Q(FH9)");	
-   TH2F* hPIDUS = new TH2F("PID_US",histTitle,400, 2.2, 3.2, 300 , 4800, 6200);
+   TH2F* hPIDUS = new TH2F("PID_US",histTitle,400, 2.2, 3.2, 300 , 0, 11);
    hPIDUS->SetXTitle("A/Q");
-   hPIDUS->SetYTitle("Q [a.u.]");	
+   hPIDUS->SetYTitle("Z");	
    TH2F* hPIDDS_S0D = new TH2F("hPIDDS_S0D","PID down stream",300, -128,-120, 300 , 1200, 3500);
    hPIDDS_S0D->SetXTitle("tof before offset [ns]");
    hPIDDS_S0D->SetYTitle("Q");
@@ -44,9 +47,7 @@ void pidAll() {
    TH2F* hPIDDS_TplaR = new TH2F("hPIDDS_TplaR","PID Tpla-R",100, -60, -20, 300 ,500, 2500);
    hPIDDS_TplaR->SetXTitle("tof before offset [ns]");
    hPIDDS_TplaR->SetYTitle("Q");
-   
-   TCanvas* cPidAll = new TCanvas("cPidAll", "PID", 0, 0, 800, 800);
-   cPidAll->Divide(2,2);
+  
 
 //#####################################################
    TBenchmark clock;
@@ -158,14 +159,17 @@ void pidAll() {
                Double_t beta = L_F3FH9/cVaccum/tof[q];
                Double_t gamma = 1./TMath::Sqrt(1-beta*beta);
                //hPIDUS->Fill(tof[q],QAveFH9[p]);
-               Double_t AQ = cVaccum*beam->fBrho/mu/gamma/beta;
-               //Double_t Zvalue = 0.0073*QAveFH9[p]-33.6;
-               hPIDUS->Fill(AQ,QAveFH9[p]);
+               Double_t AoQ = cVaccum*beam->fBrho/mu/gamma/beta;
+               //Double_t Zvalue = 0.0073*QAveFH9[p]-33.6; 
+               Double_t L = (QAveFH9[p]-4930.);
+               Double_t z = TMath::Sqrt(L/(8.042-L*0.003698))*beta;
+               //hPIDUS->Fill(AQ,QAveFH9[p]);
+               hPIDUS->Fill(AoQ,z);
             }
          }
       }
       if ( PIDUSGate && PIDcheck == 0 ) continue;
-      
+  /*    
       //Get Charge from V775 
       Int_t nHit =hoge_V775->GetEntriesFast();
       for(Int_t p = 0; p < nHit; p++){
@@ -187,7 +191,7 @@ void pidAll() {
       hPIDDS_TplaR->Fill(tof2,QAveV775[1]);
       //if( TMath::Finite(tofS0D) ) 
       hPIDDS_S0D->Fill(tofS0D,QAveV775[4]);
-	
+	*/
 		//printf("PID DS : %d, %f \n", tofS0D, QAveV775[4]);
 //------------Clock      
       clock.Stop("timer");
@@ -214,7 +218,7 @@ void pidAll() {
    
    cPidAll->cd(1);
    hPIDUS->Draw("colz");
-   
+   /*
    TLatex text;
    text.SetNDC();
    text.SetTextColor(1);
@@ -228,6 +232,6 @@ void pidAll() {
    hPIDDS_TplaL->Draw("colz");
    cPidAll->cd(4);
    hPIDDS_TplaR->Draw("colz");
-
+*/
    return ;
 }

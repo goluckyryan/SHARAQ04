@@ -1,4 +1,5 @@
 {
+
   gROOT->Reset();
   gROOT->ProcessLine(".!date");
   gStyle->SetOptStat(0);
@@ -13,27 +14,45 @@
 
 
 //   TFile *f0 = new TFile ("23F_1106_nyoki_runs23_noCali.root"); TTree *tree = (TTree*)f0->Get("tree");
-   TFile *f1 = new TFile ("23F_1106.root"); TTree *tree = (TTree*)f1->Get("tree");
+//   TFile *f1 = new TFile ("23F_1201_nyoki_run23.root"); //TTree *tree = (TTree*)f1->Get("tree");
+
+	   TFile *f1 = new TFile ("23F_1204_noPID.root"); TTree *tree = (TTree*)f1->Get("tree");
+
+//	TFile *f1 = new TFile ("hist_nyoki_Q.root");
 
 //================ update.
 //   TFile *f0 = new TFile ("23F_0912_all_1.root","update"); 
-//   TFile *f1 = new TFile ("RppAll_0714_multiOffset.root","update"); TTree *recoil = (TTree*)f1->Get("recoil");   
 //   f0->Close();
 //========================================================
-
 	//gROOT->ProcessLine("listg tree");
    TBrowser B("test","test", 900,600); 
+/*   Int_t Div[2] = {2,1}; 
+	Int_t size = 400;
+   TCanvas * cScript = new TCanvas("cScript", "cScript", 2000,0 , size*Div[0], size*Div[1]);
+   cScript->Divide(Div[0],Div[1]);
+   cScript->cd(1);
    
+   TCut incA = "TMath::Abs(S0img[0].fTrack.fA*1000)<1";
+   TCut incB = "TMath::Abs(S0img[0].fTrack.fB*1000)<1";
+   //TCut incX = "TMath::Abs(S0img[0].fTrack.fX*1000)<1";
+   //TCut incY = "TMath::Abs(S0img[0].fTrack.fY*1000)<1";
+
+/* 
 	TCut pid23F = "TMath::Abs(tof_DS[0].fTiming-321.2)<3 && TMath::Abs(plaV775[0].fCharge-875)<75";
-	TCut pid22o = "TMath::Abs(tof_DS[0].fTiming-304)<3 && TMath::Abs(plaV775[0].fCharge-800)<100";
+	TCut pid22O = "TMath::Abs(tof_DS[0].fTiming-304)<3 && TMath::Abs(plaV775[0].fCharge-800)<100";
+	TCut pid20N = "TMath::Abs(tof_DS[0].fTiming-295)<3 && TMath::Abs(plaV775[0].fCharge-766)<100";
+	TCut pid16C = "TMath::Abs(tof_DS[0].fTiming-313)<3 && TMath::Abs(plaV775[0].fCharge-695)<50";	
+	TCut pid13B = "TMath::Abs(tof_DS[0].fTiming-319)<1 && TMath::Abs(plaV775[0].fCharge-634)<50";
+	TCut pid10Be = "TMath::Abs(tof_DS[0].fTiming-329)<3 && TMath::Abs(plaV775[0].fCharge-575)<50";
 	TCut pid8Li = "TMath::Abs(tof_DS[0].fTiming-314)<3 && TMath::Abs(plaV775[0].fCharge-530)<50";
+	TCut pid7Li = "TMath::Abs(tof_DS[0].fTiming-344)<3 && TMath::Abs(plaV775[0].fCharge-527)<50";
 
 /*
 	TCut ang = "TMath::Abs((p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()-86)<3";
-//	TCut basic = "gate.Test(4) ";
-//	TCut tofD1 = "TMath::Abs(tof_D1.fTiming+15)<5";
-//	TCut nyoki = "TMath::Abs(nyoki.fID-8)<=1 && nyoki.fCharge>1800";
-//	TCut basic2 = "gate.Test(5) && !gate.Test(4)";
+	TCut basic = "gate.Test(4) && coinReg.Test(2)";
+	TCut tofD1 = "TMath::Abs(tof_D1.fTiming+15)<10";
+	TCut nyoki = "TMath::Abs(nyoki.fID-8)<=1 && nyoki.fCharge>1800";
+	TCut basic2 = "gate.Test(5) && !gate.Test(4)";
 	TCut poltgt = "TMath::Abs(beamZ.fAverage-10)<60";
 	TCut carbon = "TMath::Abs(beamZ.fAverage-10)<120";
 	TCut Sp = "TMath::Abs(p2p.fSp)<60";
@@ -41,15 +60,71 @@
 	//tree->Draw("(p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()>>g1(100,80,90)","","");
 	//tree2->Draw("(p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()>>g2(100,80,90)","","same");
 	
-	
+	/**/
 	
 //================================================ Temp analysis   
+
 /*
-	Int_t Div[2] = {2,1}; 
-	Int_t size = 400;
-   TCanvas * cScript = new TCanvas("cScript", "cScript", 2000,0 , size*Div[0], size*Div[1]);
+	for( Int_t i = 0; i <11; i++){
+	   printf("============== Sp BG - %d \n", i);
+		TString plotStr;
+		plotStr.Form("nyoki.fCharge:p2p.fSp>>hSpBG%d(200, -150, 200, 200,-500,4500)", i);
+		TString nyokiIDGate;
+		nyokiIDGate.Form("nyoki.fID==%d",i);
+		TCut nyokiID = nyokiIDGate;
+		tree->Draw(plotStr, nyokiID + basic2 + poltgt + tofD1, "colz");
+	}
+
+	tree->Draw("nyoki.fCharge:p2p.fSp>>hSpBG(200, -150, 200, 200,-500,4500)", basic2 + poltgt + tofD1, "colz");
+
+	for( Int_t i = 0; i <11; i++){
+	   printf("============== nyoki BG - %d \n", i);
+		TString plotStr;
+		plotStr.Form("nyoki.fCharge:tof_D1.fTiming>>hnQBG%d(200, -25, 0, 200,-500,4500)", i);
+		TString nyokiIDGate;
+		nyokiIDGate.Form("nyoki.fID==%d",i);
+		TCut nyokiID = nyokiIDGate;
+		tree->Draw(plotStr, nyokiID + basic2 + poltgt, "colz");
+	}
+
+	tree->Draw("nyoki.fCharge:tof_D1.fTiming>>hnQBG(200, -25, 0, 200,-500,4500)", basic2 + poltgt, "colz");
+
+	Int_t Div[2] = {6,2}; 
+	Int_t size = 300;
+   TCanvas * cScript = new TCanvas("cScript", "cScript", 0,0 , size*Div[0], size*Div[1]);
    cScript->Divide(Div[0],Div[1]);
-   
+
+	for( Int_t i = 0; i <11; i++){
+	   printf("============== nyoki - %d \n", i);
+		cScript->cd(i/2 +1 + 6*(1-TMath::Power(-1,i))/2);
+		TString plotStr;
+		plotStr.Form("nyoki.fCharge:tof_D1.fTiming>>hnQ%d(200, -25, 0, 200,-500,4500)", i);
+		TString nyokiIDGate;
+		nyokiIDGate.Form("nyoki.fID==%d",i);
+		TCut nyokiID = nyokiIDGate;
+		tree->Draw(plotStr, nyokiID + basic + poltgt, "colz");
+	}
+	
+	cScript->cd(12);
+	tree->Draw("nyoki.fCharge:tof_D1.fTiming>>hnQ(200, -25, 0, 200,-500,4500)", basic + poltgt, "colz");
+
+   TCanvas * cScript2 = new TCanvas("cScript2", "cScript2", 2000,0 , size*Div[0], size*Div[1]);
+   cScript2->Divide(Div[0],Div[1]);
+
+	for( Int_t i = 0; i <11; i++){
+	   printf("============== Sp - %d \n", i);
+		cScript2->cd(i/2 +1 + 6*(1-TMath::Power(-1,i))/2);
+		TString plotStr;
+		plotStr.Form("nyoki.fCharge:p2p.fSp>>hSp%d(200, -150, 200, 200,-500,4500)", i);
+		TString nyokiIDGate;
+		nyokiIDGate.Form("nyoki.fID==%d",i);
+		TCut nyokiID = nyokiIDGate;
+		tree->Draw(plotStr, nyokiID + basic + poltgt + tofD1, "colz");
+	}
+
+
+
+/*   
    cScript->cd(1);
 	tree->Draw("p2p.fRecoilL.Theta()*TMath::RadToDeg():p2p.fRecoilR.Theta()*TMath::RadToDeg()>>g1(100, 20,70, 100, 20, 70)","","colz");
 	

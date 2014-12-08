@@ -3,10 +3,10 @@ Double_t TKA = 258.5062;
 
 void PPFit_Sp(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t OPCM = 1){
 
-   const char* rootfile="ppAll_1105_z1040.root";
+   const char* rootfile="ppAll_1118_OpenCorr.root";
    TFile *f0 = new TFile (rootfile); TTree *tree = (TTree*)f0->Get("tree");
    
-   Double_t OpenAngGateRange[2] = {84, 89};
+   Double_t OpenAngGateRange[2] = {84, 90};
    Bool_t CentralEqSide = 1;
    Bool_t AuxGateSwitch[2] = {1,1}; // beamZ, OpenPhi
    Double_t OpenPhiGate = 7.5;
@@ -108,6 +108,7 @@ void PPFit_Sp(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t OPCM = 1
    TH1F * h1g = new TH1F("h1g",h1gTitle, nBinG, DisplayRangeG[0], DisplayRangeG[1]);
    h1g->SetXTitle("theta1+theta2 [deg]");
    h1g->SetStats(0);
+   h1g->SetMinimum(0);
    TH1F * h2g = new TH1F("h2g","gate2", nBinG, DisplayRangeG[0], DisplayRangeG[1]);
    h2g->SetLineColor(2);
    h2g->SetStats(1);
@@ -160,11 +161,27 @@ void PPFit_Sp(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t OPCM = 1
    tree->Draw("p2p.fSp>>h2",SideGate && thetaGate && !AuxGate2  && AuxGate, "same");
    
    cSp->cd(2);
-   h3 = HistSub(h1, h2, 0, 10);
-   
+   //h3 = HistSub(h1, h2, 0, 10);
+   TH1F* h3= new TH1F(*h1);
+  	h3->Sumw2();
+  	h3->Add(h2,-1);
+  	h3->Draw();
+  	
+  	TF1 * fitSp = new TF1("fitSp", "gaus", -20, 20);
+  	fitSp->SetParameters(200, 0, 3);
+  	h3->Fit("fitSp");
+  	
+  	TString countText;
+   TLatex *text = new TLatex();
+   text->SetNDC();
+   countText.Form("#sigma:%.2f#pm%.2f",fitSp->GetParameter(2), fitSp->GetParError(2));
+   text->DrawLatex(0.6, 0.8, countText);
+   countText.Form("#chi^{2}:%.2f",fitSp->GetChisquare()/fitSp->GetNDF());
+   text->DrawLatex(0.6, 0.75, countText);
+  	
    cSp->cd(3);
    tree->Draw("(p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()>>h1g",CentralGate && thetaGate && AuxGate2  && AuxGate);
-   tree->Draw("(p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()>>h2g",SideGate && thetaGate && !AuxGate2  && AuxGate, "same");
+   tree->Draw("(p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()>>h2g"f,SideGate && thetaGate && !AuxGate2  && AuxGate, "same");
    
    //h3g = HistSub(h1g, h2g, 86,1);
    
@@ -173,6 +190,7 @@ void PPFit_Sp(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t OPCM = 1
    
    Int_t CountSignal = CountTotal - CountBG;
    Double_t ErrorSignal = sqrt((Double_t)CountTotal + (Double_t)CountBG);
+   /*
    TString countText;
    TLatex *text = new TLatex();
    text->SetNDC();
@@ -181,7 +199,7 @@ void PPFit_Sp(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t OPCM = 1
    countText.Form("%5s%5d", "BG:",CountBG);
    text->DrawLatex(0.6, 0.8, countText);
    countText.Form("%5s%5d[%3d]","Sig:", CountSignal, TMath::Nint(ErrorSignal));
-   text->DrawLatex(0.6, 0.75, countText);
+   text->DrawLatex(0.6, 0.75, countText);*/
    
    printf("====== Central:%d, Side:%d => Signal:%d [%5.1f] \n",  CountTotal, CountBG, CountSignal, ErrorSignal);
   
@@ -220,7 +238,17 @@ void PPFit_Sp(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t OPCM = 1
   	h4->Sumw2();
   	h4->Add(h2g,-1);
   	h4->Draw();
-  	h4->Fit("gaus", "", "", 84,88);
+  	
+  	TF1 * fit = new TF1("fit", "gaus", 80, 92);
+  	fit->SetParameters(200, 86.5, 1);
+  	h4->Fit("fit");
+  	
+   countText.Form("#Delta#theta:%.2f#pm%.2f", fit->GetParameter(1), fit->GetParError(1));
+   text->DrawLatex(0.6, 0.85, countText);
+   countText.Form("#sigma:%.2f#pm%.2f",fit->GetParameter(2), fit->GetParError(2));
+   text->DrawLatex(0.6, 0.8, countText);
+   countText.Form("#chi^{2}:%.2f",fit->GetChisquare()/fit->GetNDF());
+   text->DrawLatex(0.6, 0.75, countText);
    
    
 }

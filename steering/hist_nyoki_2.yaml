@@ -1,0 +1,478 @@
+alias:
+  pid23F : gate.Test(0)
+  pid22O : gate.Test(1)
+  pid20N : gate.Test(2)
+  pid16C : gate.Test(3)
+  pid13B : gate.Test(4)
+  pid10Be : gate.Test(5)
+  pid8Li : ggate.Test(6)
+  pid7Li : gate.Test(7)
+  
+  
+#=========================================================
+group:
+  - name: Nyoki_Analysis
+    title: PID downstream
+    contents:
+    - name: run01
+      title: Nyoki PID run01
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==1
+    - name: run02
+      title: Nyoki PID run02
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==2
+    - name: run03
+      title: Nyoki PID run03
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==3
+    - name: run04
+      title: Nyoki PID run04
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==4
+    - name: run05
+      title: Nyoki PID run05
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==5
+    - name: run06
+      title: Nyoki PID run06
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==6
+    - name: run07
+      title: Nyoki PID run07
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==7
+    - name: run08
+      title: Nyoki PID run08
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==8
+    - name: run09
+      title: Nyoki PID run09
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==9    
+    - name: run10
+      title: Nyoki PID run10
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==10
+    - name: run11
+      title: Nyoki PID run11
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==11
+    - name: run12
+      title: Nyoki PID run12
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==12
+    - name: run13
+      title: Nyoki PID run13
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==13
+    - name: run14
+      title: Nyoki PID run14
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==14
+    - name: run15
+      title: Nyoki PID run15
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==15
+    - name: run16
+      title: Nyoki PID run16
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==16
+    - name: run17
+      title: Nyoki PID run17
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==17
+    - name: run18
+      title: Nyoki PID run18
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==18
+    - name: run19
+      title: Nyoki PID run19
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==19    
+    - name: run20
+      title: Nyoki PID run20
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==20
+    - name: run21
+      title: Nyoki PID run21
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==21
+    - name: run22
+      title: Nyoki PID run22
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==22
+    - name: run23
+      title: Nyoki PID run23
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==23
+    - name: run24
+      title: Nyoki PID run24
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==24
+    - name: run25
+      title: Nyoki PID run25
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==25
+    - name: run26
+      title: Nyoki PID run26
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==26
+    - name: run27
+      title: Nyoki PID run27
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==27
+    - name: run28
+      title: Nyoki PID run28
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==28
+    - name: run29
+      title: Nyoki PID run29
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==29    
+    - name: run30
+      title: Nyoki PID run30
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==30
+    - name: run31
+      title: Nyoki PID run31
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==31
+    - name: run32
+      title: Nyoki PID run32
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==32
+    - name: run33
+      title: Nyoki PID run33
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==33
+    - name: run34
+      title: Nyoki PID run34
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==34
+    - name: run35
+      title: Nyoki PID run35
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==35
+    - name: run36
+      title: Nyoki PID run36
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==36
+    - name: run37
+      title: Nyoki PID run37
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==37
+    - name: run38
+      title: Nyoki PID run38
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==38
+    - name: run39
+      title: Nyoki PID run39
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==39    
+    - name: run40
+      title: Nyoki PID run40
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==40
+    - name: run41
+      title: Nyoki PID run41
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==41
+    - name: run42
+      title: Nyoki PID run42
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==42
+    - name: run43
+      title: Nyoki PID run43
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==43
+    - name: run44
+      title: Nyoki PID run44
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==44
+    - name: run45
+      title: Nyoki PID run45
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==45
+    - name: run46
+      title: Nyoki PID run46
+      x: [tof_D1.fTiming, 200, 28, 45]
+      y: [nyoki.fCharge, 200, 500,2024]
+      cut: eventheader0.fRunNumber==46
+      
+#============================================ S0D
+    - name: s0drun01
+      title: S0D PID run01
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==1
+    - name: s0drun02
+      title: S0D PID run02
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==2
+    - name: s0drun03
+      title: S0D PID run03
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==3
+    - name: s0drun04
+      title: S0D PID run04
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==4
+    - name: s0drun05
+      title: S0D PID run05
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==5
+    - name: s0drun06
+      title: S0D PID run06
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==6
+    - name: s0drun07
+      title: S0D PID run07
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==7
+    - name: s0drun08
+      title: S0D PID run08
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==8
+    - name: s0drun09
+      title: S0D PID run09
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==9    
+    - name: s0drun10
+      title: S0D PID run10
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==10
+    - name: s0drun11
+      title: S0D PID run11
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==11
+    - name: s0drun12
+      title: S0D PID run12
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==12
+    - name: s0drun13
+      title: S0D PID run13
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==13
+    - name: s0drun14
+      title: S0D PID run14
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==14
+    - name: s0drun15
+      title: S0D PID run15
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==15
+    - name: s0drun16
+      title: S0D PID run16
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==16
+    - name: s0drun17
+      title: S0D PID run17
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==17
+    - name: s0drun18
+      title: S0D PID run18
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==18
+    - name: s0drun19
+      title: S0D PID run19
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==19    
+    - name: s0drun20
+      title: S0D PID run20
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==20
+    - name: s0drun21
+      title: S0D PID run21
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==21
+    - name: s0drun22
+      title: S0D PID run22
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==22
+    - name: s0drun23
+      title: S0D PID run23
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==23
+    - name: s0drun24
+      title: S0D PID run24
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==24
+    - name: s0drun25
+      title: S0D PID run25
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==25
+    - name: s0drun26
+      title: S0D PID run26
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==26
+    - name: s0drun27
+      title: S0D PID run27
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==27
+    - name: s0drun28
+      title: S0D PID run28
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==28
+    - name: s0drun29
+      title: S0D PID run29
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==29    
+    - name: s0drun30
+      title: S0D PID run30
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==30
+    - name: s0drun31
+      title: S0D PID run31
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==31
+    - name: s0drun32
+      title: S0D PID run32
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==32
+    - name: s0drun33
+      title: S0D PID run33
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==33
+    - name: s0drun34
+      title: S0D PID run34
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==34
+    - name: s0drun35
+      title: S0D PID run35
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==35
+    - name: s0drun36
+      title: S0D PID run36
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==36
+    - name: s0drun37
+      title: S0D PID run37
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==37
+    - name: s0drun38
+      title: S0D PID run38
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==38
+    - name: s0drun39
+      title: S0D PID run39
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==39    
+    - name: s0drun40
+      title: S0D PID run40
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==40
+    - name: s0drun41
+      title: S0D PID run41
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==41
+    - name: s0drun42
+      title: S0D PID run42
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==42
+    - name: s0drun43
+      title: S0D PID run43
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==43
+    - name: s0drun44
+      title: S0D PID run44
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==44
+    - name: s0drun45
+      title: S0D PID run45
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==45
+    - name: s0drun46
+      title: S0D PID run46
+      x: [tof_DS.fTiming, 200, -76, -60]
+      y: [plaV775.fCharge, 200, -10, 4096]
+      cut: plaV775.fID==4 && eventheader0.fRunNumber==46
