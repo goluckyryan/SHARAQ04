@@ -7,21 +7,32 @@ void pidNyoki() {
 //   const char* rootfile="23F_1201_nyoki_run23.root";
    const char* rootfile="23F_1204_nyoki_run2425.root";
    
-   Int_t nyokiID[2] = {8,8};
+   Int_t nyokiID[2] = {0,10};
    Bool_t useS0AB = 0;
-   Int_t useToFQ = 2;
+   Int_t useToFQ = 2; // 0 = z-AoQ, 1 = Q-tof, 2 = z-tof
    Bool_t useSlew = 0;
    
-   Bool_t allentry    = 1;
+   Bool_t allentry    = 0;
    Int_t firstEntry   = 0;
-   Int_t nEntries     = 2000000;
+   Int_t nEntries     = 3000000;
 
 	const Double_t Brho = 6.7288;  
+	
+	Int_t sampleRate = 1;
+	
+	Bool_t ppcoin = 1;
+	Bool_t beam = 0;
+	Bool_t NototherTrig = 0;
+	Bool_t pid23F = 1;
+	Bool_t pid22O = 0;
+	Bool_t pid8Li = 0;
+	
+	Bool_t fitZ = 0;
 
 //########################################################   
 
 	Double_t LS0DNyoki = 6560.;
-	Double_t tofOffSet = 0.;
+	Double_t tofOffSet = 46.4;
 	Double_t b,g,h, Sa,Sk,SQ,St;
 
 	b = 500;
@@ -36,6 +47,11 @@ void pidNyoki() {
    TString histTitle;
    histTitle.Form("PID Nyoki-%d~%d (%s)", nyokiID[0], nyokiID[1], rootfile);
    if( useS0AB) histTitle += " S0AB gate";
+   if( ppcoin) histTitle += " ppcoin";
+   if( beam) histTitle += " beam";
+   if( pid23F) histTitle += " 23F";
+   if( pid22O) histTitle += " 22O";
+   if( pid8Li) histTitle += " 8Li";
    
    gStyle->SetOptStat(0);
 
@@ -52,7 +68,7 @@ void pidNyoki() {
 		hPIDNyoki->SetXTitle("ToF [ns]");
 		hPIDNyoki->SetYTitle("Q");	
    }else if( useToFQ == 2){
-		hPIDNyoki= new TH2F("PID_nyoki",histTitle, 100, 28, 45, 100 , 0, 11);
+		hPIDNyoki= new TH2F("PID_nyoki",histTitle, 100, 28, 45, 110 , 0, 11);
 		hPIDNyoki->SetXTitle("ToF [ns]");
 		hPIDNyoki->SetYTitle("Z");	
    }
@@ -99,15 +115,21 @@ void pidNyoki() {
                  , firstEntry
                  , nEntries
                  , nEntries*100./totnumEntry);
+                 
+  Int_t count = 0;
    
 //#############################################################   
-   for( Int_t eventID = firstEntry; eventID < TMath::Min(firstEntry+nEntries, totnumEntry); eventID++){
+   for( Int_t eventID = firstEntry; eventID < TMath::Min(firstEntry+nEntries, totnumEntry); eventID+=sampleRate){
       pid->GetEntry(eventID); 
       
-      if( hoge_coinReg->Test(2) != 1 ) continue;
-      //if( hoge_coinReg->Test(2) == 1 ) continue;
+      if( ppcoin && !hoge_coinReg->Test(2) ) continue;
+      if( beam && !hoge_coinReg->Test(1) ) continue;
       
-      //if( gate->Test(0) != 1) continue;
+      if( NototherTrig && (hoge_coinReg->Test(0) || hoge_coinReg->Test(3) || hoge_coinReg->Test(4) || hoge_coinReg->Test(5) || hoge_coinReg->Test(6)) ) continue;
+      
+      if( pid23F && gate->Test(0) != 1) continue;
+      if( pid22O && gate->Test(1) != 1) continue;
+      if( pid8Li && gate->Test(6) != 1) continue;
       
       Double_t tof = -50;
       Double_t QQ = -50;
@@ -171,6 +193,7 @@ void pidNyoki() {
 		   if( TMath::Abs(s0a)>10 || TMath::Abs(s0b)>10 ) continue;  
 		}
 		
+		count += 1;
 		
 		if( useToFQ == 1){
 		   //printf("Q:%6.0f, tof:%6.2f \n", QQ, tof);
@@ -212,11 +235,27 @@ void pidNyoki() {
 
    }
    
+   printf(" total count = %d\n", count);
+   
    cPID->cd(1);
    hPIDNyoki->Draw("colz");
    
    cPID->cd(2);
-   hPIDNyoki->ProjectionY()->Draw();
-
+   hPIDNyoki->ProjectionY("test")->Draw();
+   
+   if( fitZ ){
+		TF1 * fit = new TF1("fit", "gaus(0)+gaus(3)+gaus(6)+gaus(9)+gaus(12)+gaus(15)+gaus(18)+gaus(21)", 1.8, 11);
+		Double_t par[24] = {1000, 2, 0.2, 1500, 3, 0.2, 800, 4, 0.2, 500, 5, 0.5, 400, 6, 0.5, 1000, 7, 0.5, 7000, 8, 0.5, 5500, 9, 0.5};
+		fit->SetParameters(par);
+		fit->SetParLimits(1,1.8, 2.2);
+		fit->SetParLimits(4,2.7, 3.3);
+		fit->SetParLimits(7,3.7, 4.3);
+		fit->SetParLimits(10,4.7, 5.3);
+		fit->SetParLimits(13,5.7, 6.3);
+		fit->SetParLimits(16,6.7, 7.3);
+		fit->SetParLimits(19,7.7, 8.5);
+		fit->SetParLimits(22,8.7, 9.5);
+		test->Fit("fit", "R");
+	}
    return ;
 }

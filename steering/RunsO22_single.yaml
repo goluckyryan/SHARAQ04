@@ -27,9 +27,9 @@ Processor:
 #          - /media/sh04HD/RawData/phys220020.ridf
 #          - /media/sh04HD/RawData/phys220021.ridf 
 #          - /media/sh04HD/RawData/phys220022.ridf 
-#          - /media/sh04HD/RawData/phys220023.ridf # beam trigger on #//clean
-          - /media/sh04HD/RawData/phys220024.ridf #//clean
-          - /media/sh04HD/RawData/phys220025.ridf #//clean
+          - /media/sh04HD/RawData/phys220023.ridf # beam trigger on #//clean
+#          - /media/sh04HD/RawData/phys220024.ridf #//clean
+#          - /media/sh04HD/RawData/phys220025.ridf #//clean
 #          - /media/sh04HD/RawData/phys220026.ridf #//clean
 #          - /media/sh04HD/RawData/phys220027.ridf 
 #          - /media/sh04HD/RawData/phys220028.ridf 

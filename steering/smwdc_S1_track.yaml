@@ -1,28 +1,22 @@
-# require : plastic_FH9.yaml
-#           smwdc_S1_XXX.yaml
+# require : smwdc_S1_XXX.yaml
 # output :  smwdc
 
 Processor:
   - name: mwdctrack_smwdc_S1
     type: art::sh04::TSMWDCTrackingProcessor
     parameter:
-      - name: InputCollection
-        value:
-          - smwdc_S1_x1
-          - smwdc_S1_x2
-          - smwdc_S1_u1
-          - smwdc_S1_u2
-          - smwdc_S1_v1
-          - smwdc_S1_v2
-      - name: OutputCollection
-        value: smwdc_S1
-      - name: NIteration
-        value: 0
-      - name: TimingGate
-        value: [2500,3000]
-      - name: ChargeGate
-        value: [20,10000]
-          
+      InputCollection:
+            - smwdc_S1_x1
+            - smwdc_S1_x2
+            - smwdc_S1_u1
+            - smwdc_S1_u2
+            - smwdc_S1_v1
+            - smwdc_S1_v2
+      OutputCollection: smwdc_S1
+      NIteration: 0
+      TimingGate: [-99999,9999]
+      ChargeGate: [-99999,10000]
+      MAXSSR:     10.
 
 #==================================================      
 

@@ -52,5 +52,11 @@ Processor:
       StartTimingDetID:       4           # S0D
       UseMultipleStartTiming: 0
       OutputTransparency:     0
+      
+  - name: nyoki_time_ref
+    type: art::sh04::TNyokiTimingProcessor
+    parameter:
+      InputCollection:        nyoki
+      OutputCollection:       nyoki_t
 
 #===========================================================

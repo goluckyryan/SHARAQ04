@@ -33,5 +33,5 @@
     z:        40.
     nWire:    *uvnwire
     cellSize: *cell
-    angle:    &vangle
+    angle:    *vangle
     center:   22.375

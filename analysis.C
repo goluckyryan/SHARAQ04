@@ -7,7 +7,7 @@
 	//TFile *f1 = new TFile ("23F_1201_nyoki_run23.root"); 
 	TFile *f1 = new TFile ("23F_1204_nyoki_run2425.root"); 
 
-	Int_t nyokiID = 8;
+	Int_t nyokiID = 7;
 
 	Double_t Qgain=1, Qoffset=0;
 
@@ -91,7 +91,7 @@
 		//if( coinReg->Test(1) != 1) continue;
 		//if ( gate->Test(6) != 1) continue; 
 		//if ( gate->Test(8) == 1) continue; 
-		if ( gate->Test(0) != 1) continue; 
+		//if ( gate->Test(0) != 1) continue; 
 		//if ( gate->Test(15) != 1) continue;
 		
 		Double_t QS0D = -10000;

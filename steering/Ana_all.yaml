@@ -1,6 +1,6 @@
 aliases:
 # beware to overwrite !!!
-  - &output 23F_1204_nyoki_run2425.root
+  - &output 23F_1209_nyoki_run23.root
  
 #  - &beamprm prm/kinematics/proton.yaml     
 #  - &beamprm prm/kinematics/14O.yaml  
@@ -15,10 +15,10 @@ Processor:
 #  - include: RunsProtonOptics.yaml
 #  - include: RunsProtonUp.yaml
 #  - include: RunsProtonDown.yaml
-  - include: RunsO22.yaml
+#  - include: RunsO22.yaml
 #  - include: RunsO22_up.yaml
 #  - include: RunsO22_down.yaml
-#  - include: RunsO22_single.yaml
+  - include: RunsO22_single.yaml
 #  - include: RunsO22_clean.yaml
 #  - include: RunsO22_nyoki.yaml
 #  - include: RunsO22Optics.yaml
@@ -56,7 +56,6 @@ Processor:
 #  - include: Gate_S0img.yaml
 #  - include: dcS0D.yaml                    
 #  - include: TTD.yaml                      # reuire plastic_V775 for tof
-  - include: nyoki.yaml                    # reuire plastic_V775 for tof
 #  - include: plastic_V767_timeRef.yaml
 #  - include: plastic_V767.yaml
 #  - include: smwdc_l_PolyConvert.yaml
@@ -65,8 +64,10 @@ Processor:
 #  - include: smwdc_r_PolyConvert.yaml     
 #  - include: smwdc_r_track.yaml
 #  - include: smwdc_r_track_gated.yaml
-#  - include: smwdc_S1_TableConvert.yaml    # require nyoki
-#  - include: smwdc_S1_track.yaml
+  - include: s1_time_ref.yaml              
+  - include: nyoki.yaml                    # reuire plastic_V775 for tof, and s1_time_ref
+  - include: smwdc_S1_TableConvert.yaml    # require nyoki and s1_time_ref
+  - include: smwdc_S1_track.yaml
 
 #  - name: proc_beam
 #    type: art::TParameterLoader

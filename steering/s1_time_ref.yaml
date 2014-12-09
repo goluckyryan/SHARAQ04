@@ -1,0 +1,22 @@
+# nyoki and SMWDC-S1 time reference
+# output : non
+Processor:
+  - name: timeref_s1_1
+    type: art::TTimeReferenceProcessor
+    parameter:
+      RefConfig: [11,21,31,1, 0]
+      SegConfig: [11,21,31,1]
+      
+  - name: timeref_s1_2
+    type: art::TTimeReferenceProcessor
+    parameter:
+      RefConfig: [11,21,31,2,0]
+      SegConfig: [11,21,31,2]
+      
+  - name: timeref_s1_3
+    type: art::TTimeReferenceProcessor
+    parameter:
+      RefConfig: [11,21,31,2,0]
+      SegConfig: [11,21,31,3]
+
+#===========================================================
