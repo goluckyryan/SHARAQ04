@@ -76,7 +76,7 @@ Processor:
       InputCollection:      smwdc_S1_raw
       OutputCollection:     smwdc_S1_cal
       TimingConverterArray: prm_smwdc_S1_ch2ns
-      OutputTransparency:   1
+      OutputTransparency:   0
         
   - name: smwdc_S1_cal_2_DT
     type: art::TTimingSubtractionProcessor
@@ -86,7 +86,7 @@ Processor:
       StartTimingCollection:  nyoki_t
       StartTimingDetID:       0           #ref noyki plastic
       UseMultipleStartTiming: 0
-      OutputTransparency:     1     
+      OutputTransparency:     0     
                 
   - name: mwdc_smwdc_S1
     type: art::TMWDCPlaneProcessor
