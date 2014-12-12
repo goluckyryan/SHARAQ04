@@ -1,6 +1,6 @@
 aliases:
 # beware to overwrite !!!
-  - &output 23F_1209_nyoki_run23.root
+  - &output 23F_1212_nyoki_run23.root
  
 #  - &beamprm prm/kinematics/proton.yaml     
 #  - &beamprm prm/kinematics/14O.yaml  
@@ -68,6 +68,7 @@ Processor:
   - include: nyoki.yaml                    # reuire plastic_V775 for tof, and s1_time_ref
   - include: smwdc_S1_TableConvert.yaml    # require nyoki and s1_time_ref
   - include: smwdc_S1_track.yaml
+  - include: Gate_nyokiQ.yaml
 
 #  - name: proc_beam
 #    type: art::TParameterLoader
@@ -83,7 +84,7 @@ Processor:
 #  - include: recoil_carbon.yaml
 #  - include: recoil_multiOffset.yaml
 #  - include: Gate_PIDdownstream.yaml
-  - include: Gate_PIDdownstream_rectangle.yaml
+#  - include: Gate_PIDdownstream_rectangle.yaml
 
 #  - name: projection
 #    type: art::TTreeProjectionProcessor

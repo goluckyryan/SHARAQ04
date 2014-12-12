@@ -66,7 +66,7 @@ Processor:
     parameter:
       CatID:              13
       TimingTypeID:       0
-      TrailingComesFirst: 1       # 1 = positive voltage
+      TrailingComesFirst: 0       # 1 = positive voltage
       OutputCollection:   smwdc_S1_raw
       OutputTransparency: 1
         
@@ -76,7 +76,7 @@ Processor:
       InputCollection:      smwdc_S1_raw
       OutputCollection:     smwdc_S1_cal
       TimingConverterArray: prm_smwdc_S1_ch2ns
-      OutputTransparency:   0
+      OutputTransparency:   1
         
   - name: smwdc_S1_cal_2_DT
     type: art::TTimingSubtractionProcessor
@@ -86,7 +86,7 @@ Processor:
       StartTimingCollection:  nyoki_t
       StartTimingDetID:       0           #ref noyki plastic
       UseMultipleStartTiming: 0
-      OutputTransparency:     0     
+      OutputTransparency:     1     
                 
   - name: mwdc_smwdc_S1
     type: art::TMWDCPlaneProcessor
@@ -100,6 +100,6 @@ Processor:
           - smwdc_S1_u2_dtdx
           - smwdc_S1_v1_dtdx
           - smwdc_S1_v2_dtdx 
-      OutputTransparency: 0
+      OutputTransparency: 1
           
 #==================================================      

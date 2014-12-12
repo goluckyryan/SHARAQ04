@@ -1,0 +1,9 @@
+Processor:
+
+  - name: nyoki_charge_gate
+    type: art::sh04::TNyokiGateProcessor
+    parameter:
+      InputCollection:        nyoki
+      ChargeGate:             [1000, 99999]
+      
+#===========================================================

@@ -2,25 +2,26 @@ Processor:
 #  - include: RunsO14.yaml
 #  - include: RunsO22.yaml
 #  - include: RunsO22_single.yaml
-  - include: RunsO22_clean.yaml
+  - include: RunsO22_single.yaml
   
 #============= Mapper and Timer ============================
   - include: Mapper_Timer.yaml    
 #============== PROCESSORS     =============================
-  - include: coinReg.yaml
+#  - include: coinReg.yaml
   - include: Gate_Initialtor.yaml
-  - include: plastic_V1190_prm.yaml
-  - include: plastic_V1190_F3.yaml         # no branch output
-  - include: plastic_V1190_FH9.yaml
-  - include: plastic_tof_US.yaml
+#  - include: plastic_V1190_prm.yaml
+#  - include: plastic_V1190_F3.yaml         # no branch output
+#  - include: plastic_V1190_FH9.yaml
+#  - include: plastic_tof_US.yaml
   - include: plastic_V775.yaml
 #  - include: plastic_V767_timeRef.yaml
 #  - include: plastic_V767.yaml
-  - include: Gate_PID.yaml
+#  - include: Gate_PID.yaml
+  - include: s1_time_ref.yaml
   - include: nyoki.yaml                    # reuire plastic_V775 for tof
   - include: smwdc_S1_TableConvert.yaml    # require nyoki
 #  - include: smwdc_S1_track.yaml
-#  - include: smwdc_S1_cal.yaml #no coinReg gate
+  - include: smwdc_S1_cal.yaml #no coinReg gate
       
 #==================================================      
   - name: outputtree

@@ -3,80 +3,54 @@
 # only run for frist time to geneterate DT2DL table
 # change the TimingGate and ChargeGate
 
-# require : coinReg.yaml
-
 Processor:
   - name: mwdccalib_smwdc_S1_x1
     type: art::TMWDCCalibrationProcessor
     parameter:
-      - name: InputCollection
-        value: smwdc_S1_x1
-      - name: TimingGate
-        value: [2200,3100]
-      - name: ChargeGate
-        value: [0,3000]
-      - name: OutputFileName
-        value: prm/mwdc/smwdc_S1/dtdx_x1.dat
+      InputCollection:   smwdc_S1_x1
+      TimingGate:        [-200,400]
+      ChargeGate:        [0,3000]
+      OutputFileName:    prm/mwdc/smwdc_S1/dtdx_x1.dat
 
   - name: mwdccalib_smwdc_S1_x2
     type: art::TMWDCCalibrationProcessor
     parameter:
-      - name: InputCollection
-        value: smwdc_S1_x2
-      - name: TimingGate
-        value: [2200,3100]
-      - name: ChargeGate
-        value: [0,3000]
-      - name: OutputFileName
-        value: prm/mwdc/smwdc_S1/dtdx_x2.dat
+      InputCollection:  smwdc_S1_x2
+      TimingGate:       [-200,400]
+      ChargeGate:       [0,3000]
+      OutputFileName:   prm/mwdc/smwdc_S1/dtdx_x2.dat
 
   - name: mwdccalib_smwdc_S1_u1
     type: art::TMWDCCalibrationProcessor
     parameter:
-      - name: InputCollection
-        value: smwdc_S1_u1
-      - name: TimingGate
-        value: [2200,3100]
-      - name: ChargeGate
-        value: [0,3000]
-      - name: OutputFileName
-        value: prm/mwdc/smwdc_S1/dtdx_u1.dat
+      InputCollection:  smwdc_S1_u1
+      TimingGate:       [-200,400]
+      ChargeGate:       [0,3000]
+      OutputFileName:   prm/mwdc/smwdc_S1/dtdx_u1.dat
 
   - name: mwdccalib_smwdc_S1_u2
     type: art::TMWDCCalibrationProcessor
     parameter:
-      - name: InputCollection
-        value: smwdc_S1_u2
-      - name: TimingGate
-        value: [2200,3100]
-      - name: ChargeGate
-        value: [0,3000]
-      - name: OutputFileName
-        value: prm/mwdc/smwdc_S1/dtdx_u2.dat
+      InputCollection: smwdc_S1_u2
+      TimingGate:     [-200,400]
+      ChargeGate:     [0,3000]
+      OutputFileName: prm/mwdc/smwdc_S1/dtdx_u2.dat
 
   - name: mwdccalib_smwdc_S1_v1
     type: art::TMWDCCalibrationProcessor
     parameter:
-      - name: InputCollection
-        value: smwdc_S1_v1
-      - name: TimingGate
-        value: [2200,3100]
-      - name: ChargeGate
-        value: [0,3000]
-      - name: OutputFileName
-        value: prm/mwdc/smwdc_S1/dtdx_v1.dat
+      InputCollection: smwdc_S1_v1
+      TimingGate:     [-200,400]
+      ChargeGate:     [0,3000]
+      OutputFileName: prm/mwdc/smwdc_S1/dtdx_v1.dat
 
   - name: mwdccalib_smwdc_S1_v2
     type: art::TMWDCCalibrationProcessor
     parameter:
-      - name: InputCollection
-        value: smwdc_S1_v2
-      - name: TimingGate
-        value: [2200,3100]
-      - name: ChargeGate
-        value: [0,3000]
-      - name: OutputFileName
-        value: prm/mwdc/smwdc_S1/dtdx_v2.dat
+      InputCollection: smwdc_S1_v2
+      TimingGate:     [-200,400]
+      ChargeGate:     [0,3000]
+      OutputFileName: prm/mwdc/smwdc_S1/dtdx_v2.dat
       
 #==================================================      
 
