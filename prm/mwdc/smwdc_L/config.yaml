@@ -1,16 +1,16 @@
-# SMWDC-L : L R L R L R
+# SMWDC-L : R L L R L R
 - x1:
     z:       -40.
     nWire:    &xnwire 56
     cellSize: &cell 20.
     angle:    &xangle 0.
-    center:   47.893
+    center:   48.143
 - x2:
     z:       -24.
     nWire:    *xnwire
     cellSize: *cell
     angle:    *xangle
-    center:   48.143
+    center:   47.893
 - u1:
     z:        -8.
     nWire:    &uvnwire 44
