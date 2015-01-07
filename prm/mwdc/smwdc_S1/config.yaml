@@ -1,21 +1,21 @@
-# cell config = R L L R L R
+# cell config = L R L R L R
 - x1:
     z:        -40.
     nWire:    &xnwire 56
     cellSize: &cell   20.
     angle:    &xangle  0.     #vertical/y-axis = 0
-    center:   28.625
+    center:   28.375
 - x2:
     z:       -24.
     nWire:    *xnwire
     cellSize: *cell
     angle:    *xangle
-    center:   28.375
+    center:   28.625
 - u1:
     z:        -8.
     nWire:    &uvnwire 44
     cellSize: *cell
-    angle:    &uangle 36.8699 # positive = toward x-axis
+    angle:    &uangle -36.8699 # plan angle , positive = toward y-axis
     center:   &u1center 22.375
 - u2:
     z:         8.
@@ -27,7 +27,7 @@
     z:        24.
     nWire:    *uvnwire
     cellSize: *cell
-    angle:    &vangle -36.8699
+    angle:    &vangle 36.8699
     center:   *u1center
 - v2:
     z:        40.

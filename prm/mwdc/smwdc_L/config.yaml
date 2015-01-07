@@ -15,7 +15,7 @@
     z:        -8.
     nWire:    &uvnwire 44
     cellSize: *cell
-    angle:    &uangle 36.8699
+    angle:    &uangle -36.8699
     center:   37.9894
 - u2:
     z:         8.
@@ -27,7 +27,7 @@
     z:        24.
     nWire:    *uvnwire
     cellSize: *cell
-    angle:    &vangle -36.8699
+    angle:    &vangle 36.8699
     center:   37.9894
 - v2:
     z:        40.
