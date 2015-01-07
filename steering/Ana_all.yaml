@@ -1,6 +1,6 @@
 aliases:
 # beware to overwrite !!!
-  - &output 23F_1212_nyoki_run23.root
+  - &output 23F_0106_pid.root
  
 #  - &beamprm prm/kinematics/proton.yaml     
 #  - &beamprm prm/kinematics/14O.yaml  
@@ -15,13 +15,10 @@ Processor:
 #  - include: RunsProtonOptics.yaml
 #  - include: RunsProtonUp.yaml
 #  - include: RunsProtonDown.yaml
-#  - include: RunsO22.yaml
-#  - include: RunsO22_up.yaml
-#  - include: RunsO22_down.yaml
-  - include: RunsO22_single.yaml
+  - include: RunsO22.yaml
+#  - include: RunsO22_single.yaml
 #  - include: RunsO22_clean.yaml
-#  - include: RunsO22_nyoki.yaml
-#  - include: RunsO22Optics.yaml
+#  - include: RunsO22_optics.yaml
 #  - include: RunsO14_0005.yaml
 #  - include: RunsO14Up.yaml
 #  - include: RunsO14Down.yaml
@@ -46,53 +43,55 @@ Processor:
 #  - include: dc91_track.yaml
   - include: plastic_V775.yaml             # include tof_DS
   - include: Gate_PID.yaml
-#  - include: Gate_PID_14O.yaml
-#  - include: dcx1x2_timeRef.yaml           # required for dcx1 and dcx2
-#  - include: dcx1.yaml
+  - include: Gate_PID_stop.yaml            #stop for 23F
+  - include: dcx1x2_timeRef.yaml           # required for dcx1 and dcx2
+  - include: dcx1.yaml
 #  - include: dcx1_track.yaml
-#  - include: dcx2.yaml
+  - include: dcx2.yaml
 #  - include: dcx2_track.yaml
-#  - include: S0img.yaml
-#  - include: Gate_S0img.yaml
+  - include: S0img.yaml
+  - include: Gate_S0img.yaml
+#  - include: Gate_S0img_stop.yaml
 #  - include: dcS0D.yaml                    
 #  - include: TTD.yaml                      # reuire plastic_V775 for tof
-#  - include: plastic_V767_timeRef.yaml
-#  - include: plastic_V767.yaml
-#  - include: smwdc_l_PolyConvert.yaml
-#  - include: smwdc_l_track.yaml  
+  - include: plastic_V767_timeRef.yaml
+  - include: plastic_V767.yaml
+  - include: smwdc_l_PolyConvert.yaml
+  - include: smwdc_l_track.yaml  
 #  - include: smwdc_l_track_gated.yaml
-#  - include: smwdc_r_PolyConvert.yaml     
-#  - include: smwdc_r_track.yaml
+  - include: smwdc_r_PolyConvert.yaml     
+  - include: smwdc_r_track.yaml
 #  - include: smwdc_r_track_gated.yaml
   - include: s1_time_ref.yaml              
   - include: nyoki.yaml                    # reuire plastic_V775 for tof, and s1_time_ref
   - include: smwdc_S1_TableConvert.yaml    # require nyoki and s1_time_ref
   - include: smwdc_S1_track.yaml
+#  - include: smwdc_S1_cal.yaml
   - include: Gate_nyokiQ.yaml
 
-#  - name: proc_beam
-#    type: art::TParameterLoader
-#    parameter:
-#      Name:     beam
-#      Type:     art::sh04::TBeamParameter
-#      FileName: *beamprm
+  - name: proc_beam
+    type: art::TParameterLoader
+    parameter:
+      Name:     beam
+      Type:     art::sh04::TBeamParameter
+      FileName: *beamprm
 
-#  - include: smwdc_geo.yaml
-#  - include: beamZ.yaml
-#  - include: vertex.yaml
-#  - include: recoil.yaml                   # set beamZ, angle correction
+  - include: PID_upstream.yaml
+  - include: smwdc_geo.yaml
+  - include: beamZ.yaml
+  - include: vertex.yaml
+  - include: recoil.yaml                   # set beamZ, angle correction
 #  - include: recoil_carbon.yaml
 #  - include: recoil_multiOffset.yaml
 #  - include: Gate_PIDdownstream.yaml
-#  - include: Gate_PIDdownstream_rectangle.yaml
+  - include: Gate_PIDdownstream_rectangle.yaml
 
-#  - name: projection
-#    type: art::TTreeProjectionProcessor
-#    parameter:
-#      Type:  art::TTreeProjection
-#      FileName: steering/hist_ana.yaml
-#      FileName: steering/hist_nyoki.yaml
-#      FileName: steering/hist_nyoki_2.yaml
+  - name: projection
+    type: art::TTreeProjectionProcessor
+    parameter:
+      Type:  art::TTreeProjection
+      FileName: steering/hist.yaml
+#      FileName: steering/hist_dsPID_2.yaml
 
 #============== Output     =============================
   - name: outputtree

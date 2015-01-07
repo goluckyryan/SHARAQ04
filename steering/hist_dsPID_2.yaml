@@ -1,0 +1,272 @@
+group:
+  - name: ds_PID
+    title: down stream PID
+    contents:
+    
+    - name: PIDupstream
+      title: PID updtream 
+      x: [tof_US.fTiming, 500, -1490, -1420]
+      y: [plaV1190_FH9.fCharge, 500, 5000, 6200]
+
+    - name: PIDupstream_2
+      title: PID upstream | PID(23F)
+      x: [pid_us.fAOQ, 500, 2, 3.5]
+      y: [pid_us.fZ, 500, 1, 12]
+      
+    - name: PID_downstream
+      title: PID Downstream | PID(23F)
+      x: [pid_ds.fAOQ, 500, 2, 3.5]
+      y: [pid_ds.fZ, 500, 1, 12]
+
+#======================== S0img XY
+    - name: s0img_XY_23F
+      title: S0img XY | PID(23F) 
+      x: [S0img.fTrack.fX, 300, -50, 50]
+      y: [S0img.fTrack.fY, 300, -50, 50]
+      cut: gate.Test(0)
+      
+    - name: s0img_XY_22O
+      title: S0img XY | PID(22O) 
+      x: [S0img.fTrack.fX, 300, -50, 50]
+      y: [S0img.fTrack.fY, 300, -50, 50]
+      cut: gate.Test(1)
+      
+    - name: s0img_XY_20N
+      title: S0img XY | PID(20N) 
+      x: [S0img.fTrack.fX, 100, -50, 50]
+      y: [S0img.fTrack.fY, 100, -50, 50]
+      cut: gate.Test(2)
+      
+    - name: s0img_XY_19N
+      title: S0img XY | PID(19N) 
+      x: [S0img.fTrack.fX, 100, -50, 50]
+      y: [S0img.fTrack.fY, 100, -50, 50]
+      cut: gate.Test(3)
+      
+    - name: s0img_XY_16C
+      title: S0img XY | PID(16C) 
+      x: [S0img.fTrack.fX, 100, -50, 50]
+      y: [S0img.fTrack.fY, 100, -50, 50]
+      cut: gate.Test(4)
+      
+    - name: s0img_XY_13B
+      title: S0img XY | PID(13B) 
+      x: [S0img.fTrack.fX, 100, -50, 50]
+      y: [S0img.fTrack.fY, 100, -50, 50]
+      cut: gate.Test(5)
+      
+    - name: s0img_XY_10Be
+      title: S0img XY | PID(10B) 
+      x: [S0img.fTrack.fX, 100, -50, 50]
+      y: [S0img.fTrack.fY, 100, -50, 50]
+      cut: gate.Test(6)
+      
+    - name: s0img_XY_8Li
+      title: S0img XY | PID(8Li) 
+      x: [S0img.fTrack.fX, 100, -50, 50]
+      y: [S0img.fTrack.fY, 100, -50, 50]
+      cut: gate.Test(7)
+      
+    - name: s0img_XY_7Li
+      title: S0img XY | PID(7Li) 
+      x: [S0img.fTrack.fX, 100, -50, 50]
+      y: [S0img.fTrack.fY, 100, -50, 50]
+      cut: gate.Test(8)
+
+#======================== S0img AB
+    - name: s0img_AB_23F
+      title: S0img AB | PID(23F) 
+      x: [S0img.fTrack.fA*1000, 500, -50, 50]
+      y: [S0img.fTrack.fB*1000, 500, -50, 50]
+      cut: gate.Test(0)
+      
+    - name: s0img_AB_22O
+      title: S0img AB | PID(22O) 
+      x: [S0img.fTrack.fA*1000, 500, -50, 50]
+      y: [S0img.fTrack.fB*1000, 500, -50, 50]
+      cut: gate.Test(1)
+      
+    - name: s0img_AB_20N
+      title: S0img AB | PID(20N) 
+      x: [S0img.fTrack.fA*1000, 200, -50, 50]
+      y: [S0img.fTrack.fB*1000, 200, -50, 50]
+      cut: gate.Test(2)
+      
+    - name: s0img_AB_19N
+      title: S0img AB | PID(19N) 
+      x: [S0img.fTrack.fA*1000, 100, -50, 50]
+      y: [S0img.fTrack.fB*1000, 100, -50, 50]
+      cut: gate.Test(3)
+      
+    - name: s0img_AB_16C
+      title: S0img AB | PID(16C) 
+      x: [S0img.fTrack.fA*1000, 100, -50, 50]
+      y: [S0img.fTrack.fB*1000, 100, -50, 50]
+      cut: gate.Test(4)
+      
+    - name: s0img_AB_13B
+      title: S0img AB | PID(13B) 
+      x: [S0img.fTrack.fA*1000, 100, -50, 50]
+      y: [S0img.fTrack.fB*1000, 100, -50, 50]
+      cut: gate.Test(5)
+      
+    - name: s0img_AB_10Be
+      title: S0img AB | PID(10B) 
+      x: [S0img.fTrack.fA*1000, 100, -50, 50]
+      y: [S0img.fTrack.fB*1000, 100, -50, 50]
+      cut: gate.Test(6)
+      
+    - name: s0img_AB_8Li
+      title: S0img AB | PID(8Li) 
+      x: [S0img.fTrack.fA*1000, 100, -50, 50]
+      y: [S0img.fTrack.fB*1000, 100, -50, 50]
+      cut: gate.Test(7)
+      
+    - name: s0img_AB_7Li
+      title: S0img AB | PID(7Li) 
+      x: [S0img.fTrack.fA*1000, 100, -50, 50]
+      y: [S0img.fTrack.fB*1000, 100, -50, 50]
+      cut: gate.Test(8)
+      
+#====================================== PID S0D
+    - name: S0D_pid
+      title: S0D PID
+      x: [tof_DS.fTiming, 200, -73, -63]
+      y: [plaV775.fCharge, 200, 0, 2200]
+      cut: plaV775.fID == 4
+      
+    - name: Q_FH9_S0D
+      title: Q(FH9,v1190) vs Q(S0D,v775)
+      x: ["plaV1190_FH9[0].fCharge", 200, 4800, 6200]
+      y: [plaV775.fCharge, 200, 0, 2200]
+      cut: plaV775.fID == 4 && -1490<tof_US[0].fTiming && tof_US[0].fTiming < -1400 
+   
+#======================================= nyoki PID
+    - name: nyoki_PID
+      title: Nyoki PID
+      x: [tof_D1.fTiming, 200, 30, 40]
+      y: [nyoki.fCharge, 200, 500, 2200]
+    
+      
+#======================================= SMWDC-S1
+    #------------------ Track result  
+    - name: S1_npv
+      title: MWDC-S1 FiredPlane
+      x: [smwdc_S1.fNPlaneValid, 6, 1, 7]
+      
+    - name: S1_good
+      title: MWDC-S1 tracked | firedPlane!=0
+      x: [smwdc_S1.IsGood(), 2, 0, 2]
+      cut: "smwdc_S1.fNPlaneValid != 0"
+    
+    - name: S1_ssr
+      title: MWDC-S1 SSR
+      x: [smwdc_S1.fSSR, 100, 0, 0.5]
+    
+    #------------------ Track Ray
+    - name:  S1_XA
+      title: MWDC-S1 A vs X
+      x: [smwdc_S1.fTrack.fX, 400, -200, 600]
+      y: [smwdc_S1.fTrack.fA, 400, -3, 3]
+
+    - name:  S1_XY
+      title: MWDC-S1 Y vs X
+      x: [smwdc_S1.fTrack.fX, 400, -200, 600]
+      y: [smwdc_S1.fTrack.fY, 400, -200, 200]
+
+    - name:  S1_YB
+      title: MWDC-S1 B vs Y
+      x: [smwdc_S1.fTrack.fY, 400, -200, 200]
+      y: [smwdc_S1.fTrack.fB, 400, -3, 3]
+
+    - name:  S1_AB
+      title: MWDC-S1 A vs B
+      x: [smwdc_S1.fTrack.fA, 400, -3, 3]
+      y: [smwdc_S1.fTrack.fB, 400, -3, 3]
+      
+    #--------------- extra
+    - name: s1x_nyokiQ
+      title: Q(nyoki) vs s1x
+      x: ["smwdc_S1[0].fTrack.fX", 400, -200, 600]
+      y: [nyoki.fCharge, 300, 500, 2200]
+      
+#======================================= <optics matrix element>
+    #------------- (s1x|s0x)
+    - name: s1x_s0x
+      title: (s1x|s0x)
+      x: [S0img.fTrack.fX, 300, -50, 50]
+      y: [smwdc_S1.fTrack.fX, 400, -200, 600]
+      
+    - name: s1x_s0x_23F
+      title: (s1x|s0x) | PID(23F)
+      x: [S0img.fTrack.fX, 300, -50, 50]
+      y: [smwdc_S1.fTrack.fX, 400, -200, 600]
+      cut: gate.Test(0)
+      
+    - name: s1x_s0x_22O
+      title: (s1x|s0x) | PID(22O)
+      x: [S0img.fTrack.fX, 300, -50, 50]
+      y: [smwdc_S1.fTrack.fX, 400, -200, 600]
+      cut: gate.Test(1)
+    
+    #------------- (s1x|s0a)
+    - name: s1x_s0a
+      title: (s1x|s0a)
+      x: [S0img.fTrack.fA*1000, 300, -50, 50]
+      y: [smwdc_S1.fTrack.fX, 400, -200, 600]
+      
+    - name: s1x_s0a_23F
+      title: (s1x|s0a) | PID(23F)
+      x: [S0img.fTrack.fA*1000, 300, -50, 50]
+      y: [smwdc_S1.fTrack.fX, 400, -200, 600]
+      cut: gate.Test(0)
+      
+    - name: s1x_s0a_22O
+      title: (s1x|s0a) | PID(22O)
+      x: [S0img.fTrack.fA*1000, 300, -50, 50]
+      y: [smwdc_S1.fTrack.fX, 400, -200, 600]
+      cut: gate.Test(1)
+      
+    #------------- (s1x|tof(FH9-S0D))
+    - name: s1x_tof
+      title: (s1x|tof_DS)
+      x: [tof_DS.fTiming, 300, -72, -62]
+      y: ["smwdc_S1[0].fTrack.fX", 400, -200, 600]
+      cut: plaV775.fID==4
+      
+    - name: s1x_tof_23F
+      title: (s1x|tof_DS) | PID(23F)
+      x: [tof_DS.fTiming, 300, -72, -62]
+      y: ["smwdc_S1[0].fTrack.fX", 400, -200, 600]
+      cut: plaV775.fID==4 && gate.Test(0)
+      
+    - name: s1x_tof_22O
+      title: (s1x|tof_DS) | PID(22O)
+      x: [tof_DS.fTiming, 300, -72, -62]
+      y: ["smwdc_S1[0].fTrack.fX", 400, -200, 600]
+      cut: plaV775.fID==4 && gate.Test(1)
+      
+#========================================== extra
+    - name: s1x_nyokiQ_ex
+      title: Q(nyoki) vs s1x | tgt
+      x: ["smwdc_S1[0].fTrack.fX", 400, -200, 600]
+      y: [nyoki.fCharge, 300, 500, 2200]
+      cut: -7 < S0img[0].fTrack.fX && S0img[0].fTrack.fX < 7
+
+    - name: s1x_tof_ex
+      title: (s1x|tof_DS) | tgt
+      x: [tof_DS.fTiming, 300, -72, -62]
+      y: ["smwdc_S1[0].fTrack.fX", 400, -200, 600]
+      cut: plaV775.fID==4 && -7 < S0img[0].fTrack.fX && S0img[0].fTrack.fX < 7
+      
+    - name: nyoki_PID_ex
+      title: Nyoki PID | tgt
+      x: [tof_D1.fTiming, 200, 30, 40]
+      y: [nyoki.fCharge, 200, 500, 2200]
+      cut: -7 < S0img[0].fTrack.fX && S0img[0].fTrack.fX < 7
+      
+    - name: nyoki_PID_ex2
+      title: Nyoki PID | s0img.IsGood
+      x: [tof_D1.fTiming, 200, 30, 40]
+      y: [nyoki.fCharge, 200, 500, 2200]
+      cut: S0img[0].IsGood()

@@ -22,7 +22,7 @@ Processor:
     parameter:
       CatID:              48
       TimingTypeID:       0       #colnumber of map file[0=first]
-      TrailingComesFirst: 0       # 0 negative voltage input
+      TrailingComesFirst: 0      # 0 negative voltage input
       ChargeType:         1       # 1 seems to be OK, but it is V1190.
       ChargeTypeID:       1
       OutputCollection:   nyoki_raw
@@ -36,7 +36,13 @@ Processor:
       TimingConverterArray: prm_nyoki_ch2ns
       ChargeConverterArray: prm_nyoki_ch2q
       OutputTransparency:   0
-
+      
+  - name: nyoki_time_ref
+    type: art::sh04::TNyokiTimingProcessor
+    parameter:
+      InputCollection:        nyoki
+      OutputCollection:       nyoki_t
+      
   - name: tof_S0D_to_D1
     type: art::TTimingSubtractionProcessor
     parameter:
@@ -47,10 +53,6 @@ Processor:
       UseMultipleStartTiming: 0
       OutputTransparency:     0
 
-  - name: nyoki_time_ref
-    type: art::sh04::TNyokiTimingProcessor
-    parameter:
-      InputCollection:        nyoki
-      OutputCollection:       nyoki_t
+
 
 #===========================================================

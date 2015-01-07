@@ -7,10 +7,7 @@ Processor:
         - [target_r07_x0.4_y1.8, 0.4, 1.8,  7.]
         - [target_r10_x0.4_y1.8, 0.4, 1.8, 10.]
         - [target_r14_x0.4_y1.8, 0.4, 1.8, 14.]
+        - [target_r05_x0.4_y1.8, 0.4, 1.8,  5.]
       HistogramOption: [hS0XY,hS0XY;X (mm);Y (mm),500,-25,25,500,-25,25]
-        
-#  - name: proc_stop_crystal
-#    type: art::TGateStopProcessor
-#    parameter:
-#      GateName: crystal
+       
 #===========================================================

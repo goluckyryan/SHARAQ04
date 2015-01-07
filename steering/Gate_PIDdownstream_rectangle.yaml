@@ -17,7 +17,8 @@ Processor:
         - [s0d_8Li, -69.6,  622, -68.1,  985]
         - [s0d_7Li, -74.1,  486, -72.1,  972]
       HistogramOption:     [hPID_S0D,PID S0D; ToF(v775);Charge(S0D), 200, -76, -60, 200,  0, 4000]
-      OutputTransparency:  0        
+      OutputTransparency:  0
+              
 #  - name: proc_stop_downstream
 #    type: art::TGateStopProcessor
 #    parameter:

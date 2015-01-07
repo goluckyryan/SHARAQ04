@@ -1,0 +1,53 @@
+group:
+  - name: Plastic
+    title: Plastic
+    contents:      
+#============================ 
+    - name: plaV775_ID
+      title: plaV775 ID
+      x: [plaV775.fID, 5, 0, 5]
+      
+    - name: plaV775_ID_Q
+      title: plaV775 Q vs ID
+      x: [plaV775.fID, 5, 0, 5]
+      y: [plaV775.fCharge, 200, 0, 5000]
+
+#============================ Tpla-L     
+    - name: tpla-L_PID
+      title: PID tpla-L
+      x: [tof_DS.fTiming, 300,  0, 50]
+      y: [plaV775.fCharge, 300, 0, 3000]
+      cut: plaV775.fID == 0
+      
+    - name: tpla-L_PID_a
+      title: PID tpla-L
+      x: [p2p.fRecoilL.E()-938.272, 300, 0, 200]
+      y: [plaV775.fCharge, 300, 0, 3000]
+      cut: plaV775.fID == 0
+      
+    - name: tpla-L_s1
+      title: tpla-tdiff vs mwdc-L
+      x: ["smwdc_L[0].fTrack.fX", 400, -1000, 200]
+      y: [plaV775.fTDiff, 200, -20, 10]
+      cut: plaV775.fID == 0
+      
+#============================ Tpla-R     
+    - name: tpla-R_PID
+      title: PID tpla-R
+      x: [tof_DS.fTiming, 300,  0, 50]
+      y: [plaV775.fCharge, 300, 0, 3000]
+      cut: plaV775.fID == 1
+      
+    - name: tpla-R_PID_a
+      title: PID tpla-R
+      x: [p2p.fRecoilR.E()-938.272, 300, 0, 200]
+      y: [plaV775.fCharge, 300, 0, 3000]
+      cut: plaV775.fID == 1
+      
+    - name: tpla-R_s1
+      title: tpla-tdiff vs mwdc-R
+      x: ["smwdc_R[0].fTrack.fX", 400, -200, 1000]
+      y: [plaV775.fTDiff, 200, -10, 15]
+      cut: plaV775.fID == 1
+      
+

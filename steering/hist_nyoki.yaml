@@ -14,7 +14,6 @@ alias:
   Acommon : coinReg.Test(2)
   Aux : gate.Test(8)
   
-  
 #=========================================================
 group:
   - name: Nyoki_Analysis
