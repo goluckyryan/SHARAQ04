@@ -31,9 +31,13 @@
    cf->Register(TCatCmdLoopSuspend::Instance());
    cf->Register(TCatCmdLoopTerminate::Instance());
    cf->Register(new TCatCmdHstore);
+   cf->Register(new art::TCmdFiga);
    cf->Register(TCatCmdSave::Instance());
    cf->Register(TCatCmdXval::Instance());
    cf->Register(art::TCatCmdListg::Instance());
+   cf->Register(art::TCmdMWDCCalib::Instance());
+   cf->Register(art::TCmdMWDCConfig::Instance());
+   cf->Register(new art::TCmdUpdateCanvas);
    cf->Register(new TCatCmdLg(TCatCmdLg::kX,0)); // log x
    cf->Register(new TCatCmdLg(TCatCmdLg::kY,0)); // log y
    cf->Register(new TCatCmdLg(TCatCmdLg::kZ,0)); // log z

@@ -1,19 +1,26 @@
 #include "ryan/constant.h"
 #include "ryan/RelCalculator.h"
-#include "ryan/TBeamData.h"
-#include "ryan/TRecoilData.h"
+#include "ryan/Compress/TBeamData.h"
+#include "ryan/Compress/TRecoilData.h"
 
 void simpleAna() {
    gStyle->SetOptStat(0);
+      
+   const char* rootfile="23F_1228_nyoki_run23.root";
    
-   TFile *f0 = new TFile ("23F_0922.root"); TTree *tree = (TTree*)f0->Get("tree");   
-   
-   TString name = "fZ";
+   TString plotName = "Multiplicity of nyoki";
+   TString branch = "nyoki"; // branch anme
+   TString branch_2 = "";
 	TCut cut ="";
-   TString side = "";
-	Int_t nBin = 300;
-	Double_t minX = -100;
-	Double_t maxX = 200;
+	Int_t nBin = 5;
+	Double_t minX = 1;
+	Double_t maxX = 6;
+	
+	//###########################
+   TFile *f0 = new TFile (rootfile, "read"); 
+   TTree *tree = (TTree*)f0->Get("tree");
+   Int_t totnumEntry = tree->GetEntries();
+	printf("----------%s is loaded. totEntry = %d \n", rootfile, totnumEntry);
 	
 	//###########################
 	if ( gROOT->FindObject("cSimple")){
@@ -21,25 +28,23 @@ void simpleAna() {
 	}
 	TCanvas* cSimple = new TCanvas("cSimple", "cSimple", 2300, 100, 800, 600);
 	
-	if( gROOT->FindObject("h")){
-		delete h;
-		delete hTL;
-		delete hTW;
+	if( gROOT->FindObject("h1D")){
+		delete h1D;
+      delete h2D;
 	}
 	//Int_t NumEvent = tree->GetEntries();
 	TString hTitle;
-	hTitle.Form("%s.%s",side.Data(),name.Data());
-	TH1F * h = new TH1F("h", hTitle, nBin, minX, maxX);
-	h->SetLineColor(kRed);
-	TH1F * hTL = new TH1F("hTL", hTitle, nBin, minX, maxX);
-	TH1F * hTW = new TH1F("hTW", hTitle, nBin, minX, maxX);
-	hTW->SetLineColor(kGreen); 
+	hTitle.Form("%s.%s",branch_2.Data(),plotName.Data());
 	
-	TString branch, name1, name2, name3;
-	branch = "vertex"; // branch
-	name1 = branch + side + "." + name + ">>h";
-	name2 = branch + side + "_TLgated." + name + ">>hTL";
-	name3 = branch + side + "_TWgated." + name + ">>hTW";
+	TH1F * h1D = new TH1F("h1D", hTitle, nBin, minX, maxX);
+	//h1D->SetLineColor(kRed);
+
+	TH2F * h2D = new TH2F("h2D", hTitle, nBin, 0, 100, 100, 0, 100);
+	
+	//#####################################
+	/*
+	TString name1, name2, name3;
+	name1 = branch + branch_2 + "." + plotName + ">>h1D";
 	
 	printf("%s\n", name1.Data());
 	printf("%s\n", name2.Data());
@@ -48,6 +53,24 @@ void simpleAna() {
 	tree->Draw(name1,cut,"");
 	tree->Draw(name2,cut,"same");
 	tree->Draw(name3,cut,"same");
+	
+	*/
+   //###################################
+   TClonesArray *hoge;
+   tree->SetBranchAddress(branch ,&hoge);
+   
+   for( Int_t eventID = 0; eventID < totnumEntry; eventID ++ ){
+   	tree->GetEntry(eventID);
+   	
+   	h1D->Fill(hoge->GetEntriesFast());
+   
+   }
+   
+   //###################################
+   
+   h1D->Draw();
+   	
+   //###################################	
 	/*
 	TLatex text;
    text.SetNDC();

@@ -11,7 +11,7 @@
 
 	Double_t Qgain=1, Qoffset=0;
 
-	/*switch(nyokiID){
+	switch(nyokiID){
 		case 0:  Qgain = 0.17; Qoffset = 522; break;
 		case 1:  Qgain = 0.48; Qoffset = 319; break;
 		case 2:  Qgain = 0.33; Qoffset = 429; break;
@@ -23,24 +23,24 @@
 		case 8:  Qgain = 0.36; Qoffset = 439; break;
 		case 9:  Qgain = 0.35; Qoffset = 577; break;
 		case 10: Qgain = 0.22; Qoffset = 585; break;
-	}*/
+	}
 	
-//	printf("Qgain:%4.2f, Qoffset:%6.0f \n", Qgain, Qoffset);
+	printf("Qgain:%4.2f, Qoffset:%6.0f \n", Qgain, Qoffset);
 
 	//=================================
-	TClonesArray *hoge_FH9, *hoge_V775, *hoge_nyoki, *hoge_tofD1, *hoge_mwdc;
+	TClonesArray *hoge_FH9, *hoge_V775, *hoge_nyoki, *hoge_tofD1;
 	art::TGateArray * gate;
    art::TCoinRegData *coinReg;
 	TTree *tree = (TTree*)f1->Get("tree");
 	Int_t totnumEntry = tree->GetEntries();
 	
 	printf(" --------------------- total entry = %d \n", totnumEntry);
-	/*tree->SetBranchStatus("gate",1);
+	tree->SetBranchStatus("gate",1);
 	tree->SetBranchStatus("coinReg",1);
 	tree->SetBranchStatus("plaV775",1);
 	tree->SetBranchStatus("plaV1190_FH9",1);
 	tree->SetBranchStatus("nyoki",1);
-	tree->SetBranchStatus("tof_D1",1);*/
+	tree->SetBranchStatus("tof_D1",1);
 	 
 	tree->SetBranchAddress("coinReg",&coinReg); 
 	tree->SetBranchAddress("gate",&gate); 
@@ -48,7 +48,6 @@
 	tree->SetBranchAddress("plaV1190_FH9",&hoge_FH9); 
 	tree->SetBranchAddress("nyoki",&hoge_nyoki); 
 	tree->SetBranchAddress("tof_D1",&hoge_tofD1); 
-	tree->SetBranchAddress("smwdc_S1",&hoge_mwdc); 
 	
 	//=====================================
 	Int_t Div[2] ={4,1};
@@ -138,7 +137,7 @@
 				
 		
 		Int_t nHit = hoge_FH9->GetEntriesFast();
-		//if ( nHit >=2) continue;
+		if ( nHit >=2) continue;
 		for(Int_t p = 0; p < nHit; p++){
 			art::TTwoSidedPlasticData* data1 = (art::TTwoSidedPlasticData*)hoge_FH9->At(p) ;
 			Double_t QFH9 = data1->GetCharge();
@@ -148,9 +147,6 @@
 			hFH9SlewV775->Fill(tFH9, QFH9);
 			hFH9PID->Fill(tFH9-tF3, QFH9);
 		}
-		
-		Int_t nHit = hoge_mwdc->GetEntriesFast();
-		if (nHit 
 		
 
 	}

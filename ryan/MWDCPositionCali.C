@@ -3,11 +3,14 @@ void MWDCPositionCali() {
 
 //############################################################################  
 //   const char* rootfile="PrimaryData/phys23F.root"; 
-   const char* rootfile="ppAll_1105.root"; 
+//   const char* rootfile="ppAll_1105.root";
+   const char* rootfile="23F_1212_nyoki_run23.root"; 
    
    Bool_t allentry  = 1;
    Int_t firstEntry = 0;
    Int_t nEntries=100000;
+   
+   Int_t zRange[2] = {-100,200};
 
 //############################################################################
    TFile *f = new TFile(rootfile,"read");
@@ -22,17 +25,17 @@ void MWDCPositionCali() {
    printf("totEntries:%d, nEntries:%.d [%5.2f%%]\n", totEntries, nEntries, 100.*nEntries/totEntries);
    
 //############################################################################  
-   Int_t Div[2] = {2,2};
+   Int_t Div[2] = {2,1};
    TCanvas * cMWDC = new TCanvas("cMWDC", "MWDC Position Calibaration", 100, 50, 400*Div[0], 400*Div[1]);
    cMWDC->Divide(Div[0],Div[1]);
 
    gStyle->SetOptStat(0);
    
-   TH2F* hXZ = new TH2F("hXZ", "Z and X", 50, -100, 100, 50, -1050, -950);
+   TH2F* hXZ = new TH2F("hXZ", "Z and X", 50, -200, 500, 50, zRange[0], zRange[1]);
    hXZ->SetXTitle("X [mm]");
    hXZ->SetYTitle("Z [mm]");
 
-	TH2F* hYZ = new TH2F("hYZ", "Z and Y", 50, -100, 100, 50, -1050, -950);
+	TH2F* hYZ = new TH2F("hYZ", "Z and Y", 50, -200, 500, 50, zRange[0], zRange[1]);
    hYZ->SetXTitle("Y [mm]");
    hYZ->SetYTitle("Z [mm]");
    
@@ -41,7 +44,7 @@ void MWDCPositionCali() {
 
 //############################################################################   
    TClonesArray  *hoge_L;
-   tree->SetBranchAddress("smwdc_L",&hoge_L);
+   tree->SetBranchAddress("smwdc_S1",&hoge_L);
    
   	TRandom *ranZ_seed = new TRandom();
    
@@ -68,7 +71,7 @@ void MWDCPositionCali() {
       }
       if (TrackingID1 != 1) continue;
       
-      Double_t ranZ = ranZ_seed->Integer(300) -1200.;
+      Double_t ranZ = ranZ_seed->Integer(zRange[1]- zRange[2]) + zRange[0];
       
       hXZ->Fill(x1+a1*ranZ, ranZ);
       hYZ->Fill(y1+b1*ranZ, ranZ);
@@ -83,7 +86,7 @@ void MWDCPositionCali() {
 	
 	
 //############################################################################
-
+	/*
 	TF1* fit = new TF1("fit", "gaus(0)+gaus(3)", -45,20);
 	fit->SetParLimits(2, 0, 30);
 	fit->SetParLimits(5, 0, 30);
@@ -115,5 +118,5 @@ void MWDCPositionCali() {
 	cMWDC->cd(4);
 	//hSigma2->Draw();
 	
-      
+      */
 }

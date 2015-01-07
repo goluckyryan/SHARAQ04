@@ -16,23 +16,63 @@
 //   TFile *f0 = new TFile ("23F_1106_nyoki_runs23_noCali.root"); TTree *tree = (TTree*)f0->Get("tree");
 //   TFile *f1 = new TFile ("23F_1201_nyoki_run23.root"); //TTree *tree = (TTree*)f1->Get("tree");
 
-	   TFile *f1 = new TFile ("23F_1204_noPID.root"); TTree *tree = (TTree*)f1->Get("tree");
+//	   TFile *f1 = new TFile ("23F_1222_nyoki_run23_ref8.root"); TTree *tree = (TTree*)f1->Get("tree");
 
-//	TFile *f1 = new TFile ("hist_nyoki_Q.root");
+//	   TFile *f1 = new TFile ("23F_1228_nyoki_run23.root"); TTree *tree1 = (TTree*)f1->Get("tree");
+//	   TFile *f2 = new TFile ("23F_0105_nyoki_run23.root"); TTree *tree = (TTree*)f2->Get("tree");
+
+	TFile *f1 = new TFile ("hist_23F_0106_pid.root");
 
 //================ update.
 //   TFile *f0 = new TFile ("23F_0912_all_1.root","update"); 
 //   f0->Close();
 //========================================================
-	//gROOT->ProcessLine("listg tree");
+	gROOT->ProcessLine("listg tree");
    TBrowser B("test","test", 900,600); 
-/*   Int_t Div[2] = {2,1}; 
-	Int_t size = 400;
+   
+   
+  /*
+   Int_t Div[2] = {8,6}; 
+	Int_t size = 150;
    TCanvas * cScript = new TCanvas("cScript", "cScript", 2000,0 , size*Div[0], size*Div[1]);
    cScript->Divide(Div[0],Div[1]);
-   cScript->cd(1);
    
-   TCut incA = "TMath::Abs(S0img[0].fTrack.fA*1000)<1";
+   for( Int_t i = 1; i <= 44; i++){
+   	cScript->cd(i);
+   	TString gate, plot;
+   	gate.Form("smwdc_S1_v2.fID==%d && smwdc_S1_v2.fCharge>350", i);
+   	plot.Form("smwdc_S1_v2.fTiming>>h%0d(200,-50,250)",i);
+   	//gate.Form("smwdc_S1.GetWireIDAdopted(0)==%d", i);
+   	//plot.Form("smwdc_S1.GetDriftLengthOriginal(0)>>h%0d(200,-1,11)",i);
+   	tree->Draw(plot, gate);
+  	}/**/
+   
+/*
+   cScript->cd(1);   tree->Draw("smwdc_S1_x1.fTiming>>h1(300, -100,  400)", "smwdc_S1_x1.fCharge > 350", "colz");
+   cScript->cd(2);   tree->Draw("smwdc_S1_x2.fTiming>>h2(300, -100,  400)", "smwdc_S1_x2.fCharge > 350", "colz");
+   cScript->cd(3);   tree->Draw("smwdc_S1_u1.fTiming>>h3(300, -100,  400)", "smwdc_S1_u1.fCharge > 350", "colz");
+   cScript->cd(4);   tree->Draw("smwdc_S1_u2.fTiming>>h4(300, -100,  400)", "smwdc_S1_u2.fCharge > 350", "colz");
+   cScript->cd(5);   tree->Draw("smwdc_S1_v1.fTiming>>h5(300, -100,  400)", "smwdc_S1_v1.fCharge > 350", "colz");
+   cScript->cd(6);   tree->Draw("smwdc_S1_v2.fTiming>>h6(300, -100,  400)", "smwdc_S1_v2.fCharge > 350", "colz");
+/**/
+/*  
+   cScript->cd(1);   tree->Draw("smwdc_S1_x1.fTiming:smwdc_S1_x1.fID>>h1(56, 1, 57, 500, -100,  400)", "", "colz");
+   cScript->cd(2);   tree->Draw("smwdc_S1_x2.fTiming:smwdc_S1_x2.fID>>h2(56, 1, 57, 500, -100,  400)", "", "colz");
+   cScript->cd(3);   tree->Draw("smwdc_S1_u1.fTiming:smwdc_S1_u1.fID>>h3(44, 1, 45, 500, -100,  400)", "", "colz");
+   cScript->cd(4);   tree->Draw("smwdc_S1_u2.fTiming:smwdc_S1_u2.fID>>h4(44, 1, 45, 500, -100,  400)", "", "colz");
+   cScript->cd(5);   tree->Draw("smwdc_S1_v1.fTiming:smwdc_S1_v1.fID>>h5(44, 1, 45, 500, -100,  400)", "", "colz");
+   cScript->cd(6);   tree->Draw("smwdc_S1_v2.fTiming:smwdc_S1_v2.fID>>h6(44, 1, 45, 500, -100,  400)", "", "colz");
+/**/
+/*
+	cScript->cd(1);   tree->Draw("smwdc_S1_x1.fDriftLength>>h1(300, -1,  11)", "smwdc_S1_x1.fCharge > 650", "colz");
+   cScript->cd(2);   tree->Draw("smwdc_S1_x2.fDriftLength>>h2(300, -1,  11)", "smwdc_S1_x2.fCharge > 650", "colz");
+   cScript->cd(3);   tree->Draw("smwdc_S1_u1.fDriftLength>>h3(300, -1,  11)", "smwdc_S1_u1.fCharge > 650", "colz");
+   cScript->cd(4);   tree->Draw("smwdc_S1_u2.fDriftLength>>h4(300, -1,  11)", "smwdc_S1_u2.fCharge > 650", "colz");
+   cScript->cd(5);   tree->Draw("smwdc_S1_v1.fDriftLength>>h5(300, -1,  11)", "smwdc_S1_v1.fCharge > 650", "colz");
+   cScript->cd(6);   tree->Draw("smwdc_S1_v2.fDriftLength>>h6(300, -1,  11)", "smwdc_S1_v2.fCharge > 650", "colz");
+/**/
+   
+/*   TCut incA = "TMath::Abs(S0img[0].fTrack.fA*1000)<1";
    TCut incB = "TMath::Abs(S0img[0].fTrack.fB*1000)<1";
    //TCut incX = "TMath::Abs(S0img[0].fTrack.fX*1000)<1";
    //TCut incY = "TMath::Abs(S0img[0].fTrack.fY*1000)<1";
