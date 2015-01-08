@@ -2,44 +2,44 @@
 
 void pidNyoki() {
 
-   const char* rootfile="23F_1228_nyoki_run23.root";
-//   const char* rootfile="23F_1204_nyoki_run2425.root";
+//   const char* rootfile="23F_0105_nyoki_run23.root";
+   const char* rootfile="23F_0107.root";
    
-   Int_t nyokiID[2] = {8,8};
-   Bool_t useS0AB = 1;
+   Int_t nyokiID[2] = {7,7};
+   Bool_t useS0AB = 0;
    Int_t useToFQ = 0 ;// 0 = z-AoQ, 1 = Q-tof, 2 = z-tof, 3 = z - s1x
    Bool_t useSlew = 0;
    Bool_t useMWDC = 1;
    Bool_t forceCal = 1;
    
-   Double_t newO[2] = {0,-32.0}; //{x,z} mm
-   Double_t ang = 0; //deg
+   Double_t newO[2] = {0,0}; //{x,z} mm
+   Double_t ang = 0; //deg, left hand rotation about y axis
    
 	Int_t Div[2] = {3,2};
 	Int_t size = 400;
    
-   Bool_t allentry    = 1;
+   Bool_t allentry    = 0;
    Int_t firstEntry   = 0;
-   Int_t nEntries     = 100000;
+   Int_t nEntries     = 1000000;
 	
 	Int_t sampleRate = 1;
 	
 	Bool_t ppcoin = 0;
 	Bool_t beam = 0;
-	Bool_t pid23F = 0;
-	Bool_t pid22O = 1;
+	Bool_t pid23F = 1;
+	Bool_t pid22O = 0;
 	Bool_t pid8Li = 0;
 	
 	Bool_t fitZ = 0;
 
 //########################################################  
-	const Double_t Brho0 = 6.7288;  
+	const Double_t Brho0 = 6.7288;//*22/8*9/23;  
 	const Double_t LS0DNyoki = 6595.60525; // mm
 	const Double_t para1 = -0.451752;
 	const Double_t para2 = 0.0003021347;
 	const Double_t att  = 3000.; // mm
 	const Double_t r0 = 4.4; // m
-	const Double_t xdp = -1156 ;//-1156; // mm / 100%
+	const Double_t xdp = -500 ;//-1156; // mm / 100%
 	const Double_t B0 = Brho0/r0; // T
 	Double_t tofOffSet = -0.1;
 	Double_t b,g,h, Sa,Sk,SQ,St;
@@ -103,16 +103,16 @@ void pidNyoki() {
 	hAux3->SetXTitle("beta");
 	hAux3->SetYTitle("Brho");
 
-	TH2F* hAux4 = new TH2F("hAux4", "", 200, 6400, 6800, 200, 30, 44);
-	hAux4->SetXTitle("FL");
+	TH2F* hAux4 = new TH2F("hAux4", "", 500, -200, 300, 200, 30, 40);
+	hAux4->SetXTitle("s1x");
 	hAux4->SetYTitle("tof");
 
 	TH1F* hAux5 = new TH1F("hAux5", "", 500, -200, 300);
 	hAux5->SetXTitle("s1x");
 	
-	TH2F* hAux6 = new TH2F("hAux6", "", 200, -200, 300, 200, -2, 2);
+	TH2F* hAux6 = new TH2F("hAux6", "", 500, -200, 300, 200, 0, 11);
 	hAux6->SetXTitle("s1x");
-	hAux6->SetYTitle("s1a");
+	hAux6->SetYTitle("Z");
 
 	TH1F* hDiffz = new TH1F("hDiffz", "", 100, -0.2, 0.2);
 	hDiffz->SetXTitle("z - z0");
@@ -176,6 +176,8 @@ void pidNyoki() {
       if( pid22O && gate->Test(1) != 1) continue;
       if( pid8Li && gate->Test(6) != 1) continue;
       
+      if( gate->Test(12) !=1) continue;
+      
       Double_t tof = -50;
       Double_t QQ = -50;
       Bool_t tofPass = 0;
@@ -213,7 +215,7 @@ void pidNyoki() {
 		   
 			if( S0Pass == 0 ) continue;
 		   //if( TMath::Abs(s0a)>10 || TMath::Abs(s0b)>10 ) continue;
-		   //if( TMath::Abs(s0x)<5 ) continue;  
+		   if( TMath::Abs(s0x)>4 ) continue;  
 		}
       
 		//_____________Get SMWDC-S1
@@ -302,8 +304,8 @@ void pidNyoki() {
 		   Double_t z0 = TMath::Sqrt(L0/(g-L0*h))*beta0;
 		   
 		   Double_t L;
-		   if( 0 < s1y && s1y < 50 ) {
-		   	L = (QQ-b)*TMath::Exp((50-s1y)/att);
+		   if( -50 < s1y && s1y < 0 ) {
+		   	L = (QQ-b)*TMath::Exp((-50-s1y)/att);
 	   	}else{
 	   		L = L0;
 	   	}
@@ -313,9 +315,9 @@ void pidNyoki() {
          //hAux2->Fill(z, s1y);
          hAux2->Fill(AoQ, Brho);
          hAux3->Fill(beta,Brho);
-         hAux4->Fill(FL,tof); //-4069.4
+         hAux4->Fill(s1x,tof); //-4069.4
          hAux5->Fill(s1x);
-         hAux6->Fill(s1x,s1a);
+         hAux6->Fill(s1x,z);
          
          hDiffz->Fill( z - z0);
 		   hDiffAoQ->Fill( AoQ - AoQ0);
@@ -357,7 +359,7 @@ void pidNyoki() {
    //hAux2->Draw("colz");
    
 	cPID->cd(2);
-	hAux2->Draw("colz");
+	hAux->Draw("colz");
 	//hPIDNyoki->ProjectionY("test")->Draw();
 	//hDiffz->Draw();
 	
@@ -386,6 +388,7 @@ void pidNyoki() {
 	/**/
 	
 	cPID->cd(5);
+	//hAux2->Draw("colz");
 	hAux6->Draw("colz");
 	
 	cPID->cd(6);

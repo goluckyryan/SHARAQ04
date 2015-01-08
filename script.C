@@ -19,29 +19,58 @@
 //	   TFile *f1 = new TFile ("23F_1222_nyoki_run23_ref8.root"); TTree *tree = (TTree*)f1->Get("tree");
 
 //	   TFile *f1 = new TFile ("23F_1228_nyoki_run23.root"); TTree *tree1 = (TTree*)f1->Get("tree");
-//	   TFile *f2 = new TFile ("23F_0105_nyoki_run23.root"); TTree *tree = (TTree*)f2->Get("tree");
+	   TFile *f2 = new TFile ("23F_0107.root"); TTree *tree = (TTree*)f2->Get("tree");
 
-	TFile *f1 = new TFile ("hist_23F_0106_pid.root");
+//	TFile *f1 = new TFile ("hist_23F_0107.root", "read");
 
 //================ update.
-//   TFile *f0 = new TFile ("23F_0912_all_1.root","update"); 
+//   TFile *f0 = new TFile ("23F_1224_nyoki_optics.root","update"); 
 //   f0->Close();
 //========================================================
 	gROOT->ProcessLine("listg tree");
    TBrowser B("test","test", 900,600); 
    
+   /*Double_t newO[2] = {0,0}; //{x,z} mm
+   Double_t ang = -74.3; //deg, left hand rotation about y axis
+   
+   Double_t t = TMath::Tan(ang*TMath::DegToRad());
+   Double_t s = TMath::Sin(ang*TMath::DegToRad());
+   Double_t c = TMath::Cos(ang*TMath::DegToRad());
+   
+   TString plot;
+   //plot.Form("(smwdc_S1.fTrack.fA+%.4f)/(1-smwdc_S1.fTrack.fA*%.4f):smwdc_S1.fTrack.fA>>h1(100,-3,3,100,-5,5)", t, t);
+   //plot.Form("smwdc_S1.fTrack.fY:(smwdc_S1.fTrack.fX-%.3f+smwdc_S1.fTrack.fA*%.3f)/(%.3f-smwdc_S1.fTrack.fA*%.3f)>>h1(400,-500,500,100,-200,200)", newO[0], newO[1],c,s);
+   plot.Form("smwdc_S1.fTrack.fX:(smwdc_S1.fTrack.fX-%.3f+smwdc_S1.fTrack.fA*%.3f)/(%.3f-smwdc_S1.fTrack.fA*%.3f)>>h1(400,-500,500,400,-500,500)", newO[0], newO[1],c,s);
+   
+   tree->Draw(plot, "", "colz");
+   /**/
    
   /*
-   Int_t Div[2] = {8,6}; 
-	Int_t size = 150;
-   TCanvas * cScript = new TCanvas("cScript", "cScript", 2000,0 , size*Div[0], size*Div[1]);
+   Int_t Div[2] = {1,6};  //x,y
+	Int_t size[2] = {600,200}; //x,y
+   TCanvas * cScript = new TCanvas("cScript", "cScript", 2000,0 , size[0]*Div[0], size[1]*Div[1]);
    cScript->Divide(Div[0],Div[1]);
    
-   for( Int_t i = 1; i <= 44; i++){
+   for( Int_t i = 1; i <= 6; i++){
    	cScript->cd(i);
    	TString gate, plot;
-   	gate.Form("smwdc_S1_v2.fID==%d && smwdc_S1_v2.fCharge>350", i);
-   	plot.Form("smwdc_S1_v2.fTiming>>h%0d(200,-50,250)",i);
+   	Int_t wireNum = 44;
+   	if( i == 1 || i == 2) wireNum = 56;
+   	gate.Form("abs(smwdc_S1.fTrack.fX-150)<50 & abs(smwdc_S1.fTrack.fY)<25 & gate.Test(12)");
+   	if( i == 1){
+   		plot.Form("smwdc_S1_x1.fID>>h%0d(%d,1,%d)", i, wireNum, wireNum+1);
+   	}else if( i ==2){
+   		plot.Form("smwdc_S1_x2.fID>>h%0d(%d,1,%d)", i, wireNum, wireNum+1);
+		}else if( i ==3){
+   		plot.Form("smwdc_S1_u1.fID>>h%0d(%d,1,%d)", i, wireNum, wireNum+1);
+		}else if( i ==4){
+   		plot.Form("smwdc_S1_u2.fID>>h%0d(%d,1,%d)", i, wireNum, wireNum+1);
+		}else if( i ==5){
+   		plot.Form("smwdc_S1_v1.fID>>h%0d(%d,1,%d)", i, wireNum, wireNum+1);
+		}else if( i ==6){
+   		plot.Form("smwdc_S1_v2.fID>>h%0d(%d,1,%d)", i, wireNum, wireNum+1);
+		}
+   	
    	//gate.Form("smwdc_S1.GetWireIDAdopted(0)==%d", i);
    	//plot.Form("smwdc_S1.GetDriftLengthOriginal(0)>>h%0d(200,-1,11)",i);
    	tree->Draw(plot, gate);

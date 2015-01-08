@@ -1,7 +1,0 @@
-Processor:
-  - name: ridfevent
-    type: art::TRIDFEventStore
-    parameter:
-      OutputTransparency: 1
-      InputFiles:
-          - /media/sh04HD/RawData/phys240015.ridf
