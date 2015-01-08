@@ -4,13 +4,13 @@
     nWire:    &xnwire 56
     cellSize: &cell 20.
     angle:    &xangle 0.
-    center:    9.107
+    center:    9.107  # R
 - x2:
     z:        -24.
     nWire:    *xnwire
     cellSize: *cell
     angle:    *xangle
-    center:    8.857
+    center:    8.857  # L
 - u1:
     z:        -8.
     nWire:    &uvnwire 44
