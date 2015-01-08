@@ -1,7 +1,7 @@
 aliases:
   - &beamZc      170.
   - &tofShift_Lc  0.  #time shift (tgt to Tpla)
-  - &tofShift_Rc -0.5  #time shift (tgt to Tpla)
+  - &tofShift_Rc  0.  #time shift (tgt to Tpla)
 #============== PROCESSORS     =============================
 Processor:
   - name: tpla_tof_c
@@ -35,6 +35,7 @@ Processor:
       Geometry:         SMWDC_geometry
       Side:             0           # 0 = left, !0 = right
       BeamZ:            *beamZc
+      AngleShift:       0.00524
       UseReactionPointCorrection:   1   #s0XY
       UseIncidentAngleCorrection:   1   #s0AB
       UsePolarizedMagnetCorrection: 1
@@ -51,6 +52,7 @@ Processor:
       Geometry:         SMWDC_geometry
       Side:             1
       BeamZ:            *beamZc
+      AngleShift:       -0.00524
       UseReactionPointCorrection:   1
       UseIncidentAngleCorrection:   1
       UsePolarizedMagnetCorrection: 1
@@ -65,4 +67,5 @@ Processor:
       PPAC:               ppac
       PPACDetID:          0
       BeamParameter:      beam  # declare before and elsewhere
+      ResidualFrame:      0
       OutputTransparency: 0

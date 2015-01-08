@@ -1,0 +1,22 @@
+Processor:
+  - name: proc_pidgate_US_V775
+    type: art::TPIDGateProcessor
+    parameter:
+      TimingArray:        tof_DS
+      TimingDetID:        2
+      ChargeArray:        plaV775
+      ChargeDetID:        2
+      Rectangle:
+        - [23F, 318,770,323,1000] 
+        - [22O, 302,700,306,900]
+        - [20N, 292,666,298,866]
+        - [19N, 306.3, 675.8, 310, 843.6]
+        - [16C, 310,645,316,745]
+        - [13B, 318,584,320,684]
+        - [10Be, 326,525,331,625]
+        - [8Li, 312.2, 457, 316, 590.7]
+        - [7Li, 341,477,347,577]
+      HistogramOption:     [hPIDv775,PID;-ToF(v775);Charge(F3)v775, 1000, 280, 340, 600, 200, 1500]
+      OutputTransparency:  0
+      
+#===========================================================

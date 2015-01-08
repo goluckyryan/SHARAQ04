@@ -29,7 +29,7 @@ Processor:
       Parameter0:  -500.   # L = Q - p0
       Parameter1:  16.5
       Parameter2:  0.007288
-      Dispersion:  999999999
+      Dispersion:  -600  # tetatively
       TimeOffset:  0.
       FlightLength:   6595.6
       FL1:           -0.451752. 

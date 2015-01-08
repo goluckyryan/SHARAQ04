@@ -1,0 +1,40 @@
+Processor:
+  - name: ridfevent
+    type: art::TRIDFEventStore
+    parameter:
+      OutputTransparency: 1
+      InputFiles:
+          - /media/sh04HD/RawData/phys240045.ridf
+          - /media/sh04HD/RawData/phys240046.ridf
+          - /media/sh04HD/RawData/phys240047.ridf
+          - /media/sh04HD/RawData/phys240048.ridf
+          - /media/sh04HD/RawData/phys240049.ridf
+          - /media/sh04HD/RawData/phys240050.ridf
+          - /media/sh04HD/RawData/phys240051.ridf
+          - /media/sh04HD/RawData/phys240052.ridf
+          - /media/sh04HD/RawData/phys240053.ridf
+          - /media/sh04HD/RawData/phys240054.ridf
+          - /media/sh04HD/RawData/phys240055.ridf
+          - /media/sh04HD/RawData/phys240056.ridf
+          - /media/sh04HD/RawData/phys240057.ridf
+          - /media/sh04HD/RawData/phys240058.ridf
+          - /media/sh04HD/RawData/phys240059.ridf
+          - /media/sh04HD/RawData/phys240060.ridf
+          - /media/sh04HD/RawData/phys240061.ridf
+          - /media/sh04HD/RawData/phys240062.ridf
+          - /media/sh04HD/RawData/phys240063.ridf
+          - /media/sh04HD/RawData/phys240064.ridf
+          - /media/sh04HD/RawData/phys240065.ridf
+          - /media/sh04HD/RawData/phys240066.ridf
+          - /media/sh04HD/RawData/phys240067.ridf
+          - /media/sh04HD/RawData/phys240068.ridf
+          - /media/sh04HD/RawData/phys240069.ridf
+          - /media/sh04HD/RawData/phys240070.ridf
+          - /media/sh04HD/RawData/phys240071.ridf
+          - /media/sh04HD/RawData/phys240072.ridf
+          - /media/sh04HD/RawData/phys240073.ridf
+          - /media/sh04HD/RawData/phys240074.ridf
+          - /media/sh04HD/RawData/phys240075.ridf
+          - /media/sh04HD/RawData/phys240076.ridf
+          - /media/sh04HD/RawData/phys240077.ridf
+          - /media/sh04HD/RawData/phys240078.ridf

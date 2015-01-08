@@ -29,139 +29,139 @@ group:
 
     #------------------ plane
     - name: L_x1_dt
-      title: MWDC-L x1 Drift Time | Q > -11
+      title: MWDC-L x1 Drift Time | Q > 21
       x: [smwdc_L_x1.fTiming, 200, -150, 300]
-      cut: smwdc_L_x1.fCharge > -11
+      cut: smwdc_L_x1.fCharge > 21
 
     - name: L_x2_dt
-      title: MWDC-L x2 Drift Time | Q > -11
+      title: MWDC-L x2 Drift Time | Q > 21
       x: [smwdc_L_x2.fTiming, 200, -150, 300]    
-      cut: smwdc_L_x2.fCharge > -11
+      cut: smwdc_L_x2.fCharge > 21
 
     - name: L_u1_dt
-      title: MWDC-L u1 Drift Time  | Q > -11
+      title: MWDC-L u1 Drift Time  | Q > 21
       x: [smwdc_L_u1.fTiming, 200, -150, 300]
-      cut: smwdc_L_u1.fCharge > -11
+      cut: smwdc_L_u1.fCharge > 21
 
     - name: L_u2_dt
-      title: MWDC-L u2 Drift Time  | Q > -11
+      title: MWDC-L u2 Drift Time  | Q > 21
       x: [smwdc_L_u2.fTiming, 200, -150, 300]
-      cut: smwdc_L_u2.fCharge > -11
+      cut: smwdc_L_u2.fCharge > 21
 
     - name: L_v1_dt
-      title: MWDC-L v1 Drift Time  | Q > -11
+      title: MWDC-L v1 Drift Time  | Q > 21
       x: [smwdc_L_v1.fTiming, 200, -150, 300]
-      cut: smwdc_L_v1.fCharge > -11
+      cut: smwdc_L_v1.fCharge > 21
 
     - name: L_v2_dt
-      title: MWDC-L v2 Drift Time  | Q > -11
+      title: MWDC-L v2 Drift Time  | Q > 21
       x: [smwdc_L_v2.fTiming, 200, -150, 300]
-      cut: smwdc_L_v2.fCharge > -11
+      cut: smwdc_L_v2.fCharge > 21
 
     #-------- plane DT vs ID
     - name: L_x1_dt_id
-      title: MWDC-L x1 Drift Time vs ID  | Q > -11
+      title: MWDC-L x1 Drift Time vs ID  | Q > 21
       x: [smwdc_L_x1.fID, 56, 1 , 57]
       y: [smwdc_L_x1.fTiming, 200, -150, 300]
-      cut: smwdc_L_x1.fCharge > -11
+      cut: smwdc_L_x1.fCharge > 21
 
     - name: L_x2_dt_id
-      title: MWDC-L x2 Drift Time vs ID  | Q > -11
+      title: MWDC-L x2 Drift Time vs ID  | Q > 21
       x: [smwdc_L_x2.fID, 56, 1 , 57]
       y: [smwdc_L_x2.fTiming, 200, -150, 300]
-      cut: smwdc_L_x2.fCharge > -11 
+      cut: smwdc_L_x2.fCharge > 21 
 
     - name: L_u1_dt_id
-      title: MWDC-L u1 Drift Time vs ID | Q > -11
+      title: MWDC-L u1 Drift Time vs ID | Q > 21
       x: [smwdc_L_u1.fID, 44, 1 , 45]
       y: [smwdc_L_u1.fTiming, 200, -150, 300]
-      cut: smwdc_L_u1.fCharge > -11
+      cut: smwdc_L_u1.fCharge > 21
 
     - name: L_u2_dt_id
-      title: MWDC-L u2 Drift Time vs ID | Q > -11
+      title: MWDC-L u2 Drift Time vs ID | Q > 21
       x: [smwdc_L_u2.fID, 44, 1 , 45]
       y: [smwdc_L_u2.fTiming, 200, -150, 300]
-      cut: smwdc_L_u2.fCharge > -11
+      cut: smwdc_L_u2.fCharge > 21
 
     - name: L_v1_dt_id
-      title: MWDC-L v1 Drift Time vs ID | Q > -11
+      title: MWDC-L v1 Drift Time vs ID | Q > 21
       x: [smwdc_L_v1.fID, 44, 1 , 45]
       y: [smwdc_L_v1.fTiming, 200, -150, 300]
-      cut: smwdc_L_v1.fCharge > -11
+      cut: smwdc_L_v1.fCharge > 21
 
     - name: L_v2_dt_id
-      title: MWDC-L v2 Drift Time vs ID | Q > -11
+      title: MWDC-L v2 Drift Time vs ID | Q > 21
       x: [smwdc_L_v2.fID, 44, 1 , 45]
       y: [smwdc_L_v2.fTiming, 200, -150, 300]
-      cut: smwdc_L_v1.fCharge > -11
+      cut: smwdc_L_v1.fCharge > 21
       
     #---------- plane DL
     - name: L_x1_dl
-      title: MWDC-L x1 Drift Length | Q > -11
+      title: MWDC-L x1 Drift Length | Q > 21
       x: [smwdc_L_x1.fDriftLength, 200, -1, 11]
-      cut: smwdc_L_x1.fCharge > -11
+      cut: smwdc_L_x1.fCharge > 21
 
     - name: L_x2_dl
-      title: MWDC-L x2 Drift Length | Q > -11
+      title: MWDC-L x2 Drift Length | Q > 21
       x: [smwdc_L_x2.fDriftLength, 200, -1, 11]
-      cut: smwdc_L_x2.fCharge > -11    
+      cut: smwdc_L_x2.fCharge > 21    
 
     - name: L_u1_dl
-      title: MWDC-L u1 Drift Length | Q > -11
+      title: MWDC-L u1 Drift Length | Q > 21
       x: [smwdc_L_u1.fDriftLength, 200, -1, 11]
-      cut: smwdc_L_u1.fCharge > -11
+      cut: smwdc_L_u1.fCharge > 21
 
     - name: L_u2_dl
-      title: MWDC-L u2 Drift Length | Q > -11
+      title: MWDC-L u2 Drift Length | Q > 21
       x: [smwdc_L_u2.fDriftLength, 200, -1, 11]
-      cut: smwdc_L_u2.fCharge > -11
+      cut: smwdc_L_u2.fCharge > 21
 
     - name: L_v1_dl
-      title: MWDC-L v1 Drift Length | Q > -11
+      title: MWDC-L v1 Drift Length | Q > 21
       x: [smwdc_L_v1.fDriftLength, 200, -1, 11]
-      cut: smwdc_L_v1.fCharge > -11
+      cut: smwdc_L_v1.fCharge > 21
 
     - name: L_v2_dl
-      title: MWDC-L v2 Drift Length | Q > -11
+      title: MWDC-L v2 Drift Length | Q > 21
       x: [smwdc_L_v2.fDriftLength, 200, -1, 11]
-      cut: smwdc_L_v2.fCharge > -11
+      cut: smwdc_L_v2.fCharge > 21
       
     #---------- plane ID vs DL
     - name: L_x1_dl_id
-      title: MWDC-L x1 Drift Length vs ID | Q > -11
+      title: MWDC-L x1 Drift Length vs ID | Q > 21
       x: [smwdc_L_x1.fID, 56, 1 , 57]
       y: [smwdc_L_x1.fDriftLength, 200, -1, 11]
-      cut: smwdc_L_x1.fCharge > -11
+      cut: smwdc_L_x1.fCharge > 21
 
     - name: L_x2_dl_id
-      title: MWDC-L x2 Drift Length vs ID| Q > -11
+      title: MWDC-L x2 Drift Length vs ID| Q > 21
       x: [smwdc_L_x2.fID, 56, 1 , 57]
       y: [smwdc_L_x2.fDriftLength, 200, -1, 11]    
-      cut: smwdc_L_x2.fCharge > -11
+      cut: smwdc_L_x2.fCharge > 21
 
     - name: L_u1_dl_id
-      title: MWDC-L u1 Drift Length vs ID | Q > -11
+      title: MWDC-L u1 Drift Length vs ID | Q > 21
       x: [smwdc_L_u1.fID, 44, 1 , 45]
       y: [smwdc_L_u1.fDriftLength, 200, -1, 11]
-      cut: smwdc_L_u1.fCharge > -11
+      cut: smwdc_L_u1.fCharge > 21
 
     - name: L_u2_dl_id
-      title: MWDC-L u2 Drift Length vs ID | Q > -11
+      title: MWDC-L u2 Drift Length vs ID | Q > 21
       x: [smwdc_L_u2.fID, 44, 1 , 45]
       y: [smwdc_L_u2.fDriftLength, 200, -1, 11]
-      cut: smwdc_L_u2.fCharge > -11
+      cut: smwdc_L_u2.fCharge > 21
 
     - name: L_v1_dl_id
-      title: MWDC-L v1 Drift Length vs ID | Q > -11
+      title: MWDC-L v1 Drift Length vs ID | Q > 21
       x: [smwdc_L_v1.fID, 44, 1 , 45]
       y: [smwdc_L_v1.fDriftLength, 200, -1, 11]
-      cut: smwdc_L_v1.fCharge > -11
+      cut: smwdc_L_v1.fCharge > 21
 
     - name: L_v2_dl_id
-      title: MWDC-L v2 Drift Length vs ID | Q > -11
+      title: MWDC-L v2 Drift Length vs ID | Q > 21
       x: [smwdc_L_v2.fID, 44, 1 , 45]
       y: [smwdc_L_v2.fDriftLength, 200, -1, 11]
-      cut: smwdc_L_v2.fCharge > -11
+      cut: smwdc_L_v2.fCharge > 21
 
     #------------------ Track Adopted
     - name:  L_DT_A
@@ -184,6 +184,11 @@ group:
       title: MWDC-L Adopted Drift Length vs WireID
       x: [smwdc_L.fWireIDAdopted, 55, 0, 55]
       y: [smwdc_L.fDriftLengthAdopted, 200, 0, 15]   
+
+    - name:  L_DTDL
+      title: MWDC-L DT-DL original | Tracked
+      x: [smwdc_L.fDriftTimeAdopted, 300, -150, 150]
+      y: [smwdc_L.fDriftLengthOriginal, 300, 0, 13]
     
     - name:  L_DTDL_tracked
       title: MWDC-L DT-DL corrected | Tracked
@@ -226,23 +231,23 @@ group:
     #------------------ Track Ray
     - name:  L_XA
       title: MWDC-L A vs X
-      x: [smwdc_L.fTrack.fX, 400, -1000, 200]
-      y: [smwdc_L.fTrack.fA, 400, -1, 0.5]
+      x: [smwdc_L.fTrack.fX, 1200, -1000, 200]
+      y: [smwdc_L.fTrack.fA, 400, -2, 2]
 
     - name:  L_XY
       title: MWDC-L Y vs X
-      x: [smwdc_L.fTrack.fX, 400, -1000, 200]
+      x: [smwdc_L.fTrack.fX, 1200, -1000, 200]
       y: [smwdc_L.fTrack.fY, 400, -200, 200]
 
     - name:  L_YB
       title: MWDC-L B vs Y
       x: [smwdc_L.fTrack.fY, 400, -200, 200]
-      y: [smwdc_L.fTrack.fB, 400, -0.5, 0.5]
+      y: [smwdc_L.fTrack.fB, 400, -1, 1]
 
     - name:  L_AB
       title: MWDC-L A vs B
-      x: [smwdc_L.fTrack.fA, 400, -1, 0.5]
-      y: [smwdc_L.fTrack.fB, 400, -0.5, 0.5]
+      x: [smwdc_L.fTrack.fA, 400, -2, 2]
+      y: [smwdc_L.fTrack.fB, 400, -1, 1]
 
 #============================================================== SMWDC-R
   - name: mwdc_R
@@ -274,139 +279,139 @@ group:
 
     #------------------ plane
     - name: R_x1_dt
-      title: MWDC-R x1 Drift Time | Q > -11
+      title: MWDC-R x1 Drift Time | Q > 21
       x: [smwdc_R_x1.fTiming, 200, -150, 300]
-      cut: smwdc_R_x1.fCharge > -11
+      cut: smwdc_R_x1.fCharge > 21
 
     - name: R_x2_dt
-      title: MWDC-R x2 Drift Time | Q > -11
+      title: MWDC-R x2 Drift Time | Q > 21
       x: [smwdc_R_x2.fTiming, 200, -150, 300]    
-      cut: smwdc_R_x2.fCharge > -11
+      cut: smwdc_R_x2.fCharge > 21
 
     - name: R_u1_dt
-      title: MWDC-R u1 Drift Time  | Q > -11
+      title: MWDC-R u1 Drift Time  | Q > 21
       x: [smwdc_R_u1.fTiming, 200, -150, 300]
-      cut: smwdc_R_u1.fCharge > -11
+      cut: smwdc_R_u1.fCharge > 21
 
     - name: R_u2_dt
-      title: MWDC-R u2 Drift Time  | Q > -11
+      title: MWDC-R u2 Drift Time  | Q > 21
       x: [smwdc_R_u2.fTiming, 200, -150, 300]
-      cut: smwdc_R_u2.fCharge > -11
+      cut: smwdc_R_u2.fCharge > 21
 
     - name: R_v1_dt
-      title: MWDC-R v1 Drift Time  | Q > -11
+      title: MWDC-R v1 Drift Time  | Q > 21
       x: [smwdc_R_v1.fTiming, 200, -150, 300]
-      cut: smwdc_R_v1.fCharge > -11
+      cut: smwdc_R_v1.fCharge > 21
 
     - name: R_v2_dt
-      title: MWDC-R v2 Drift Time  | Q > -11
+      title: MWDC-R v2 Drift Time  | Q > 21
       x: [smwdc_R_v2.fTiming, 200, -150, 300]
-      cut: smwdc_R_v2.fCharge > -11
+      cut: smwdc_R_v2.fCharge > 21
 
     #-------- plane DT vs ID
     - name: R_x1_dt_id
-      title: MWDC-R x1 Drift Time vs ID  | Q > -11
+      title: MWDC-R x1 Drift Time vs ID  | Q > 21
       x: [smwdc_R_x1.fID, 56, 1 , 57]
       y: [smwdc_R_x1.fTiming, 200, -150, 300]
-      cut: smwdc_R_x1.fCharge > -11
+      cut: smwdc_R_x1.fCharge > 21
 
     - name: R_x2_dt_id
-      title: MWDC-R x2 Drift Time vs ID  | Q > -11
+      title: MWDC-R x2 Drift Time vs ID  | Q > 21
       x: [smwdc_R_x2.fID, 56, 1 , 57]
       y: [smwdc_R_x2.fTiming, 200, -150, 300]
-      cut: smwdc_R_x2.fCharge > -11 
+      cut: smwdc_R_x2.fCharge > 21 
 
     - name: R_u1_dt_id
-      title: MWDC-R x1 Drift Time vs ID | Q > -11
+      title: MWDC-R x1 Drift Time vs ID | Q > 21
       x: [smwdc_R_u1.fID, 44, 1 , 45]
       y: [smwdc_R_u1.fTiming, 200, -150, 300]
-      cut: smwdc_R_u1.fCharge > -11
+      cut: smwdc_R_u1.fCharge > 21
 
     - name: R_u2_dt_id
-      title: MWDC-R x1 Drift Time vs ID | Q > -11
+      title: MWDC-R x1 Drift Time vs ID | Q > 21
       x: [smwdc_R_u2.fID, 44, 1 , 45]
       y: [smwdc_R_u2.fTiming, 200, -150, 300]
-      cut: smwdc_R_u2.fCharge > -11
+      cut: smwdc_R_u2.fCharge > 21
 
     - name: R_v1_dt_id
-      title: MWDC-R x1 Drift Time vs ID | Q > -11
+      title: MWDC-R x1 Drift Time vs ID | Q > 21
       x: [smwdc_R_v1.fID, 44, 1 , 45]
       y: [smwdc_R_v1.fTiming, 200, -150, 300]
-      cut: smwdc_R_v1.fCharge > -11
+      cut: smwdc_R_v1.fCharge > 21
 
     - name: R_v2_dt_id
-      title: MWDC-R x1 Drift Time vs ID | Q > -11
+      title: MWDC-R x1 Drift Time vs ID | Q > 21
       x: [smwdc_R_v2.fID, 44, 1 , 45]
       y: [smwdc_R_v2.fTiming, 200, -150, 300]
-      cut: smwdc_R_v1.fCharge > -11
+      cut: smwdc_R_v1.fCharge > 21
       
     #---------- plane DL
     - name: R_x1_dl
-      title: MWDC-R x1 Drift Length | Q > -11
+      title: MWDC-R x1 Drift Length | Q > 21
       x: [smwdc_R_x1.fDriftLength, 200, -1, 11]
-      cut: smwdc_R_x1.fCharge > -11
+      cut: smwdc_R_x1.fCharge > 21
 
     - name: R_x2_dl
-      title: MWDC-R x2 Drift Length | Q > -11
+      title: MWDC-R x2 Drift Length | Q > 21
       x: [smwdc_R_x2.fDriftLength, 200, -1, 11]
-      cut: smwdc_R_x2.fCharge > -11    
+      cut: smwdc_R_x2.fCharge > 21    
 
     - name: R_u1_dl
-      title: MWDC-R x1 Drift Length | Q > -11
+      title: MWDC-R x1 Drift Length | Q > 21
       x: [smwdc_R_u1.fDriftLength, 200, -1, 11]
-      cut: smwdc_R_u1.fCharge > -11
+      cut: smwdc_R_u1.fCharge > 21
 
     - name: R_u2_dl
-      title: MWDC-R x1 Drift Length | Q > -11
+      title: MWDC-R x1 Drift Length | Q > 21
       x: [smwdc_R_u2.fDriftLength, 200, -1, 11]
-      cut: smwdc_R_u2.fCharge > -11
+      cut: smwdc_R_u2.fCharge > 21
 
     - name: R_v1_dl
-      title: MWDC-R x1 Drift Length | Q > -11
+      title: MWDC-R x1 Drift Length | Q > 21
       x: [smwdc_R_v1.fDriftLength, 200, -1, 11]
-      cut: smwdc_R_v1.fCharge > -11
+      cut: smwdc_R_v1.fCharge > 21
 
     - name: R_v2_dl
-      title: MWDC-R x1 Drift Length | Q > -11
+      title: MWDC-R x1 Drift Length | Q > 21
       x: [smwdc_R_v2.fDriftLength, 200, -1, 11]
-      cut: smwdc_R_v2.fCharge > -11
+      cut: smwdc_R_v2.fCharge > 21
       
     #---------- plane ID vs DL
     - name: R_x1_dl_id
-      title: MWDC-R x1 Drift Length vs ID | Q > -11
+      title: MWDC-R x1 Drift Length vs ID | Q > 21
       x: [smwdc_R_x1.fID, 56, 1 , 57]
       y: [smwdc_R_x1.fDriftLength, 200, -1, 11]
-      cut: smwdc_R_x1.fCharge > -11
+      cut: smwdc_R_x1.fCharge > 21
 
     - name: R_x2_dl_id
-      title: MWDC-R x2 Drift Length vs ID| Q > -11
+      title: MWDC-R x2 Drift Length vs ID| Q > 21
       x: [smwdc_R_x2.fID, 56, 1 , 57]
       y: [smwdc_R_x2.fDriftLength, 200, -1, 11]    
-      cut: smwdc_R_x2.fCharge > -11
+      cut: smwdc_R_x2.fCharge > 21
 
     - name: R_u1_dl_id
-      title: MWDC-R x1 Drift Length vs ID | Q > -11
+      title: MWDC-R x1 Drift Length vs ID | Q > 21
       x: [smwdc_R_u1.fID, 44, 1 , 45]
       y: [smwdc_R_u1.fDriftLength, 200, -1, 11]
-      cut: smwdc_R_u1.fCharge > -11
+      cut: smwdc_R_u1.fCharge > 21
 
     - name: R_u2_dl_id
-      title: MWDC-R x1 Drift Length vs ID | Q > -11
+      title: MWDC-R x1 Drift Length vs ID | Q > 21
       x: [smwdc_R_u2.fID, 44, 1 , 45]
       y: [smwdc_R_u2.fDriftLength, 200, -1, 11]
-      cut: smwdc_R_u2.fCharge > -11
+      cut: smwdc_R_u2.fCharge > 21
 
     - name: R_v1_dl_id
-      title: MWDC-R x1 Drift Length vs ID | Q > -11
+      title: MWDC-R x1 Drift Length vs ID | Q > 21
       x: [smwdc_R_v1.fID, 44, 1 , 45]
       y: [smwdc_R_v1.fDriftLength, 200, -1, 11]
-      cut: smwdc_R_v1.fCharge > -11
+      cut: smwdc_R_v1.fCharge > 21
 
     - name: R_v2_dl_id
-      title: MWDC-R x1 Drift Length vs ID | Q > -11
+      title: MWDC-R x1 Drift Length vs ID | Q > 21
       x: [smwdc_R_v2.fID, 44, 1 , 45]
       y: [smwdc_R_v2.fDriftLength, 200, -1, 11]
-      cut: smwdc_R_v2.fCharge > -11
+      cut: smwdc_R_v2.fCharge > 21
 
     #------------------ Track Adopted
     - name:  R_DT_A
@@ -429,6 +434,11 @@ group:
       title: MWDC-R Adopted Drift Length vs WireID
       x: [smwdc_R.fWireIDAdopted, 55, 0, 55]
       y: [smwdc_R.fDriftLengthAdopted, 200, 0, 15]   
+
+    - name:  R_DTDL
+      title: MWDC-R DT-DL original | Tracked
+      x: [smwdc_R.fDriftTimeAdopted, 300, -150, 150]
+      y: [smwdc_R.fDriftLengthOriginal, 300, 0, 13]
     
     - name:  R_DTDL_tracked
       title: MWDC-R DT-DL corrected | Tracked
@@ -471,23 +481,23 @@ group:
     #------------------ Track Ray
     - name:  R_XA
       title: MWDC-R A vs X
-      x: [smwdc_R.fTrack.fX, 400, -200, 1000]
-      y: [smwdc_R.fTrack.fA, 400, -0.5, 1]
+      x: [smwdc_R.fTrack.fX, 1200, -200, 1000]
+      y: [smwdc_R.fTrack.fA, 400, -2, 2]
 
     - name:  R_XY
       title: MWDC-R Y vs X
-      x: [smwdc_R.fTrack.fX, 400, -200, 1000]
+      x: [smwdc_R.fTrack.fX, 1200, -200, 1000]
       y: [smwdc_R.fTrack.fY, 400, -200, 200]
 
     - name:  R_YB
       title: MWDC-R B vs Y
       x: [smwdc_R.fTrack.fY, 400, -200, 200]
-      y: [smwdc_R.fTrack.fB, 400, -0.5, 0.5]
+      y: [smwdc_R.fTrack.fB, 400, -1, 1]
 
     - name:  R_AB
       title: MWDC-R A vs B
-      x: [smwdc_R.fTrack.fA, 400, -0.5, 1]
-      y: [smwdc_R.fTrack.fB, 400, -0.5, 0.5]
+      x: [smwdc_R.fTrack.fA, 400, -2, 2]
+      y: [smwdc_R.fTrack.fB, 400, -1, 1]
 
 #===================================================
   - name: mwdc_LR

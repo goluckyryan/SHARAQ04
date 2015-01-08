@@ -1,6 +1,6 @@
 aliases:
 # beware to overwrite !!!
-  - &output 23F_0106_pid.root
+  - &output 23F_0108.root
  
 #  - &beamprm prm/kinematics/proton.yaml     
 #  - &beamprm prm/kinematics/14O.yaml  
@@ -15,19 +15,22 @@ Processor:
 #  - include: RunsProtonOptics.yaml
 #  - include: RunsProtonUp.yaml
 #  - include: RunsProtonDown.yaml
+#----------------------------------
   - include: RunsO22.yaml
 #  - include: RunsO22_single.yaml
 #  - include: RunsO22_clean.yaml
 #  - include: RunsO22_optics.yaml
-#  - include: RunsO14_0005.yaml
-#  - include: RunsO14Up.yaml
-#  - include: RunsO14Down.yaml
-#  - include: RunsO14Others.yaml
+#----------------------------------
+#  - include: RunsO14_single.yaml
+#  - include: RunsO14_Up.yaml
+#  - include: RunsO14_Down.yaml
+#  - include: RunsO14_Others.yaml
+#----------------------------------
 #  - include: RunsO24.yaml
-#  - include: RunsO24_0001.yaml
-#  - include: RunsO24Optics.yaml
-#  - include: RunsO24Up.yaml
-#  - include: RunsO24Down.yaml
+#  - include: RunsO24_single.yaml
+#  - include: RunsO24_optics.yaml
+#  - include: RunsO24_up.yaml
+#  - include: RunsO24_down.yaml
 #============= Mapper and Timer ============================
   - include: Mapper_Timer.yaml    
 #============== PROCESSORS     =============================
@@ -42,8 +45,14 @@ Processor:
 #  - include: dc91.yaml
 #  - include: dc91_track.yaml
   - include: plastic_V775.yaml             # include tof_DS
-  - include: Gate_PID.yaml
-  - include: Gate_PID_stop.yaml            #stop for 23F
+#  - include: Gate_PID_v1190.yaml
+  - include: Gate_PID_22Orun.yaml
+#  - include: Gate_PID_14Orun.yaml
+#  - include: Gate_PID_24Orun.yaml
+  - include: Gate_PID_stop_23F.yaml       
+#  - include: Gate_PID_stop_22O.yaml       
+#  - include: Gate_PID_stop_14O.yaml       
+#  - include: Gate_PID_stop_25F.yaml       
   - include: dcx1x2_timeRef.yaml           # required for dcx1 and dcx2
   - include: dcx1.yaml
 #  - include: dcx1_track.yaml
@@ -83,7 +92,7 @@ Processor:
   - include: recoil.yaml                   # set beamZ, angle correction
 #  - include: recoil_carbon.yaml
 #  - include: recoil_multiOffset.yaml
-#  - include: Gate_PIDdownstream.yaml
+#  - include: Gate_PIDdownstream_polygon.yaml
   - include: Gate_PIDdownstream_rectangle.yaml
 
   - name: projection

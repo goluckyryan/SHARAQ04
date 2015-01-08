@@ -1,0 +1,6 @@
+Processor:
+  - name: proc_stop_US
+    type: art::TGateStopProcessor
+    parameter:
+      GateName: 14O
+#===========================================================

@@ -169,7 +169,7 @@ group:
       
     - name:  S1_Q_A
       title: MWDC-S1 Drift Length Adopted
-      x: [smwdc_S1.fChargeAdopted, 300, 0, 2200]
+      x: [smwdc_S1.fChargeAdopted, 300, 0, 1500]
       
     - name:  S1_DL_org
       title: MWDC-S1 Drift Length Original
@@ -225,12 +225,12 @@ group:
     #------------------ Track Ray
     - name:  S1_XA
       title: MWDC-S1 A vs X
-      x: [smwdc_S1.fTrack.fX, 400, -200, 600]
+      x: [smwdc_S1.fTrack.fX, 800, -200, 600]
       y: [smwdc_S1.fTrack.fA, 400, -3, 3]
 
     - name:  S1_XY
       title: MWDC-S1 Y vs X
-      x: [smwdc_S1.fTrack.fX, 400, -200, 600]
+      x: [smwdc_S1.fTrack.fX, 800, -200, 600]
       y: [smwdc_S1.fTrack.fY, 400, -200, 200]
 
     - name:  S1_YB

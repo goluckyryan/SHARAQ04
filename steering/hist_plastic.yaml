@@ -5,11 +5,11 @@ group:
 #============================ 
     - name: plaV775_ID
       title: plaV775 ID
-      x: [plaV775.fID, 5, 0, 5]
+      x: [plaV775.fID, 10, 0, 5]
       
     - name: plaV775_ID_Q
       title: plaV775 Q vs ID
-      x: [plaV775.fID, 5, 0, 5]
+      x: [plaV775.fID, 10, 0, 5]
       y: [plaV775.fCharge, 200, 0, 5000]
 
 #============================ Tpla-L     
