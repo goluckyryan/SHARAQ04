@@ -8,7 +8,7 @@ Processor:
     parameter:
       Name:     prm_smwdc_S1_ch2ns
       Type:     art::TAffineConverter
-      FileName: prm/mwdc/smwdc_S1/ch2ns.dat.ryan
+      FileName: prm/mwdc/smwdc_S1/ch2ns.dat.ryan2
       
   - name: smwdc_S1_prm_ch2q
     type: art::TParameterArrayLoader
@@ -22,42 +22,42 @@ Processor:
     parameter:
       Name:     smwdc_S1_x1_dtdx
       Type:     art::TMonotoneTableConverter
-      FileName: prm/mwdc/smwdc_S1/ryan/x1.dat
+      FileName: prm/mwdc/smwdc_S1/ryan2/x1.dat
 
   - name: smwdc_S1_x2_dtdx
     type: art::TParameterLoader
     parameter:
       Name:     smwdc_S1_x2_dtdx
       Type:     art::TMonotoneTableConverter
-      FileName: prm/mwdc/smwdc_S1/ryan/x2.dat
+      FileName: prm/mwdc/smwdc_S1/ryan2/x2.dat
 
   - name: smwdc_S1_u1_dtdx
     type: art::TParameterLoader
     parameter:
       Name:     smwdc_S1_u1_dtdx
       Type:     art::TMonotoneTableConverter
-      FileName: prm/mwdc/smwdc_S1/ryan/u1.dat
+      FileName: prm/mwdc/smwdc_S1/ryan2/u1.dat
 
   - name: smwdc_S1_u2_dtdx
     type: art::TParameterLoader
     parameter:
       Name:     smwdc_S1_u2_dtdx
       Type:     art::TMonotoneTableConverter
-      FileName: prm/mwdc/smwdc_S1/ryan/u2.dat
+      FileName: prm/mwdc/smwdc_S1/ryan2/u2.dat
 
   - name: smwdc_S1_v1_dtdx
     type: art::TParameterLoader
     parameter:
       Name:     smwdc_S1_v1_dtdx
       Type:     art::TMonotoneTableConverter
-      FileName: prm/mwdc/smwdc_S1/ryan/v1.dat
+      FileName: prm/mwdc/smwdc_S1/ryan2/v1.dat
 
   - name: smwdc_S1_v2_dtdx
     type: art::TParameterLoader
     parameter:
       Name:     smwdc_S1_v2_dtdx
       Type:     art::TMonotoneTableConverter
-      FileName: prm/mwdc/smwdc_S1/ryan/v2.dat
+      FileName: prm/mwdc/smwdc_S1/ryan2/v2.dat
       
   - name: mwdc_S1_geo
     type: art::TParameterLoader

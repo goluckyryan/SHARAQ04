@@ -1,0 +1,14 @@
+group:
+  - name: mwdc_LR
+    title: mwdc_LR_check
+    contents:      
+    - name:  beamZ
+      title: beamZ 
+      x: [beamZ.fAverage, 400, -100, 300]
+      
+    - name:  beamZ_LR
+      title: beamZ gated
+      x: [beamZ.fL, 400, -100, 300]
+      y: [beamZ.fR, 400, -100, 300]
+      
+

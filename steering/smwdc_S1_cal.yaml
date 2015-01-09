@@ -1,12 +1,12 @@
 ######################################################################
-# TMWDCCalibrationProcessor, run for first time. after loop, run /share/marco/MWDCCalib.C
+# TMWDCCalibrationProcessor, run for first time. run $ mwdccalib
 # only run for frist time to geneterate DT2DL table
 # change the TimingGate and ChargeGate
 alias:
 - &tmin -100
-- &tmax 200
-- &qmin 600
-- &qmax 1200
+- &tmax 300
+- &qmin 350
+- &qmax 5000
 - &usemax 1
 
 Processor:
@@ -17,6 +17,7 @@ Processor:
       TimingGate:        [*tmin, *tmax]
       ChargeGate:        [*qmin, *qmax]
       UseMax:            *usemax
+      Gate:              smwdc_S1_x1.fID != 29 & abs(smwdc_S1_x1.fID-30)<10
 
   - name: mwdccalib_smwdc_S1_x2
     type: art::TMWDCCalibrationProcessor
@@ -25,6 +26,7 @@ Processor:
       TimingGate:       [*tmin, *tmax]
       ChargeGate:       [*qmin, *qmax]
       UseMax:            *usemax
+      Gate:              smwdc_S1_x2.fID != 29 & abs(smwdc_S1_x2.fID-30)<10
 
   - name: mwdccalib_smwdc_S1_u1
     type: art::TMWDCCalibrationProcessor
@@ -49,6 +51,7 @@ Processor:
       TimingGate:     [*tmin, *tmax]
       ChargeGate:     [*qmin, *qmax]
       UseMax:            *usemax
+      Gate:           abs(smwdc_S1_u1.fID-22)<10
 
   - name: mwdccalib_smwdc_S1_v2
     type: art::TMWDCCalibrationProcessor
@@ -57,6 +60,7 @@ Processor:
       TimingGate:     [*tmin, *tmax]
       ChargeGate:     [*qmin, *qmax]
       UseMax:            *usemax
+      Gate:           abs(smwdc_S1_u2.fID-22)<10
       
 #==================================================      
 

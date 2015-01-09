@@ -1,12 +1,31 @@
+alias:
+  ChargeMin_S1: +350
+  wireIDGate: +29 
+  nyoki_t_Gate: abs(nyoki_t-2272)<100  
+aliases:
+  - &ChargeGate_S1 "MWDC-S1 x1 Drift Time | Qgate = Q > 350"
+  
 group:
+#======================================================= SMWDC-S1
   - name: mwdc_S1
     title: mwdc_S1_check
     contents:      
     #------------------ cal
     - name:  S1_Traw
       title: MWDC-S1 Raw Time
-      x: [smwdc_S1_cal.fTiming, 500, -500, 500]
+      x: [smwdc_S1_cal.fTiming, 500, -3000, 500]
 
+    - name:  nyoki_t
+      title: nyoki_t Raw Time
+      x: [nyoki_t.fTiming, 500, -3000, 500]
+
+
+    - name:  raw_time
+      title: MWDC-S1 vs nyoki_t Raw Time
+      x: ["nyoki_t[0].fTiming", 500, -3000, 500]
+      y: [smwdc_S1_cal.fTiming, 500, -3000, 500]
+
+      
     #------------------ DT
     - name:  S1_DT
       title: MWDC-S1 Drift Time
@@ -18,8 +37,13 @@ group:
         
     - name:  S1_DT_id
       title: MWDC-S1 Drift Time vs ID
-      x: [smwdc_S1_DT.fTiming, 370, -100, 300]
-      y: [smwdc_S1_DT.fID, 288, 0 , 288]
+      x: [smwdc_S1_DT.fID, 288, 0 , 288]
+      y: [smwdc_S1_DT.fTiming, 370, -100, 300]
+      
+    - name:  S1_TW_id
+      title: MWDC-L Q vs ID
+      x: [smwdc_S1_DT.fID, 288, 0 , 288]
+      y: [smwdc_S1_DT.fCharge, 300,    0, 1500]
             
     - name:  S1_TW_TL
       title: MWDC-S1 Energy Loss vd Drift-time
@@ -28,139 +52,139 @@ group:
 
     #------------------ plane
     - name: S1_x1_dt
-      title: MWDC-S1 x1 Drift Time | Q > 600
+      title: *ChargeGate_S1
       x: [smwdc_S1_x1.fTiming, 200, -100, 300]
-      cut: smwdc_S1_x1.fCharge > 600
+      cut: smwdc_S1_x1.fCharge > ChargeMin_S1
 
     - name: S1_x2_dt
-      title: MWDC-S1 x2 Drift Time | Q > 600
+      title: MWDC-S1 x2 Drift Time | Qgate
       x: [smwdc_S1_x2.fTiming, 200, -100, 300]    
-      cut: smwdc_S1_x2.fCharge > 600
+      cut: smwdc_S1_x2.fCharge > ChargeMin_S1
 
     - name: S1_u1_dt
-      title: MWDC-S1 u1 Drift Time  | Q > 600
+      title: MWDC-S1 u1 Drift Time  | Qgate
       x: [smwdc_S1_u1.fTiming, 200, -100, 300]
-      cut: smwdc_S1_u1.fCharge > 600
+      cut: smwdc_S1_u1.fCharge > ChargeMin_S1
 
     - name: S1_u2_dt
-      title: MWDC-S1 u2 Drift Time  | Q > 600
+      title: MWDC-S1 u2 Drift Time  | Qgate
       x: [smwdc_S1_u2.fTiming, 200, -100, 300]
-      cut: smwdc_S1_u2.fCharge > 600
+      cut: smwdc_S1_u2.fCharge > ChargeMin_S1
 
     - name: S1_v1_dt
-      title: MWDC-S1 v1 Drift Time  | Q > 600
+      title: MWDC-S1 v1 Drift Time  | Qgate
       x: [smwdc_S1_v1.fTiming, 200, -100, 300]
-      cut: smwdc_S1_v1.fCharge > 600
+      cut: smwdc_S1_v1.fCharge > ChargeMin_S1
 
     - name: S1_v2_dt
-      title: MWDC-S1 v2 Drift Time  | Q > 600
+      title: MWDC-S1 v2 Drift Time  | Qgate
       x: [smwdc_S1_v2.fTiming, 200, -100, 300]
-      cut: smwdc_S1_v2.fCharge > 600
+      cut: smwdc_S1_v2.fCharge > ChargeMin_S1
 
     #-------- plane DT vs ID
     - name: S1_x1_dt_id
-      title: MWDC-S1 x1 Drift Time vs ID  | Q > 600
+      title: MWDC-S1 x1 Drift Time vs ID  | Qgate
       x: [smwdc_S1_x1.fID, 56, 1 , 57]
       y: [smwdc_S1_x1.fTiming, 200, -100, 300]
-      cut: smwdc_S1_x1.fCharge > 600
+      cut: smwdc_S1_x1.fCharge > ChargeMin_S1 & smwdc_S1_x1.fID != wireIDGate
 
     - name: S1_x2_dt_id
-      title: MWDC-S1 x2 Drift Time vs ID  | Q > 600
+      title: MWDC-S1 x2 Drift Time vs ID  | Qgate
       x: [smwdc_S1_x2.fID, 56, 1 , 57]
       y: [smwdc_S1_x2.fTiming, 200, -100, 300]
-      cut: smwdc_S1_x2.fCharge > 600 
+      cut: smwdc_S1_x2.fCharge > ChargeMin_S1 & smwdc_S1_x2.fID != wireIDGate
 
     - name: S1_u1_dt_id
-      title: MWDC-S1 x1 Drift Time vs ID | Q > 600
+      title: MWDC-S1 u1 Drift Time vs ID | Qgate
       x: [smwdc_S1_u1.fID, 44, 1 , 45]
       y: [smwdc_S1_u1.fTiming, 200, -100, 300]
-      cut: smwdc_S1_u1.fCharge > 600
+      cut: smwdc_S1_u1.fCharge > ChargeMin_S1
 
     - name: S1_u2_dt_id
-      title: MWDC-S1 x1 Drift Time vs ID | Q > 600
+      title: MWDC-S1 u2 Drift Time vs ID | Qgate
       x: [smwdc_S1_u2.fID, 44, 1 , 45]
       y: [smwdc_S1_u2.fTiming, 200, -100, 300]
-      cut: smwdc_S1_u2.fCharge > 600
+      cut: smwdc_S1_u2.fCharge > ChargeMin_S1
 
     - name: S1_v1_dt_id
-      title: MWDC-S1 x1 Drift Time vs ID | Q > 600
+      title: MWDC-S1 v1 Drift Time vs ID | Qgate
       x: [smwdc_S1_v1.fID, 44, 1 , 45]
       y: [smwdc_S1_v1.fTiming, 200, -100, 300]
-      cut: smwdc_S1_v1.fCharge > 600
+      cut: smwdc_S1_v1.fCharge > ChargeMin_S1
 
     - name: S1_v2_dt_id
-      title: MWDC-S1 x1 Drift Time vs ID | Q > 600
+      title: MWDC-S1 v2 Drift Time vs ID | Qgate
       x: [smwdc_S1_v2.fID, 44, 1 , 45]
       y: [smwdc_S1_v2.fTiming, 200, -100, 300]
-      cut: smwdc_S1_v1.fCharge > 600
+      cut: smwdc_S1_v1.fCharge > ChargeMin_S1
       
     #---------- plane DL
     - name: S1_x1_dl
-      title: MWDC-S1 x1 Drift Length | Q > 600
+      title: MWDC-S1 x1 Drift Length | Qgate
       x: [smwdc_S1_x1.fDriftLength, 200, -1, 11]
-      cut: smwdc_S1_x1.fCharge > 600
+      cut: smwdc_S1_x1.fCharge > ChargeMin_S1 & smwdc_S1_x1.fID != wireIDGate
 
     - name: S1_x2_dl
-      title: MWDC-S1 x2 Drift Length | Q > 600
+      title: MWDC-S1 x2 Drift Length | Qgate
       x: [smwdc_S1_x2.fDriftLength, 200, -1, 11]
-      cut: smwdc_S1_x2.fCharge > 600    
+      cut: smwdc_S1_x2.fCharge > ChargeMin_S1 & smwdc_S1_x2.fID != wireIDGate   
 
     - name: S1_u1_dl
-      title: MWDC-S1 x1 Drift Length | Q > 600
+      title: MWDC-S1 u1 Drift Length | Qgate
       x: [smwdc_S1_u1.fDriftLength, 200, -1, 11]
-      cut: smwdc_S1_u1.fCharge > 600
+      cut: smwdc_S1_u1.fCharge > ChargeMin_S1
 
     - name: S1_u2_dl
-      title: MWDC-S1 x1 Drift Length | Q > 600
+      title: MWDC-S1 u2 Drift Length | Qgate
       x: [smwdc_S1_u2.fDriftLength, 200, -1, 11]
-      cut: smwdc_S1_u2.fCharge > 600
+      cut: smwdc_S1_u2.fCharge > ChargeMin_S1
 
     - name: S1_v1_dl
-      title: MWDC-S1 x1 Drift Length | Q > 600
+      title: MWDC-S1 v1 Drift Length | Qgate
       x: [smwdc_S1_v1.fDriftLength, 200, -1, 11]
-      cut: smwdc_S1_v1.fCharge > 600
+      cut: smwdc_S1_v1.fCharge > ChargeMin_S1
 
     - name: S1_v2_dl
-      title: MWDC-S1 x1 Drift Length | Q > 600
+      title: MWDC-S1 v2 Drift Length | Qgate
       x: [smwdc_S1_v2.fDriftLength, 200, -1, 11]
-      cut: smwdc_S1_v2.fCharge > 600
+      cut: smwdc_S1_v2.fCharge > ChargeMin_S1
       
     #---------- plane ID vs DL
     - name: S1_x1_dl_id
-      title: MWDC-S1 x1 Drift Length vs ID | Q > 600
+      title: MWDC-S1 x1 Drift Length vs ID | Qgate
       x: [smwdc_S1_x1.fID, 56, 1 , 57]
       y: [smwdc_S1_x1.fDriftLength, 200, -1, 11]
-      cut: smwdc_S1_x1.fCharge > 600
+      cut: smwdc_S1_x1.fCharge > ChargeMin_S1 & smwdc_S1_x1.fID != wireIDGate
 
     - name: S1_x2_dl_id
-      title: MWDC-S1 x2 Drift Length vs ID| Q > 600
+      title: MWDC-S1 x2 Drift Length vs ID| Qgate
       x: [smwdc_S1_x2.fID, 56, 1 , 57]
       y: [smwdc_S1_x2.fDriftLength, 200, -1, 11]    
-      cut: smwdc_S1_x2.fCharge > 600
+      cut: smwdc_S1_x2.fCharge > ChargeMin_S1 & smwdc_S1_x2.fID != wireIDGate
 
     - name: S1_u1_dl_id
-      title: MWDC-S1 x1 Drift Length vs ID | Q > 600
+      title: MWDC-S1 u1 Drift Length vs ID | Qgate
       x: [smwdc_S1_u1.fID, 44, 1 , 45]
       y: [smwdc_S1_u1.fDriftLength, 200, -1, 11]
-      cut: smwdc_S1_u1.fCharge > 600
+      cut: smwdc_S1_u1.fCharge > ChargeMin_S1
 
     - name: S1_u2_dl_id
-      title: MWDC-S1 x1 Drift Length vs ID | Q > 600
+      title: MWDC-S1 u2 Drift Length vs ID | Qgate
       x: [smwdc_S1_u2.fID, 44, 1 , 45]
       y: [smwdc_S1_u2.fDriftLength, 200, -1, 11]
-      cut: smwdc_S1_u2.fCharge > 600
+      cut: smwdc_S1_u2.fCharge > ChargeMin_S1
 
     - name: S1_v1_dl_id
-      title: MWDC-S1 x1 Drift Length vs ID | Q > 600
+      title: MWDC-S1 v1 Drift Length vs ID | Qgate
       x: [smwdc_S1_v1.fID, 44, 1 , 45]
       y: [smwdc_S1_v1.fDriftLength, 200, -1, 11]
-      cut: smwdc_S1_v1.fCharge > 600
+      cut: smwdc_S1_v1.fCharge > ChargeMin_S1
 
     - name: S1_v2_dl_id
-      title: MWDC-S1 x1 Drift Length vs ID | Q > 600
+      title: MWDC-S1 v2 Drift Length vs ID | Qgate
       x: [smwdc_S1_v2.fID, 44, 1 , 45]
       y: [smwdc_S1_v2.fDriftLength, 200, -1, 11]
-      cut: smwdc_S1_v2.fCharge > 600
+      cut: smwdc_S1_v2.fCharge > ChargeMin_S1
 
     #------------------ Track Adopted
     - name:  S1_DT_A
@@ -168,7 +192,7 @@ group:
       x: [smwdc_S1.fDriftTimeAdopted, 300, -100, 200]
       
     - name:  S1_Q_A
-      title: MWDC-S1 Drift Length Adopted
+      title: MWDC-S1 Q Adopted
       x: [smwdc_S1.fChargeAdopted, 300, 0, 1500]
       
     - name:  S1_DL_org
@@ -178,11 +202,21 @@ group:
     - name: S1_DL_A
       title: MWDC-S1 Drift Length Adopted 
       x: [smwdc_S1.fDriftLengthAdopted, 300, -1, 11]  
+     
+    - name: S1_DL_org_id_A
+      title: MWDC-S1 Drift Length Original vs WireID
+      x: [smwdc_S1.fWireIDAdopted, 57, 1, 57]
+      y: [smwdc_S1.fDriftLengthOriginal, 200, 0, 15]    
       
-    - name: S1_DL_A_id
+    - name: S1_DL_A_id_A
       title: MWDC-S1 Adopted Drift Length vs WireID
-      x: [smwdc_S1.fWireIDAdopted, 55, 0, 55]
+      x: [smwdc_S1.fWireIDAdopted, 57, 1, 57]
       y: [smwdc_S1.fDriftLengthAdopted, 200, 0, 15]   
+
+    - name:  S1_DTDL
+      title: MWDC-S1 DT-DL original | Tracked
+      x: [smwdc_S1.fDriftTimeAdopted, 300, -50, 250]
+      y: [smwdc_S1.fDriftLengthOriginal, 300, 0, 13]
     
     - name:  S1_DTDL_tracked
       title: MWDC-S1 DT-DL corrected | Tracked
@@ -201,7 +235,7 @@ group:
       
     - name: S1_good
       title: MWDC-S1 tracked | firedPlane!=0
-      x: [smwdc_S1.IsGood(), 2, 0, 2]
+      x: [smwdc_S1.IsGood(), 4, -1, 3]
       cut: "smwdc_S1.fNPlaneValid != 0"
     
     - name: S1_ssr
@@ -210,17 +244,17 @@ group:
     
     #------------------ Sigma
     - name: S1_sX
-      title: MWDC-S1 Sigma(X)
+      title: MWDC-S1 Sigma(X) [mm]
       x: [smwdc_S1.GetSigma(0), 100, 0, 1]
     - name: S1_sA
-      title: MWDC-S1 Sigma(A)
-      x: [smwdc_S1.GetSigma(1)*1000, 100, 0, 10]
+      title: MWDC-S1 Sigma(A) [mrad]
+      x: [smwdc_S1.GetSigma(1)*1000, 100, 0, 50]
     - name: S1_sY
-      title: MWDC-S1 Sigma(Y)
+      title: MWDC-S1 Sigma(Y) [mm]
       x: [smwdc_S1.GetSigma(2), 100, 0, 1]
     - name: S1_sB
-      title: MWDC-S1 Sigma(B)
-      x: [smwdc_S1.GetSigma(3)*1000, 100, 0, 30]
+      title: MWDC-S1 Sigma(B) [mrad]
+      x: [smwdc_S1.GetSigma(3)*1000, 100, 0, 50]
     
     #------------------ Track Ray
     - name:  S1_XA
@@ -243,18 +277,72 @@ group:
       x: [smwdc_S1.fTrack.fA, 400, -3, 3]
       y: [smwdc_S1.fTrack.fB, 400, -3, 3]
 
-    - name:  S1_XA_s
-      title: MWDC-S1 A vs X -32.5
-      x: [smwdc_S1.fTrack.X(-32.5), 800, -200, 400]
-      y: [smwdc_S1.fTrack.fA, 400, -3, 3]
+    #-------------------- Check wire Direction
+    - name: S1_x1_wiredir
+      title: MWDC-S1 x1 wire dir
+      x: [smwdc_S1.fTrack.X(-40), 800, -200, 600]
+      y: [smwdc_S1.fTrack.Y(-40), 400, -200, 200]
+      cut: smwdc_S1.GetWireIDAdopted(0)
+
+    - name: S1_x2_wiredir
+      title: MWDC-S1 x2 wire dir
+      x: [smwdc_S1.fTrack.X(-24), 800, -200, 600]
+      y: [smwdc_S1.fTrack.Y(-24), 400, -200, 200]
+      cut: smwdc_S1.GetWireIDAdopted(1)
+
+    - name: S1_u1_wiredir
+      title: MWDC-S1 u1 wire dir
+      x: [smwdc_S1.fTrack.X(-8), 800, -200, 600]
+      y: [smwdc_S1.fTrack.Y(-8), 400, -200, 200]
+      cut: smwdc_S1.GetWireIDAdopted(2)
+
+    - name: S1_u2_wiredir
+      title: MWDC-S1 u2 wire dir
+      x: [smwdc_S1.fTrack.X(8), 800, -200, 600]
+      y: [smwdc_S1.fTrack.Y(8), 400, -200, 200]
+      cut: smwdc_S1.GetWireIDAdopted(3)
+
+    - name: S1_v1_wiredir
+      title: MWDC-S1 v1 wire dir
+      x: [smwdc_S1.fTrack.X(24), 800, -200, 600]
+      y: [smwdc_S1.fTrack.Y(24), 400, -200, 200]
+      cut: smwdc_S1.GetWireIDAdopted(4)
+
+    - name: S1_v2_wiredir
+      title: MWDC-S1 v2 wire dir
+      x: [smwdc_S1.fTrack.X(40), 800, -200, 600]
+      y: [smwdc_S1.fTrack.Y(40), 400, -200, 200]
+      cut: smwdc_S1.GetWireIDAdopted(5)
       
-    - name:  S1_XY_s
-      title: MWDC-S1 Y vs X -32.5
-      x: [smwdc_S1.fTrack.X(-32.5), 400, -200, 400]
-      y: [smwdc_S1.fTrack.Y(-32.5), 400, -200, 200]
+    #---------------------- Check ray distribution
+    - name: S1_x1_ray
+      title: MWDC-S1 x1 ray
+      x: [smwdc_S1.fTrack.X(-40)*1.0+0.0*smwdc_S1.fTrack.Y(-40), 800, -200, 600]
+      cut: smwdc_S1.GetWireIDAdopted(0)
       
-    - name:  S1_YB_s
-      title: MWDC-S1 B vs Y -32.5
-      x: [smwdc_S1.fTrack.Y(-32.5), 400, -200, 200]
-      y: [smwdc_S1.fTrack.fB, 400, -3, 3]
+    - name: S1_x2_ray
+      title: MWDC-S1 x2 ray
+      x: [smwdc_S1.fTrack.X(-24)*1.0+0.0*smwdc_S1.fTrack.Y(-24), 800, -200, 600]
+      cut: smwdc_S1.GetWireIDAdopted(1)
+      
+    - name: S1_u1_ray
+      title: MWDC-S1 u1 ray
+      x: [smwdc_S1.fTrack.X(-8)*0.8-0.6*smwdc_S1.fTrack.Y(-8), 800, -200, 600]
+      cut: smwdc_S1.GetWireIDAdopted(2)
+      
+    - name: S1_u2_ray
+      title: MWDC-S1 u2 ray
+      x: [smwdc_S1.fTrack.X(8)*0.8-0.6*smwdc_S1.fTrack.Y(8), 800, -200, 600]
+      cut: smwdc_S1.GetWireIDAdopted(3)
+      
+    - name: S1_v1_ray
+      title: MWDC-S1 v1 ray
+      x: [smwdc_S1.fTrack.X(24)*0.8+0.6*smwdc_S1.fTrack.Y(24), 800, -200, 600]
+      cut: smwdc_S1.GetWireIDAdopted(4)
+      
+    - name: S1_v2_ray
+      title: MWDC-S1 v2 ray
+      x: [smwdc_S1.fTrack.X(40)*0.8+0.6*smwdc_S1.fTrack.Y(40), 800, -200, 600]
+      cut: smwdc_S1.GetWireIDAdopted(5)
+
 

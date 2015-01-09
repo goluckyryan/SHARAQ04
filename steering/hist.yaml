@@ -2,7 +2,9 @@ include:
   - hist_ana.yaml
 #  - hist_dsPID.yaml
   - hist_plastic.yaml
-  - hist_mwdc.yaml
+  - hist_mwdc_L.yaml
+  - hist_mwdc_R.yaml
+  - hist_mwdc_LR.yaml
   - hist_mwdc_s1.yaml
 #  - hist_nyoki.yaml # for no upstream PID gate out
 #  - hist_nyoki2.yaml # run by run

@@ -1,6 +1,6 @@
 aliases:
 # beware to overwrite !!!
-  - &output 23F_0108.root
+  - &output test.root
  
 #  - &beamprm prm/kinematics/proton.yaml     
 #  - &beamprm prm/kinematics/14O.yaml  
@@ -37,14 +37,20 @@ Processor:
   - include: coinReg.yaml
   - include: Gate_Initialtor.yaml
 #  - include: Gate_coinReg.yaml
+
+    #----------------- BigRIPS & plastics
   - include: plastic_V1190_prm.yaml
   - include: plastic_V1190_F3.yaml         # no branch output
   - include: plastic_V1190_FH9.yaml
-  - include: plastic_tof_US.yaml
+  - include: plastic_tof_US.yaml 
 #  - include: ppac_old.yaml
 #  - include: dc91.yaml
 #  - include: dc91_track.yaml
   - include: plastic_V775.yaml             # include tof_DS
+#  - include: dcS0D.yaml                    
+#  - include: TTD.yaml                      # reuire plastic_V775 for tof
+
+    #-----------------  PID
 #  - include: Gate_PID_v1190.yaml
   - include: Gate_PID_22Orun.yaml
 #  - include: Gate_PID_14Orun.yaml
@@ -52,7 +58,9 @@ Processor:
   - include: Gate_PID_stop_23F.yaml       
 #  - include: Gate_PID_stop_22O.yaml       
 #  - include: Gate_PID_stop_14O.yaml       
-#  - include: Gate_PID_stop_25F.yaml       
+#  - include: Gate_PID_stop_25F.yaml     
+
+    #---------------- S0img  
   - include: dcx1x2_timeRef.yaml           # required for dcx1 and dcx2
   - include: dcx1.yaml
 #  - include: dcx1_track.yaml
@@ -61,23 +69,26 @@ Processor:
   - include: S0img.yaml
   - include: Gate_S0img.yaml
 #  - include: Gate_S0img_stop.yaml
-#  - include: dcS0D.yaml                    
-#  - include: TTD.yaml                      # reuire plastic_V775 for tof
+
+    #------------------ MWDC-L and R
   - include: plastic_V767_timeRef.yaml
   - include: plastic_V767.yaml
   - include: smwdc_l_PolyConvert.yaml
+#  - include: smwdc_l_TableConvert.yaml
   - include: smwdc_l_track.yaml  
-#  - include: smwdc_l_track_gated.yaml
-  - include: smwdc_r_PolyConvert.yaml     
-  - include: smwdc_r_track.yaml
-#  - include: smwdc_r_track_gated.yaml
-  - include: s1_time_ref.yaml              
-  - include: nyoki.yaml                    # reuire plastic_V775 for tof, and s1_time_ref
+#  - include: smwdc_l_cal.yaml
+#  - include: smwdc_r_PolyConvert.yaml     
+#  - include: smwdc_r_track.yaml
+
+    #------------------ D1 analysis
+  - include: s1_time_ref.yaml              # required
+  - include: nyoki.yaml                    # require plastic_V775 for tof, and s1_time_ref
   - include: smwdc_S1_TableConvert.yaml    # require nyoki and s1_time_ref
   - include: smwdc_S1_track.yaml
 #  - include: smwdc_S1_cal.yaml
   - include: Gate_nyokiQ.yaml
 
+    #------------------- Physics
   - name: proc_beam
     type: art::TParameterLoader
     parameter:
@@ -85,7 +96,7 @@ Processor:
       Type:     art::sh04::TBeamParameter
       FileName: *beamprm
 
-  - include: PID_upstream.yaml
+  - include: PID.yaml
   - include: smwdc_geo.yaml
   - include: beamZ.yaml
   - include: vertex.yaml
@@ -95,6 +106,7 @@ Processor:
 #  - include: Gate_PIDdownstream_polygon.yaml
   - include: Gate_PIDdownstream_rectangle.yaml
 
+    #------------------ Hist
   - name: projection
     type: art::TTreeProjectionProcessor
     parameter:
