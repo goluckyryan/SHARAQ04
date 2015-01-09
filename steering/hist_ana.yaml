@@ -1,14 +1,31 @@
+aliases:
+  - &title_SpSimple "Sp | simple = PID(23F) + |vertex.Z-10|<60 + |tof_D1-35|<10"
+  - &title_Spcommon "Sp | common = simple + |openAng-80|<10 + nyoki.Q>499 + 2<nyoki.ID<10"
+  
 alias:
+  vertexCenter: +10
+  vertexWidth: +60
+  tofDSCenter: +35
+  tofDSWidth: +10
+  nyokiQmin: +499
+  nyokiIDmin: +2
+  nyokiIDmax: +10
+  openAngCenter: +80
+  openAngWith: +10
+  SpCenter: +20
+  SpWidth: +20
+  
   pid23F: gate.Test(0)
-  vertexGate: TMath::Abs(vertex.fZ-10)<60
-  tofDSGate: TMath::Abs(tof_D1.fTiming-35)<10
+  vertexGate: TMath::Abs(vertex.fZ-vertexCenter)< vertexWidth
+  tofDSGate: TMath::Abs(tof_D1.fTiming-tofDSCenter)< tofDSWidth
+  
   simpleGate: pid23F & tofDSGate & vertexGate
   
   tgtGate: gate.Test(9)
   holderGate: gate.Test(11) & !gate.Test(9)
-  nyokiIDGate: abs(nyoki.fID-8)<=2 # don't know why does not work
-  nyokiQGate: 1000 < nyoki.fCharge # don't know why does not work
-  openAngGate: TMath::Abs((p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()-80)<10
+  nyokiIDGate: (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) # don't know why does not work
+  nyokiQGate:  nyoki.fCharge > nyokiQmin # don't know why does not work
+  openAngGate: TMath::Abs((p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()-openAngCenter)<openAngWith
   openPhiGate: TMath::Abs((TMath::Abs(p2p.fRecoilL.Phi()-p2p.fRecoilR.Phi()))*TMath::RadToDeg()-180)<10
   
   commonGate: simpleGate & openAngGate
@@ -58,7 +75,7 @@ group:
       title: S0img X vs nyokiID | PID(23F)
       x: [nyoki.fID, 10, 1, 11]
       y: ["S0img[0].fTrack.fX", 500, -50, 50]
-      cut: gate.Test(0)
+      cut: gate.Test(0) & & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax)
       
     - name: S0imgY_nyokiID
       title: S0img Y vs nyokiID | PID(23F)
@@ -70,6 +87,11 @@ group:
       title: Vertex.Z | PID(23F)
       x: [vertex.fZ, 300, -100, 200]
       cut: gate.Test(0)
+      
+    - name: vertexZ_gate
+      title: Vertex.Z | PID(23F)
+      x: [vertex.fZ, 300, -100, 200]
+      cut: gate.Test(0) & vertexGate
       
     - name: vertexXY
       title: Vertex.XY | PID(23F)
@@ -116,7 +138,7 @@ group:
       
 #============================ p2p
     - name: openAng_simple
-      title: openAng | simple
+      title: openAng | simple 
       x: [(p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg(), 120, 60, 90]
       cut: simpleGate
       
@@ -133,12 +155,12 @@ group:
     - name: openPhi_common_tgt
       title: openPhi | common tgt
       x: [(TMath::Abs(p2p.fRecoilL.Phi()-p2p.fRecoilR.Phi()))*TMath::RadToDeg()-180, 100, -50, 50]
-      cut: commonGate & nyoki.fCharge>456 & abs(nyoki.fID-8)<3 & tgtGate
+      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & tgtGate
 
     - name: openPhi_common_holder
       title: openPhi | common holder
       x: [(TMath::Abs(p2p.fRecoilL.Phi()-p2p.fRecoilR.Phi()))*TMath::RadToDeg()-180, 100, -50, 50]
-      cut: commonGate & nyoki.fCharge>456 & abs(nyoki.fID-8)<3 & holderGate
+      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & holderGate
       
     - name: PID_downstream_simple
       title: PID Downstream | simple
@@ -150,53 +172,59 @@ group:
       title: PID Downstream | common
       x: [pid_ds.fAOQ, 500, 1.8, 3.2]
       y: [pid_ds.fZ, 500, 1, 12]
-      cut: commonGate & nyoki.fCharge>456 & abs(nyoki.fID-8)<3
+      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax)
       
     - name: PID_downstream_common_tgt
       title: PID Downstream | common tgt
       x: [pid_ds.fAOQ, 500, 1.8, 3.2]
       y: [pid_ds.fZ, 500, 1, 12]
-      cut: commonGate & nyoki.fCharge>456 & abs(nyoki.fID-8)<3 & tgtGate
+      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & tgtGate
 
     - name: PID_downstream_common_holder
       title: PID Downstream | common holder
       x: [pid_ds.fAOQ, 500, 1.8, 3.2]
       y: [pid_ds.fZ, 500, 1, 12]
-      cut: commonGate & nyoki.fCharge>456 & abs(nyoki.fID-8)<3 & holderGate
+      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & holderGate
       
     - name: PID_downstream_Sp
       title: PID Downstream | common tgt |Sp-20|<20
       x: [pid_ds.fAOQ, 500, 1.8, 3.2]
       y: [pid_ds.fZ, 500, 1, 12]
-      cut: commonGate & nyoki.fCharge>456 & abs(nyoki.fID-8)<3 & tgt & abs(p2p.fSp-20)<20
+      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & tgtGate & abs(p2p.fSp-SpCenter)<SpWidth
       
     - name: NyokiPID_simple
-      title: QDC(Nyoki) vs Tof(S0D-Nyoki)
+      title: QDC(Nyoki) vs Tof(S0D-Nyoki) | simple
       x: [tof_D1.fTiming, 400, 25, 45]
       y: [nyoki.fCharge, 400, 500, 2200]
       cut: simpleGate
     
     - name: NyokiPID_common
-      title: QDC(Nyoki) vs Tof(S0D-Nyoki)
+      title: QDC(Nyoki) vs Tof(S0D-Nyoki) | common
       x: [tof_D1.fTiming, 400, 25, 45]
       y: [nyoki.fCharge, 400, 500, 2200]
-      cut: commonGate & nyoki.fCharge>456 & abs(nyoki.fID-8)<3
+      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax)
       
     - name: NyokiPID_common_tgt
-      title: QDC(Nyoki) vs Tof(S0D-Nyoki)
+      title: QDC(Nyoki) vs Tof(S0D-Nyoki) | common tgt
       x: [tof_D1.fTiming, 400, 25, 45]
       y: [nyoki.fCharge, 400, 500, 2200]
-      cut: commonGate & nyoki.fCharge>456 & abs(nyoki.fID-8)<3 & tgtGate
+      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & tgtGate
       
     - name: NyokiPID_common_holder
-      title: QDC(Nyoki) vs Tof(S0D-Nyoki)
+      title: QDC(Nyoki) vs Tof(S0D-Nyoki) | common holder
       x: [tof_D1.fTiming, 400, 25, 45]
       y: [nyoki.fCharge, 400, 500, 2200]
-      cut: commonGate & nyoki.fCharge>456 & abs(nyoki.fID-8)<3 & holderGate
-      
+      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & holderGate
+
+    - name: NyokiPID_Sp
+      title: QDC(Nyoki) vs Tof(S0D-Nyoki) | common tgt |Sp-20|<20
+      x: [tof_D1.fTiming, 400, 25, 45]
+      y: [nyoki.fCharge, 400, 500, 2200]
+      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & tgtGate & abs(p2p.fSp-SpCenter)<SpWidth
+
    #------------ simple = PID(23F) + vertexZ + tof_D1
     - name: Sp
-      title: Sp | PID(23F) & |vertex.Z-10|<60 & |tof_D1-35|<10 = simple
+      title: *title_SpSimple
       x: ["p2p[0].fSp", 200, -100, 100]
       cut: simpleGate
        
@@ -232,48 +260,48 @@ group:
       
    #------------ common
     - name: Sp_common
-      title: Sp | common
+      title: *title_Spcommon
       x: ["p2p[0].fSp", 200, -100, 100]
-      cut: commonGate & nyoki.fCharge>456 & abs(nyoki.fID-8)<3
+      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax)
     
     - name: Sp_s1x_common
       title: Sp vs s1x | common
       x: [smwdc_S1.fTrack.fX, 200, -200, 400]
       y: ["p2p[0].fSp", 200, -100, 100]
-      cut: commonGate &  nyoki.fCharge>456 & abs(nyoki.fID-8)<3
+      cut: commonGate &  nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax)
       
    #------------ common + tgt
     - name: Sp_common_tgt
       title: Sp | common tgt
       x: ["p2p[0].fSp", 200, -100, 100]
-      cut: commonGate & nyoki.fCharge>456 & abs(nyoki.fID-8)<3 & tgtGate
+      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & tgtGate
     
     - name: Sp_s1x_common_tgt
       title: Sp vs s1x | common tgt
       x: [smwdc_S1.fTrack.fX, 200, -200, 400]
       y: ["p2p[0].fSp", 200, -100, 100]
-      cut: commonGate & nyoki.fCharge>456 & abs(nyoki.fID-8)<3 & tgtGate
+      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & tgtGate
       
     - name: Sp_Z_common_tgt
       title: Sp vs Z | common tgt
       x: [pid_ds.fZ, 500, 0, 11]
       y: ["p2p[0].fSp", 200, -100, 100]
-      cut: commonGate & nyoki.fCharge>456 & abs(nyoki.fID-8)<3 & tgtGate
+      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & tgtGate
       
    #------------ common + holder
     - name: Sp_common_holder
       title: Sp | common holder
       x: ["p2p[0].fSp", 200, -100, 100]
-      cut: commonGate & nyoki.fCharge>456 & abs(nyoki.fID-8)<3 & holderGate
+      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & holderGate
     
     - name: Sp_s1x_common_holder
       title: Sp vs s1x | common holder
       x: [smwdc_S1.fTrack.fX, 200, -200, 400]
       y: ["p2p[0].fSp", 200, -100, 100]
-      cut: commonGate & nyoki.fCharge>456 & abs(nyoki.fID-8)<3 & holderGate
+      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & holderGate
       
     - name: Sp_Z_common_holder
       title: Sp vs Z | common holder
       x: [pid_ds.fZ, 500, 0, 11]
       y: ["p2p[0].fSp", 200, -100, 100]
-      cut: commonGate & nyoki.fCharge>456 & abs(nyoki.fID-8)<3 & tgtGate
+      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & tgtGate
