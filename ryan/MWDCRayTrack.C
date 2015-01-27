@@ -4,15 +4,15 @@ void MWDCRayTrack() {
 //############################################################################  
 //   const char* rootfile="PrimaryData/phys23F.root"; 
 //   const char* rootfile="ppAll_1105.root";
-   const char* rootfile="23F_1212_nyoki_run23.root"; 
+   const char* rootfile="23F_0112.root"; 
    
    TString mwdcName = "smwdc_S1";
    
-   Bool_t allentry  = 1;
+   Bool_t allentry  = 0;
    Int_t firstEntry = 0;
-   Int_t nEntries=1000;
+   Int_t nEntries=200000;
    
-   Double_t zRange[2] = {-200,300};
+   Double_t zRange[2] = {-400,100};
    
    Double_t ang = 13.65*TMath::DegToRad();
    
@@ -32,7 +32,9 @@ void MWDCRayTrack() {
 //############################################################################  
    Int_t Div[2] = {2,1};
    Int_t size = 600;
-   TCanvas * cMWDC = new TCanvas("cMWDC", "MWDC Position Calibaration", 100, 50, size*Div[0], size*Div[1]);
+   TString canvasName = "MWDC Ray ";
+   canvasName += rootfile;
+   TCanvas * cMWDC = new TCanvas("cMWDC", canvasName , 100, 50, size*Div[0], size*Div[1]);
    cMWDC->Divide(Div[0],Div[1]);
 
    gStyle->SetOptStat(0);
@@ -55,6 +57,7 @@ void MWDCRayTrack() {
   	TRandom *ranZ_seed = new TRandom();
    
 //############################################################################  
+   Int_t count = 0;
    for( Int_t eventID = firstEntry; eventID < endEntry; eventID ++){
       tree->GetEntry(eventID);
       
@@ -62,7 +65,7 @@ void MWDCRayTrack() {
       Double_t xx, aa, yy, bb;
       
 //---------- Gate
-		if( !gate->Test(5)) continue;
+//		if( !gate->Test(5)) continue;
 		
 //---------Get SMWDC image, should be one 1 instance
       Int_t nHit = hoge_MWDC->GetEntriesFast();
@@ -80,6 +83,8 @@ void MWDCRayTrack() {
       }
       if (TrackingID1 != 1) continue;
       
+      count ++;
+      
       Double_t ranZ = ranZ_seed->Integer(int(zRange[1]- zRange[0])) + zRange[0];
       
       hXZ->Fill(xx+aa*ranZ, ranZ);
@@ -87,6 +92,8 @@ void MWDCRayTrack() {
 	   //printf(" Z, X = %10.3f, %10.3f | x, a  = %10.3f, %10.3f \n", ranZ, xx-aa*ranZ, xx, aa);
 	   
 	}
+	
+	printf(" total fill : %d \n", count);
 
 	cMWDC->cd(1);
 	hXZ->Draw("colz");

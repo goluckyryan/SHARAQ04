@@ -2,10 +2,9 @@
 
 void pidNyoki() {
 
-//   const char* rootfile="23F_0105_nyoki_run23.root";
-   const char* rootfile="23F_0107.root";
+   const char* rootfile="test_23F_0123_run23.root";
    
-   Int_t nyokiID[2] = {7,7};
+   Int_t nyokiID[2] = {2,10};
    Bool_t useS0AB = 0;
    Int_t useToFQ = 0 ;// 0 = z-AoQ, 1 = Q-tof, 2 = z-tof, 3 = z - s1x
    Bool_t useSlew = 0;
@@ -26,30 +25,34 @@ void pidNyoki() {
 	
 	Bool_t ppcoin = 0;
 	Bool_t beam = 0;
-	Bool_t pid23F = 1;
+	Bool_t pid23F = 0;
 	Bool_t pid22O = 0;
 	Bool_t pid8Li = 0;
 	
 	Bool_t fitZ = 0;
 
 //########################################################  
-	const Double_t Brho0 = 6.7288;//*22/8*9/23;  
-	const Double_t LS0DNyoki = 6595.60525; // mm
+	const Double_t Brho0 = 6.5269;//6.7288;//*22/8*9/23;  
+	const Double_t LS0DNyoki = 6595.60525-25; // mm
 	const Double_t para1 = -0.451752;
 	const Double_t para2 = 0.0003021347;
-	const Double_t att  = 3000.; // mm
+	const Double_t att  = 99999999;//3000.; // mm
 	const Double_t r0 = 4.4; // m
-	const Double_t xdp = -500 ;//-1156; // mm / 100%
+	const Double_t xdp = -1156; // mm / 100%
 	const Double_t B0 = Brho0/r0; // T
 	Double_t tofOffSet = -0.1;
 	Double_t b,g,h, Sa,Sk,SQ,St;
+	
+	Double_t nyokiY[2] = {50, 0}; //start, end
 	
 	ang = ang * TMath::DegToRad();
 	
 	//____
 	b = 500; // ch
-	g = 16.5;//15.7;
-	h = 0.007288;//0.0064;
+	//g = 16.5;//
+	g =18.4;
+	//h = 0.007288;//
+	h = -0.0089834;
 	
 	//____Slew
 	Sa = 28.0;
@@ -67,8 +70,9 @@ void pidNyoki() {
    if( pid8Li) histTitle += " 8Li";
    
    gStyle->SetOptStat(0);
-
-   TCanvas* cPID = new TCanvas("cPid", "PID", 2000, 0, Div[0]*size,Div[1]*size);
+   TString canvasName = "PID Nyoki : ";
+   canvasName += rootfile;
+   TCanvas* cPID = new TCanvas("cPid", canvasName, 2000, 0, Div[0]*size,Div[1]*size);
    cPID->Divide(Div[0],Div[1]);
    
    TH2F* hPIDNyoki ;
@@ -99,9 +103,9 @@ void pidNyoki() {
 	hAux2->SetXTitle("A/Q");
 	hAux2->SetYTitle("Brho");
 	
-	TH2F* hAux3 = new TH2F("hAux3", "", 200, 0.5, 0.7, 200, 4.0, 8.0);
-	hAux3->SetXTitle("beta");
-	hAux3->SetYTitle("Brho");
+	TH2F* hAux3 = new TH2F("hAux3", "", 200, 30, 40, 200, 0, 1700);
+	hAux3->SetXTitle("tof");
+	hAux3->SetYTitle("L");
 
 	TH2F* hAux4 = new TH2F("hAux4", "", 500, -200, 300, 200, 30, 40);
 	hAux4->SetXTitle("s1x");
@@ -125,7 +129,7 @@ void pidNyoki() {
    clock.Start("timer");
    Bool_t shown = 0;
 
-   TClonesArray *hoge_nyoki, *hoge_tofD1, *hoge_S0img, *hoge_mwdc;
+   TClonesArray *hoge_nyoki, *hoge_tofD1, *hoge_S0img, *hoge_mwdc, *hoge_vertex;
    art::TCoinRegData *hoge_coinReg;
 	art::TGateArray * gate;
 
@@ -137,6 +141,7 @@ void pidNyoki() {
    pid->SetBranchStatus("coinReg",1);
    pid->SetBranchStatus("nyoki",1);
    pid->SetBranchStatus("tof_D1",1);
+   pid->SetBranchStatus("vertex",1);
    if ( useMWDC) pid->SetBranchStatus("smwdc_S1",1);
    if ( useS0AB) pid->SetBranchStatus("S0img",1);
 
@@ -145,6 +150,7 @@ void pidNyoki() {
    pid->SetBranchAddress("coinReg",&hoge_coinReg);
    pid->SetBranchAddress("nyoki",&hoge_nyoki);
    pid->SetBranchAddress("tof_D1",&hoge_tofD1);
+   pid->SetBranchAddress("vertex",&hoge_vertex);
    if ( useS0AB) pid->SetBranchAddress("S0img", &hoge_S0img);
    if ( useMWDC) pid->SetBranchAddress("smwdc_S1",&hoge_mwdc);
    
@@ -176,7 +182,7 @@ void pidNyoki() {
       if( pid22O && gate->Test(1) != 1) continue;
       if( pid8Li && gate->Test(6) != 1) continue;
       
-      if( gate->Test(12) !=1) continue;
+      //if( gate->Test(9) !=1) continue;
       
       Double_t tof = -50;
       Double_t QQ = -50;
@@ -199,7 +205,7 @@ void pidNyoki() {
       
       Double_t FL = LS0DNyoki;
       
-      //___________________Get S0img
+      //___________________________________________________________Get S0img
       if( useS0AB ){
 		   Int_t nHit = hoge_S0img->GetEntriesFast();
 		   Bool_t S0Pass = 0;
@@ -217,8 +223,13 @@ void pidNyoki() {
 		   //if( TMath::Abs(s0a)>10 || TMath::Abs(s0b)>10 ) continue;
 		   if( TMath::Abs(s0x)>4 ) continue;  
 		}
+		//___________________________________________________________Get Vertex
+		//Int_t nHit = hoge_vertex->GetEntriesFast();
+		//for( Int_t p = 0; p < nHit; p++){
+			
+		//}
       
-		//_____________Get SMWDC-S1
+		//___________________________________________________________Get SMWDC-S1
 		if ( useMWDC) {
 			Int_t nHit = hoge_mwdc->GetEntriesFast();
 			Bool_t mwdcPass = 0;
@@ -244,7 +255,7 @@ void pidNyoki() {
 			FL = LS0DNyoki +para1*s1x + para2*s1x*s1x;
 		}
 		
-      //____________Get Charge from nyoki
+      //___________________________________________________________Get Charge from nyoki
       Int_t nHit1 =hoge_nyoki->GetEntriesFast();
       if( nHit1 >= 2) continue;
       
@@ -261,7 +272,7 @@ void pidNyoki() {
       }
       if( QQPass == 0 ) continue;
       
-      //_________________Get tof_D1
+      //___________________________________________________________Get tof_D1
       Int_t nHit2 =hoge_tofD1->GetEntriesFast();
       for(Int_t p = 0; p < nHit2; p++){
          data2 = (art::TTimeDifference*)hoge_tofD1->At(p) ;
@@ -284,7 +295,7 @@ void pidNyoki() {
 		count += 1;
 		
 		
-		//____________________Calculate z and AoQ and fill histogram		
+		//___________________________________________________________Calculate z and AoQ and fill histogram		
 		if( useToFQ == 1){
 		   //printf("Q:%6.0f, tof:%6.2f \n", QQ, tof);
 			hPIDNyoki->Fill(tof,QQ);			
@@ -301,20 +312,20 @@ void pidNyoki() {
 		   Double_t AoQ = cVaccum*Brho/mu/gamma/beta;
 		   
 		   Double_t L0 = (QQ-b);
-		   Double_t z0 = TMath::Sqrt(L0/(g-L0*h))*beta0;
+		   Double_t z0 = TMath::Sqrt(L0/(g+L0*h))*beta0;
 		   
 		   Double_t L;
-		   if( -50 < s1y && s1y < 0 ) {
-		   	L = (QQ-b)*TMath::Exp((-50-s1y)/att);
+		   if( nyokiY[0] < s1y && s1y < nyokiY[1] ) {
+		   	L = (QQ-b)*TMath::Exp((nyokiY[0]-s1y)/att);
 	   	}else{
 	   		L = L0;
 	   	}
-		   Double_t z = TMath::Sqrt(L/(g-L*h))*beta;
+		   Double_t z = TMath::Sqrt(L/(g+L*h))*beta;
 		   
          hAux->Fill(AoQ0, z0);
          //hAux2->Fill(z, s1y);
          hAux2->Fill(AoQ, Brho);
-         hAux3->Fill(beta,Brho);
+         hAux3->Fill(tof,L0);
          hAux4->Fill(s1x,tof); //-4069.4
          hAux5->Fill(s1x);
          hAux6->Fill(s1x,z);
@@ -356,43 +367,48 @@ void pidNyoki() {
    hPIDNyoki->Draw("colz");
    
    //hPIDNyoki->ProjectionX()->Draw("colz");
-   //hAux2->Draw("colz");
+   //hAux3->Draw("colz");
    
-	cPID->cd(2);
+	cPID->cd(4);
 	hAux->Draw("colz");
 	//hPIDNyoki->ProjectionY("test")->Draw();
 	//hDiffz->Draw();
 	
-	cPID->cd(3);
+	cPID->cd(2);
 	//hPIDNyoki->ProjectionY("test")->Draw();
-	//hAux->ProjectionY("testAux")->Draw("same");
+	hAux->ProjectionY("testAux")->Draw("same");
 	//testAux->SetLineColor(2);
 	//testAux->Draw("same");
 	//hAux2->ProfileY()->Draw();
 	//hDiffAoQ->Draw();
 	
 	
-	hAux3->Draw("colz");	
+	//hAux3->Draw("colz");	
 	//hAux3->ProjectionX()->Draw();
-	TF1 * func = new TF1 ("func", "8.54677*x/TMath::Sqrt(1-x*x)", 0.5, 0.8);
-	func->Draw("same");
+	//TF1 * func = new TF1 ("func", "8.54677*x/TMath::Sqrt(1-x*x)", 0.5, 0.8);
+	//func->Draw("same");
 	
-	cPID->cd(4);
-	hAux5->Draw();
+	cPID->cd(5);
+	//hAux5->Draw();
 	/*hAux4->Draw("colz");
 	TF1 * func2 = new TF1 ("func2", "x/299.792458/0.61859", 6400, 6800);
 	func2->Draw("same");
 	//hAux2->Draw("colz");
 	//hAux2->ProjectionX()->Draw();
-	//hAux3->ProjectionX()->Draw("same");
+	*/
+	//hAux3->ProjectionY()->Draw("");
+	hPIDNyoki->ProjectionY()->Draw("");
 	/**/
 	
-	cPID->cd(5);
-	//hAux2->Draw("colz");
-	hAux6->Draw("colz");
-	
 	cPID->cd(6);
-	hAux4->Draw("colz");
+	//hAux2->Draw("colz");
+	//hAux6->Draw("colz");
+	hAux->ProjectionX("aux_Z=9", 170, 190)->Draw("");
+	hAux->ProjectionX("aux_Z=8", 150, 170)->Draw("same");
+	
+	cPID->cd(3);
+	hPIDNyoki->ProjectionX("pid_Z=9", 170, 190)->Draw("");
+	hPIDNyoki->ProjectionX("pid_Z=8", 150, 170)->Draw("same");
 	
 	
 	/**/

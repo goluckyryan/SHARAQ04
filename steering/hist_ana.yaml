@@ -1,6 +1,6 @@
 aliases:
   - &title_SpSimple "Sp | simple = PID(23F) + |vertex.Z-10|<60 + |tof_D1-35|<10"
-  - &title_Spcommon "Sp | common = simple + |openAng-80|<10 + nyoki.Q>499 + 2<nyoki.ID<10"
+  - &title_Spcommon "Sp | common = simple + |openAng-80|<10 + nyoki.Q>499 + 2<=nyoki.ID<=10"
   
 alias:
   vertexCenter: +10
@@ -87,11 +87,6 @@ group:
       title: Vertex.Z | PID(23F)
       x: [vertex.fZ, 300, -100, 200]
       cut: gate.Test(0)
-      
-    - name: vertexZ_gate
-      title: Vertex.Z | PID(23F)
-      x: [vertex.fZ, 300, -100, 200]
-      cut: gate.Test(0) & vertexGate
       
     - name: vertexXY
       title: Vertex.XY | PID(23F)
@@ -269,7 +264,12 @@ group:
       x: [smwdc_S1.fTrack.fX, 200, -200, 400]
       y: ["p2p[0].fSp", 200, -100, 100]
       cut: commonGate &  nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax)
-      
+
+    - name: Sp_AoQ_common
+      title: Sp vs A/Q | common
+      x: ["pid_ds.fAOQ", 500, 1.8, 3.2]
+      y: ["p2p[0].fSp", 200, -100, 100]
+      cut: commonGate &  nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax)
    #------------ common + tgt
     - name: Sp_common_tgt
       title: Sp | common tgt
@@ -288,6 +288,11 @@ group:
       y: ["p2p[0].fSp", 200, -100, 100]
       cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & tgtGate
       
+    - name: Sp_AoQ_common_tgt
+      title: Sp vs A/Q | common tgt
+      x: ["pid_ds.fAOQ", 500, 1.8, 3.2]
+      y: ["p2p[0].fSp", 200, -100, 100]
+      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & tgtGate
    #------------ common + holder
     - name: Sp_common_holder
       title: Sp | common holder
@@ -305,3 +310,9 @@ group:
       x: [pid_ds.fZ, 500, 0, 11]
       y: ["p2p[0].fSp", 200, -100, 100]
       cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & tgtGate
+      
+    - name: Sp_AoQ_common__holder
+      title: Sp vs A/Q | common holder
+      x: ["pid_ds.fAOQ", 500, 1.8, 3.2]
+      y: ["p2p[0].fSp", 200, -100, 100]
+      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & holderGate

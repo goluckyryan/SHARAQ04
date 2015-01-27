@@ -8,16 +8,41 @@ Processor:
 #          - /media/sh04HD/RawData/ppcoin1008.ridf
 #          - /media/sh04HD/RawData/ppcoin1009.ridf   #just before O22 run  
 
-#_______________ dispersion check
-          - /media/sh04HD/RawData/optics3001.ridf   #Brho 6.9
-          - /media/sh04HD/RawData/optics3005.ridf   #Brho 7.1
+#_______________ dispersion check_ change Brho_upstream
+#          - /media/sh04HD/RawData/optics3001.ridf   #Brho 6.9
+          
+#          - /media/sh04HD/RawData/optics3005.ridf   #Brho 7.1
+          
 #          - /media/sh04HD/RawData/bldtune3005.ridf   #Brho 6.7288
-          - /media/sh04HD/RawData/optics3007.ridf   #Brho 6.5288
-          - /media/sh04HD/RawData/optics3008.ridf   #Brho 6.5288
-          - /media/sh04HD/RawData/optics3009.ridf   #Brho 6.5288
-          - /media/sh04HD/RawData/optics3011.ridf   #Brho 6.3288
-          - /media/sh04HD/RawData/optics3012.ridf   #Brho 6.0288
-          - /media/sh04HD/RawData/optics3013.ridf   #Brho 5.7288
-          - /media/sh04HD/RawData/optics3014.ridf   #Brho 5.7288
-          - /media/sh04HD/RawData/optics3015.ridf   #Brho 5.5288  
+#          - /media/sh04HD/RawData/optics3007.ridf   #Brho 6.5288
+#          - /media/sh04HD/RawData/optics3008.ridf   #Brho 6.5288
+#          - /media/sh04HD/RawData/optics3009.ridf   #Brho 6.5288
+          
+#          - /media/sh04HD/RawData/optics3011.ridf   #Brho 6.3288
+          
+#          - /media/sh04HD/RawData/optics3012.ridf   #Brho 6.0288
+          
+#          - /media/sh04HD/RawData/optics3013.ridf   #Brho 5.7288
+#          - /media/sh04HD/RawData/optics3014.ridf   #Brho 5.7288
+          
+#          - /media/sh04HD/RawData/optics3015.ridf   #Brho 5.5288  
+          
+#_______________ dispersion check_ change Brho_upstream
+          - /media/sh04HD/RawData/optics3016.ridf   #Brho 6.5288 tuning SQ 
+          - /media/sh04HD/RawData/optics3017.ridf   #Brho 6.5288 tuning SQ 
+          - /media/sh04HD/RawData/optics3018.ridf   #Brho 6.5288 tuning SQ 
+          - /media/sh04HD/RawData/optics3019.ridf   #Brho 6.5288 tuning SQ 
+          
+          - /media/sh04HD/RawData/ppcoin1001.ridf   #ppcoin w/ 22O 
+          - /media/sh04HD/RawData/ppcoin1002.ridf   #ppcoin w/ 22O          
+          - /media/sh04HD/RawData/ppcoin1003.ridf   #ppcoin w/ 22O          
+          - /media/sh04HD/RawData/ppcoin1004.ridf   #ppcoin w/ 22O
+          
+          - /media/sh04HD/RawData/ppcoin1005.ridf   #
+          - /media/sh04HD/RawData/ppcoin1006.ridf   #
+          - /media/sh04HD/RawData/ppcoin1007.ridf   #
+          - /media/sh04HD/RawData/ppcoin1008.ridf   #
+          - /media/sh04HD/RawData/ppcoin1009.ridf   #
+
+
 

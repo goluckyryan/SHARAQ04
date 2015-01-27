@@ -1,0 +1,22 @@
+# require : 
+# output : 
+
+Processor:
+  - name: proc_pid_upstream
+    type: art::sh04::TResidualPIDProcessor #this is made for downstream residual. using it for upstream may fail.
+    parameter:
+      ChargeCollection:  plaV1190_FH9
+      TOFCollection:     tof_US
+      Output:     pid_us
+      MWDCCollection: S0img   # dummy
+      Parameter0:  -4960. #-4930.   # L = Q - p0
+      Parameter1:  8.042    
+      Parameter2:  0.003698
+      Dispersion:  999999999
+      TimeOffset:  1845.06  # tof = t + TimeOffset
+      FlightLength:  74075.
+      FL1:           0.
+      FL2:           0.
+      BeamParameter: beam  #over-rided by Brho_D1
+      Brho_D1:     6.7288
+#===========================================================

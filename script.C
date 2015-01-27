@@ -1,36 +1,106 @@
 {
+	gROOT->Reset();
+	gROOT->ProcessLine(".!date");
+	gStyle->SetOptStat(0);
 
-  gROOT->Reset();
-  gROOT->ProcessLine(".!date");
-  gStyle->SetOptStat(0);
+//========================================================
+
+	char * rootfile = "test_23F_run23.root";
+
+	TFile *f0 = new TFile (rootfile, "read"); TTree *tree = (TTree*)f0->Get("tree");
+	gROOT->ProcessLine("listg tree");
+	printf("=====> /// %s //// is loaded. Total #Entry: %d \n", rootfile,  tree->GetEntries());
+
+//======================================================== Browser or Canvas
+	TBrowser B("Bscript",rootfile, 900,600); 	
+
+/*	
+	Int_t Div[2] = {3,2};  //x,y
+	Int_t size[2] = {400,400}; //x,y
+   TCanvas * cScript = new TCanvas("cScript", "cScript", 2000,0 , size[0]*Div[0], size[1]*Div[1]);
+   cScript->Divide(Div[0],Div[1]);
    
-//   TFile *f0 = new TFile ("hist_mwdc.root");
-
-//   TFile *f0 = new TFile ("23F_1027.root"); TTree *tree = (TTree*)f0->Get("tree");    
-//   TFile *f1 = new TFile ("ppAll_1106_OpenCorr.root"); TTree *tree2 = (TTree*)f1->Get("tree");  
-
-//   TFile *f1 = new TFile ("23F_0914_all.root"); TTree *tree2 = (TTree*)f1->Get("tree");
-//   TFile *f2 = new TFile ("Rphys23Fclean.root","read"); TTree *recoil = (TTree*)f2->Get("recoil");  
-
-
-//   TFile *f0 = new TFile ("23F_1106_nyoki_runs23_noCali.root"); TTree *tree = (TTree*)f0->Get("tree");
-//   TFile *f1 = new TFile ("23F_1201_nyoki_run23.root"); //TTree *tree = (TTree*)f1->Get("tree");
-
-//	   TFile *f1 = new TFile ("23F_1222_nyoki_run23_ref8.root"); TTree *tree = (TTree*)f1->Get("tree");
-
-//	   TFile *f1 = new TFile ("23F_1228_nyoki_run23.root"); TTree *tree1 = (TTree*)f1->Get("tree");
-	   TFile *f2 = new TFile ("23F_0107.root"); TTree *tree = (TTree*)f2->Get("tree");
-
-//	TFile *f1 = new TFile ("hist_23F_0107.root", "read");
+//======================================================== load histogram
+//	TFile *f1 = new TFile ("hist_23F_0112_new_smwdc_S1_config.root", "read");
 
 //================ update.
-//   TFile *f0 = new TFile ("23F_1224_nyoki_optics.root","update"); 
-//   f0->Close();
-//========================================================
-	gROOT->ProcessLine("listg tree");
-   TBrowser B("test","test", 900,600); 
-   
-   /*Double_t newO[2] = {0,0}; //{x,z} mm
+//	TFile *f0 = new TFile ("23F_1224_nyoki_optics.root","update"); 
+//	f0->Close();
+
+//======================================================== analysis
+/*	
+	
+	//----------------- S0img
+	TString cut = "(coinReg.fQuality & 7) == 2"; //"gate.Test(1) & gate.Test(12)";
+	//Int_t eventRange[2] = {250000, 1102000}; // optics 3019
+	Int_t eventRange[2] = {1841093, 8999275}; // ppcoin 1007, ppcoin, 
+	
+	//Int_t eventRange[2] = {200000, 10840368}; // ppcoin 1008, 1009, beam
+	
+	cScript->cd(1);
+	tree->Draw("plaV1190_FH9.fCharge:tof_US.fTiming>>hpid(500, -1500, -1400, 500, 4900, 6200)",cut, "colz", eventRange[0], eventRange[1]);
+	hpid->SetTitle("PID upstream");
+
+	cScript->cd(2);
+	tree->Draw("S0img.fTrack.fY:S0img.fTrack.fX>>hs0xy(200, -30, 30, 200, -30, 30)", cut, "colz", eventRange[0], eventRange[1]);
+	hs0xy->SetTitle("S0img XY [mm, mm]");
+	
+	cScript->cd(3);
+	tree->Draw("S0img.fTrack.fA*1000:S0img.fTrack.fX>>hs0xa(200, -30, 30, 200, -30, 30)", cut, "colz", eventRange[0], eventRange[1]);
+	hs0xa->SetTitle("S0img XA [mm, mrad]");
+
+	cScript->cd(4);
+	tree->Draw("S0img.fTrack.fB*1000:S0img.fTrack.fX>>hs0xb(200, -30, 30, 200, -50, 50)", cut, "colz", eventRange[0], eventRange[1]);
+	hs0xb->SetTitle("S0img XB [mm, mrad]");
+
+	cScript->cd(5);
+	tree->Draw("S0img.fTrack.fB*1000:S0img.fTrack.fY>>hs0yb(200, -30, 30, 200, -50, 50)", cut, "colz", eventRange[0], eventRange[1]);
+	hs0yb->SetTitle("S0img YB, [mm, mrad]");
+	
+	cScript->cd(6);
+	tree->Draw("S0img.fTrack.fB*1000:S0img.fTrack.fA*1000>>hs0ab(200, -30, 30, 200, -50, 50)", cut, "colz", eventRange[0], eventRange[1]);
+	hs0ab->SetTitle("S0img AB [mrad, mrad]");
+
+/* //----------------- Optics element
+	TString cut = "gate.Test(1) & gate.Test(12)";
+	//Int_t eventRange[2] = {250000, 1102000}; // optics 3019
+	Int_t eventRange[2] = {200000, 10840368}; // ppcoin 1008, 1009
+	
+
+	cScript->cd(1);
+	tree->Draw("S0img.fTrack.fX:smwdc_S1.fTrack.fX>>hs1xs0x(100,-200,200,100,-8,8)", cut , "colz", eventRange[0], eventRange[1]);
+	hs1xs0x->SetTitle("(s1x|s0x) [mm/mm] | " + cut);
+
+	cScript->cd(2);
+	tree->Draw("S0img.fTrack.fA*1000:smwdc_S1.fTrack.fX>>hs1xs0a(100,-200,200,100,-30,30)", cut , "colz", eventRange[0], eventRange[1]);
+	hs1xs0a->SetTitle("(s1x|s0a) [mm/mrad]");
+	
+	cScript->cd(3);
+	tree->Draw("S0img.fTrack.fX:smwdc_S1.fTrack.fA>>hs1as0x(100,-1.5,1.5,100,-8,8)", cut , "colz", eventRange[0], eventRange[1]);
+	hs1as0x->SetTitle("(s1a|s0x) [rad/mm]");
+
+	cScript->cd(4);
+	tree->Draw("S0img.fTrack.fA*1000:smwdc_S1.fTrack.fA>>hs1as0a(100,-1.5,1.5,100,-30,30)", cut , "colz", eventRange[0], eventRange[1]);
+	hs1as0a->SetTitle("(s1a|s0a) [rad/mrad]");
+	
+	cScript->cd(5);
+	tree->Draw("S0img.fTrack.fY:smwdc_S1.fTrack.fY>>hs1ys0y(100,-200,200,100,-8,8)", cut , "colz", eventRange[0], eventRange[1]);
+	hs1ys0y->SetTitle("(s1y|s0y) [mm/mm]");
+
+	cScript->cd(6);
+	tree->Draw("S0img.fTrack.fB*1000:smwdc_S1.fTrack.fY>>hs1ys0b(100,-200,200,100,-30,30)", cut , "colz", eventRange[0], eventRange[1]);
+	hs1ys0b->SetTitle("(s1y|s0b) [mm/mrad]");
+
+	cScript->cd(7);
+	tree->Draw("S0img.fTrack.fY:smwdc_S1.fTrack.fB>>hs1bs0y(100,-1.5,1.5,100,-8,8)", cut , "colz", eventRange[0], eventRange[1]);
+	hs1bs0y->SetTitle("(s1b|s0y) [rad/mm]");
+
+	cScript->cd(8);
+	tree->Draw("S0img.fTrack.fB*1000:smwdc_S1.fTrack.fB>>hs1bs0b(100,-1.5,1.5,100,-30,30)", cut , "colz", eventRange[0], eventRange[1]);
+	hs1bs0b->SetTitle("(s1b|s0b) [rad/mrad]");
+
+   /*
+   Double_t newO[2] = {0,0}; //{x,z} mm
    Double_t ang = -74.3; //deg, left hand rotation about y axis
    
    Double_t t = TMath::Tan(ang*TMath::DegToRad());
@@ -46,10 +116,7 @@
    /**/
    
   /*
-   Int_t Div[2] = {1,6};  //x,y
-	Int_t size[2] = {600,200}; //x,y
-   TCanvas * cScript = new TCanvas("cScript", "cScript", 2000,0 , size[0]*Div[0], size[1]*Div[1]);
-   cScript->Divide(Div[0],Div[1]);
+   
    
    for( Int_t i = 1; i <= 6; i++){
    	cScript->cd(i);
@@ -100,8 +167,9 @@
    cScript->cd(5);   tree->Draw("smwdc_S1_v1.fDriftLength>>h5(300, -1,  11)", "smwdc_S1_v1.fCharge > 650", "colz");
    cScript->cd(6);   tree->Draw("smwdc_S1_v2.fDriftLength>>h6(300, -1,  11)", "smwdc_S1_v2.fCharge > 650", "colz");
 /**/
-   
-/*   TCut incA = "TMath::Abs(S0img[0].fTrack.fA*1000)<1";
+
+/*   
+   TCut incA = "TMath::Abs(S0img[0].fTrack.fA*1000)<1";
    TCut incB = "TMath::Abs(S0img[0].fTrack.fB*1000)<1";
    //TCut incX = "TMath::Abs(S0img[0].fTrack.fX*1000)<1";
    //TCut incY = "TMath::Abs(S0img[0].fTrack.fY*1000)<1";
@@ -115,21 +183,41 @@
 	TCut pid10Be = "TMath::Abs(tof_DS[0].fTiming-329)<3 && TMath::Abs(plaV775[0].fCharge-575)<50";
 	TCut pid8Li = "TMath::Abs(tof_DS[0].fTiming-314)<3 && TMath::Abs(plaV775[0].fCharge-530)<50";
 	TCut pid7Li = "TMath::Abs(tof_DS[0].fTiming-344)<3 && TMath::Abs(plaV775[0].fCharge-527)<50";
-
+/**/
 /*
-	TCut ang = "TMath::Abs((p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()-86)<3";
-	TCut basic = "gate.Test(4) && coinReg.Test(2)";
-	TCut tofD1 = "TMath::Abs(tof_D1.fTiming+15)<10";
-	TCut nyoki = "TMath::Abs(nyoki.fID-8)<=1 && nyoki.fCharge>1800";
-	TCut basic2 = "gate.Test(5) && !gate.Test(4)";
-	TCut poltgt = "TMath::Abs(beamZ.fAverage-10)<60";
+	TCut vertexZ = "TMath::Abs(beamZ.fAverage-10)<60";
+	TCut tofD1 = "TMath::Abs(tof_D1.fTiming-35)<10";	
+	TCut ang = "TMath::Abs((p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()-80)<10";
+	
+	TCut tgt = "gate.Test(9)";
+	TCut holder = "gate.Test(10) && !gate.Test(9)";
+	
+	
+	TCut nyoki = "TMath::Abs(nyoki.fID-8)<=1 && nyoki.fCharge>500";
+	
 	TCut carbon = "TMath::Abs(beamZ.fAverage-10)<120";
 	TCut Sp = "TMath::Abs(p2p.fSp)<60";
 	
 	//tree->Draw("(p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()>>g1(100,80,90)","","");
 	//tree2->Draw("(p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()>>g2(100,80,90)","","same");
+	TH2F* h1 = new TH2F("h1", "Ex vs s1x | common", 100, -150, 300, 40, -20, 60);
+	TH2F* h2 = new TH2F("h2", "Ex vs s1x | common tgt", 100, -150, 300, 40, -20, 60);
+	TH2F* h3 = new TH2F("h3", "Ex vs s1x | common holder", 100, -150, 300, 40, -20, 60);	
+	TH2F* h4 = new TH2F("h4", "Ex vs s1x | common tgt |Sp-20|<20", 100, -150, 300, 40, -20, 60);	
+
+
+	cScript->cd(1);	tree->Draw("p2p.fEx:smwdc_S1.fTrack.fX>>h1", vertexZ + tofD1 + ang, "colz");
+	printf("------------- 1\n");
+	cScript->cd(2);	tree->Draw("p2p.fEx:smwdc_S1.fTrack.fX>>h2", vertexZ + tofD1 + ang + tgt, "colz");
+	printf("------------- 2\n");
+	cScript->cd(3);	tree->Draw("p2p.fEx:smwdc_S1.fTrack.fX>>h3", vertexZ + tofD1 + ang + holder, "colz");
+	printf("------------- 3\n");
+	cScript->cd(4);	//tree->Draw("p2p.fEx:smwdc_S1.fTrack.fX>>h4", vertexZ + tofD1 + ang + tgt + "abs(p2p.fSp-20)<20", "colz");
+	//printf("------------- 4\n");
+
 	
-	/**/
+	
+/**/
 	
 //================================================ Temp analysis   
 

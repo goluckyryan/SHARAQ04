@@ -13,8 +13,8 @@ Processor:
             - smwdc_S1_v1
             - smwdc_S1_v2
       OutputCollection:  smwdc_S1
-      NIteration:        0
-      TimingGate:        [-50,200]
+      NIteration:        5
+      TimingGate:        [-60,200]
       ChargeGate:        [350,10000]
       MAXSSR:            10.
       UseAllCombination: 1  #default 1
