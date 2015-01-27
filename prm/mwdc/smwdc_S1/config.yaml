@@ -1,18 +1,18 @@
 # cell config = L R L R L R
 - x1:
-    z:        -24.
+    z:        -40.
     nWire:    &xnwire 56
     cellSize: &cell   20.
     angle:    &xangle  0.     #vertical/y-axis = 0
-#    center:   28.375  # L
-    center:   28.625  # R
+    center:   28.375  # L
+#    center:   28.625  # R
 - x2:
-    z:       -40.
+    z:       -24.
     nWire:    *xnwire
     cellSize: *cell
     angle:    *xangle
-#    center:   28.625  # R
-    center:   28.375  # L
+    center:   28.625  # R
+#    center:   28.375  # L
 - u1:
     z:        -8.
     nWire:    &uvnwire 44
