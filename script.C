@@ -5,7 +5,7 @@
 
 //========================================================
 
-	char * rootfile = "test_23F_run23.root";
+	char * rootfile = "23F_0203_ppcoin1008.root";
 
 	TFile *f0 = new TFile (rootfile, "read"); TTree *tree = (TTree*)f0->Get("tree");
 	gROOT->ProcessLine("listg tree");
@@ -14,8 +14,8 @@
 //======================================================== Browser or Canvas
 	TBrowser B("Bscript",rootfile, 900,600); 	
 
-/*	
-	Int_t Div[2] = {3,2};  //x,y
+	
+/*	Int_t Div[2] = {2,2};  //x,y
 	Int_t size[2] = {400,400}; //x,y
    TCanvas * cScript = new TCanvas("cScript", "cScript", 2000,0 , size[0]*Div[0], size[1]*Div[1]);
    cScript->Divide(Div[0],Div[1]);
@@ -28,13 +28,14 @@
 //	f0->Close();
 
 //======================================================== analysis
-/*	
-	
+
+	/*
 	//----------------- S0img
-	TString cut = "(coinReg.fQuality & 7) == 2"; //"gate.Test(1) & gate.Test(12)";
+	TString cut = "1";//"(coinReg.fQuality & 7) == 2"; //"gate.Test(1) & gate.Test(12)";
 	//Int_t eventRange[2] = {250000, 1102000}; // optics 3019
-	Int_t eventRange[2] = {1841093, 8999275}; // ppcoin 1007, ppcoin, 
-	
+	//Int_t eventRange[2] = {1841093, 8999275}; // ppcoin 1007, ppcoin
+	Int_t eventRange[2] = {tree->GetEntries(), 0 };
+	//Int_t eventRange[2] = {5000000, 256859}; // 
 	//Int_t eventRange[2] = {200000, 10840368}; // ppcoin 1008, 1009, beam
 	
 	cScript->cd(1);
@@ -61,28 +62,44 @@
 	tree->Draw("S0img.fTrack.fB*1000:S0img.fTrack.fA*1000>>hs0ab(200, -30, 30, 200, -50, 50)", cut, "colz", eventRange[0], eventRange[1]);
 	hs0ab->SetTitle("S0img AB [mrad, mrad]");
 
-/* //----------------- Optics element
-	TString cut = "gate.Test(1) & gate.Test(12)";
+
+/**/ //----------------- Optics element
+/*
+//	TString cut = "gate.Test(1) & gate.Test(12) & abs(smwdc_S1.fTrack.fB)<0.3 && abs(ppac.fX/75)<0.2 && abs(S0img.fTrack.fB)<10";
+	TString cut = "gate.Test(1) & gate.Test(12) & abs(smwdc_S1.fTrack.fB)<0.3";
+
 	//Int_t eventRange[2] = {250000, 1102000}; // optics 3019
-	Int_t eventRange[2] = {200000, 10840368}; // ppcoin 1008, 1009
+	//Int_t eventRange[2] = {200000, 10840368}; // ppcoin 1008, 1009
+	//Int_t eventRange[2] = {256858, 0}; // ppcoin 1008, 1009
+	Int_t eventRange[2] = {7000000, 256859}; // 
+	//Int_t eventRange[2] = {tree->GetEntries(), 0}; // 
 	
 
 	cScript->cd(1);
-	tree->Draw("S0img.fTrack.fX:smwdc_S1.fTrack.fX>>hs1xs0x(100,-200,200,100,-8,8)", cut , "colz", eventRange[0], eventRange[1]);
-	hs1xs0x->SetTitle("(s1x|s0x) [mm/mm] | " + cut);
+	tree->Draw("S0img.fTrack.fX:smwdc_S1.fTrack.fX>>hs1xs0x(50,-20,20,50,-8,8)", cut + " & abs(S0img.fTrack.fA*1000)<3", "colz", eventRange[0], eventRange[1]);
+	hs1xs0x->SetTitle("(s1x|s0x) [mm/mm] | ");
 
 	cScript->cd(2);
-	tree->Draw("S0img.fTrack.fA*1000:smwdc_S1.fTrack.fX>>hs1xs0a(100,-200,200,100,-30,30)", cut , "colz", eventRange[0], eventRange[1]);
+	tree->Draw("S0img.fTrack.fA*1000:smwdc_S1.fTrack.fX>>hs1xs0a(50,-20,20,50,-30,30)", cut + " & abs(S0img.fTrack.fX)<2", "colz", eventRange[0], eventRange[1]);
 	hs1xs0a->SetTitle("(s1x|s0a) [mm/mrad]");
-	
-	cScript->cd(3);
-	tree->Draw("S0img.fTrack.fX:smwdc_S1.fTrack.fA>>hs1as0x(100,-1.5,1.5,100,-8,8)", cut , "colz", eventRange[0], eventRange[1]);
-	hs1as0x->SetTitle("(s1a|s0x) [rad/mm]");
 
-	cScript->cd(4);
-	tree->Draw("S0img.fTrack.fA*1000:smwdc_S1.fTrack.fA>>hs1as0a(100,-1.5,1.5,100,-30,30)", cut , "colz", eventRange[0], eventRange[1]);
-	hs1as0a->SetTitle("(s1a|s0a) [rad/mrad]");
+	cScript->cd(3);
+	tree->Draw("ppac.fX/75:smwdc_S1.fTrack.fX>>hs1xs0d(50,-20,20,50,-1,1)", cut + " & abs(S0img.fTrack.fA*1000)<3" + " & abs(S0img.fTrack.fX)<2" , "colz", eventRange[0], eventRange[1]);
+	hs1xs0d->SetTitle("(s1x|d) [mm/1%]");
 	
+	cScript->cd(4);
+	tree->Draw("S0img.fTrack.fX:smwdc_S1.fTrack.fA*1000>>hs1as0x(50,-350,-100,50,-8,8)", cut + " & abs(S0img.fTrack.fA*1000)<3", "colz", eventRange[0], eventRange[1]);
+	hs1as0x->SetTitle("(s1a|s0x) [mrad/mm]");
+
+	cScript->cd(5);
+	tree->Draw("S0img.fTrack.fA*1000:smwdc_S1.fTrack.fA*1000>>hs1as0a(50,-350,-100,50,-30,30)", cut + " & abs(S0img.fTrack.fX)<2", "colz", eventRange[0], eventRange[1]);
+	hs1as0a->SetTitle("(s1a|s0a) [mrad/mrad]");
+
+	cScript->cd(6);
+	tree->Draw("ppac.fX/75:smwdc_S1.fTrack.fA*1000>>hs1as0d(50,-350,-100,50,-1,1)", cut + " & abs(S0img.fTrack.fA*1000)<3" + " & abs(S0img.fTrack.fX)<2" , "colz", eventRange[0], eventRange[1]);
+	hs1as0d->SetTitle("(s1a|d) [mrad/1%]");
+
+/*	
 	cScript->cd(5);
 	tree->Draw("S0img.fTrack.fY:smwdc_S1.fTrack.fY>>hs1ys0y(100,-200,200,100,-8,8)", cut , "colz", eventRange[0], eventRange[1]);
 	hs1ys0y->SetTitle("(s1y|s0y) [mm/mm]");
@@ -90,7 +107,7 @@
 	cScript->cd(6);
 	tree->Draw("S0img.fTrack.fB*1000:smwdc_S1.fTrack.fY>>hs1ys0b(100,-200,200,100,-30,30)", cut , "colz", eventRange[0], eventRange[1]);
 	hs1ys0b->SetTitle("(s1y|s0b) [mm/mrad]");
-
+/*
 	cScript->cd(7);
 	tree->Draw("S0img.fTrack.fY:smwdc_S1.fTrack.fB>>hs1bs0y(100,-1.5,1.5,100,-8,8)", cut , "colz", eventRange[0], eventRange[1]);
 	hs1bs0y->SetTitle("(s1b|s0y) [rad/mm]");
@@ -98,6 +115,71 @@
 	cScript->cd(8);
 	tree->Draw("S0img.fTrack.fB*1000:smwdc_S1.fTrack.fB>>hs1bs0b(100,-1.5,1.5,100,-30,30)", cut , "colz", eventRange[0], eventRange[1]);
 	hs1bs0b->SetTitle("(s1b|s0b) [rad/mrad]");
+
+/**/
+/*
+	cScript->cd(1);
+	tree->Draw("smwdc_S1.GetSigma(0)>>hsX(100,0,1)", "" , "");
+	hsX->SetTitle("Sigma(X) [mm]");
+
+	cScript->cd(2);
+	tree->Draw("smwdc_S1.GetSigma(1)*1000>>hsA(100,0,20)", "" , "");
+	hsA->SetTitle("Sigma(A) [mrad]");
+
+	cScript->cd(3);
+	tree->Draw("smwdc_S1.GetSigma(2)>>hsY(100,0,1)", "" , "");
+	hsY->SetTitle("Sigma(X) [mm]");
+	
+	cScript->cd(4);
+	tree->Draw("smwdc_S1.GetSigma(3)*1000>>hsB(100,0,20)", "" , "");
+	hsB->SetTitle("Sigma(X) [mrad]");
+	
+/**/	
+
+
+/*
+	TString cut = "abs(smwdc_S1.fTrack.fB)<0.3 &";
+
+	cScript->cd(1);
+	tree->Draw("smwdc_S1.fTrack.fX>>h23F(100,-80,20)", cut + "gate.Test(0) & abs(pid_ds.fZ-9)<0.5", "");
+	//h23F->SetTitle("s1x for difference isotopes");
+	//h23F->SetLineColor(1);
+	h23F->SetTitle("23F Brho=6.571 ");
+
+	cScript->cd(2);
+	tree->Draw("smwdc_S1.fTrack.fX>>h22O(100,-80,20)", cut + "gate.Test(1) & abs(pid_ds.fZ-8)<0.5", "");
+	h22O->SetTitle("22O Brho=6.569 ");
+	//h22O->SetLineColor(2);
+
+	cScript->cd(3);
+	tree->Draw("smwdc_S1.fTrack.fX>>h20N(100,-80,20)", cut + "gate.Test(2) & abs(pid_ds.fZ-7)<0.5", "");
+	h20N->SetTitle("20N Brho=6.582 ");
+	//h20N->SetLineColor(3);
+	
+	cScript->cd(4);
+	tree->Draw("smwdc_S1.fTrack.fX>>h16C(100,-80,20)", cut + "gate.Test(4) & abs(pid_ds.fZ-6)<0.5", "");
+	h16C->SetTitle("16C Brho=6.617 ");
+	//h16C->SetLineColor(4);
+
+	cScript->cd(5);
+	tree->Draw("smwdc_S1.fTrack.fX>>h13B(100,-80,20)", cut + "gate.Test(5) & abs(pid_ds.fZ-5)<0.5", "");
+	h13B->SetTitle("13B Brho=6.640 ");
+	//h13B->SetLineColor(5);
+
+	cScript->cd(6);
+	tree->Draw("smwdc_S1.fTrack.fX>>h10Be(100,-80,20)", cut + "gate.Test(6) & abs(pid_ds.fZ-4)<0.5", "");
+	h10Be->SetTitle("10Be Brho=6.662 ");
+	//h10Be->SetLineColor(6);
+
+	cScript->cd(7);
+	tree->Draw("smwdc_S1.fTrack.fX>>h7Li(100,-80,20)", cut + "gate.Test(8) & abs(pid_ds.fZ-3)<0.5", "");
+	h7Li->SetTitle("7Li Brho=6.684 ");
+	//h7Li->SetLineColor(7);
+	
+	cScript->cd(8);
+	tree->Draw("smwdc_S1.fTrack.fX>>h8Li(100,-80,20)", cut + "gate.Test(7) & abs(pid_ds.fZ-3)<0.5", "");
+	h8Li->SetTitle("8Li Brho=6.674 ");
+	//h8Li->SetLineColor(8);
 
    /*
    Double_t newO[2] = {0,0}; //{x,z} mm
@@ -184,6 +266,9 @@
 	TCut pid8Li = "TMath::Abs(tof_DS[0].fTiming-314)<3 && TMath::Abs(plaV775[0].fCharge-530)<50";
 	TCut pid7Li = "TMath::Abs(tof_DS[0].fTiming-344)<3 && TMath::Abs(plaV775[0].fCharge-527)<50";
 /**/
+
+
+
 /*
 	TCut vertexZ = "TMath::Abs(beamZ.fAverage-10)<60";
 	TCut tofD1 = "TMath::Abs(tof_D1.fTiming-35)<10";	
@@ -218,6 +303,24 @@
 	
 	
 /**/
+/*
+	TString cut = "abs((p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()-86)<3 & abs(beamZ.fAverage-10)<60 & abs(p2p.fSp)<10";
+	cScript->cd(1);	
+//	tree->Draw("p2p.fRecoilL.E()-938.272:p2p.fRecoilL.Theta()*TMath::RadToDeg()>>h1(100,20,70,100,0,200)", cut , "colz");
+//	TF1 * f1 = new TF1("f1", "258.5/(1+(1.137753231)*TMath::Power(TMath::Tan(x*TMath::DegToRad()),2))", 20, 70);
+//	f1->Draw("same");
+
+	tree->Draw("tofL.fTiming:p2p.fRecoilL.Theta()*TMath::RadToDeg()>>h1(100,20,70,100,5,20)", cut , "colz");
+   h1->SetTitle("Tpla-L ToF vs Theta | |openAng-86|<3 + |beamZ-10|<60 + |Sp|<10");
+   TF1 * f1 = new TF1("f1", "1400/299.792458/TMath::Cos((x-60)*TMath::DegToRad())*(938.272+(258.5/(1+(1.137753231)*TMath::Power(TMath::Tan(x*TMath::DegToRad()),2))))/TMath::Sqrt(2*938.272*(258.5/(1+(1.137753231)*TMath::Power(TMath::Tan(x*TMath::DegToRad()),2))) + TMath::Power((258.5/(1+(1.137753231)*TMath::Power(TMath::Tan(x*TMath::DegToRad()),2))),2))", 20, 70);
+	f1->Draw("same");
+
+
+	cScript->cd(2);
+//	tree->Draw("p2p.fRecoilR.E()-938.272:p2p.fRecoilR.Theta()*TMath::RadToDeg()>>h2(100,20,70,100,0,200)", cut , "colz");
+	tree->Draw("tofR.fTiming:p2p.fRecoilR.Theta()*TMath::RadToDeg()>>h2(100,20,70,100,5,20)", cut , "colz");
+	h2->SetTitle("Tpla-R ToF vs Theta");
+   f1->Draw("same");
 	
 //================================================ Temp analysis   
 

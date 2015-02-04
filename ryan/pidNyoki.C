@@ -2,7 +2,7 @@
 
 void pidNyoki() {
 
-   const char* rootfile="test_23F_0123_run23.root";
+   const char* rootfile="23F_run23.root";
    
    Int_t nyokiID[2] = {2,10};
    Bool_t useS0AB = 0;
@@ -38,7 +38,7 @@ void pidNyoki() {
 	const Double_t para2 = 0.0003021347;
 	const Double_t att  = 99999999;//3000.; // mm
 	const Double_t r0 = 4.4; // m
-	const Double_t xdp = -1156; // mm / 100%
+	const Double_t xdp = -1427; //-1156; // mm / 100%
 	const Double_t B0 = Brho0/r0; // T
 	Double_t tofOffSet = -0.1;
 	Double_t b,g,h, Sa,Sk,SQ,St;
@@ -107,9 +107,9 @@ void pidNyoki() {
 	hAux3->SetXTitle("tof");
 	hAux3->SetYTitle("L");
 
-	TH2F* hAux4 = new TH2F("hAux4", "", 500, -200, 300, 200, 30, 40);
+	TH2F* hAux4 = new TH2F("hAux4", "", 500, -200, 300, 200, 1.8, 3.5);
 	hAux4->SetXTitle("s1x");
-	hAux4->SetYTitle("tof");
+	hAux4->SetYTitle("AoQ");
 
 	TH1F* hAux5 = new TH1F("hAux5", "", 500, -200, 300);
 	hAux5->SetXTitle("s1x");
@@ -326,7 +326,7 @@ void pidNyoki() {
          //hAux2->Fill(z, s1y);
          hAux2->Fill(AoQ, Brho);
          hAux3->Fill(tof,L0);
-         hAux4->Fill(s1x,tof); //-4069.4
+         hAux4->Fill(s1x,AoQ); //-4069.4
          hAux5->Fill(s1x);
          hAux6->Fill(s1x,z);
          
@@ -401,14 +401,16 @@ void pidNyoki() {
 	/**/
 	
 	cPID->cd(6);
+	tree->Draw("coinReg.fQuality & 255");
 	//hAux2->Draw("colz");
 	//hAux6->Draw("colz");
-	hAux->ProjectionX("aux_Z=9", 170, 190)->Draw("");
-	hAux->ProjectionX("aux_Z=8", 150, 170)->Draw("same");
+	//hAux->ProjectionX("aux_Z=9", 170, 190)->Draw("");
+	//hAux->ProjectionX("aux_Z=8", 150, 170)->Draw("same");
 	
 	cPID->cd(3);
-	hPIDNyoki->ProjectionX("pid_Z=9", 170, 190)->Draw("");
-	hPIDNyoki->ProjectionX("pid_Z=8", 150, 170)->Draw("same");
+	hAux4->Draw("colz");
+	//hPIDNyoki->ProjectionX("pid_Z=9", 170, 190)->Draw("");
+	//hPIDNyoki->ProjectionX("pid_Z=8", 150, 170)->Draw("same");
 	
 	
 	/**/

@@ -17,7 +17,7 @@ Processor:
       TimingGate:        [*tmin, *tmax]
       ChargeGate:        [*qmin, *qmax]
       UseMax:            *usemax
-      Gate:              smwdc_S1_x1.fID != 29 & abs(smwdc_S1_x1.fID-30)<10
+      Gate:              abs(smwdc_S1_x1.fID-29)>2
 
   - name: mwdccalib_smwdc_S1_x2
     type: art::TMWDCCalibrationProcessor
@@ -26,7 +26,7 @@ Processor:
       TimingGate:       [*tmin, *tmax]
       ChargeGate:       [*qmin, *qmax]
       UseMax:            *usemax
-      Gate:              smwdc_S1_x2.fID != 29 & abs(smwdc_S1_x2.fID-30)<10
+      Gate:              abs(smwdc_S1_x2.fID-29)>2
 
   - name: mwdccalib_smwdc_S1_u1
     type: art::TMWDCCalibrationProcessor
@@ -35,6 +35,7 @@ Processor:
       TimingGate:       [*tmin, *tmax]
       ChargeGate:       [*qmin, *qmax]
       UseMax:            *usemax
+      Gate:              abs(smwdc_S1_u1.fID-24)>1
 
   - name: mwdccalib_smwdc_S1_u2
     type: art::TMWDCCalibrationProcessor
@@ -43,6 +44,7 @@ Processor:
       TimingGate:     [*tmin, *tmax]
       ChargeGate:     [*qmin, *qmax]
       UseMax:            *usemax
+      Gate:              abs(smwdc_S1_u2.fID-24)>1
 
   - name: mwdccalib_smwdc_S1_v1
     type: art::TMWDCCalibrationProcessor
@@ -51,7 +53,7 @@ Processor:
       TimingGate:     [*tmin, *tmax]
       ChargeGate:     [*qmin, *qmax]
       UseMax:            *usemax
-      Gate:           abs(smwdc_S1_u1.fID-22)<10
+      Gate:           abs(smwdc_S1_u1.fID-22)>1
 
   - name: mwdccalib_smwdc_S1_v2
     type: art::TMWDCCalibrationProcessor
@@ -60,7 +62,7 @@ Processor:
       TimingGate:     [*tmin, *tmax]
       ChargeGate:     [*qmin, *qmax]
       UseMax:            *usemax
-      Gate:           abs(smwdc_S1_u2.fID-22)<10
+      Gate:           abs(smwdc_S1_u2.fID-22)>1
       
 #==================================================      
 

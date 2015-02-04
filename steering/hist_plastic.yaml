@@ -21,12 +21,18 @@ group:
       
     - name: tpla-L_PID_a
       title: PID tpla-L
-      x: [p2p.fRecoilL.E()-938.272, 300, 0, 200]
+      x: ["p2p[0].fRecoilL.E()-938.272", 300, 0, 200]
       y: [plaV775.fCharge, 300, 0, 3000]
       cut: plaV775.fID == 0
       
+    - name: tpla-L_PID_b
+      title: PID tpla-L | |smwdc-L.x|<50
+      x: ["p2p[0].fRecoilL.E()-938.272", 300, 0, 200]
+      y: [plaV775.fCharge, 300, 0, 3000]
+      cut: plaV775.fID == 0 & abs(smwdc_L[0].fTrack.fX)<50
+      
     - name: tpla-L_s1
-      title: tpla-tdiff vs mwdc-L
+      title: tpla-tdiff vs mwdc-L.x
       x: ["smwdc_L[0].fTrack.fX", 400, -1000, 200]
       y: [plaV775.fTDiff, 200, -20, 10]
       cut: plaV775.fID == 0
@@ -40,12 +46,18 @@ group:
       
     - name: tpla-R_PID_a
       title: PID tpla-R
-      x: [p2p.fRecoilR.E()-938.272, 300, 0, 200]
+      x: ["p2p[0].fRecoilR.E()-938.272", 300, 0, 200]
       y: [plaV775.fCharge, 300, 0, 3000]
       cut: plaV775.fID == 1
+
+    - name: tpla-R_PID_b
+      title: PID tpla-L | |smwdc-R.x|<50
+      x: ["p2p[0].fRecoilL.E()-938.272", 300, 0, 200]
+      y: [plaV775.fCharge, 300, 0, 3000]
+      cut: plaV775.fID == 0 & abs(smwdc_R[0].fTrack.fX)<50
       
     - name: tpla-R_s1
-      title: tpla-tdiff vs mwdc-R
+      title: tpla-tdiff vs mwdc-R.x
       x: ["smwdc_R[0].fTrack.fX", 400, -200, 1000]
       y: [plaV775.fTDiff, 200, -10, 15]
       cut: plaV775.fID == 1

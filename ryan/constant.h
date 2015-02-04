@@ -22,7 +22,7 @@ const Double_t deg2rad=0.01745329251;
 const Double_t rad2deg=57.2957795131;
 
 const Double_t L_F3FH9 = 74075.; 
-const Double_t DbeamZ = 13.;
+const Double_t DbeamZ = 0.;
 const Double_t L_FH9TGT = 12020.-1155. + DbeamZ;
 const Double_t L_TGTCARBON = 150.;
 

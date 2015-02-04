@@ -1,13 +1,14 @@
 include:
-#  - hist_PID.yaml  # all plastics
-#  - hist_ana.yaml
+  - hist_PID.yaml  # all plastics
+  - hist_ana.yaml
+#  - hist_ana_proton.yaml
 #  - hist_dsPID.yaml
-#  - hist_plastic.yaml
-#  - hist_mwdc_L.yaml
-#  - hist_mwdc_R.yaml
-#  - hist_mwdc_LR.yaml
+  - hist_plastic.yaml
+  - hist_mwdc_L.yaml
+  - hist_mwdc_R.yaml
+  - hist_mwdc_LR.yaml
   - hist_mwdc_s1.yaml
-  - hist_D1.yaml       # S0img, SMWDC-S1, nyoki
+#  - hist_D1.yaml       # S0img, SMWDC-S1, nyoki
 #  - hist_nyoki.yaml  # for no upstream PID gate out
 #  - hist_nyoki2.yaml # run by run
 #  - hist_optics_1.yaml

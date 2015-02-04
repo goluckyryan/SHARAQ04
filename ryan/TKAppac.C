@@ -12,7 +12,7 @@
 void TKAppac() {
    
 //############################################################################   
-   const char* rootfile="23F_0925_optics.root";
+   const char* rootfile="23F_0203_ppcoin1008.root";
    //const char* rootfile="ppDown.root";
    //const char* rootfile="Data/phys2.root";
    TBeamData *beam  = new TBeamData("23F");

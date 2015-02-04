@@ -3,20 +3,21 @@ Double_t TKA = 258.5062;
 
 void PPFit_Sp(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t OPCM = 1){
 
-   const char* rootfile="ppAll_1118_OpenCorr.root";
+//   const char* rootfile="ppAll_1118_OpenCorr.root";
+   const char* rootfile="proton.root";
    TFile *f0 = new TFile (rootfile); TTree *tree = (TTree*)f0->Get("tree");
    
    Double_t OpenAngGateRange[2] = {84, 90};
    Bool_t CentralEqSide = 1;
    Bool_t AuxGateSwitch[2] = {1,1}; // beamZ, OpenPhi
    Double_t OpenPhiGate = 7.5;
-   Double_t beamZGate[2] = {0,60}; //mid, half-width
+   Double_t beamZGate[2] = {10,60}; //mid, half-width
    Double_t sideGateExtL = 0; //deg
    Double_t sideGateExtR = 0;
    
    printf("================> %s opened.\n", rootfile);
    
-   //================ calculate theta 
+   //==================================================================================== calculate theta 
    if (OPCM ==1 ){
       Int_t    cmThetaRange[2] = {angle1, angle2};
       Double_t thetaOpRange[2] ={CMtoLabTheta(TKA,cmThetaRange[0]), CMtoLabTheta(TKA,cmThetaRange[1])};
@@ -28,7 +29,7 @@ void PPFit_Sp(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t OPCM = 1
    }
    Double_t OpenAngGateRange_width = OpenAngGateRange[1] - OpenAngGateRange[0];
       
-   //=============Set Gate
+   //==================================================================================== Set Gates
    TString thetaGateTitle;
    //TString thetaGateTitle2;
    if ( LR == 1) {
@@ -73,40 +74,60 @@ void PPFit_Sp(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t OPCM = 1
    AuxGate.Print();
    AuxGate2.Print();
    
-   //===================Setting histogram
+   //-------------------------------- Gate text
+   TString thetaGateText;
+   if( LR ==1 ){
+   	thetaGateText.Form("%4.1f<#theta_L<%4.1f", thetaOpRange[0], thetaOpRange[1]);
+   }else{
+   	thetaGateText.Form("%4.1f<#theta_R<%4.1f", thetaOpRange[0], thetaOpRange[1]);
+   }
+   
+   TString CentralGateText;
+   CentralGateText.Form("|#Delta#theta-%4.1f|<%4.1f",  OpenAngGateRange[0]+OpenAngGateRange_width/2, OpenAngGateRange_width/2);
+   
+   TString SideGate1Text, SideGate2Text;;
+   SideGate1Text.Form("#Delta#theta#in(%4.1f,%4.1f)", OpenAngGateRange[0]-OpenAngGateRange_width/2 - sideGateExtL, OpenAngGateRange[0]);
+   SideGate2Text.Form("#Delta#theta#in(%4.1f,%4.1f)", OpenAngGateRange[1], OpenAngGateRange[1] + OpenAngGateRange_width/2 + sideGateExtR);
+   
+   if ( CentralEqSide ){
+   	SideGate1Text = "";
+   	SideGate2Text = "";
+   }
+   
+   TString AuxGateText;
+   AuxGateText.Form("|BeamZ-%2.0f|<%2.0f", beamZGate[0], beamZGate[1]);
+   TString AuxGate2Text;
+   AuxGate2Text.Form("|#Delta#Phi|<%3.1f", OpenPhiGate);
+   
+   
+   //================================================================================== Setting histograms
    gStyle->SetOptStat(0);
-   TCanvas * cSp = new TCanvas ("cSp","cSp", 1200,50,800,800);
-   cSp->Divide(2,2);
-   TString h1Title, h2Title;
-   h1Title.Form("%4.1f < OpenAngGateRange < %4.1f", OpenAngGateRange[0], OpenAngGateRange[1]);
-   h2Title.Form("OpenAngGateRange = (%4.1f, %4.1f) or (%4.1f, %4.1f)", OpenAngGateRange[0]-OpenAngGateRange_width/2, OpenAngGateRange[1]+OpenAngGateRange_width/2);
+   TCanvas * cSp = new TCanvas ("cSp","cSp", 200,50,2000,800);
+   cSp->Divide(5,2);
+   TString h1Title;
+   h1Title.Form("%s", rootfile);
    
    Double_t DisplayRangeH[2] = {-30,30};
    Int_t nBinH = TMath::Nint((DisplayRangeH[1]-DisplayRangeH[0])/1.);
    TH1F * h1 = new TH1F("h1",h1Title, nBinH, DisplayRangeH[0], DisplayRangeH[1]);
    h1->SetMinimum(0);
    h1->SetXTitle("Sp [MeV]");
+   h1->SetYTitle("Count / 1 MeV");
    h1->SetStats(1);
-   TH1F * h2 = new TH1F("h2",h2Title, nBinH, DisplayRangeH[0], DisplayRangeH[1]);
+   TH1F * h2 = new TH1F("h2",h1Title, nBinH, DisplayRangeH[0], DisplayRangeH[1]);
    h2->SetMinimum(0);
    h2->SetLineColor(2);
    h2->SetStats(0);
    TH1F * h3 = new TH1F("h3","h1-h2", nBinH, DisplayRangeH[0], DisplayRangeH[1]);
    
-   Double_t DisplayRangeG[2] = {80,92};
+   Double_t DisplayRangeG[2] = {82,94};
    Int_t nBinG = (DisplayRangeG[1]-DisplayRangeG[0])*8;
    TString h1gTitle;
-   if( AuxGate == "" && AuxGate2 == ""){
-   	h1gTitle = "";
-   }else if(AuxGate == ""){
-   	h1gTitle.Form("|OpenPhi| < %3.1f", OpenPhiGate);
-   }else if(AuxGate2 == ""){
-   	h1gTitle.Form("|beamZ-%2.0f| < %2.0f", beamZGate[0],  beamZGate[1]);
-   }else{
-   	h1gTitle.Form("|beamZ-%2.0f| < %2.0f & |OpenPhi| < %3.1f", beamZGate[0],  beamZGate[1], OpenPhiGate);
-   }
+   h1gTitle.Form("OpenTheta");
+
    TH1F * h1g = new TH1F("h1g",h1gTitle, nBinG, DisplayRangeG[0], DisplayRangeG[1]);
    h1g->SetXTitle("theta1+theta2 [deg]");
+   h1g->SetYTitle("Count / 0.125 deg");
    h1g->SetStats(0);
    h1g->SetMinimum(0);
    TH1F * h2g = new TH1F("h2g","gate2", nBinG, DisplayRangeG[0], DisplayRangeG[1]);
@@ -136,31 +157,52 @@ void PPFit_Sp(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t OPCM = 1
    TH1F * hPhi = new TH1F("hPhi", "Open(Phi)", 120, -30, 30);
    hPhi->SetMinimum(0);
    hPhi->SetXTitle("phi1+phi2 [deg]");
+   hPhi->SetYTitle("Count / 0.5 deg");
    TH1F * hPhibg = new TH1F("hPhibg", "Open(Phi)", 120, -30, 30); 
    hPhibg->SetMinimum(0);
    hPhibg->SetLineColor(2);
    
    TH1F * hbeamZ = new TH1F("hbeamZ", "beamZ", 100,-100,200);
    hbeamZ->SetMinimum(0);
+   hbeamZ->SetXTitle("BeamZ [mm]");
+   hbeamZ->SetYTitle("Count / 3 mm");
    TH1F * hbeamZbg = new TH1F("hbeamZbg", "beamZ", 100,-100,200); 
    hbeamZbg->SetMinimum(0);
    hbeamZbg->SetLineColor(2);
    TH1F * hbeamSub= new TH1F("hbeamSub","hbeamZ-hbeamZbg", 100, -100, 200);
    
-   TH1F * hEsum = new TH1F("hEsum", "E1+E2", 100,150,350);
+   TH1F * hEsum = new TH1F("hEsum", "E1+E2", 100,100,350);
    hEsum->SetMinimum(0);
-   TH1F * hEsumBG = new TH1F("hEsumBG", "E1+E2", 100,150,350); 
+   hEsum->SetXTitle("E1+E1 [MeV]");
+   hEsum->SetYTitle("count / 2.5 MeV");
+   TH1F * hEsumBG = new TH1F("hEsumBG", "E1+E2", 100,100,350); 
    hEsumBG->SetMinimum(0);
    hEsumBG->SetLineColor(2);
    TH1F * hEsumSub= new TH1F("hEsumSub","hEsum-hEsumBG", 100, 150, 350);
   
    
-   //==============Calculate
+   //=========================================================================================== Calculate
+  	TString countText;
+   TLatex *text = new TLatex();
+   text->SetNDC();
+   text->SetTextSize(0.04);
+   
+  	//--------------------------------------------
    cSp->cd(1);
    tree->Draw("p2p.fSp>>h1",CentralGate && thetaGate && AuxGate2 && AuxGate);
    tree->Draw("p2p.fSp>>h2",SideGate && thetaGate && !AuxGate2  && AuxGate, "same");
    
-   cSp->cd(2);
+   text->DrawLatex(0.6,0.80,thetaGateText);
+   text->DrawLatex(0.6,0.75,AuxGateText);
+   
+   text->SetTextColor(4);if( CentralEqSide ) text->SetTextColor(1);text->DrawLatex(0.6,0.70,CentralGateText);
+   text->SetTextColor(4);text->DrawLatex(0.6,0.65,AuxGate2Text);
+   text->SetTextColor(2);text->DrawLatex(0.6,0.60, "!" + AuxGate2Text);
+   text->SetTextColor(2);text->DrawLatex(0.6,0.55,SideGate1Text);
+   text->SetTextColor(2);text->DrawLatex(0.6,0.50,SideGate2Text);
+   text->SetTextColor(1);
+   
+   cSp->cd(6);
    //h3 = HistSub(h1, h2, 0, 10);
    TH1F* h3= new TH1F(*h1);
   	h3->Sumw2();
@@ -171,17 +213,35 @@ void PPFit_Sp(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t OPCM = 1
   	fitSp->SetParameters(200, 0, 3);
   	h3->Fit("fitSp");
   	
-  	TString countText;
-   TLatex *text = new TLatex();
-   text->SetNDC();
+  	countText.Form("Sp:%.2f#pm%.2f", fitSp->GetParameter(1), fitSp->GetParError(1));
+   text->DrawLatex(0.6, 0.85, countText);
    countText.Form("#sigma:%.2f#pm%.2f",fitSp->GetParameter(2), fitSp->GetParError(2));
    text->DrawLatex(0.6, 0.8, countText);
    countText.Form("#chi^{2}:%.2f",fitSp->GetChisquare()/fitSp->GetNDF());
    text->DrawLatex(0.6, 0.75, countText);
+   
+   /*
+   countText.Form("%5s%5d","Tot:", CountTotal);
+   text->DrawLatex(0.6, 0.85, countText);
+   countText.Form("%5s%5d", "BG:",CountBG);
+   text->DrawLatex(0.6, 0.8, countText);
+   countText.Form("%5s%5d[%3d]","Sig:", CountSignal, TMath::Nint(ErrorSignal));
+   text->DrawLatex(0.6, 0.75, countText);*/
   	
-   cSp->cd(3);
+  	//--------------------------------------------
+   cSp->cd(2);
    tree->Draw("(p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()>>h1g",CentralGate && thetaGate && AuxGate2  && AuxGate);
-   tree->Draw("(p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()>>h2g"f,SideGate && thetaGate && !AuxGate2  && AuxGate, "same");
+   tree->Draw("(p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()>>h2g",SideGate && thetaGate && !AuxGate2  && AuxGate, "same");
+   
+   text->DrawLatex(0.6,0.80,thetaGateText);
+   text->DrawLatex(0.6,0.75,AuxGateText);
+   text->SetTextColor(4);if( CentralEqSide ) text->SetTextColor(1);text->DrawLatex(0.6,0.70,CentralGateText);
+   text->SetTextColor(4);text->DrawLatex(0.6,0.65,AuxGate2Text);
+   text->SetTextColor(2);text->DrawLatex(0.6,0.60, "!" + AuxGate2Text);
+   text->SetTextColor(2);text->DrawLatex(0.6,0.55,SideGate1Text);
+   text->SetTextColor(2);text->DrawLatex(0.6,0.50,SideGate2Text);
+   text->SetTextColor(1);
+   
    
    //h3g = HistSub(h1g, h2g, 86,1);
    
@@ -190,51 +250,11 @@ void PPFit_Sp(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t OPCM = 1
    
    Int_t CountSignal = CountTotal - CountBG;
    Double_t ErrorSignal = sqrt((Double_t)CountTotal + (Double_t)CountBG);
-   /*
-   TString countText;
-   TLatex *text = new TLatex();
-   text->SetNDC();
-   countText.Form("%5s%5d","Tot:", CountTotal);
-   text->DrawLatex(0.6, 0.85, countText);
-   countText.Form("%5s%5d", "BG:",CountBG);
-   text->DrawLatex(0.6, 0.8, countText);
-   countText.Form("%5s%5d[%3d]","Sig:", CountSignal, TMath::Nint(ErrorSignal));
-   text->DrawLatex(0.6, 0.75, countText);*/
    
    printf("====== Central:%d, Side:%d => Signal:%d [%5.1f] \n",  CountTotal, CountBG, CountSignal, ErrorSignal);
-  
-   cSp->cd(4);
-   /*if (LR == 1){
-      tree->Draw("p2p.fRecoilL.Theta()*TMath::RadToDeg()>>hL", CentralGate && thetaGate && AuxGate);
-      tree->Draw("p2p.fRecoilR.Theta()*TMath::RadToDeg()>>hR", CentralGate && thetaGate && AuxGate, "same");
-   }else{
-      tree->Draw("p2p.fRecoilR.Theta()*TMath::RadToDeg()>>hR", CentralGate && thetaGate && AuxGate);
-      tree->Draw("p2p.fRecoilL.Theta()*TMath::RadToDeg()>>hL", CentralGate && thetaGate && AuxGate, "same");
-   }*/
-   
-   //tree->Draw("beamZ.fAverage>>hbeamZ",CentralGate && thetaGate && AuxGate2  && AuxGate);
-   //tree->Draw("beamZ.fAverage>>hbeamZbg",SideGate && thetaGate && !AuxGate2  && AuxGate, "same");
-   
-   //hbeamSub = HistSub(hbeamZ, hbeamZbg, 11, 30);
-   
-   //tree->Draw("p2p.fSp:(p2p.fRecoilL.E()+p2p.fRecoilR.E()-2*938.272)>>htest(100,0,350,100,-30,30)",CentralGate && thetaGate && AuxGate && AuxGate2, "colz");
-  
-   /*
-   tree->Draw("abs(p2p.fRecoilL.Phi()-p2p.fRecoilR.Phi())*TMath::RadToDeg()-180>>hPhi", CentralGate && thetaGate && AuxGate2 && AuxGate, "");
-   tree->Draw("abs(p2p.fRecoilL.Phi()-p2p.fRecoilR.Phi())*TMath::RadToDeg()-180>>hPhibg", SideGate && thetaGate && AuxGate2 && AuxGate, "same");
-  	TH1F * htest = new TH1F(*hPhi);
-  	htest->Sumw2();
-  	htest->Add(hPhibg,-1);
-  	htest->Draw();
-   htest->Fit("gaus", "", "", -20, 20);
-  	*/
-  	
-   //tree->Draw("(p2p_zerom500.fRecoilL.E()+p2p_zerom500.fRecoilR.E()-2*938.272)>>hEsum",CentralGate && thetaGate && AuxGate && AuxGate2, "");
-   //tree->Draw("(p2p_zerom500.fRecoilL.E()+p2p_zerom500.fRecoilR.E()-2*938.272)>>hEsumBG",SideGate && thetaGate && !AuxGate && !AuxGate2, "same");
-  	//hEsumSub = HistSub(hEsum, hEsumBG, 260, 60);
-  	
-  	
-  	TH1F* h4= new TH1F(*h1g);
+
+   cSp->cd(7);
+   TH1F* h4= new TH1F(*h1g);
   	h4->Sumw2();
   	h4->Add(h2g,-1);
   	h4->Draw();
@@ -250,7 +270,115 @@ void PPFit_Sp(Int_t angle1 = 0, Int_t angle2 = 180, Int_t LR = 1, Int_t OPCM = 1
    countText.Form("#chi^{2}:%.2f",fit->GetChisquare()/fit->GetNDF());
    text->DrawLatex(0.6, 0.75, countText);
    
+  	//--------------------------------------------
+   cSp->cd(3);  
+   //tree->Draw("abs(p2p.fRecoilL.Phi()-p2p.fRecoilR.Phi())*TMath::RadToDeg()-180>>hPhi", CentralGate, "");   
+   tree->Draw("abs(p2p.fRecoilL.Phi()-p2p.fRecoilR.Phi())*TMath::RadToDeg()-180>>hPhi", CentralGate && thetaGate && AuxGate && "abs(p2p.fSp)<13", "");
+   tree->Draw("abs(p2p.fRecoilL.Phi()-p2p.fRecoilR.Phi())*TMath::RadToDeg()-180>>hPhibg", SideGate && thetaGate && AuxGate && "abs(p2p.fSp)>13", "same");
+  	
+   text->DrawLatex(0.6,0.80,thetaGateText);
+   text->DrawLatex(0.6,0.75,AuxGateText);
+   text->SetTextColor(4);if( CentralEqSide ) text->SetTextColor(1);text->DrawLatex(0.6,0.70,CentralGateText);
+   text->SetTextColor(4);text->DrawLatex(0.6,0.65,"|Sp|<13");
+   text->SetTextColor(2);text->DrawLatex(0.6,0.60,"|Sp>13|");
+   text->SetTextColor(2);text->DrawLatex(0.6,0.55,SideGate1Text);
+   text->SetTextColor(2);text->DrawLatex(0.6,0.50,SideGate2Text);
+   text->SetTextColor(1);
+  	
+  	cSp->cd(8);
+  	TH1F * htest = new TH1F(*hPhi);
+  	htest->Sumw2();
+  	htest->Add(hPhibg,-1);
+  	htest->Draw();
+  	//htest->Fit("gaus", "", "", -20, 20);
+  	
+  	TF1 * fitPhi = new TF1("fitPhi", "gaus", 80, 92);
+  	fitPhi->SetParameters(200, 86.5, 1);
+  	htest->Fit("fitPhi");
    
+  	countText.Form("#Delta#phi:%.2f#pm%.2f", fitPhi->GetParameter(1), fitPhi->GetParError(1));
+   text->DrawLatex(0.6, 0.85, countText);
+   countText.Form("#sigma:%.2f#pm%.2f",fitPhi->GetParameter(2), fitPhi->GetParError(2));
+   text->DrawLatex(0.6, 0.8, countText);
+   countText.Form("#chi^{2}:%.2f",fitPhi->GetChisquare()/fitPhi->GetNDF());
+   text->DrawLatex(0.6, 0.75, countText);
+  	
+  	
+  	//--------------------------------------------
+  	cSp->cd(4);
+   tree->Draw("beamZ.fAverage>>hbeamZ",CentralGate && thetaGate && AuxGate2 , "");
+   tree->Draw("beamZ.fAverage>>hbeamZbg",SideGate && thetaGate && !AuxGate2 , "same");
+  	
+   text->DrawLatex(0.6,0.80,thetaGateText);
+   text->SetTextColor(4);if( CentralEqSide ) text->SetTextColor(1);text->DrawLatex(0.6,0.70,CentralGateText);
+   text->SetTextColor(4);text->DrawLatex(0.6,0.65,AuxGate2Text);
+   text->SetTextColor(2);text->DrawLatex(0.6,0.60, "!" + AuxGate2Text);
+   text->SetTextColor(2);text->DrawLatex(0.6,0.55,SideGate1Text);
+   text->SetTextColor(2);text->DrawLatex(0.6,0.50,SideGate2Text);
+   text->SetTextColor(1);
+     	
+  	cSp->cd(9);
+  	TH1F * hbeamZ3 = new TH1F(*hbeamZ);
+  	hbeamZ3->Sumw2();
+  	hbeamZ3->Add(hbeamZbg,-1);
+  	hbeamZ3->Draw();
+  	//htest->Fit("gaus", "", "", -20, 20);
+  	
+  	TF1 * fitbeamZ = new TF1("fitbeamZ", "gaus", -50, 120);
+  	fitbeamZ->SetParameters(200, 10, 50);
+  	hbeamZ3->Fit("fitbeamZ");
+   
+  	countText.Form("BeamZ:%.2f#pm%.2f", fitbeamZ->GetParameter(1), fitbeamZ->GetParError(1));
+   text->DrawLatex(0.5, 0.85, countText);
+   countText.Form("#sigma:%.2f#pm%.2f",fitbeamZ->GetParameter(2), fitbeamZ->GetParError(2));
+   text->DrawLatex(0.6, 0.8, countText);
+   countText.Form("#chi^{2}:%.2f",fitbeamZ->GetChisquare()/fitbeamZ->GetNDF());
+   text->DrawLatex(0.6, 0.75, countText);
+  	
+  	
+  	cSp->cd(5);
+   //tree->Draw("p2p.fSp:(p2p.fRecoilL.E()+p2p.fRecoilR.E()-2*938.272)>>htest(100,0,350,100,-30,30)",CentralGate && thetaGate && AuxGate && AuxGate2, "colz");
+   tree->Draw("(p2p.fRecoilL.E()+p2p.fRecoilR.E()-2*938.272)>>hEsum"  ,CentralGate && thetaGate && AuxGate && AuxGate2, "");
+   tree->Draw("(p2p.fRecoilL.E()+p2p.fRecoilR.E()-2*938.272)>>hEsumBG",SideGate && thetaGate && AuxGate && !AuxGate2, "same");
+   
+   text->DrawLatex(0.6,0.80,thetaGateText);
+   text->DrawLatex(0.6,0.75,AuxGateText);
+   text->SetTextColor(4);if( CentralEqSide ) text->SetTextColor(1);text->DrawLatex(0.6,0.70,CentralGateText);
+   text->SetTextColor(4);text->DrawLatex(0.6,0.65,AuxGate2Text);
+   text->SetTextColor(2);text->DrawLatex(0.6,0.60,"!" + AuxGate2Text);
+   text->SetTextColor(2);text->DrawLatex(0.6,0.55,SideGate1Text);
+   text->SetTextColor(2);text->DrawLatex(0.6,0.50,SideGate2Text);
+   text->SetTextColor(1);   
+   
+   cSp->cd(10);
+  	//hEsumSub = HistSub(hEsum, hEsumBG, 260, 60);
+  	TH1F * hEsumSub = new TH1F(*hEsum);
+  	hEsumSub->Sumw2();
+  	hEsumSub->Add(hEsumBG,-1);
+  	hEsumSub->Draw();
+  	//htest->Fit("gaus", "", "", -20, 20);
+  	
+  	TF1 * fitEsum = new TF1("fitEsum", "gaus", 0, 300);
+  	fitEsum->SetParameters(200, 250, 100);
+  	hEsumSub->Fit("fitEsum");
+   
+  	countText.Form("#SigmaE:%.2f#pm%.2f", fitEsum->GetParameter(1), fitEsum->GetParError(1));
+   text->DrawLatex(0.6, 0.85, countText);
+   countText.Form("#sigma:%.2f#pm%.2f",fitEsum->GetParameter(2), fitEsum->GetParError(2));
+   text->DrawLatex(0.6, 0.8, countText);
+   countText.Form("#chi^{2}:%.2f",fitEsum->GetChisquare()/fitEsum->GetNDF());
+   text->DrawLatex(0.6, 0.75, countText);
+  	
+
+   /*if (LR == 1){
+      tree->Draw("p2p.fRecoilL.Theta()*TMath::RadToDeg()>>hL", CentralGate && thetaGate && AuxGate);
+      tree->Draw("p2p.fRecoilR.Theta()*TMath::RadToDeg()>>hR", CentralGate && thetaGate && AuxGate, "same");
+   }else{
+      tree->Draw("p2p.fRecoilR.Theta()*TMath::RadToDeg()>>hR", CentralGate && thetaGate && AuxGate);
+      tree->Draw("p2p.fRecoilL.Theta()*TMath::RadToDeg()>>hL", CentralGate && thetaGate && AuxGate, "same");
+   }*/
+   
+   //hbeamSub = HistSub(hbeamZ, hbeamZbg, 11, 30);
 }
 
 //#####################################################################

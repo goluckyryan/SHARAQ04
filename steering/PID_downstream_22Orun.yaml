@@ -12,7 +12,7 @@ Processor:
       Parameter0:  -500.   # p0, L = Q + p0
       Parameter1:  18.4      # g = k*A, dE = k z^2/beta^2
       Parameter2:  0.00898  # h = k*B, L = A *dE/(1+B*dE)
-      Dispersion:  -1156  # tetatively
+      Dispersion:  -1427  # tetatively
       TimeOffset:  0.
       FlightLength:   6570.6 #6595.6
       FL1:           -0.451752. 
