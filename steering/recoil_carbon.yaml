@@ -1,5 +1,5 @@
 aliases:
-  - &beamZc      170.
+  - &beamZc      160.
   - &tofShift_Lc  0.  #time shift (tgt to Tpla)
   - &tofShift_Rc  0.  #time shift (tgt to Tpla)
 #============== PROCESSORS     =============================

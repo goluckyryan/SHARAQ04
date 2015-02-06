@@ -1,6 +1,6 @@
 aliases:
 # beware to overwrite !!!
-  - &output 23F_0203_all.root
+  - &output 23F_0206.root
  
 #  - &beamprm prm/kinematics/proton.yaml     
 #  - &beamprm prm/kinematics/14O.yaml  
@@ -36,7 +36,7 @@ Processor:
 #============== PROCESSORS     =============================
   - include: coinReg.yaml
   - include: Gate_Initialtor.yaml
-  - include: Gate_coinReg.yaml
+#  - include: Gate_coinReg.yaml
 
 ########----------------- BigRIPS & plastics
   - include: plastic_V1190_prm.yaml
@@ -105,17 +105,17 @@ Processor:
   - include: beamZ.yaml
   - include: vertex.yaml
   - include: recoil.yaml                   # set beamZ, angle correction
-#  - include: recoil_carbon.yaml
+  - include: recoil_carbon.yaml
 #  - include: recoil_multiOffset.yaml
 #  - include: Gate_PIDdownstream_polygon.yaml
   - include: Gate_PIDdownstream_rectangle.yaml
 
 ########----------------- Hist
-  - name: projection
-    type: art::TTreeProjectionProcessor
-    parameter:
-      Type:  art::TTreeProjection
-      FileName: steering/hist.yaml
+#  - name: projection
+#    type: art::TTreeProjectionProcessor
+#    parameter:
+#      Type:  art::TTreeProjection
+#      FileName: steering/hist.yaml
 #      FileName: steering/hist_dsPID_2.yaml
 
 #============== Output     =============================

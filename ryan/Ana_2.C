@@ -8,6 +8,7 @@ void Ana_2(){
    TCanvas * cAna = new TCanvas("cAna", "Ana", 2000,0 , 400, 400);
    //cAna->Divide(4,2);
    
+   
    Int_t SpHistRange[2] = {-40,120};
    Int_t SpHistBin = 80;
    
@@ -36,7 +37,7 @@ void Ana_2(){
    TCut OpenPhi = "TMath::Abs(TMath::Abs(p2p.fRecoilL.Phi()-p2p.fRecoilR.Phi())*TMath::RadToDeg()-150)<10";
    
    //TCut PID23f = "TMath::Abs(plaV1190_FH9.fCharge-5913)<147 && TMath::Abs(tof_US.fTiming+1463)<2";
-   TCut common = "gate.Test(4)" + nyokiQ + nyokiID;
+   TCut common = "gate.Test(9)" + nyokiQ + nyokiID;
   
   	TCut gate = common + VertexZ;// + OpenPhi;
   	TCut side = common ;//+ VertexZ2;
@@ -44,7 +45,7 @@ void Ana_2(){
   	gate.Print();
   	side.Print();
   	
-  	//***************************
+  	//************************************************
   	Int_t binWidth = (SpHistRange[1] - SpHistRange[0])*1./SpHistBin;
   	TString hSpTitle;
   	hSpTitle.Form("Seperation energy | Nyoki-%d", nyokiIDnum);

@@ -5,19 +5,24 @@
 
 //========================================================
 
-	char * rootfile = "23F_0203_ppcoin1008.root";
+	char * rootfile = "P_23F_0205_all.root";
 
-	TFile *f0 = new TFile (rootfile, "read"); TTree *tree = (TTree*)f0->Get("tree");
-	gROOT->ProcessLine("listg tree");
+	TFile *f0 = new TFile (rootfile, "read"); 
+	if( f0==0){
+		printf("cannot load file: %s \n", rootfile);
+		return;
+	}
+	TTree *tree = (TTree*)f0->Get("recoil");
+	//gROOT->ProcessLine("listg tree");
 	printf("=====> /// %s //// is loaded. Total #Entry: %d \n", rootfile,  tree->GetEntries());
 
 //======================================================== Browser or Canvas
-	TBrowser B("Bscript",rootfile, 900,600); 	
+//	TBrowser B("Bscript",rootfile, 900,600); 	
 
 	
-/*	Int_t Div[2] = {2,2};  //x,y
-	Int_t size[2] = {400,400}; //x,y
-   TCanvas * cScript = new TCanvas("cScript", "cScript", 2000,0 , size[0]*Div[0], size[1]*Div[1]);
+	Int_t Div[2] = {5,2};  //x,y
+	Int_t size[2] = {300,300}; //x,y
+   TCanvas * cScript = new TCanvas("cScript", "cScript", 100,0 , size[0]*Div[0], size[1]*Div[1]);
    cScript->Divide(Div[0],Div[1]);
    
 //======================================================== load histogram
@@ -26,9 +31,202 @@
 //================ update.
 //	TFile *f0 = new TFile ("23F_1224_nyoki_optics.root","update"); 
 //	f0->Close();
-
+/**/
 //======================================================== analysis
 
+	TCut vertexZcut = "abs(vertexZ-10)<25";
+	TCut s1xcut = "";//"s1x<0";
+	TCut pidZcut = "pidZ>5";
+	TCut tofS1cut = "abs(tofS1-34.5)<1";
+	
+	TLatex text;
+   text.SetNDC();
+
+	cScript->cd(1);
+	tree->Draw("s1x:Ex2>>h1(70,-40,100, 100, -200, 300)", s1xcut + pidZcut + vertexZcut + tofS1cut, "colz");
+	h1->SetTitle("s1x vs Ex");
+	h1->SetXTitle("Ex [MeV]");
+	h1->SetYTitle("s1x [mm]");
+	text->DrawLatex(0.6, 0.8, s1xcut);
+	
+	cScript->cd(2);
+	tree->Draw("tofS1:Ex2>>h2(70,-40,100, 100, 30, 38)", s1xcut + pidZcut + vertexZcut + tofS1cut, "colz");
+	h2->SetTitle("tofS1 vs Ex");
+	h2->SetXTitle("Ex [MeV]");
+	h2->SetYTitle("tofS1 [mm]");
+	text->DrawLatex(0.3, 0.8, tofS1cut);
+
+	cScript->cd(3);
+	tree->Draw("pidAoQ:Ex2>>h3(70,-40,100, 100, 1.4, 3.2)", s1xcut + pidZcut + vertexZcut + tofS1cut, "colz");
+	h3->SetTitle("A/Q vs Ex");
+	h3->SetXTitle("Ex [MeV]");
+	h3->SetYTitle("A/Q");
+	
+	cScript->cd(4);
+	tree->Draw("pidZ:Ex2>>h4(70,-40,100,100,1, 11)", s1xcut + pidZcut + vertexZcut + tofS1cut, "colz");
+	h4->SetTitle("Z vs Ex");
+	h4->SetXTitle("Ex [MeV]");
+	h4->SetYTitle("Z ");
+	text->DrawLatex(0.6, 0.3, pidZcut);
+	
+	cScript->cd(5);
+	tree->Draw("pidZ:pidAoQ>>h5(100,1.4,3.2,100,1, 11)", s1xcut + pidZcut + vertexZcut + tofS1cut, "colz");
+	h5->SetTitle("Z vs A/Q");
+	h5->SetXTitle("A/Q");
+	h5->SetYTitle("Z ");
+
+	cScript->cd(6);
+	tree->Draw("vertexZ:Ex2>>h6(70,-40,100,100,-100, 250)", s1xcut + pidZcut + vertexZcut + tofS1cut, "colz");
+	h6->SetTitle("vertex.Z vs Ex");
+	h6->SetXTitle("Ex [MeV]");
+	h6->SetYTitle("vertex.Z [mm]");
+	text->DrawLatex(0.3, 0.8, vertexZcut);
+	
+	cScript->cd(7);
+	tree->Draw("s1x:pidAoQ>>h7(100,1.4,3.2,100,-200,300)", s1xcut + pidZcut + vertexZcut + tofS1cut, "colz");
+	h7->SetTitle("s1x vs A/Q");
+	h7->SetXTitle("A/Q ");
+	h7->SetYTitle("s1x [mm]");
+	
+	cScript->cd(8);
+	Int_t binWidth = 2;
+	Int_t binRange[2] = {-40,60};
+	TString plot1; plot1.Form("Ex2>>hEx(%d,%d,%d)", (binRange[1]-binRange[0])/binWidth, binRange[0], binRange[1]);
+	TString plot2; plot2.Form("Ex2>>hExbg(%d,%d,%d)", (binRange[1]-binRange[0])/binWidth, binRange[0], binRange[1]);
+	
+	//tree->Draw("s1x:vertexZ>>h7(100,-100,250,100,-200,300)", "", "colz");
+	tree->Draw(plot1, s1xcut + pidZcut + vertexZcut + tofS1cut, "colz");
+	hEx->SetMinimum(0);
+	hEx->SetTitle("Ex | gated");
+	hEx->SetXTitle("Ex [MeV]");
+	hEx->SetYTitle("count / 2 MeV");
+	hEx->Draw();
+	tree->Draw(plot2, s1xcut + !pidZcut + vertexZcut + tofS1cut, "same");
+	hExbg->Scale(0.6);
+	hExbg->SetLineColor(2);
+	hExbg->Draw("same");
+	text->DrawLatex(0.6,0.8,!pidZcut);
+	
+	cScript->cd(9);
+	TH1F* hExsub = new TH1F(*hEx);
+	hExsub->Sumw2();
+	hExsub->Add(hExbg,-1);
+	hExsub->Draw();
+	
+	cScript->cd(10);
+	tree->Draw("k>>h10", s1xcut + pidZcut + vertexZcut + tofS1cut, "colz");
+	h10->SetTitle("Momt [MeV/c]");
+	tree->Draw("k>>h10a", s1xcut + !pidZcut + vertexZcut + tofS1cut, "same");
+	
+	
+
+	//tree->Draw("s1x:pidAoQ>>h8(100,1.4,3.2,100,-200,300)", "abs(tofS1-34.5)<1 && abs(vertexZ-15)<20 && pidZ>5", "colz");
+	//tree->Draw("pidZ:pidAoQ>>h8(100,1.4,3.2,100,1, 11)", "abs(tofS1-34.5)<1 && abs(vertexZ-15)<20 && pidZ>5", "colz");
+	/*
+//	TString cut = "gate.Test(9) & abs(vertex-10)<60 & abs(tof_D1.fTiming-35)<2 & abs((p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()-80)<15 & abs(p2p.fSp-20)<30"
+	
+	TString cut = "gate.Test(9) && abs(vertex.fZ-10)<60 && abs(tof_D1.fTiming-35)<1 ";
+	TString cutbg = "gate.Test(11) && !gate.Test(9) && abs(vertex.fZ-10)<60 && abs(tof_D1.fTiming-35)<2";
+	TString cutbg2 = "!gate.Test(9) && abs(vertex.fZ-10)<60 && abs(tof_D1.fTiming-35)<1";
+	
+	TCut tgt = "gate.Test(9)";
+	TCut vertexZ = "abs(vertex.fZ-10)<60";
+	
+	/*
+	TString openAng = "";//"&& TMath::Abs((p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()-80)<15";
+	
+	cScript->cd(1);
+  	tree->Draw("p2p.fEx>>hSp1(50,-20,80)",cut + openAng + "&& smwdc_S1.fTrack.fX<0 && pid_ds.fZ>5", "");
+  	hSp1->SetTitle("tgt + |vertex.Z-10|<60 + |tof-35|<1 + 0<s1x<100 + Z>5");
+  	hSp1->SetXTitle("Ex2(22O) [MeV]");
+  	hSp1->SetMinimum(0);
+  	hSp1->Draw();
+  	tree->Draw("p2p.fEx>>hSp1bg(50,-20,80)",cutbg2 + openAng + "&& smwdc_S1.fTrack.fX<0 && pid_ds.fZ>5", "same");
+  	hSp1bg->SetLineColor(2);
+  	hSp1bg->Scale(1.0);
+  	hSp1bg->Draw("same");
+  	
+  	cScript->cd(2);
+  	TH1F* sp1sub = new TH1F(*hSp1);
+  	sp1sub->Sumw2();
+  	sp1sub->Add(hSp1bg, -1);
+  	sp1sub->Draw();
+  	
+  	printf("Sp1...done\n");
+  	
+  	cScript->cd(3);
+  	tree->Draw("p2p.fEx>>hSp2(50,-20,80)",cut + openAng + "&& smwdc_S1.fTrack.fX<100 && smwdc_S1.fTrack.fX>0 && pid_ds.fZ>5", "");
+  	hSp2->SetTitle("tgt + |vertex.Z-10|<60 + |tof-35|<1 + 0<s1x<100 + Z<5");
+  	hSp2->SetXTitle("Ex2(22O*) [MeV]");
+  	hSp2->SetMinimum(0);
+  	hSp2->Draw();
+  	tree->Draw("p2p.fEx>>hSp2bg(50,-20,80)",cutbg2 + openAng + "&& smwdc_S1.fTrack.fX<100 && smwdc_S1.fTrack.fX>0  && pid_ds.fZ>5", "same");
+  	hSp2bg->SetLineColor(2);
+  	hSp2bg->Scale(1.0);
+  	hSp2bg->Draw("same");
+  	
+  	cScript->cd(4);
+  	TH1F* sp2sub = new TH1F(*hSp2);
+  	sp2sub->Sumw2();
+  	sp2sub->Add(hSp2bg, -1);
+  	sp2sub->Draw();
+	
+	
+	/*
+	cScript->cd(1);
+	tree->Draw("smwdc_S1.fTrack.fX:pid_ds.fAOQ>>hs1xAoQ(100,2,3, 100, -200, 500)", cut, "colz");
+   
+	cScript->cd(2);
+	tree->Draw("smwdc_S1.fTrack.fX:pid_ds.fZ>>hs1xZ(100,1,10, 100, -200, 500)", cut, "colz");
+  	
+  	cScript->cd(3);
+	tree->Draw("smwdc_S1.fTrack.fX:p2p.fEx>>hs1xEx(80,-40,120, 100, -200, 500)", cut, "colz");
+  	
+  	cScript->cd(1);
+  	//tree->Draw("pid_ds.fZ:pid_ds.fAOQ>>hPID(100,2,3,100,1,10)", cut , "colz");
+  	tree->Draw("p2p.fEx>>hSp1(80,-40,120)",cut + "&& smwdc_S1.fTrack.fX<0", "colz");
+  	tree->Draw("p2p.fEx>>hSp1bg(80,-40,120)",cutbg + "&& smwdc_S1.fTrack.fX<0", "colz");
+  	
+  	cScript->cd(2);
+  	//tree->Draw("pid_ds.fZ:pid_ds.fAOQ>>hPIDa(100,2,3,100,1,10)", cut + "&& smwdc_S1.fTrack.fX<0", "colz");
+  	
+  	
+  	
+  	/*
+  	tree->Draw("smwdc_S1[0].fTrack.fX>>h01(200,-200,400)", cut + " & nyoki.fID==1", "");
+  	tree->Draw("smwdc_S1[0].fTrack.fX>>h02(200,-200,400)", cut + " & nyoki.fID==2", "");
+  	tree->Draw("smwdc_S1[0].fTrack.fX>>h03(200,-200,400)", cut + " & nyoki.fID==3", "");
+  	tree->Draw("smwdc_S1[0].fTrack.fX>>h04(200,-200,400)", cut + " & nyoki.fID==4", "");
+  	
+  	
+  	tree->Draw("smwdc_S1[0].fTrack.fX>>h05(200,-200,400)", cut + " & nyoki.fID==5", "", 2000000);printf(" h05 done .\n"); 	
+  	tree->Draw("smwdc_S1[0].fTrack.fX>>h06(200,-200,400)", cut + " & nyoki.fID==6", "", 2000000);printf(" h06 done .\n");
+  	tree->Draw("smwdc_S1[0].fTrack.fX>>h07(200,-200,400)", cut + " & nyoki.fID==7", "", 2000000);printf(" h07 done .\n");
+  	tree->Draw("smwdc_S1[0].fTrack.fX>>h08(200,-200,400)", cut + " & nyoki.fID==8", "", 2000000);printf(" h08 done .\n");
+  	tree->Draw("smwdc_S1[0].fTrack.fX>>h09(200,-200,400)", cut + " & nyoki.fID==9", "", 2000000);printf(" h09 done .\n");
+  	//tree->Draw("smwdc_S1[0].fTrack.fX>>h10(200,-200,400)", cut + " & nyoki.fID==10", "");
+  	
+  	h07->SetLineColor(4);h07->Draw();
+  	h08->SetLineColor(2);h08->Draw("same");
+  	h09->SetLineColor(4);h09->Draw("same");
+  	//h10->SetLineColor(2);h10->Draw("same");
+  	h06->SetLineColor(2);h06->Draw("same");
+  	h05->SetLineColor(4);h05->Draw("same");
+  	/*h04->SetLineColor(2);h04->Draw("same");
+  	h03->SetLineColor(4);h03->Draw("same");
+  	h02->SetLineColor(2);h02->Draw("same");
+  	h01->SetLineColor(4);h01->Draw("same");
+  	
+  	cScript->cd(3);
+  	tree->Draw("pid_ds.fZ:pid_ds.fAOQ>>hPIDb(100,2,3,100,1,10)", cut + "&& 100>smwdc_S1.fTrack.fX && smwdc_S1.fTrack.fX>0", "colz");
+  	//tree->Draw("nyoki.fCharge:plaV775[4].fCharge>>p07(100,700, 2200, 100, 700, 2200)", cut + "& nyoki.fID==7", "colz", 2000000);
+  	//printf(" p07 done .\n");
+  	
+  	/*cScript->cd(1);
+  	tree->Draw("nyoki.fCharge:plaV775[4].fCharge>>p08(100,700, 2200, 100, 700, 2200)", cut + "& nyoki.fID==8", "colz",3000000);
+  	p08->SetTitle("Nyoki-8 Q | S0DPL");
+  	printf(" p08 done .\n");
+  	
 	/*
 	//----------------- S0img
 	TString cut = "1";//"(coinReg.fQuality & 7) == 2"; //"gate.Test(1) & gate.Test(12)";
@@ -285,10 +483,10 @@
 	
 	//tree->Draw("(p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()>>g1(100,80,90)","","");
 	//tree2->Draw("(p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()>>g2(100,80,90)","","same");
-	TH2F* h1 = new TH2F("h1", "Ex vs s1x | common", 100, -150, 300, 40, -20, 60);
-	TH2F* h2 = new TH2F("h2", "Ex vs s1x | common tgt", 100, -150, 300, 40, -20, 60);
-	TH2F* h3 = new TH2F("h3", "Ex vs s1x | common holder", 100, -150, 300, 40, -20, 60);	
-	TH2F* h4 = new TH2F("h4", "Ex vs s1x | common tgt |Sp-20|<20", 100, -150, 300, 40, -20, 60);	
+	TH2F* h1 = new TH2F("h1", "Ex2 vs s1x | common", 100, -150, 300, 40, -20, 60);
+	TH2F* h2 = new TH2F("h2", "Ex2 vs s1x | common tgt", 100, -150, 300, 40, -20, 60);
+	TH2F* h3 = new TH2F("h3", "Ex2 vs s1x | common holder", 100, -150, 300, 40, -20, 60);	
+	TH2F* h4 = new TH2F("h4", "Ex2 vs s1x | common tgt |Sp-20|<20", 100, -150, 300, 40, -20, 60);	
 
 
 	cScript->cd(1);	tree->Draw("p2p.fEx:smwdc_S1.fTrack.fX>>h1", vertexZ + tofD1 + ang, "colz");

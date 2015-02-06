@@ -1,0 +1,176 @@
+group:
+  - name: FindGatesForEx
+    title: Find Gates for Ex
+    contents:      
+#============================ Ex
+    - name: Ex_common
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<2 + |vertex.Z-10|<60 
+      x: [p2p.fEx, 110, -100, 120]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<2 & abs(vertex.fZ-10)<60
+      
+    - name: Ex_common_Z_gt_5
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<2 + |vertex.Z-10|<60 + pid.Z>5
+      x: [p2p.fEx, 110, -100, 120]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<2 & abs(vertex.fZ-10)<60 & pid_ds.fZ>5
+      
+    - name: Ex_common_Z_lt_5
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<2 + |vertex.Z-10|<60 + pid.Z<5
+      x: [p2p.fEx, 110, -100, 120]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<2 & abs(vertex.fZ-10)<60 & pid_ds.fZ<5
+      
+    - name: Ex_common_s1x_a
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<2 + |vertex.Z-10|<60 + |s1x-50|>150
+      x: [p2p.fEx, 110, -100, 120]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<2 & abs(vertex.fZ-10)<60 & abs(smwdc_S1.fTrack.fX-50)<150
+   
+    - name: Ex_common_s1x_b
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<2 + |vertex.Z-10|<60 + |s1x-50|>150
+      x: [p2p.fEx, 110, -100, 120]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<2 & abs(vertex.fZ-10)<60 & abs(smwdc_S1.fTrack.fX-50)>150
+      
+    - name: Ex_common_s1x_Z
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<2 + |vertex.Z-10|<60 + |s1x-50|<150 + pid.Z>5
+      x: [p2p.fEx, 110, -100, 120]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<2 & abs(vertex.fZ-10)<60 & abs(smwdc_S1.fTrack.fX-50)<150 & pid_ds.fZ>5
+      
+    - name: Ex_common_varToF1_s1x_Z
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<1 + |vertex.Z-10|<60 + |s1x-50|<150 + pid.Z>5
+      x: [p2p.fEx, 110, -100, 120]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<1 & abs(vertex.fZ-10)<60 & abs(smwdc_S1.fTrack.fX-50)<150 & pid_ds.fZ>5
+        
+    - name: Ex_common_varToF3_s1x_Z
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<3 + |vertex.Z-10|<60 + |s1x-50|<150 + pid.Z>5
+      x: [p2p.fEx, 110, -100, 120]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<3 & abs(vertex.fZ-10)<60 & abs(smwdc_S1.fTrack.fX-50)<150 & pid_ds.fZ>5
+        
+    - name: Ex_common_varHolder_s1x_Z
+      title: Ex | PID(23F) + ppcoin + holder + |tof_D1-35|<1 + |vertex.Z-10|<60 + |s1x-50|<150 + pid.Z>5
+      x: [p2p.fEx, 110, -100, 120]
+      cut: gate.Test(0) & !gate.Test(9) & abs(tof_D1.fTiming-35)<1 & abs(vertex.fZ-10)<60 & abs(smwdc_S1.fTrack.fX-50)<150 & pid_ds.fZ>5
+        
+    - name: Ex_common_varZ1_s1x_Z
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<1 + |vertex.Z-10|<100 + |s1x-50|<150 + pid.Z>5
+      x: [p2p.fEx, 110, -100, 120]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<1 & abs(vertex.fZ-10)<100 & abs(smwdc_S1.fTrack.fX-50)<150 & pid_ds.fZ>5
+      
+#======================================      
+    - name: s1x_Ex_common
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<2 + |vertex.Z-10|<60 
+      x: [p2p.fEx, 110, -100, 120]
+      y: [smwdc_S1.fTrack.fX, 100, -200, 200]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<2 & abs(vertex.fZ-10)<60
+      
+    - name: s1x_Ex_common_Z_gt_5
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<2 + |vertex.Z-10|<60 + pid.Z>5
+      x: [p2p.fEx, 110, -100, 120]
+      y: [smwdc_S1.fTrack.fX, 100, -200, 200]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<2 & abs(vertex.fZ-10)<60 & pid_ds.fZ>5
+      
+    - name: s1x_Ex_common_Z_lt_5
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<2 + |vertex.Z-10|<60 + pid.Z>5
+      x: [p2p.fEx, 110, -100, 120]
+      y: [smwdc_S1.fTrack.fX, 100, -200, 200]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<2 & abs(vertex.fZ-10)<60 & pid_ds.fZ<5
+      
+    - name: s1x_Ex_common_s1x_a
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<2 + |vertex.Z-10|<60 + |s1x-50|<150
+      x: [p2p.fEx, 110, -100, 120]
+      y: [smwdc_S1.fTrack.fX, 100, -200, 200]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<2 & abs(vertex.fZ-10)<60 & abs(smwdc_S1.fTrack.fX-50)<150
+   
+    - name: s1x_Ex_common_s1x_b
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<2 + |vertex.Z-10|<60 + |s1x-50|>150
+      x: [p2p.fEx, 110, -100, 120]
+      y: [smwdc_S1.fTrack.fX, 100, -200, 200]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<2 & abs(vertex.fZ-10)<60 & abs(smwdc_S1.fTrack.fX-50)>150
+      
+    - name: s1x_Ex_common_s1x_Z
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<2 + |vertex.Z-10|<60 + |s1x-50|<150 + pid.Z>5
+      x: [p2p.fEx, 110, -100, 120]
+      y: [smwdc_S1.fTrack.fX, 100, -200, 200]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<2 & abs(vertex.fZ-10)<60 & abs(smwdc_S1.fTrack.fX-50)<150 & pid_ds.fZ>5
+      
+    - name: s1x_Ex_common_varToF1_s1x_Z
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<1 + |vertex.Z-10|<60 + |s1x-50|<150 + pid.Z>5
+      x: [p2p.fEx, 110, -100, 120]
+      y: [smwdc_S1.fTrack.fX, 100, -200, 200]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<1 & abs(vertex.fZ-10)<60 & abs(smwdc_S1.fTrack.fX-50)<150 & pid_ds.fZ>5
+        
+    - name: s1x_Ex_common_varToF3_s1x_Z
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<3 + |vertex.Z-10|<60 + |s1x-50|<150 + pid.Z>5
+      x: [p2p.fEx, 110, -100, 120]
+      y: [smwdc_S1.fTrack.fX, 100, -200, 200]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<3 & abs(vertex.fZ-10)<60 & abs(smwdc_S1.fTrack.fX-50)<150 & pid_ds.fZ>5
+        
+    - name: s1x_Ex_common_varHolder_s1x_Z
+      title: Ex | PID(23F) + ppcoin + hld + |tof_D1-35|<1 + |vertex.Z-10|<60 + |s1x-50|<150 + pid.Z>5
+      x: [p2p.fEx, 110, -100, 120]
+      y: [smwdc_S1.fTrack.fX, 100, -200, 200]
+      cut: gate.Test(0) & !gate.Test(9) & abs(tof_D1.fTiming-35)<1 & abs(vertex.fZ-10)<60 & abs(smwdc_S1.fTrack.fX-50)<150 & pid_ds.fZ>5
+        
+    - name: s1x_Ex_common_varZ1_s1x_Z
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<1 + |vertex.Z-10|<100 + |s1x-50|<150 + pid.Z>5
+      x: [p2p.fEx, 110, -100, 120]
+      y: [smwdc_S1.fTrack.fX, 100, -200, 200]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<1 & abs(vertex.fZ-10)<100 & abs(smwdc_S1.fTrack.fX-50)<150 & pid_ds.fZ>5
+      
+#======================================  pid
+    - name: pid_ds_common
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<2 + |vertex.Z-10|<60 
+      x: [pid_ds.fAOQ, 50, 1.8, 3.2]
+      y: [pid_ds.fZ, 50, 1, 10]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<2 & abs(vertex.fZ-10)<60
+      
+    - name: pid_ds_common_Z_gt_5
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<2 + |vertex.Z-10|<60 + pid.Z>5
+      x: [pid_ds.fAOQ, 50, 1.8, 3.2]
+      y: [pid_ds.fZ, 50, 1, 10]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<2 & abs(vertex.fZ-10)<60 & pid_ds.fZ>5
+      
+    - name: pid_ds_common_Z_lt_5
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<2 + |vertex.Z-10|<60 + pid.Z>5
+      x: [pid_ds.fAOQ, 50, 1.8, 3.2]
+      y: [pid_ds.fZ, 50, 1, 10]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<2 & abs(vertex.fZ-10)<60 & pid_ds.fZ<5
+      
+    - name: pid_ds_common_s1x_a
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<2 + |vertex.Z-10|<60 + |s1x-50|<150
+      x: [pid_ds.fAOQ, 50, 1.8, 3.2]
+      y: [pid_ds.fZ, 50, 1, 10]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<2 & abs(vertex.fZ-10)<60 & abs(smwdc_S1.fTrack.fX-50)<150
+   
+    - name: pid_ds_common_s1x_b
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<2 + |vertex.Z-10|<60 + |s1x-50|>150
+      x: [pid_ds.fAOQ, 50, 1.8, 3.2]
+      y: [pid_ds.fZ, 50, 1, 10]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<2 & abs(vertex.fZ-10)<60 & abs(smwdc_S1.fTrack.fX-50)>150
+      
+    - name: pid_ds_common_s1x_Z
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<2 + |vertex.Z-10|<60 + |s1x-50|<150 + pid.Z>5
+      x: [pid_ds.fAOQ, 50, 1.8, 3.2]
+      y: [pid_ds.fZ, 50, 1, 10]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<2 & abs(vertex.fZ-10)<60 & abs(smwdc_S1.fTrack.fX-50)<150 & pid_ds.fZ>5
+      
+    - name: pid_ds_common_varToF1_s1x_Z
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<1 + |vertex.Z-10|<60 + |s1x-50|<150 + pid.Z>5
+      x: [pid_ds.fAOQ, 50, 1.8, 3.2]
+      y: [pid_ds.fZ, 50, 1, 10]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<1 & abs(vertex.fZ-10)<60 & abs(smwdc_S1.fTrack.fX-50)<150 & pid_ds.fZ>5
+        
+    - name: pid_ds_common_varToF3_s1x_Z
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<3 + |vertex.Z-10|<60 + |s1x-50|<150 + pid.Z>5
+      x: [pid_ds.fAOQ, 50, 1.8, 3.2]
+      y: [pid_ds.fZ, 50, 1, 10]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<3 & abs(vertex.fZ-10)<60 & abs(smwdc_S1.fTrack.fX-50)<150 & pid_ds.fZ>5
+        
+    - name: pid_ds_common_varHolder_s1x_Z
+      title: Ex | PID(23F) + ppcoin + hld + |tof_D1-35|<1 + |vertex.Z-10|<60 + |s1x-50|<150 + pid.Z>5
+      x: [pid_ds.fAOQ, 50, 1.8, 3.2]
+      y: [pid_ds.fZ, 50, 1, 10]
+      cut: gate.Test(0) & !gate.Test(9) & abs(tof_D1.fTiming-35)<1 & abs(vertex.fZ-10)<60 & abs(smwdc_S1.fTrack.fX-50)<150 & pid_ds.fZ>5
+        
+    - name: pid_ds_common_varZ1_s1x_Z
+      title: Ex | PID(23F) + ppcoin + tgt + |tof_D1-35|<1 + |vertex.Z-10|<100 + |s1x-50|<150 + pid.Z>5
+      x: [pid_ds.fAOQ, 50, 1.8, 3.2]
+      y: [pid_ds.fZ, 50, 1, 10]
+      cut: gate.Test(0) & gate.Test(9) & abs(tof_D1.fTiming-35)<1 & abs(vertex.fZ-10)<100 & abs(smwdc_S1.fTrack.fX-50)<150 & pid_ds.fZ>5

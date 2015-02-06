@@ -53,6 +53,15 @@ Processor:
       UseMultipleStartTiming: 0
       OutputTransparency:     0
 
+  - name: tof_S0D_to_D1_t
+    type: art::TTimingSubtractionProcessor
+    parameter:
+      InputCollection:        nyoki_t   # tof = [t] - tref
+      OutputCollection:       tof_D1_t
+      StartTimingCollection:  plaV775     #  tof= t - [tref]
+      StartTimingDetID:       4           # S0D
+      UseMultipleStartTiming: 0
+      OutputTransparency:     0
 
 
 #===========================================================

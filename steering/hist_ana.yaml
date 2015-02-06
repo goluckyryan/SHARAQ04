@@ -131,6 +131,24 @@ group:
       y: [smwdc_S1.fTrack.fA, 400, -3, 3]
       cut: gate.Test(0)
       
+#============================ mwdc-S1x vs AoQ
+    - name: s1x_AoQ
+      title: S1x vs AoQ | simple
+      x: [pid_ds.fAOQ, 100, 2, 3]
+      y: [smwdc_S1.fTrack.fX, 100, -200, 400]
+      cut: simpleGate
+    
+    - name: s1x_Z
+      title: S1x vs Z | simple
+      x: [pid_ds.fZ, 100, 1, 10]
+      y: [smwdc_S1.fTrack.fX, 100, -200, 400]
+      cut: simpleGate
+    
+    - name: s1x_Sp
+      title: S1x vs Ex | simple
+      x: [p2p.fEx, 100, -40, 120]
+      y: [smwdc_S1.fTrack.fX, 100, -200, 400]
+      cut: simpleGate      
 #============================ p2p
     - name: openAng_simple
       title: openAng | simple 

@@ -1,93 +1,96 @@
-#include "HistSub.C"
+//#include "HistSub.C"
 
 void Ana(){
    gROOT->ProcessLine(".!date");
    gStyle->SetOptStat(0);
  
-   TFile *f1 = new TFile ("23F_1010.root"); TTree *tree = (TTree*)f1->Get("tree");
+   TFile *f1 = new TFile ("23F_0204_all.root"); TTree *tree = (TTree*)f1->Get("tree");
 	gROOT->ProcessLine("listg tree");
 
-   TCanvas * cAna = new TCanvas("cAna", "Ana", 0,0 , 1200, 800);
-   cAna->Divide(3,2);
+	Double_t bgRatio = 0.85; 
+
+	Double_t pidZmin = 5;
+	Double_t tofD1[2] = {35, 1}; //mid, half-width
+	Double_t vertexZ[2] = {10, 60}; // mid, half-width
+	Double_t openAng[2] = {80, 15}; // mid, hald-width
+
+
+	//========================================================================
+   Int_t Div[2] = {4,1};
+   Int_t size[2] = {400,400};
+   TCanvas * cAna = new TCanvas("cAna", "Ana", 0,0 , Div[0]*size[0], Div[1]*size[1]);
+   cAna->Divide(Div[0],Div[1]);
    
-   TCut nyoki = "nyoki.fCharge>1500 && nyoki.fCharge<2800";
+   //========================================================================
+   TString tofD1GateText ; tofD1GateText.Form("abs(tof_D1.fTiming-%2.0f)<%2.0f", tofD1[0], tofD1[1]);
+   TString vertexZGateText; vertexZGateText.Form("TMath::Abs(vertex.fZ-%3.0f)<%3.0f", vertexZ[0], vertexZ[1]);
+	TString openAngGateText; openAngGateText.Form("TMath::Abs((p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()-2.0f)<%2.0f", openAng[0], openAng[1]);
+   TString pidZGateText; pidZGateText.Form("pid_ds.fZ>%1.0f", pidZmin);
+   
+   TCut nyoki = "nyoki.fCharge>1000 && nyoki.fCharge<2800";
    TCut nyokiID = "nyoki.fID == 9";
-   TCut PID23f = "TMath::Abs(plaV1190_FH9.fCharge-5913)<147 && TMath::Abs(tof_US.fTiming+1463)<2";
-   TCut common = "gate.Test(4) && gate.Test(7)" ;//+ nyoki + nyokiID;
-  
-   TCut VertexZ = "TMath::Abs(vertex.fZ-14)<34";
-   TCut VertexZ2 = "(TMath::Abs(vertex.fZ+44)<24 || TMath::Abs(vertex.fZ-80)<36)";
-   //TCut OpenAng = "TMath::Abs((p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()-80)<10";
+   TCut PID23fgate = "TMath::Abs(plaV1190_FH9.fCharge-5913)<147 && TMath::Abs(tof_US.fTiming+1463)<2";
    
+   TCut tofD1Gate  = tofD1GateText;
+   TCut vertexZGate = vertexZGateText;
+   TCut tgtGate = "gate.Test(9)";
+   TCut holderGate = "!gate.Test(9)"; //gate.Test(11) & 
+   TCut OpenAngGate = openAngGateText;
+   TCut s1xAGate = "smwdc_S1.fTrack.fX<0";
+   TCut s1xBGate = "0<smwdc_S1.fTrack.fX && smwdc_S1.fTrack.fX<100";
+   TCut pidZGate = pidZGateText;
+   
+   TCut commonGate = tofD1Gate + vertexZGate + pidZGate;// + s1xAGate;// + OpenAng;
   
-  	TCut gate = common + VertexZ ;
-  	TCut side = common + VertexZ2;
+   TCut VertexZ2Gate = "(TMath::Abs(vertex.fZ+44)<24 || TMath::Abs(vertex.fZ-80)<36)";
+   
+  	TCut signal = commonGate + tgtGate;
+  	TCut background = commonGate + holderGate;
   	
-  	gate.Print();
-  	side.Print();
+  	signal.Print();
+  	background.Print();
   	
-  	TH1F * hSp = new TH1F("hSp", "Seperation energy", 80, -40, 120);
-  	hSp->SetMinimum(0);
-  	hSp->SetXTitle("Sp [MeV]");
-  	hSp->SetYTitle("count / 2 MeV");
-  	TH1F * hSpBG = new TH1F("hSpBG", "Sp", 80, -40, 120);
-   hSpBG->SetLineColor(2);
-   TH1F * hSpSub = new TH1F("hSpSub", "Sp2", 80, -40, 120);
-  	hSpSub->SetXTitle("Sp [MeV]");
-  	hSpSub->SetYTitle("count / 2 MeV");
-  	//hSpSub->SetMinimum(0);
+  	TString tofD1text; tofD1text.Form("|tof_D1-%2.0f|<%2.0f",tofD1[0],tofD1[1]);
+   TString vertexZtext; vertexZtext.Form("|vertex.Z-%3.0f|<%3.0f",  vertexZ[0], vertexZ[1]);
+  	TString openAngtext; openAngtext.Form("|#Delta#theta-%2.0f|<%2.0f",openAng[0], openAng[1]);
+  	TString pidZtext; pidZtext.Form("pid.Z>%1.0f",pidZmin);
+  	TString s1xAtext;
+  	TString tgttext = "target";
+  	TString holdertext = "holder";
   	
-  	TH1F * hOpenAng = new TH1F("hOpenAng", "OpenAng", 60, 40, 100);
-  	hOpenAng->SetMinimum(0);
-  	hOpenAng->SetXTitle("openning angle [deg]");
-  	hOpenAng->SetYTitle("count / 1 deg");
-  	TH1F * hOpenAngBG = new TH1F("hOpenAngBG", "OpenAng BG", 60, 40, 100);
-   hOpenAngBG->SetLineColor(2);
-   TH1F * hOpenAngSub = new TH1F("hOpenAngSub", "OpenAng Sub", 60, 40, 100);
-  	//hSpSub->SetMinimum(0);
+  	//========================================================================
   	
-  	TH1F* hvZ = new TH1F("hvZ", "vertex(Z)", 150, -100, 200);
-  	hvZ->SetXTitle("vertex(Z) [mm]");
-  	hvZ->SetYTitle("count / 2 mm");
-  	TH1F* hvZBG = new TH1F("hvZBG", "vertex(Z)", 150, -100, 200);
-  	hvZBG->SetLineColor(2);
-  	
+  	TString countText;
+   TLatex *text = new TLatex();
+   text->SetNDC();
+   text->SetTextSize(0.04);
+  	//========================================================================
    cAna->cd(1);
-   tree->Draw("vertex.fZ>>hvZc(150,-100,200)", common);
-   gROOT->ProcessLine(".!date"); printf("Draw(vertex.fZ, common) ... done \n");
-   tree->Draw("vertex.fZ>>hvZ",gate,"same");   
-   gROOT->ProcessLine(".!date"); printf("Draw(vertex.fZ, gate) ... done \n");
-   tree->Draw("vertex.fZ>>hvZBG",side,"same");
-   gROOT->ProcessLine(".!date"); printf("Draw(vertex.fZ, side) ... done \n");
+	tree->Draw("smwdc_S1.fTrack.fX:p2p.fEx>>hs1xExA(80,-40,120, 50, -200, 200)", tofD1Gate + vertexZGate + pidZGate + tgtGate, "colz");
+
+/*   text->DrawLatex(0.6, 0.80, tofD1text);
+   text->DrawLatex(0.6, 0.75, pidZtext);
+   text->DrawLatex(0.6, 0.70, vertexZtext);
+   text->SetTextColor(2);text->DrawLatex(0.6, 0.6, tgttext);
+   text->SetTextColor(4);text->DrawLatex(0.6, 0.5, holdertext);
+/**/
+   
+   //tree->Draw("p2p.fRecoilL.Theta()*TMath::RadToDeg():p2p.fRecoilR.Theta()*TMath::RadToDeg()>>ha(55,15,70,55,15,70)",gate + "abs(pid_ds.fAOQ-2.55)<0.22", "colz");
    
    
    cAna->cd(2);
-   tree->Draw("(p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()>>hOpenAng",gate);
-   gROOT->ProcessLine(".!date"); printf("Draw(openAngle, gate) ... done \n");
-   tree->Draw("(p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()>>hOpenAngBG",side,"same");
-   gROOT->ProcessLine(".!date"); printf("Draw(openAngle, side) ... done \n");
-   
+   tree->Draw("smwdc_S1.fTrack.fX:p2p.fEx>>hs1xExB(80,-40,120, 50, -200, 200)", tofD1Gate + vertexZGate + !pidZGate + tgtGate, "colz");
+  	
    cAna->cd(3);
-   hOpenAngSub = HistSub(hOpenAng, hOpenAngBG);
-   hOpenAngSub->Draw();
+   tree->Draw("p2p.fEx>>hSpA( 50, -20, 80)",  tofD1Gate + vertexZGate + pidZGate + tgtGate, "colz");
+   tree->Draw("p2p.fEx>>hSpB( 50, -20, 80)",  tofD1Gate + vertexZGate + !pidZGate + tgtGate, "same");
    
-   cAna->cd(4);	
-   tree->Draw("p2p.fSp>>hSpn(80,-40,120)", "gate.Test(6) " && VertexZ && nyoki);
-   gROOT->ProcessLine(".!date"); printf("Draw(Sp, gate && nyoki) ... done \n");
-   
-   
-   cAna->cd(5);
-   tree->Draw("p2p.fSp>>hSp",gate);
-   gROOT->ProcessLine(".!date"); printf("Draw(Sp, gate) ... done \n");
-   tree->Draw("p2p.fSp>>hSpBG",side, "same");
-   gROOT->ProcessLine(".!date"); printf("Draw(Sp, side) ... done \n");   
-   
-  	cAna->cd(6);
-  	hSpSub = HistSub(hSp, hSpBG);
-  	hSpSub->SetYTitle("count / 2 MeV");
-  	hSpSub->Draw("");
-  	
-  	
+   cAna->cd(4);
+   tree->Draw("p2p.fEx>>hSpAa( 50, -20, 80)",  tofD1Gate + !vertexZGate + pidZGate + tgtGate , "colz");
+  	tree->Draw("p2p.fEx>>hSpAb( 50, -20, 80)",  tofD1Gate + !vertexZGate + !pidZGate + tgtGate , "same");
+
+  	/**/
+  	//========================================================================
   	/*
 	Double_t para[3*3];
 	Double_t paraError[3*3];

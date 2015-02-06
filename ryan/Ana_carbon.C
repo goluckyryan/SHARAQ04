@@ -1,14 +1,15 @@
 TF1 * total;
-const Int_t numGauss = 6;// number of gauss
+const Int_t numGauss = 4;// number of gauss
 const int NPAR = 3*numGauss;
 
 Double_t fixSigma = 3.0; //3.0 is not fixed
 Double_t para[3*numGauss] = {300, 32, 10};
 //Double_t para[3*numGauss] = {50, 30, 5, 10, 40,7};
-///Double_t para[3*numGauss] = {20, 13.3, 5 , 160, 30, 5, 120, 40, 5};
+//Double_t para[3*numGauss] = {20, 13.3, 5 , 160, 30, 5, 120, 40, 5};
+Double_t para[3*numGauss] = {20, 0, 5, 20, 10, 5 , 160, 20, 5, 120, 40, 5};
 //Double_t para[3*numGauss] = {20, 13, fixSigma, 160, 28, fixSigma, 120, 40, fixSigma};
 //Double_t para[3*numGauss] = {20, 13.3, fixSigma, 40, 23.3, fixSigma, 100, 36, fixSigma, 10, 40, fixSigma};
-Double_t para[3*numGauss] = {20,0,4, 50,10,4, 120,15,4, 80,25,4, 30,40,5, 20,60,4};
+//Double_t para[3*numGauss] = {20,0,4, 50,10,4, 120,15,4, 80,25,4, 30,40,5, 20,60,4};
 
 
 void Ana_carbon(){
@@ -16,63 +17,42 @@ void Ana_carbon(){
    gROOT->ProcessLine(".!date");
    gStyle->SetOptStat(0);
  
-   TFile *f1 = new TFile ("23F_1027.root"); TTree *tree = (TTree*)f1->Get("tree");
+   TFile *f1 = new TFile ("23F_0205_all.root"); TTree *tree = (TTree*)f1->Get("tree");
 	//gROOT->ProcessLine("listg tree");
 
-	Int_t Div[2] = {4,2};
+	Int_t Div[2] = {2,1};
    
    Int_t SpHistRange[2] = {-20,100};
-   Int_t SpHistBin = 60;
+   Int_t SpHistBin = 120;
    
-   Int_t fitRange[2] = {-10, 100};
+   Int_t fitRange[2] = {-20, 100};
    
-   Int_t nyokiIDnum[2] = {7,9};
-   Int_t nyokiQRange[2] = { 1800, 9000};
-   Int_t vertexZHW = 60;
+   Int_t vertexZHW = 20;
    
-   Double_t factor = 0.21;
+   Double_t factor = 1;
 
-   if( nyokiIDnum[0] == nyokiIDnum[1]){
-		if (nyokiIDnum[0] == 7){
-	  	  //nyokiQRange[1] = 3300;
-		  //SpHistBin = 30;
-		  factor = 1.4;
-		}else if (nyokiIDnum[0] == 8){
-		  //nyokiQRange[1] = 3000;
-		  //SpHistBin = 30;
-		  factor = 1.2;
-		}
-	}
    
   
    //*****************************
-   TString nyokiIDStr, nyokiQStr, vertexZStr;
-   if( nyokiIDnum[0] == nyokiIDnum[1]){
-	   nyokiIDStr.Form("nyoki.fID == %d", nyokiIDnum[0]);
-   }else{
-   	nyokiIDStr.Form("nyoki.fID >= %d && nyoki.fID <= %d", nyokiIDnum[0], nyokiIDnum[1]);
-   }
-   nyokiQStr.Form("nyoki.fCharge>%d && nyoki.fCharge<%d", nyokiQRange[0],nyokiQRange[1]);
-   vertexZStr.Form("TMath::Abs(vertex.fZ-10)<%d", vertexZHW);
-   TCut nyokiID,nyokiQ, VertexZ;
-   nyokiID = nyokiIDStr;
-   nyokiQ = nyokiQStr;
+   TString vertexZStr;
+   vertexZStr.Form("TMath::Abs(vertex.fZ-15)<%d", vertexZHW);
+   TCut VertexZ;
    VertexZ = vertexZStr;
    
    TCut OpenPhi = "TMath::Abs(TMath::Abs(p2p.fRecoilL.Phi()-p2p.fRecoilR.Phi())*TMath::RadToDeg()-150)<10";
   
-	TCut ang = "TMath::Abs((p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()-75)<10";
+	TCut ang = "TMath::Abs((p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()-75)<15";
 	
-	TCut basic = "gate.Test(4)";
-	TCut tofD1 = "TMath::Abs(tof_D1.fTiming+15)<5 ";
-	TCut basic2 = "gate.Test(5) && !gate.Test(4)";
-	TCut carbon = "TMath::Abs(vertex.fZ-170)<60";
+	TCut basic = "gate.Test(9)";
+	TCut tofD1 = "TMath::Abs(tof_D1.fTiming-35)<2 ";
+	TCut basic2 = "gate.Test(11) && !gate.Test(9)";
+	TCut carbon = "TMath::Abs(vertex.fZ-160)<60";
 	
-	nyokiID = "TMath::Abs(nyoki.fID-8)<=1";
-	nyokiQ = "nyoki.fCharge>1800";
+	TCut pidZ = "pid_ds.fZ>5";
+	TCut s1xcut = "abs(smwdc_S1.fTrack.fX-50)<180";
   
-  	TCut gate = basic + tofD1 + nyokiID + nyokiQ + VertexZ + ang ;// + OpenPhi;
-  	TCut side = !basic + !tofD1 + nyokiID + nyokiQ + VertexZ + ang ;
+  	TCut gate = tofD1 + pidZ + s1xcut + VertexZ ;// + ang ;//basic + + nyokiID + nyokiQ  + OpenPhi;
+  	TCut side = tofD1 + !pidZ + s1xcut + VertexZ ;//+ ang ;//!basic ++ nyokiID + nyokiQ
   	
   	gate.Print();
   	side.Print();
@@ -90,11 +70,7 @@ void Ana_carbon(){
    cAna->Divide(Div[0], Div[1]);
   	
   	TString hSpTitle;
-   if( nyokiIDnum[0] == nyokiIDnum[1]){
-	   hSpTitle.Form("Excitation energy | Nyoki-%d", nyokiIDnum[0]);
-   }else{
-   	hSpTitle.Form("Excitation energy | Nyoki-%d ~ %d", nyokiIDnum[0], nyokiIDnum[1]);
-   }
+   hSpTitle.Form("Excitation energy ");
   	TH1F * hSp = new TH1F("hSp", hSpTitle, SpHistBin, SpHistRange[0], SpHistRange[1]);
   	hSp->SetMinimum(0);
   	hSp->SetXTitle("Ex [MeV]");
@@ -104,24 +80,12 @@ void Ana_carbon(){
   	TH1F * hSpCarbon = new TH1F("hSpCarbon", "Seperation energy Carbon", SpHistBin, SpHistRange[0], SpHistRange[1]);
   	hSpCarbon->SetLineColor(2);
   	
-  	TString hSpNyokiTitle;
-  	hSpNyokiTitle.Form("Sp vs Nyoki_%0d", nyokiIDnum); 
-  	TH2F * hSpNyoki = new TH2F("hSpNyoki", hSpNyokiTitle, SpHistBin, SpHistRange[0], SpHistRange[1], 35, 500, 4000);
-  	hSpNyoki->SetXTitle("Sp [MeV]");
-  	hSpNyoki->SetYTitle("Nyoki Q [a.u.]");
-  	
   	TH1F * hOpenAng = new TH1F("hOpenAng", "OpenAng", 60 , 40, 100);
   	hOpenAng->SetMinimum(0);
   	hOpenAng->SetXTitle("Openning angle [deg]");
   	hOpenAng->SetYTitle("count / 1 deg");
   	TH1F * hOpenAngCarbon = new TH1F("hOpenAngCarbon", "OpenAng Carbon", 60 , 40, 100);
   	hOpenAngCarbon->SetLineColor(2);
-  	
-  	TString hOpenAngNyokiTitle;
-  	hOpenAngNyokiTitle.Form("OpenAngle vs Nyoki_%0d", nyokiIDnum); 
-  	TH2F * hOpenAngNyoki = new TH2F("hOpenAngNyoki", hOpenAngNyokiTitle, 60, 40, 100, 35, 500, 4000);
-  	hOpenAngNyoki->SetXTitle("Openning Angle [1 deg]");
-  	hOpenAngNyoki->SetYTitle("Nyoki Q [a.u.]");
   	
   	TH1F* hvZc = new TH1F("hvZc", "vertex(Z)", 180, -100, 260);
   	hvZc->SetXTitle("vertex(Z) [mm]");
@@ -158,14 +122,7 @@ void Ana_carbon(){
    //tree->Draw("TMath::Abs(p2p.fRecoilL.Phi()-p2p.fRecoilR.Phi())*TMath::RadToDeg()>>h1(60,140,200)",gate);
    //tree->Draw("TMath::Abs(p2p.fRecoilL.Phi()-p2p.fRecoilR.Phi())*TMath::RadToDeg()>>h2(60,140,200)",side, "same");
   
-   /*
-   cAna->cd(6);
-   tree->Draw("nyoki.fCharge:(p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()>>hOpenAngNyoki",gate , "colz");
-   
-  	cAna->cd(7);
-  	tree->Draw("nyoki.fCharge:p2p.fSp>>hSpNyoki", gate, "colz");
-   */
-
+   /**/
    cAna->cd(1);
    tree->Draw("p2p.fEx>>hSp",gate);
    gROOT->ProcessLine(".!date"); printf("Draw.(Sp, gate) ... done \n");
@@ -180,7 +137,7 @@ void Ana_carbon(){
 	textStr.Form("carbon BG x %.2f", factor);
 	text.DrawLatex(0.6, 0.8, textStr.Data());
 	
-	textStr.Form("vertexZ gate");
+	/*textStr.Form("vertexZ gate");
 	text.DrawLatex(0.60, 0.7, textStr.Data());
 	textStr.Form("crystal gate");
 	text.DrawLatex(0.6, 0.67, textStr.Data());
@@ -189,7 +146,7 @@ void Ana_carbon(){
 	textStr.Form("nyoki Q gate");
 	text.DrawLatex(0.6, 0.61, textStr.Data());
 	textStr.Form("ToF(S0D-nyoki) gate");
-	text.DrawLatex(0.6, 0.58, textStr.Data());
+	text.DrawLatex(0.6, 0.58, textStr.Data());*/
 	
 
 	cAna->cd(2);
@@ -255,14 +212,15 @@ void Ana_carbon(){
 
 	total->SetParameters(para);	
 	
-	fixSigma = 4;
+	//fixSigma = 4;
+	if( fixSigma != 3.0){ 
 	total->FixParameter(2,fixSigma);
 	total->FixParameter(5,fixSigma);
 	total->FixParameter(8,fixSigma);
 	total->FixParameter(11,fixSigma);
 	total->FixParameter(14,fixSigma);
 	total->FixParameter(17,fixSigma);
-	
+	}
 
 	printf("***********fit total %d Guassians\n", numGauss);  
 	testSp->Fit(total,"R");
@@ -450,7 +408,7 @@ void Ana_carbon(){
 	testMomtZSp->Draw("colz");
    
    */
-   
+   /*
    cAna->cd(3);
    
    Int_t momtbin = 30;
