@@ -1,0 +1,53 @@
+# require : plastic_V775.yaml
+# output : nyoki
+#          tof_D1
+
+Processor:
+  - name: nyoki_prm_ch2ns_n
+    type: art::TParameterArrayLoader
+    parameter:
+      Name:     prm_nyoki_ch2ns_n
+      Type:     art::TAffineConverter
+      FileName: prm/nyoki/ch2ns.dat
+      
+  - name: nyoki_prm_ch2q_n
+    type: art::TParameterArrayLoader
+    parameter:
+      Name:     prm_nyoki_ch2q_n
+      Type:     art::TAffineConverter
+      FileName: prm/nyoki/ch2q.dat.noAdjust
+
+  - name: plastic_nyoki_raw_n     #must be different from output name and no "-"
+    type: art::TTimingChargeMappingProcessor
+    parameter:
+      CatID:              48
+      TimingTypeID:       0       #colnumber of map file[0=first]
+      TrailingComesFirst: 0      # 0 negative voltage input
+      ChargeType:         1       # 1 seems to be OK, but it is V1190.
+      ChargeTypeID:       1
+      OutputCollection:   nyoki_raw_n
+      OutputTransparency: 1                       # 1 = no output
+
+  - name: plastic_nyoki_cal_n
+    type: art::TTimingChargeCalibrationProcessor
+    parameter:
+      InputCollection:      nyoki_raw_n
+      OutputCollection:     nyoki_n
+      TimingConverterArray: prm_nyoki_ch2ns_n
+      ChargeConverterArray: prm_nyoki_ch2q_n
+      OutputTransparency:   0
+     
+      
+  - name: tof_S0D_to_D1_n
+    type: art::TTimingSubtractionProcessor
+    parameter:
+      InputCollection:        nyoki_n   # tof = [t] - tref
+      OutputCollection:       tof_D1_n
+      StartTimingCollection:  plaV775     #  tof= t - [tref]
+      StartTimingDetID:       4           # S0D
+      UseMultipleStartTiming: 0
+      OutputTransparency:     0
+
+
+
+#===========================================================

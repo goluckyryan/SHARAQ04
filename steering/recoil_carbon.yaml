@@ -69,3 +69,15 @@ Processor:
       BeamParameter:      beam  # declare before and elsewhere
       ResidualFrame:      0
       OutputTransparency: 0
+      
+  - name: proc_p2p_c_lab
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_c_lab
+      RecoilL:            recoil_L_c
+      RecoilR:            recoil_R_c
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      ResidualFrame:      1
+      OutputTransparency: 0
