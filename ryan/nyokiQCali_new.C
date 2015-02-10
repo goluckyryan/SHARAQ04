@@ -1,9 +1,9 @@
 #include "ryan/constant.h"
 
-void simpleAna() {
+void nyokiQCali_new() {
    gStyle->SetOptStat(0);
       
-   const char* rootfile="23F_run23_nyokiQ.root";
+   const char* rootfile="23F_run24_nyokiQ.root";
    
    TString plotName = "Multiplicity of nyoki";
    TString branch = "nyoki"; // branch anme
@@ -19,6 +19,10 @@ void simpleAna() {
    Int_t totnumEntry = tree->GetEntries();
 	printf("----------%s is loaded. totEntry = %d \n", rootfile, totnumEntry);
 	
+   TBenchmark clock;
+   clock.Reset();
+   clock.Start("timer");
+   Bool_t shown = 0;
 	//###########################  Canvas and histogram
 	if ( gROOT->FindObject("cSimple")){
 		delete cSimple;
@@ -35,13 +39,13 @@ void simpleAna() {
 	
 	//Int_t NumEvent = tree->GetEntries();
 	TString hTitle;
-	hTitle.Form("%s.%s",branch_2.Data(),plotName.Data());
+	hTitle.Form("%s.%s {%s}",branch_2.Data(),plotName.Data(), rootfile);
 	
 	TH1F * h1D = new TH1F("h1D", hTitle, nBin, minX, maxX);
 	//h1D->SetLineColor(kRed);
 
-	Int_t S0DQRange[2] = {500, 2200};
-	Int_t nyokiQRange[2] = {500, 4500};
+	Int_t S0DQRange[2] = {800, 2200};
+	Int_t nyokiQRange[2] = {800, 4500};
 
 	TH2F * hn03 = new TH2F("hn03", "Nyoki-03 Calibrated" , 100, S0DQRange[0], S0DQRange[1], 100, S0DQRange[0], S0DQRange[1]); hn03->SetXTitle("nyoki [ch]"); hn03->SetYTitle("S0DPL [ch]");
 	TH2F * hn04 = new TH2F("hn04", "Nyoki-04 Calibrated" , 100, S0DQRange[0], S0DQRange[1], 100, S0DQRange[0], S0DQRange[1]); hn04->SetXTitle("nyoki [ch]"); hn04->SetYTitle("S0DPL [ch]");
@@ -52,7 +56,9 @@ void simpleAna() {
 	TH2F * hn09 = new TH2F("hn09", "Nyoki-09 Calibrated" , 100, S0DQRange[0], S0DQRange[1], 100, S0DQRange[0], S0DQRange[1]); hn09->SetXTitle("nyoki [ch]"); hn09->SetYTitle("S0DPL [ch]");
 	TH2F * hn10 = new TH2F("hn10", "Nyoki-10 Calibrated" , 100, S0DQRange[0], S0DQRange[1], 100, S0DQRange[0], S0DQRange[1]); hn10->SetXTitle("nyoki [ch]"); hn10->SetYTitle("S0DPL [ch]");
 
-	TH2F * hn = new TH2F("hn", "" , 8, 3, 11, 100, S0DQRange[0], S0DQRange[1]);	
+	TH2F * hn = new TH2F("hn", "Nyoki Q Calibrated" , 8, 3, 11, 100, S0DQRange[0], S0DQRange[1]);	
+	hn->SetXTitle("nyoki ID");
+	hn->SetYTitle("nyoki Q [ch]");
 	
 	TH2F * hn03n = new TH2F("hn03n", "Nyoki-03 " , 100, nyokiQRange[0], nyokiQRange[1], 100, S0DQRange[0], S0DQRange[1]); hn03->SetXTitle("nyoki [ch]"); hn03->SetYTitle("S0DPL [ch]");
 	TH2F * hn04n = new TH2F("hn04n", "Nyoki-04 " , 100, nyokiQRange[0], nyokiQRange[1], 100, S0DQRange[0], S0DQRange[1]); hn04->SetXTitle("nyoki [ch]"); hn04->SetYTitle("S0DPL [ch]");
@@ -63,7 +69,9 @@ void simpleAna() {
 	TH2F * hn09n = new TH2F("hn09n", "Nyoki-09 " , 100, nyokiQRange[0], nyokiQRange[1], 100, S0DQRange[0], S0DQRange[1]); hn09->SetXTitle("nyoki [ch]"); hn09->SetYTitle("S0DPL [ch]");
 	TH2F * hn10n = new TH2F("hn10n", "Nyoki-10 " , 100, nyokiQRange[0], nyokiQRange[1], 100, S0DQRange[0], S0DQRange[1]); hn10->SetXTitle("nyoki [ch]"); hn10->SetYTitle("S0DPL [ch]");
 	
-	TH2F * hnn = new TH2F("hnn", "" , 8, 3, 11, 100, 0, 4000);	
+	TH2F * hnn = new TH2F("hnn", "Nyoki Q" , 8, 3, 11, 100, nyokiQRange[0], nyokiQRange[1]);	
+	hnn->SetXTitle("nyoki ID");
+	hnn->SetYTitle("nyoki Q [ch]");
 	
 	//#####################################
 	/*
@@ -150,6 +158,25 @@ void simpleAna() {
       hn08n->Fill(nQn[8], s0DQ);
       hn09n->Fill(nQn[9], s0DQ);
       hn10n->Fill(nQn[10], s0DQ);
+      
+      clock.Stop("timer");
+      Double_t time = clock.GetRealTime("timer");
+      clock.Start("timer");
+      
+      if ( !shown ) {
+         if (fmod(time, 10) < 1 ){
+            printf( "%10d[%2d%%] |%3d min %5.2f sec | expect:%6.1fmin\n", 
+            eventID, 
+            TMath::Nint((eventID+1)*100./totnumEntry),
+            TMath::Floor(time/60), time - TMath::Floor(time/60)*60,
+            totnumEntry*time/(eventID+1)/60.);
+            shown = 1;
+         }
+      }else{
+         if (fmod(time, 10) > 9 ){
+            shown = 0;
+         }
+      }
        
    	
    }
@@ -160,25 +187,25 @@ void simpleAna() {
    
    TLine line;
    
-   cSimple->cd(1); hn03->Draw("colz"); line.DrawLine(0,0, 5000,5000);
-   cSimple->cd(2); hn04->Draw("colz"); line.DrawLine(0,0, 5000,5000);
-   cSimple->cd(3); hn05->Draw("colz"); line.DrawLine(0,0, 5000,5000);
-   cSimple->cd(4); hn06->Draw("colz"); line.DrawLine(0,0, 5000,5000);
-   cSimple->cd(5); hn07->Draw("colz"); line.DrawLine(0,0, 5000,5000);
-   cSimple->cd(6); hn08->Draw("colz"); line.DrawLine(0,0, 5000,5000);
-   cSimple->cd(7); hn09->Draw("colz"); line.DrawLine(0,0, 5000,5000);
-   cSimple->cd(8); hn10->Draw("colz"); line.DrawLine(0,0, 5000,5000);
+   cSimple->cd(1); hn03->Draw("colz"); line.DrawLine(S0DQRange[0], S0DQRange[0], S0DQRange[1], S0DQRange[1]);
+   cSimple->cd(2); hn04->Draw("colz"); line.DrawLine(S0DQRange[0], S0DQRange[0], S0DQRange[1], S0DQRange[1]);
+   cSimple->cd(3); hn05->Draw("colz"); line.DrawLine(S0DQRange[0], S0DQRange[0], S0DQRange[1], S0DQRange[1]);
+   cSimple->cd(4); hn06->Draw("colz"); line.DrawLine(S0DQRange[0], S0DQRange[0], S0DQRange[1], S0DQRange[1]);
+   cSimple->cd(5); hn07->Draw("colz"); line.DrawLine(S0DQRange[0], S0DQRange[0], S0DQRange[1], S0DQRange[1]);
+   cSimple->cd(6); hn08->Draw("colz"); line.DrawLine(S0DQRange[0], S0DQRange[0], S0DQRange[1], S0DQRange[1]);
+   cSimple->cd(7); hn09->Draw("colz"); line.DrawLine(S0DQRange[0], S0DQRange[0], S0DQRange[1], S0DQRange[1]);
+   cSimple->cd(8); hn10->Draw("colz"); line.DrawLine(S0DQRange[0], S0DQRange[0], S0DQRange[1], S0DQRange[1]);
    cSimple->cd(9); hn->Draw("colz");
    
    
-   cSimple->cd(11); hn03n->Draw("colz"); line.DrawLine(0,0, 5000,5000);
-   cSimple->cd(12); hn04n->Draw("colz"); line.DrawLine(0,0, 5000,5000);
-   cSimple->cd(13); hn05n->Draw("colz"); line.DrawLine(0,0, 5000,5000);
-   cSimple->cd(14); hn06n->Draw("colz"); line.DrawLine(0,0, 5000,5000);
-   cSimple->cd(15); hn07n->Draw("colz"); line.DrawLine(0,0, 5000,5000);
-   cSimple->cd(16); hn08n->Draw("colz"); line.DrawLine(0,0, 5000,5000);
-   cSimple->cd(17); hn09n->Draw("colz"); line.DrawLine(0,0, 5000,5000);
-   cSimple->cd(18); hn10n->Draw("colz"); line.DrawLine(0,0, 5000,5000);
+   cSimple->cd(11); hn03n->Draw("colz"); 
+   cSimple->cd(12); hn04n->Draw("colz");
+   cSimple->cd(13); hn05n->Draw("colz"); 
+   cSimple->cd(14); hn06n->Draw("colz");
+   cSimple->cd(15); hn07n->Draw("colz"); 
+   cSimple->cd(16); hn08n->Draw("colz"); 
+   cSimple->cd(17); hn09n->Draw("colz");
+   cSimple->cd(18); hn10n->Draw("colz");
    cSimple->cd(19); hnn->Draw("colz");	
    //###################################	
 	/*

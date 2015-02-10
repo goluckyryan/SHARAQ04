@@ -1,9 +1,11 @@
+//The value at plot2 are the offset require
 
-void NyokiQCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t a_adj=0, Double_t b_adj=1) {
+
+void NyokiTCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t a_adj=0, Double_t b_adj=1) {
 
 //############################################################################  
 //   const char* rootfile="PrimaryData/phys23F.root"; 
-   const char* rootfile="23F_run24_nyokiQ.root"; 
+   const char* rootfile="23F_run24_nyokiCali.root"; 
    
    Bool_t allentry  = 1;
    Int_t firstEntry = 0;
@@ -11,7 +13,9 @@ void NyokiQCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t a_adj=0, Double
    
    Int_t nyokiID[2] = {nyokiIDa, nyokiIDb};
    
-   Double_t nyokiRange[2] = {700, 2200};
+   Int_t nBin = 100;
+   Double_t diffRange[2] = {-3,3};
+   Double_t nyokiRange[2] = {-260, -230};
 
 //############################################################################
    TFile *f = new TFile(rootfile,"read");
@@ -30,33 +34,43 @@ void NyokiQCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t a_adj=0, Double
 		delete cNyokiQ;
 	}
 	
-	if( gROOT->FindObject("hQab")){
-		delete hQab;
+	if( gROOT->FindObject("hTab")){
+		delete hTab;
+		delete hTdiff;
 	}
  
-   Int_t Div[2] = {3,1};
+   Int_t Div[2] = {2,1};
    TCanvas * cNyokiQ = new TCanvas("cNyokiQ", "Nyoki Q Calibaration", 2000, 50, 400*Div[0], 400*Div[1]);
    cNyokiQ->Divide(Div[0],Div[1]);
 
    gStyle->SetOptStat(0);
    TString hTitle;
-   hTitle.Form("Nyoki Q, %d vs %d {%s}", nyokiID[0], nyokiID[1], rootfile);
-   TH2F* hQab = new TH2F("hQab", hTitle, 100, nyokiRange[0], nyokiRange[1], 100, nyokiRange[0], nyokiRange[1]);
+   hTitle.Form("Hodo time, %d vs %d {%s}", nyokiID[0], nyokiID[1], rootfile);
+   TH2F* hTab = new TH2F("hTab", hTitle, 100, nyokiRange[0], nyokiRange[1], 100, nyokiRange[0], nyokiRange[1]);
    TString xTitle, yTitle;
-   xTitle.Form("nyoki %d", nyokiID[0]);
-   yTitle.Form("nyoki %d", nyokiID[1]);
-	hQab->SetXTitle(xTitle);
-	hQab->SetYTitle(yTitle);
+   xTitle.Form("Hodo %d [ns]", nyokiID[0]);
+   yTitle.Form("Hodo %d [ns]", nyokiID[1]);
+	hTab->SetXTitle(xTitle);
+	hTab->SetYTitle(yTitle);
+	
+	hTitle.Form("Hodo Time (%d - %d)", nyokiID[1], nyokiID[0]);
+	TH1F* hTdiff = new TH1F("hTdiff", hTitle, nBin, diffRange[0], diffRange[1]);
+	hTdiff->SetXTitle(" [ns]");
+	
    
 //############################################################################   
    tree->SetBranchStatus("*",0);
+   //tree->SetBranchStatus("plaV775",1);
    tree->SetBranchStatus("nyoki",1);
 
-   TClonesArray  *hoge_nyoki;
+   TClonesArray  *hoge_nyoki, *hoge_v775 = 0;
    tree->SetBranchAddress("nyoki",&hoge_nyoki);
+   //tree->SetBranchAddress("plaV775",&hoge_v775);
+
 	//art::TTimingChargeData * data;
 
-   Double_t charge[14];
+   Double_t timing[14];
+   Double_t S0Dt; 
    
    TBenchmark clock;
    clock.Reset();
@@ -65,31 +79,50 @@ void NyokiQCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t a_adj=0, Double
    
 //############################################################################  
    for( Int_t eventID = firstEntry; eventID < endEntry; eventID ++){
+      delete hoge_v775; hoge_v775=0;
+      
       tree->GetEntry(eventID,0);
       
-		//--------- initialization
-   	for( Int_t i = 0; i < 14; i++){
-   		charge[i] = TMath::QuietNaN();
-   	}
-		//--------- Get nyoki Q
+   	//--------- Get S0D timing
+		/*S0Dt = TMath::QuietNaN();
+		Bool_t hitFlag = 0;
+   	Int_t nHit = hoge_v775 -> GetEntriesFast();
+   	//printf(" ----------- nHit: %d \n", nHit);
+      for( Int_t p = 0; p < nHit; p++){
+         Int_t hitID = ((art::TTwoSidedPlasticData*) hoge_v775->At(p))->GetID();
+         if ( hitID != 4 ) continue;
+         S0Dt = ((art::TTwoSidedPlasticData*) hoge_v775->At(p))->GetTiming();
+         hitFlag = 1;
+         //printf("S0DPL: %f \n", s0DQ);
+      }       
+      if( hitFlag == 0 ) continue; 
+      /**/
+      
+   
+		//--------- Get nyoki T
       Int_t nHit = hoge_nyoki->GetEntriesFast();
       if( nHit < 2) continue;
       
       //printf(" nHit : %d \n", nHit);
-      
+      for( Int_t i = 0; i < 14; i++){
+   		timing[i] = TMath::QuietNaN();
+   	}
       for( Int_t p = 0; p < nHit; p++){
          Int_t ID = ((art::TTimingChargeData*)hoge_nyoki->At(p))->GetID();
-         charge[ID] = ((art::TTimingChargeData*)hoge_nyoki->At(p))->GetCharge();
+         timing[ID] = ((art::TTimingChargeData*)hoge_nyoki->At(p))->GetTiming();
       }
+      if( TMath::IsNaN(timing[nyokiID[0]]) || TMath::IsNaN(timing[nyokiID[1]]) ) continue;
       
-      //--------- Fill Hist
-      if( TMath::IsNaN(charge[nyokiID[0]]) || TMath::IsNaN(charge[nyokiID[1]]) ) continue;
-      	
-   	if( TMath::Abs(charge[nyokiID[0]] - charge[nyokiID[1]]) < 500 ) continue;
-   	 
-		hQab->Fill(b_adj*charge[nyokiID[0]]+a_adj, charge[nyokiID[1]]);
-
-      	//printf(" nyoki-7, nyoki-8 = %.3f, %.3f \n", charge[7], charge[8]);
+      //__________ Check tof;
+      //printf(" %f - %f = %f\n", timing[nyokiID[0]],  S0Dt, timing[nyokiID[0]] - S0Dt);
+      //if( abs(timing[nyokiID[0]] - S0Dt - 35)>10) continue;
+      if( abs(timing[nyokiID[0]] - (nyokiRange[0] + nyokiRange[1])/2)>(nyokiRange[1] - nyokiRange[0])/2) continue;
+      if( abs(timing[nyokiID[1]] - (nyokiRange[0] + nyokiRange[1])/2)>(nyokiRange[1] - nyokiRange[0])/2) continue;
+      //--------- Fill Hist      	
+		hTab->Fill(b_adj*timing[nyokiID[0]]+a_adj, timing[nyokiID[1]]);
+		hTdiff->Fill(timing[nyokiID[1]] - (b_adj*timing[nyokiID[0]]+a_adj) );
+   	
+      	//printf(" nyoki-7, nyoki-8 = %.3f, %.3f \n", timing[7], timing[8]);
 
 		//------------------
       clock.Stop("timer");
@@ -122,15 +155,21 @@ void NyokiQCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t a_adj=0, Double
 	TF1* fit = new TF1("fit", "[0]+[1]*x", nyokiRange[0], nyokiRange[1]);
 	
 	cNyokiQ->cd(1);
-	hQab->Draw("colz");
+	hTab->Draw("colz");
 	TLine line;
 	line.DrawLine(nyokiRange[0], nyokiRange[0], nyokiRange[1], nyokiRange[1]);
 	
+	
 	cNyokiQ->cd(2);
-	hQab->ProfileY("_pfy")->Draw();
-	hQab_pfy->SetTitle("ProfileY");
+	hTdiff->Draw();
 	
-	hQab_pfy->Fit(fit, "R" );
+	/*
+	hTab->ProfileY("_pfy")->Draw();
+	hTab_pfy->SetTitle("ProfileY");
+	hTab_pfy->SetMinimum(nyokiRange[0]);
+	hTab_pfy->SetMaximum(nyokiRange[1]);
+	
+	hTab_pfy->Fit(fit, "R" );
 	Double_t a = fit->GetParameter(0);
 	Double_t b = fit->GetParameter(1);
 	
@@ -140,11 +179,14 @@ void NyokiQCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t a_adj=0, Double
 	textStr.Form("inte.: %5.3f (%5.3f)", a, err_a); text.DrawLatex(0.5,0.40, textStr);	
 	textStr.Form("slope: %5.3f (%5.3f)", b, err_b); text.DrawLatex(0.5,0.35, textStr);
 	
+	/*
 	cNyokiQ->cd(3);
-	hQab->ProfileX("_pfx")->Draw();
-	hQab_pfx->SetTitle("ProfileX");
+	hTab->ProfileX("_pfx")->Draw();
+	hTab_pfx->SetTitle("ProfileX");
+	hTab_pfx->SetMinimum(nyokiRange[0]);
+	hTab_pfx->SetMaximum(nyokiRange[1]);
 	
-	hQab_pfx->Fit(fit, "R" );
+	hTab_pfx->Fit(fit, "R" );
 	Double_t a = fit->GetParameter(0);
 	Double_t b = fit->GetParameter(1);
 	
@@ -153,7 +195,7 @@ void NyokiQCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t a_adj=0, Double
 	
 	textStr.Form("inte.: %5.3f (%5.3f)", a, err_a); text.DrawLatex(0.5,0.40, textStr);	
 	textStr.Form("slope: %5.3f (%5.3f)", b, err_b); text.DrawLatex(0.5,0.35, textStr);
-	
+	*/
 	
 //############################################################################
 	

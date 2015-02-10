@@ -5,19 +5,24 @@
 
 //========================================================
 
-	char * rootfile = "P_23F_0205_all.root";
+	char * rootfile = "23F_RUN24_PIDDS.root";
 
 	TFile *f0 = new TFile (rootfile, "read"); 
 	if( f0==0){
 		printf("cannot load file: %s \n", rootfile);
 		return;
 	}
-	TTree *tree = (TTree*)f0->Get("recoil");
+	TTree *tree = (TTree*)f0->Get("tree");
 	//gROOT->ProcessLine("listg tree");
 	printf("=====> /// %s //// is loaded. Total #Entry: %d \n", rootfile,  tree->GetEntries());
 
 //======================================================== Browser or Canvas
-//	TBrowser B("Bscript",rootfile, 900,600); 	
+	//TBrowser B("Bscript",rootfile, 900,600); 	
+
+	
+	//tree->Process("test_Selector.C");
+	//tree->Process("PostSelector.C");
+	
 
 	
 	Int_t Div[2] = {5,2};  //x,y
@@ -34,65 +39,68 @@
 /**/
 //======================================================== analysis
 
-	TCut vertexZcut = "abs(vertexZ-10)<25";
-	TCut s1xcut = "";//"s1x<0";
-	TCut pidZcut = "pidZ>5";
+	TCut vertexZcut = "abs(vertexZ-10)<30";
+	TCut s1xcut = "";//"s1x>0";
+	TCut pidZcut = "";//"pidZ>5";
 	TCut tofS1cut = "abs(tofS1-34.5)<1";
+	TCut Aux = "abs(Ex-0)<5";
+	Double_t bgScale = 0.2;
+	
+	Int_t binWidth = 2;
+	Int_t binRange[2] = {-40,60};
 	
 	TLatex text;
    text.SetNDC();
 
 	cScript->cd(1);
-	tree->Draw("s1x:Ex2>>h1(70,-40,100, 100, -200, 300)", s1xcut + pidZcut + vertexZcut + tofS1cut, "colz");
+	tree->Draw("s1x:Ex>>h1(70,-40,100, 100, -200, 300)", s1xcut + pidZcut + vertexZcut + tofS1cut + Aux, "colz");
 	h1->SetTitle("s1x vs Ex");
 	h1->SetXTitle("Ex [MeV]");
 	h1->SetYTitle("s1x [mm]");
 	text->DrawLatex(0.6, 0.8, s1xcut);
 	
 	cScript->cd(2);
-	tree->Draw("tofS1:Ex2>>h2(70,-40,100, 100, 30, 38)", s1xcut + pidZcut + vertexZcut + tofS1cut, "colz");
+	tree->Draw("tofS1:Ex>>h2(70,-40,100, 100, 30, 38)", s1xcut + pidZcut + vertexZcut + tofS1cut + Aux, "colz");
 	h2->SetTitle("tofS1 vs Ex");
 	h2->SetXTitle("Ex [MeV]");
 	h2->SetYTitle("tofS1 [mm]");
 	text->DrawLatex(0.3, 0.8, tofS1cut);
 
 	cScript->cd(3);
-	tree->Draw("pidAoQ:Ex2>>h3(70,-40,100, 100, 1.4, 3.2)", s1xcut + pidZcut + vertexZcut + tofS1cut, "colz");
+	tree->Draw("pidAOQ:Ex>>h3(70,-40,100, 100, 1.8, 3.2)", s1xcut + pidZcut + vertexZcut + tofS1cut + Aux, "colz");
 	h3->SetTitle("A/Q vs Ex");
 	h3->SetXTitle("Ex [MeV]");
 	h3->SetYTitle("A/Q");
 	
 	cScript->cd(4);
-	tree->Draw("pidZ:Ex2>>h4(70,-40,100,100,1, 11)", s1xcut + pidZcut + vertexZcut + tofS1cut, "colz");
+	tree->Draw("pidZ:Ex>>h4(70,-40,100,100,1, 11)", s1xcut + pidZcut + vertexZcut + tofS1cut + Aux, "colz");
 	h4->SetTitle("Z vs Ex");
 	h4->SetXTitle("Ex [MeV]");
 	h4->SetYTitle("Z ");
 	text->DrawLatex(0.6, 0.3, pidZcut);
 	
 	cScript->cd(5);
-	tree->Draw("pidZ:pidAoQ>>h5(100,1.4,3.2,100,1, 11)", s1xcut + pidZcut + vertexZcut + tofS1cut, "colz");
+	tree->Draw("pidZ:pidAOQ>>h5(100,1.8,3.2,100,1, 11)", s1xcut + pidZcut + vertexZcut + tofS1cut + Aux, "colz");
 	h5->SetTitle("Z vs A/Q");
 	h5->SetXTitle("A/Q");
 	h5->SetYTitle("Z ");
 
 	cScript->cd(6);
-	tree->Draw("vertexZ:Ex2>>h6(70,-40,100,100,-100, 250)", s1xcut + pidZcut + vertexZcut + tofS1cut, "colz");
+	tree->Draw("vertexZ:Ex>>h6(70,-40,100,100,-100, 250)", s1xcut + pidZcut + vertexZcut + tofS1cut + Aux, "colz");
 	h6->SetTitle("vertex.Z vs Ex");
 	h6->SetXTitle("Ex [MeV]");
 	h6->SetYTitle("vertex.Z [mm]");
 	text->DrawLatex(0.3, 0.8, vertexZcut);
 	
 	cScript->cd(7);
-	tree->Draw("s1x:pidAoQ>>h7(100,1.4,3.2,100,-200,300)", s1xcut + pidZcut + vertexZcut + tofS1cut, "colz");
+	tree->Draw("s1x:pidAOQ>>h7(100,1.8,3.2,100,-200,300)", s1xcut + pidZcut + vertexZcut + tofS1cut + Aux, "colz");
 	h7->SetTitle("s1x vs A/Q");
 	h7->SetXTitle("A/Q ");
 	h7->SetYTitle("s1x [mm]");
 	
 	cScript->cd(8);
-	Int_t binWidth = 2;
-	Int_t binRange[2] = {-40,60};
-	TString plot1; plot1.Form("Ex2>>hEx(%d,%d,%d)", (binRange[1]-binRange[0])/binWidth, binRange[0], binRange[1]);
-	TString plot2; plot2.Form("Ex2>>hExbg(%d,%d,%d)", (binRange[1]-binRange[0])/binWidth, binRange[0], binRange[1]);
+	TString plot1; plot1.Form("Ex>>hEx(%d,%d,%d)", (binRange[1]-binRange[0])/binWidth, binRange[0], binRange[1]);
+	TString plot2; plot2.Form("Ex>>hExbg(%d,%d,%d)", (binRange[1]-binRange[0])/binWidth, binRange[0], binRange[1]);
 	
 	//tree->Draw("s1x:vertexZ>>h7(100,-100,250,100,-200,300)", "", "colz");
 	tree->Draw(plot1, s1xcut + pidZcut + vertexZcut + tofS1cut, "colz");
@@ -101,8 +109,8 @@
 	hEx->SetXTitle("Ex [MeV]");
 	hEx->SetYTitle("count / 2 MeV");
 	hEx->Draw();
-	tree->Draw(plot2, s1xcut + !pidZcut + vertexZcut + tofS1cut, "same");
-	hExbg->Scale(0.6);
+	tree->Draw(plot2, s1xcut + !pidZcut + vertexZcut + tofS1cut + Aux, "same");
+	hExbg->Scale(bgScale);
 	hExbg->SetLineColor(2);
 	hExbg->Draw("same");
 	text->DrawLatex(0.6,0.8,!pidZcut);
@@ -114,14 +122,17 @@
 	hExsub->Draw();
 	
 	cScript->cd(10);
-	tree->Draw("k>>h10", s1xcut + pidZcut + vertexZcut + tofS1cut, "colz");
+	tree->Draw("kMomt>>h10(200,0,800)", s1xcut + pidZcut + vertexZcut + tofS1cut + Aux, "colz");
 	h10->SetTitle("Momt [MeV/c]");
-	tree->Draw("k>>h10a", s1xcut + !pidZcut + vertexZcut + tofS1cut, "same");
+	tree->Draw("kMomt>>h10a(200,0,800)", s1xcut + !pidZcut + vertexZcut + tofS1cut + Aux, "same");
+	h10a->SetLineColor(2);
+	h10a->Scale(bgScale);
+	h10a->Draw("same");
 	
 	
 
-	//tree->Draw("s1x:pidAoQ>>h8(100,1.4,3.2,100,-200,300)", "abs(tofS1-34.5)<1 && abs(vertexZ-15)<20 && pidZ>5", "colz");
-	//tree->Draw("pidZ:pidAoQ>>h8(100,1.4,3.2,100,1, 11)", "abs(tofS1-34.5)<1 && abs(vertexZ-15)<20 && pidZ>5", "colz");
+	//tree->Draw("s1x:pidAOQ>>h8(100,1.4,3.2,100,-200,300)", "abs(tofS1-34.5)<1 && abs(vertexZ-15)<20 && pidZ>5", "colz");
+	//tree->Draw("pidZ:pidAOQ>>h8(100,1.4,3.2,100,1, 11)", "abs(tofS1-34.5)<1 && abs(vertexZ-15)<20 && pidZ>5", "colz");
 	/*
 //	TString cut = "gate.Test(9) & abs(vertex-10)<60 & abs(tof_D1.fTiming-35)<2 & abs((p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()-80)<15 & abs(p2p.fSp-20)<30"
 	

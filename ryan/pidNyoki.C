@@ -2,7 +2,7 @@
 
 void pidNyoki() {
 
-   const char* rootfile="23F_run23.root";
+   const char* rootfile="23F_run23_pidds.root";
    
    Int_t nyokiID[2] = {2,10};
    Bool_t useS0AB = 0;
@@ -14,12 +14,12 @@ void pidNyoki() {
    Double_t newO[2] = {0,0}; //{x,z} mm
    Double_t ang = 0; //deg, left hand rotation about y axis
    
-	Int_t Div[2] = {3,2};
+	Int_t Div[2] = {1,1};
 	Int_t size = 400;
    
-   Bool_t allentry    = 0;
+   Bool_t allentry    = 1;
    Int_t firstEntry   = 0;
-   Int_t nEntries     = 1000000;
+   Int_t nEntries     = 100000;
 	
 	Int_t sampleRate = 1;
 	
@@ -29,18 +29,18 @@ void pidNyoki() {
 	Bool_t pid22O = 0;
 	Bool_t pid8Li = 0;
 	
-	Bool_t fitZ = 0;
+	Bool_t fitZ = 1;
 
 //########################################################  
 	const Double_t Brho0 = 6.5269;//6.7288;//*22/8*9/23;  
-	const Double_t LS0DNyoki = 6595.60525-25; // mm
+	const Double_t LS0DNyoki = 6575.60525; // mm
 	const Double_t para1 = -0.451752;
 	const Double_t para2 = 0.0003021347;
 	const Double_t att  = 99999999;//3000.; // mm
 	const Double_t r0 = 4.4; // m
 	const Double_t xdp = -1427; //-1156; // mm / 100%
 	const Double_t B0 = Brho0/r0; // T
-	Double_t tofOffSet = -0.1;
+	Double_t tofOffSet = 0.1;
 	Double_t b,g,h, Sa,Sk,SQ,St;
 	
 	Double_t nyokiY[2] = {50, 0}; //start, end
@@ -107,16 +107,16 @@ void pidNyoki() {
 	hAux3->SetXTitle("tof");
 	hAux3->SetYTitle("L");
 
-	TH2F* hAux4 = new TH2F("hAux4", "", 500, -200, 300, 200, 1.8, 3.5);
+	TH2F* hAux4 = new TH2F("hAux4", "", 400, -100, 100, 200, 1, 10);
 	hAux4->SetXTitle("s1x");
-	hAux4->SetYTitle("AoQ");
+	hAux4->SetYTitle("Z");
 
-	TH1F* hAux5 = new TH1F("hAux5", "", 500, -200, 300);
-	hAux5->SetXTitle("s1x");
+	TH1F* hAux5 = new TH1F("hAux5", "from A/Q", 100, 20, 25);
+	hAux5->SetXTitle("A");
+	hAux5->SetLineColor(2);
 	
-	TH2F* hAux6 = new TH2F("hAux6", "", 500, -200, 300, 200, 0, 11);
-	hAux6->SetXTitle("s1x");
-	hAux6->SetYTitle("Z");
+	TH1F* hAux6 = new TH1F("hAux6", "", 100, 20, 25);
+	hAux6->SetXTitle("A");
 
 	TH1F* hDiffz = new TH1F("hDiffz", "", 100, -0.2, 0.2);
 	hDiffz->SetXTitle("z - z0");
@@ -137,11 +137,12 @@ void pidNyoki() {
    TTree *pid = (TTree*)f->Get("tree");
    
    Int_t totnumEntry = pid->GetEntries();
+	pid->SetBranchStatus("*",0);
 	pid->SetBranchStatus("gate",1);
    pid->SetBranchStatus("coinReg",1);
    pid->SetBranchStatus("nyoki",1);
    pid->SetBranchStatus("tof_D1",1);
-   pid->SetBranchStatus("vertex",1);
+   //pid->SetBranchStatus("vertex",1);
    if ( useMWDC) pid->SetBranchStatus("smwdc_S1",1);
    if ( useS0AB) pid->SetBranchStatus("S0img",1);
 
@@ -150,7 +151,7 @@ void pidNyoki() {
    pid->SetBranchAddress("coinReg",&hoge_coinReg);
    pid->SetBranchAddress("nyoki",&hoge_nyoki);
    pid->SetBranchAddress("tof_D1",&hoge_tofD1);
-   pid->SetBranchAddress("vertex",&hoge_vertex);
+   //pid->SetBranchAddress("vertex",&hoge_vertex);
    if ( useS0AB) pid->SetBranchAddress("S0img", &hoge_S0img);
    if ( useMWDC) pid->SetBranchAddress("smwdc_S1",&hoge_mwdc);
    
@@ -173,7 +174,7 @@ void pidNyoki() {
    
 //#############################################################   
    for( Int_t eventID = firstEntry; eventID < TMath::Min(firstEntry+nEntries, totnumEntry); eventID+=sampleRate){
-      pid->GetEntry(eventID); 
+      pid->GetEntry(eventID,0); 
       
       if( ppcoin && !hoge_coinReg->Test(2) ) continue;
       if( beam && !hoge_coinReg->Test(1) ) continue;
@@ -282,6 +283,7 @@ void pidNyoki() {
          	//Slew 
          	Double_t walk = Sa/TMath::Power(QQ-SQ,Sk) - St;
          	if( useSlew == 0) walk = 0;
+         	
          	tof = data2->GetTiming() + tofOffSet - walk;
          	//printf("%10.2f , %10.2f \n", tof, walk);
          	tofPass = 1;
@@ -315,20 +317,27 @@ void pidNyoki() {
 		   Double_t z0 = TMath::Sqrt(L0/(g+L0*h))*beta0;
 		   
 		   Double_t L;
-		   if( nyokiY[0] < s1y && s1y < nyokiY[1] ) {
-		   	L = (QQ-b)*TMath::Exp((nyokiY[0]-s1y)/att);
-	   	}else{
+		   //if( nyokiY[0] < s1y && s1y < nyokiY[1] ) {
+		   //	L = (QQ-b)*TMath::Exp((nyokiY[0]-s1y)/att);
+	   	//}else{
 	   		L = L0;
-	   	}
+	   	//}
 		   Double_t z = TMath::Sqrt(L/(g+L*h))*beta;
 		   
          hAux->Fill(AoQ0, z0);
          //hAux2->Fill(z, s1y);
          hAux2->Fill(AoQ, Brho);
          hAux3->Fill(tof,L0);
-         hAux4->Fill(s1x,AoQ); //-4069.4
-         hAux5->Fill(s1x);
-         hAux6->Fill(s1x,z);
+         hAux4->Fill(s1x,z); //-4069.4
+         //hAux5->Fill(s1x);
+         if( TMath::Abs(z-8.)<0.1) {
+            //printf(" %f* %f = %f \n", z0, AoQ0, AoQ0*8); 
+         	hAux5->Fill(AoQ*8.);
+      	}
+      	if( TMath::Abs(z0-9.)<0.1 ) {
+         	hAux6->Fill(AoQ*9.);
+      	}
+         
          
          hDiffz->Fill( z - z0);
 		   hDiffAoQ->Fill( AoQ - AoQ0);
@@ -365,10 +374,10 @@ void pidNyoki() {
    
    cPID->cd(1);
    hPIDNyoki->Draw("colz");
-   
+   hAux4->Draw("colz");
    //hPIDNyoki->ProjectionX()->Draw("colz");
    //hAux3->Draw("colz");
-   
+   /*
 	cPID->cd(4);
 	hAux->Draw("colz");
 	//hPIDNyoki->ProjectionY("test")->Draw();
@@ -397,13 +406,14 @@ void pidNyoki() {
 	//hAux2->ProjectionX()->Draw();
 	*/
 	//hAux3->ProjectionY()->Draw("");
-	hPIDNyoki->ProjectionY()->Draw("");
+	//hPIDNyoki->ProjectionY("testPID")->Draw("");
 	/**/
-	
+	/*
 	cPID->cd(6);
-	tree->Draw("coinReg.fQuality & 255");
+	//tree->Draw("coinReg.fQuality & 255");
+	hAux6->Draw();
 	//hAux2->Draw("colz");
-	//hAux6->Draw("colz");
+	hAux5->Draw("same");
 	//hAux->ProjectionX("aux_Z=9", 170, 190)->Draw("");
 	//hAux->ProjectionX("aux_Z=8", 150, 170)->Draw("same");
 	
@@ -416,18 +426,40 @@ void pidNyoki() {
 	/**/
    
    if( fitZ ){
-		TF1 * fit = new TF1("fit", "gaus(0)+gaus(3)+gaus(6)+gaus(9)+gaus(12)+gaus(15)+gaus(18)+gaus(21)", 1.8, 11);
-		Double_t par[24] = {1000, 2, 0.2, 1500, 3, 0.2, 800, 4, 0.2, 500, 5, 0.5, 400, 6, 0.5, 1000, 7, 0.5, 7000, 8, 0.5, 5500, 9, 0.5};
+		cPID->cd(2);
+		TF1 * fit = new TF1("fit", "gaus(0)+gaus(3)+gaus(6)+gaus(9)+gaus(12)+gaus(15)+gaus(18)", 2.5, 11);
+		Double_t par[21] = { 1500, 3, 0.2, 800, 4, 0.2, 500, 5, 0.5, 400, 6, 0.5, 1000, 7, 0.5, 7000, 8, 0.5, 5500, 9, 0.5};
 		fit->SetParameters(par);
-		fit->SetParLimits(1,1.8, 2.2);
-		fit->SetParLimits(4,2.7, 3.3);
-		fit->SetParLimits(7,3.7, 4.3);
-		fit->SetParLimits(10,4.7, 5.3);
-		fit->SetParLimits(13,5.7, 6.3);
-		fit->SetParLimits(16,6.7, 7.3);
-		fit->SetParLimits(19,7.7, 8.5);
-		fit->SetParLimits(22,8.7, 9.5);
-		test->Fit("fit", "R");
+		fit->SetParLimits(1,2.7, 3.3);
+		fit->SetParLimits(2,0, 2);
+		fit->SetParLimits(4,3.7, 4.3);
+		fit->SetParLimits(5,0, 2);
+		fit->SetParLimits(7,4.7, 5.3);
+		fit->SetParLimits(8,0, 2);
+		fit->SetParLimits(10,5.7, 6.3);
+		fit->SetParLimits(11,0, 2);
+		fit->SetParLimits(13,6.7, 7.3);
+		fit->SetParLimits(14,0, 2);
+		fit->SetParLimits(16,7.7, 8.5);
+		fit->SetParLimits(17,0, 2);
+		fit->SetParLimits(29,8.7, 9.5);
+		fit->SetParLimits(20,0, 2);
+		testAux->Fit("fit", "R");
+		fit->GetParameters(par);
+		
+		TF1* k2 = new TF1("k2", "gaus", 2.5, 11); k2->SetParameters(&par[0]); k2->SetLineColor(1);k2->SetLineWidth(1);k2->Draw("same");
+		TF1* k3 = new TF1("k3", "gaus", 2.5, 11); k3->SetParameters(&par[3]); k3->SetLineColor(2);k3->SetLineWidth(1);k3->Draw("same");
+		TF1* k4 = new TF1("k4", "gaus", 2.5, 11); k4->SetParameters(&par[6]); k4->SetLineColor(3);k4->SetLineWidth(1);k4->Draw("same");
+		TF1* k5 = new TF1("k5", "gaus", 2.5, 11); k5->SetParameters(&par[9]); k5->SetLineColor(4);k5->SetLineWidth(1);k5->Draw("same");
+		TF1* k6 = new TF1("k6", "gaus", 2.5, 11); k6->SetParameters(&par[12]);k6->SetLineColor(5);k6->SetLineWidth(1);k6->Draw("same");
+		TF1* k7 = new TF1("k7", "gaus", 2.5, 11); k7->SetParameters(&par[15]);k7->SetLineColor(6);k7->SetLineWidth(1);k7->Draw("same");
+		TF1* k8 = new TF1("k8", "gaus", 2.5, 11); k8->SetParameters(&par[18]);k8->SetLineColor(7);k8->SetLineWidth(1);k8->Draw("same");
+		//TF1* k9 = new TF1("k9", "gaus", 1.8, 11); k9->SetParameters(&par[21]);k9->SetLineColor(8);k9->SetLineWidth(1);k9->Draw("same");
+		
+		
+		
+		//testPID->Fit("fit", "R");
+		
 	}
    return ;
 }
