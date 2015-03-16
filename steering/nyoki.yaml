@@ -42,11 +42,12 @@ Processor:
     parameter:
       InputCollection:        nyoki
       OutputCollection:       nyoki_t
+      TimingGate:            [-270,-210]
       
   - name: tof_S0D_to_D1
     type: art::TTimingSubtractionProcessor
     parameter:
-      InputCollection:        nyoki_t   # tof = [t] - tref
+      InputCollection:        nyoki   # tof = [t] - tref
       OutputCollection:       tof_D1
       StartTimingCollection:  plaV775     #  tof= t - [tref]
       StartTimingDetID:       4           # S0D

@@ -100,10 +100,22 @@ group:
       x: [tof_DS.fTiming, 400, -72, -60]
       y: [plaV775.fCharge, 400,  200, 2200]
       cut: gate.Test(0) && plaV775.fID == 4
+    
+    - name: S0DPID_2
+      title: QDC(S0D) vs Tof(FH9-S0D)
+      x: [tof_DS.fTiming, 400, -78, -60]
+      y: [plaV775.fCharge, 400,  200, 4000]
+      cut: gate.Test(0) && plaV775.fID == 4
       
     - name: NyokiPID
       title: QDC(Nyoki) vs Tof(S0D-Nyoki)
       x: [tof_D1.fTiming, 400, 25, 45]
+      y: [nyoki.fCharge, 400, 500, 2200]
+      cut: gate.Test(0)
+    
+    - name: NyokiPID_2
+      title: QDC(Nyoki) vs Tof(S0D-Nyoki)
+      x: [tof_D1.fTiming, 400, 34, 50]
       y: [nyoki.fCharge, 400, 500, 2200]
       cut: gate.Test(0)
       
@@ -122,13 +134,13 @@ group:
     - name: S1XY
       title: s1y vs s1x | PID(23F)
       x: [smwdc_S1.fTrack.fX, 400, -200, 600]
-      y: [smwdc_S1.fTrack.fY, 400, -200, 200]
+      y: [smwdc_S1.fTrack.fY, 300, -150, 150]
       cut: gate.Test(0)
     
     - name: S1XA
       title: s1a vs s1x | PID(23F)
       x: [smwdc_S1.fTrack.fX, 400, -200, 600]
-      y: [smwdc_S1.fTrack.fA, 400, -3, 3]
+      y: [smwdc_S1.fTrack.fA, 400, -1, 1]
       cut: gate.Test(0)
       
 #============================ mwdc-S1x vs AoQ

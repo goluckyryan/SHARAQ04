@@ -1,0 +1,25 @@
+aliases:
+  - &beamZ      0.
+  - &tofShift_L 0.  #time shift (tgt to Tpla)
+  - &tofShift_R 0.  #time shift (tgt to Tpla)
+#============== PROCESSORS     =============================
+Processor:
+  - name: tpla_tof
+    type: art::sh04::TRecoilTOFProcessor
+    parameter:
+      OutputL:            tofL
+      OutputR:            tofR
+      OutputS0D:          tofS0D
+      F3PlasticColName:   plaV775
+      F3PlasticDetID:     2
+      FH9PlasticColName:  plaV775
+      FH9PlasticDetID:    3
+      S0DPlasticColName:  plaV775
+      S0DPlasticDetID:    4
+      TPlasticColName:    plaV775
+      TPlasticLDetID:     0
+      TPlasticRDetID:     1
+      BeamZ:              *beamZ
+      ShiftL:             *tofShift_L
+      ShiftL:             *tofShift_R 
+      OutputTransparency: 0

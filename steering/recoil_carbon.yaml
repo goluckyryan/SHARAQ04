@@ -1,7 +1,7 @@
 aliases:
   - &beamZc      160.
-  - &tofShift_Lc  0.  #time shift (tgt to Tpla)
-  - &tofShift_Rc  0.  #time shift (tgt to Tpla)
+  - &tofShift_Lc  -1.1  #time shift (tgt to Tpla)
+  - &tofShift_Rc  -0.9  #time shift (tgt to Tpla)
 #============== PROCESSORS     =============================
 Processor:
   - name: tpla_tof_c

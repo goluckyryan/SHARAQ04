@@ -23,13 +23,13 @@ group:
       x: [pid_us.fZ, 500, 1, 12]  
 
     - name: PIDupstream_AoQ_Z=9
-      title: PID upstream 
-      x: ["pid_us.fAOQ*9", 500, 1.8, 3.2]
+      title: PID upstream Z = 9
+      x: ["pid_us.fAOQ*9", 500, 17, 30]
       cut: abs(pid_us.fZ-9)<0.5
   
     - name: PIDupstream_AoQ_Z=8
-      title: PID upstream 
-      x: ["pid_us.fAOQ*8", 500, 1.8, 3.2]
+      title: PID upstream Z = 8
+      x: ["pid_us.fAOQ*8", 500, 15, 26]
       cut: abs(pid_us.fZ-8)<0.5  
 
 #============================ Downstream PID
@@ -54,13 +54,13 @@ group:
       x: [pid_ds.fZ, 300, 0, 12]  
       
     - name: PID_ds_AoQ_Z=9
-      title: PID Downstream 
-      x: ["pid_ds.fAOQ*9", 500, 1.8, 3.2]
+      title: PID Downstream Z = 9
+      x: ["pid_ds.fAOQ*9", 500, 17, 30]
       cut: abs(pid_ds.fZ-9)<0.5
   
     - name: PIDds_AoQ_Z=8
-      title: PID Downstream 
-      x: ["pid_ds.fAOQ*8", 500, 1.8, 3.2]
+      title: PID Downstream Z = 8
+      x: ["pid_ds.fAOQ*8", 500, 15, 26]
       cut: abs(pid_ds.fZ-8)<0.5 
       
 #    - name: PID_downstream_2

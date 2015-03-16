@@ -1,0 +1,209 @@
+alias:
+  ChargeMin_dcs0d: +900
+aliases:
+  - &ChargeGate_dcs0d "DCS0D x1 Drift Time | Qgate = Q > 900"
+  
+group:
+#======================================================= SMWDC-dcs0d
+  - name: DCS0D
+    title: DCS0D_check
+    contents:      
+    #------------------ cal
+    - name:  dcs0d_Traw
+      title: DCS0D Raw Time
+      x: [dcs0d_cal.fTiming, 500, -500, 500]
+      
+    #------------------ DT
+    - name:  dcs0d_DT
+      title: DCS0D Drift Time
+      x: [dcs0d_DT.fTiming, 300, -100, 200] 
+ 
+    - name:  dcs0d_TW
+      title: DCS0D Energy Loss
+      x: [dcs0d_DT.fCharge, 300, 0, 2500]
+        
+    - name:  dcs0d_DT_id
+      title: DCS0D Drift Time vs ID
+      x: [dcs0d_DT.fID, 120, 1 , 121]
+      y: [dcs0d_DT.fTiming, 300, -100, 200]
+      
+    - name:  dcs0d_TW_id
+      title: MWDC-L Q vs ID
+      x: [dcs0d_DT.fID, 120, 1 , 121]
+      y: [dcs0d_DT.fCharge, 300,  0, 2500]
+            
+    - name:  dcs0d_TW_TL
+      title: DCS0D Energy Loss vd Drift-time
+      y: [dcs0d_DT.fCharge, 300,    0, 2500]
+      x: [dcs0d_DT.fTiming, 300, -100, 200]
+ 
+    #------------------ plane
+    - name: dcs0d_x1_dt
+      title: *ChargeGate_dcs0d
+      x: [dcs0d_x1.fTiming, 300, -100,200]
+      cut: dcs0d_x1.fCharge > ChargeMin_dcs0d
+ 
+    - name: dcs0d_x2_dt
+      title: DCS0D x2 Drift Time | Qgate
+      x: [dcs0d_x2.fTiming, 300, -100,200]    
+      cut: dcs0d_x2.fCharge > ChargeMin_dcs0d
+ 
+    - name: dcs0d_y1_dt
+      title: DCS0D y1 Drift Time  | Qgate
+      x: [dcs0d_y1.fTiming, 300, -100,200]
+      cut: dcs0d_y1.fCharge > ChargeMin_dcs0d
+ 
+    - name: dcs0d_y2_dt
+      title: DCS0D y2 Drift Time  | Qgate
+      x: [dcs0d_y2.fTiming, 300, -100,200]
+      cut: dcs0d_y2.fCharge > ChargeMin_dcs0d
+ 
+    #-------- plane DT vs ID
+    - name: dcs0d_x1_dt_id
+      title: DCS0D x1 Drift Time vs ID  | Qgate
+      x: [dcs0d_x1.fID, 40, 1 , 41]
+      y: [dcs0d_x1.fTiming, 300, -100,200]
+      cut: dcs0d_x1.fCharge > ChargeMin_dcs0d 
+      
+    - name: dcs0d_x2_dt_id
+      title: DCS0D x2 Drift Time vs ID  | Qgate
+      x: [dcs0d_x2.fID, 40, 1 , 41]
+      y: [dcs0d_x2.fTiming, 300, -100,200]
+      cut: dcs0d_x2.fCharge > ChargeMin_dcs0d 
+ 
+    - name: dcs0d_y1_dt_id
+      title: DCS0D y1 Drift Time vs ID | Qgate
+      x: [dcs0d_y1.fID, 20, 1 , 21]
+      y: [dcs0d_y1.fTiming, 300, -100,200]
+      cut: dcs0d_y1.fCharge > ChargeMin_dcs0d 
+ 
+    - name: dcs0d_y2_dt_id
+      title: DCS0D y2 Drift Time vs ID | Qgate
+      x: [dcs0d_y2.fID, 20, 1 , 21]
+      y: [dcs0d_y2.fTiming, 300, -100,200]
+      cut: dcs0d_y2.fCharge > ChargeMin_dcs0d 
+      
+    #---------- plane DL
+    - name: dcs0d_x1_dl
+      title: DCS0D x1 Drift Length | Qgate & wireID
+      x: [dcs0d_x1.fDriftLength, 200, -1, 7]
+      cut: dcs0d_x1.fCharge > ChargeMin_dcs0d & dcs0d_x1.fID != wireIDGate
+ 
+    - name: dcs0d_x2_dl
+      title: DCS0D x2 Drift Length | Qgate & wireID
+      x: [dcs0d_x2.fDriftLength, 200,-1, 7]
+      cut: dcs0d_x2.fCharge > ChargeMin_dcs0d & dcs0d_x2.fID != wireIDGate   
+ 
+    - name: dcs0d_y1_dl
+      title: DCS0D y1 Drift Length | Qgate
+      x: [dcs0d_y1.fDriftLength, 200,-1, 7]
+      cut: dcs0d_y1.fCharge > ChargeMin_dcs0d
+ 
+    - name: dcs0d_y2_dl
+      title: DCS0D y2 Drift Length | Qgate
+      x: [dcs0d_y2.fDriftLength, 200,-1, 7]
+      cut: dcs0d_y2.fCharge > ChargeMin_dcs0d
+      
+    #---------- plane ID vs DL
+    - name: dcs0d_x1_dl_id
+      title: DCS0D x1 Drift Length vs ID | Qgate
+      x: [dcs0d_x1.fID, 40, 1, 41]
+      y: [dcs0d_x1.fDriftLength, 200,-1, 7]
+      cut: dcs0d_x1.fCharge > ChargeMin_dcs0d & dcs0d_x1.fID != wireIDGate
+ 
+    - name: dcs0d_x2_dl_id
+      title: DCS0D x2 Drift Length vs ID| Qgate
+      x: [dcs0d_x2.fID, 40, 1, 41]
+      y: [dcs0d_x2.fDriftLength, 200,-1, 7]    
+      cut: dcs0d_x2.fCharge > ChargeMin_dcs0d & dcs0d_x2.fID != wireIDGate
+ 
+    - name: dcs0d_y1_dl_id
+      title: DCS0D y1 Drift Length vs ID | Qgate
+      x: [dcs0d_y1.fID, 20,1, 21]
+      y: [dcs0d_y1.fDriftLength, 200,-1, 7]
+      cut: dcs0d_y1.fCharge > ChargeMin_dcs0d
+ 
+    - name: dcs0d_y2_dl_id
+      title: DCS0D y2 Drift Length vs ID | Qgate
+      x: [dcs0d_y2.fID, 20,1, 21]
+      y: [dcs0d_y2.fDriftLength, 200,-1, 7]
+      cut: dcs0d_y2.fCharge > ChargeMin_dcs0d
+ 
+    #------------------ Track Adopted
+    - name:  dcs0d_DT_A
+      title: DCS0D Drift Timing Adopted
+      x: [dcs0d.fDriftTimeAdopted, 300, -100, 200]
+      
+    - name:  dcs0d_Q_A
+      title: DCS0D Q Adopted
+      x: [dcs0d.fChargeAdopted, 300, 0, 2500]
+      
+    - name:  dcs0d_DL_org
+      title: DCS0D Drift Length Original
+      x: [dcs0d.fDriftLengthOriginal, 200,-1, 7]
+ 
+    - name: dcs0d_DL_A
+      title: DCS0D Drift Length Adopted 
+      x: [dcs0d.fDriftLengthAdopted, 200,-1, 7]  
+     
+    - name: dcs0d_DL_org_id_A
+      title: DCS0D Drift Length Original vs WireID
+      x: [dcs0d.fWireIDAdopted, 40, 1, 41]
+      y: [dcs0d.fDriftLengthOriginal, 200, 0, 15]    
+      
+    - name: dcs0d_DL_A_id_A
+      title: DCS0D Adopted Drift Length vs WireID
+      x: [dcs0d.fWireIDAdopted, 40, 1, 41]
+      y: [dcs0d.fDriftLengthAdopted, 200, 0, 15]   
+ 
+    - name:  dcs0d_DTDL
+      title: DCS0D DT-DL original | Tracked
+      x: [dcs0d.fDriftTimeAdopted, 300, -100, 250]
+      y: [dcs0d.fDriftLengthOriginal, 200,-1, 7]
+    
+    - name:  dcs0d_DTDL_tracked
+      title: DCS0D DT-DL corrected | Tracked
+      x: [dcs0d.fDriftTimeAdopted, 300, -100, 250]
+      y: [dcs0d.fDriftLengthAdopted, 200,-1, 7]
+ 
+    - name:  dcs0d_TW_TL_tracked
+      title: DCS0D Energy Loss vd Drift-time | Tracked
+      y: [dcs0d.fChargeAdopted, 300, 0, 2500]
+      x: [dcs0d.fDriftTimeAdopted, 300, -100, 250]    
+      
+    #------------------ Track result  
+    - name: dcs0d_npv
+      title: DCS0D FiredPlane
+      x: [dcs0d.fNPlaneValid, 4, 1, 5]
+      
+    - name: dcs0d_good
+      title: DCS0D tracked | firedPlane!=0
+      x: [dcs0d.IsGood(), 4, -1, 3]
+      cut: "dcs0d.fNPlaneValid != 0"
+    
+    - name: dcs0d_ssr
+      title: DCS0D SSR
+      x: [dcs0d.fSSR, 100, 0, 0.5]
+    
+    #------------------ Sigma
+    - name: dcs0d_sX
+      title: DCS0D Sigma(X) [mm]
+      x: [dcs0d.GetSigma(0), 100, 0, 1]
+      
+    - name: dcs0d_sY
+      title: DCS0D Sigma(Y) [mm]
+      x: [dcs0d.GetSigma(1), 100, 0, 1]
+ 
+    #------------------ Track Ray
+    - name:  dcs0d_X
+      title: DCS0D X
+      x: [dcs0d.fTrack.fX, 200, -100, 100]
+ 
+    - name:  dcs0d_Y
+      title: DCS0D Y 
+      x: [dcs0d.fTrack.fY, 200, -100, 100]
+ 
+    - name:  dcs0d_XY
+      title: DCS0D X vs Y
+      x: [dcs0d.fTrack.fX, 200, -100, 100]
+      y: [dcs0d.fTrack.fY, 200, -100, 100]

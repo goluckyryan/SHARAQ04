@@ -13,7 +13,7 @@
     nWire:    40
     cellSize: 12
     angle:    90
-    center:   21.
+    center:   21.5
 - y1:
     z:         5.
     nWire:    20
@@ -25,4 +25,4 @@
     nWire:    20
     cellSize: 12
     angle:    0
-    center:   11.
+    center:   11.5

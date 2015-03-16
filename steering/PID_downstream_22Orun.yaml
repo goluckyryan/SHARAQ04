@@ -14,7 +14,7 @@ Processor:
       Parameter2:  0.00898  # h = k*B, L = A *dE/(1+B*dE)
       Dispersion:  -1427  # tetatively
       TimeOffset:  0.
-      FlightLength:   6575.6 #6575.6
+      FlightLength:   6903 #6575.6 #6575.6
       FL1:           -0.451752. 
       FL2:           0.0003021347
       BeamParameter: beam

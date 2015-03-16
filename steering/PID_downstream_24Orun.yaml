@@ -10,12 +10,13 @@ Processor:
       Output:     pid_ds
       MWDCCollection: smwdc_S1   
       Parameter0:  -500.   # L = Q - p0
-      Parameter1:  16.5
-      Parameter2:  0.007288
-      Dispersion:  -1156  # tetatively
+      Parameter1:  18.4    #
+      Parameter2:  0.00898 #
+      Dispersion:  -1427  # tetatively
       TimeOffset:  0.
-      FlightLength:   6595.6
+      FlightLength:   6903 #
       FL1:           -0.451752. 
       FL2:           0.0003021347
       BeamParameter: beam
+      Brho_D1:       7.1315
 #===========================================================

@@ -3,20 +3,20 @@
 void Resol_pla() {
    
 //   const char* rootfile="23F_0922.root";
-   const char* rootfile="23F_0924_run08.root";
+   const char* rootfile="test_dcs0d.root";
 
-   const char* plaBranch= "plaV1190_FH9"; Int_t plaDetID = 0;
-   const char* mwdcBranch = "dc91";
+   const char* plaBranch= "plaV775"; Int_t plaDetID = 4;
+   const char* mwdcBranch = "dcs0d";
 
    Double_t PlaBeta = 0.66;
    
-   Bool_t allentry  = 0;
+   Bool_t allentry  = 1;
    Int_t firstEntry = 0;
    Int_t nEntries=      500000;
    
    Int_t nBin = 500;
    Int_t relBinWidth = 5;
-   Double_t MeanRange[2] = {-20,20};
+   Double_t MeanRange[2] = {-100,50};
    
    Double_t maxResol = 500; // ps
    
@@ -80,7 +80,18 @@ void Resol_pla() {
       	TDiffRange[1] = 40;
       	plaName = "Pla-FH9 V775";
    	}
-   }
+   }else if (mwdcBranch == "dcs0d"){
+   	tree->SetBranchStatus(mwdcBranch,1);
+      tree->SetBranchAddress(mwdcBranch,&hoge_MWDC);
+      mwdc_z0 = 0;
+      dis_mwdc_pla = 150;
+      XRange[0] = -200;
+      XRange[1] = 200;
+		TDiffRange[0] = -4;
+   	TDiffRange[1] = 2;
+   	plaName = "Pla-S0D V775";
+   	
+	}
    //**************************************
    printf("====== Pla: %s, DetID:%d, mwdc: %s \n", plaBranch, plaDetID, mwdcBranch);
    
@@ -89,13 +100,13 @@ void Resol_pla() {
    TString hTdiffTitle;
    hTdiffTitle.Form("%s | %s(tdiff) vs %s(X by %s)",rootfile, plaName.Data(), plaName.Data(), mwdcBranch);  
    TH2F* hTdiff = new TH2F("hTdiff",hTdiffTitle, nBin , XRange[0], XRange[1], 200, TDiffRange[0], TDiffRange[1]);
-   hTdiff->SetXTitle("pla(X)[mm]");
-   hTdiff->SetYTitle("Tdiff[ns]");
+   hTdiff->SetXTitle("pla.X [mm]");
+   hTdiff->SetYTitle("Tdiff [ns]");
    
 	TString hResolTitle;
 	hResolTitle.Form("Tavg Resolution vs %s(X). binWidth:%2d (%4.1f mm), Pla beta:%4.2f", plaName.Data(), relBinWidth, (relBinWidth)*(XRange[1]-XRange[0])/nBin, PlaBeta);
 	TH1F* hResol = new TH1F("hResol", hResolTitle, nBin, XRange[0], XRange[1]); 
-	hResol->SetXTitle("pla(X)[mm]");
+	hResol->SetXTitle("pla.X [mm]");
    hResol->SetYTitle("Tavg Resol [ps]");
    
    TH2F* hMean = new TH2F("hMean", "Mean vs PlaX" , nBin, XRange[0], XRange[1], 200, TDiffRange[0], TDiffRange[1]); 
@@ -114,7 +125,7 @@ void Resol_pla() {
    printf("====== totnumEntry:%d, 1stEntry:%d, nEntries:%d[%5.1f%%]\n",totnumEntry,firstEntry,nEntries,nEntries*100./totnumEntry);
    
    for( Int_t eventID = firstEntry; eventID < endEntry; eventID ++){
-      tree->GetEntry(eventID); 
+      tree->GetEntry(eventID,0); 
 
       //if( hoge_gate->Test(0) != 1) continue;
 
@@ -142,6 +153,10 @@ void Resol_pla() {
          art::TTrack * track = (art::TTrack*)mwdcData->GetTrack();
          Double_t x = track->GetX();
          Double_t a = track->GetA();
+         if( mwdcBranch == "dcs0d") {
+         	x = track->GetY();
+         	a = track->GetB();
+         }
          PlaX = x + (dis_mwdc_pla - mwdc_z0)*a;
       }
       if (!TMath::Finite(PlaX)) continue;     
@@ -223,6 +238,8 @@ void Resol_pla() {
    
 	cPlaResol->cd(3);
 	hMean->Draw("colz");
+	hMean->SetYTitle("mean of TDiff [ns]");
+	hMean->SetXTitle("pla.X [mm]");
 	
 
    return ;

@@ -11,4 +11,59 @@ group:
       x: [beamZ.fL, 400, -100, 300]
       y: [beamZ.fR, 400, -100, 300]
       
+    - name: vertex_XY
+      title: vertex XY
+      x: [vertex.fX, 400, -30, 30]
+      y: [vertex.fY, 400, -30, 30]
+      
+    - name: vertex_XZ
+      title: vertex XZ
+      x: [vertex.fZ, 400, -100, 200]
+      y: [vertex.fX, 400, -30, 30]
+      
+    - name: vertex_YZ
+      title: vertex XY
+      x: [vertex.fZ, 400, -100, 200]
+      y: [vertex.fY, 400, -30, 30]
+      
+    - name: vertex_XZ_gateY
+      title: vertex XZ | |Y|<3 
+      x: [vertex.fZ, 400, -100, 200]
+      y: [vertex.fX, 400, -30, 30]
+      cut: TMath::Abs(vertex.fY)<3
 
+    - name: vertex_YZ_gateX
+      title: vertex YZ | |X|<3 
+      x: [vertex.fZ, 400, -100, 200]
+      y: [vertex.fY, 400, -30, 30]
+      cut: TMath::Abs(vertex.fX)<3    
+    
+    - name: vertex_Z_gateY
+      title: vertex Z | |Y|<3 
+      x: [vertex.fZ, 400, -100, 200]
+      cut: TMath::Abs(vertex.fY)<3
+
+    - name: vertex_Z_gateX
+      title: vertex Z | |X|<3 
+      x: [vertex.fZ, 400, -100, 200]
+      cut: TMath::Abs(vertex.fX)<3    
+      
+    - name: vertex_Z_gateY_S0img
+      title: vertex Z | |Y|<3 Crystal
+      x: [vertex.fZ, 400, -100, 200]
+      cut: TMath::Abs(vertex.fY)<3 & gate.Test(9)
+
+    - name: vertex_Z_gateX_S0img
+      title: vertex Z | |X|<3 Crystal
+      x: [vertex.fZ, 400, -100, 200]
+      cut: TMath::Abs(vertex.fX)<3 & gate.Test(11)
+      
+    - name: vertex_Z_check1
+      title: vertex Z | pid.Z>5 + |tof(S0D-Hodo)-36|<2
+      x: [vertex.fZ, 400, -100, 200]
+      cut: pid_ds.fZ>5 && TMath::Abs(tof_D1.fTiming-36)<2
+      
+    - name: vertex_Z_check2
+      title: vertex Z | pid.Z<5 + |tof(S0D-Hodo)-36|<2
+      x: [vertex.fZ, 400, -100, 200]
+      cut: pid_ds.fZ<5 && TMath::Abs(tof_D1.fTiming-36)<2

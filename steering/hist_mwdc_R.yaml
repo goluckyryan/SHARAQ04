@@ -255,27 +255,90 @@ group:
     - name: R_sB
       title: MWDC-R Sigma(B) [mrad]
       x: [smwdc_R.GetSigma(3)*1000, 100, 0, 30]
+      
+    #------------------ CI
+    - name: R_C1X
+      title: MWDC-R CI(X) [mm]
+      x: [smwdc_R.GetCI(0), 100, 0, 10]
+    - name: R_CIA
+      title: MWDC-R CI(A) [mrad]
+      x: [smwdc_R.GetCI(1)*1000, 100, 0, 60]
+    - name: R_CIY
+      title: MWDC-R CI(Y) [mm]
+      x: [smwdc_R.GetCI(2), 100, 0, 10]
+    - name: R_CIB
+      title: MWDC-R CI(B) [mrad]
+      x: [smwdc_R.GetCI(3)*1000, 100, 0, 120]
     
     #------------------ Track Ray
+    - name:  R_X
+      title: MWDC-R X
+      x: [smwdc_R.fTrack.fX, 800, -1000, 200]
+      cut: smwdc_R.IsGood()
+      
+    - name:  R_A
+      title: MWDC-R A
+      x: [smwdc_R.fTrack.fA, 400, -1, 0.5]
+      cut: smwdc_R.IsGood()
+      
+    - name:  R_Y
+      title: MWDC-R Y
+      x: [smwdc_R.fTrack.fY, 400, -200, 200]
+      cut: smwdc_R.IsGood()
+ 
+    - name:  R_B
+      title: MWDC-R B
+      x: [smwdc_R.fTrack.fB, 400, -0.5, 0.5]
+      cut: smwdc_R.IsGood()
+      
     - name:  R_XA
       title: MWDC-R A vs X
       x: [smwdc_R.fTrack.fX, 1200, -200,  1000]
-      y: [smwdc_R.fTrack.fA, 400, -2, 2]
+      y: [smwdc_R.fTrack.fA, 400, -0.5, 1]
+      cut: smwdc_R.IsGood()
 
     - name:  R_XY
       title: MWDC-R Y vs X
       x: [smwdc_R.fTrack.fX, 1200, -200,  1000]
       y: [smwdc_R.fTrack.fY, 400, -200, 200]
+      cut: smwdc_R.IsGood()
 
     - name:  R_YB
       title: MWDC-R B vs Y
       x: [smwdc_R.fTrack.fY, 400, -200, 200]
-      y: [smwdc_R.fTrack.fB, 400, -1, 1]
+      y: [smwdc_R.fTrack.fB, 400, -0.5, 0.5]
+      cut: smwdc_R.IsGood()
 
     - name:  R_AB
       title: MWDC-R A vs B
-      x: [smwdc_R.fTrack.fA, 400, -2, 2]
-      y: [smwdc_R.fTrack.fB, 400, -1, 1]
+      x: [smwdc_R.fTrack.fA, 400, -0.5, 1]
+      y: [smwdc_R.fTrack.fB, 400, -0.5, 0.5]
+      cut: smwdc_R.IsGood()
+      
+    - name:  R_XA_2
+      title: MWDC-R A vs X | IsGood()
+      x: [smwdc_R.fTrack.X(-30), 400, -200, 1000]
+      y: [smwdc_R.fTrack.fA, 400, -0.5, 1]
+      cut: smwdc_R.IsGood()
+ 
+    #-------------------- DL correlation
+    - name: R_x_DL
+      title: X1(DL) vs X2(DL) | IsGood() + NPlane = 6
+      x: ["smwdc_R.GetLRAdopted(0)*smwdc_R.GetDriftLengthAdopted(0)", 200, -10, 10]
+      y: ["smwdc_R.GetLRAdopted(1)*smwdc_R.GetDriftLengthAdopted(1)", 200, -10, 10]
+      cut: smwdc_R.IsGood() & smwdc_R.fNPlaneValid == 6 & smwdc_R.GetWireIDAdopted(0) == smwdc_R.GetWireIDAdopted(1)
+      
+    - name: R_u_DL
+      title: U1(DL) vs U2(DL) | IsGood() + NPlane = 6
+      x: ["smwdc_R.GetLRAdopted(2)*smwdc_R.GetDriftLengthAdopted(2)", 200, -10, 10]
+      y: ["smwdc_R.GetLRAdopted(3)*smwdc_R.GetDriftLengthAdopted(3)", 200, -10, 10]
+      cut: smwdc_R.IsGood() & smwdc_R.fNPlaneValid == 6 & smwdc_R.GetWireIDAdopted(2) == smwdc_R.GetWireIDAdopted(3)
+      
+    - name: R_v_DL
+      title: V1(DL) vs V2(DL) | IsGood() + NPlane = 6
+      x: ["smwdc_R.GetLRAdopted(4)*smwdc_R.GetDriftLengthAdopted(4)", 200, -10, 10]
+      y: ["smwdc_R.GetLRAdopted(5)*smwdc_R.GetDriftLengthAdopted(5)", 200, -10, 10]
+      cut: smwdc_R.IsGood() & smwdc_R.fNPlaneValid == 6 & smwdc_R.GetWireIDAdopted(4) == smwdc_R.GetWireIDAdopted(5)
       
     #-------------------- Check wire Direction
     - name: R_x1_wiredir

@@ -1,0 +1,113 @@
+# require:  s1_time_ref.yaml
+# output :  smwdc_S1_XX
+
+Processor:
+#========================= Parameter
+  - name: smwdc_S1_prm_ch2ns_0
+    type: art::TParameterArrayLoader
+    parameter:
+      Name:     prm_smwdc_S1_ch2ns_0
+      Type:     art::TAffineConverter
+      FileName: prm/mwdc/smwdc_S1/ch2ns.dat.kawase   
+      
+  - name: smwdc_S1_prm_ch2q_0
+    type: art::TParameterArrayLoader
+    parameter:
+      Name:     prm_smwdc_S1_ch2q_0
+      Type:     art::TAffineConverter
+      FileName: prm/mwdc/smwdc_S1/ch2q.dat.ryan
+
+  - name: smwdc_S1_x1_dtdx_0
+    type: art::TParameterLoader
+    parameter:
+      Name:     smwdc_S1_x1_dtdx_0
+      Type:     art::TMonotoneTableConverter
+      FileName: prm/mwdc/smwdc_S1/Zero/x1.dat
+
+  - name: smwdc_S1_x2_dtdx_0
+    type: art::TParameterLoader
+    parameter:
+      Name:     smwdc_S1_x2_dtdx_0
+      Type:     art::TMonotoneTableConverter
+      FileName: prm/mwdc/smwdc_S1/Zero/x2.dat
+
+  - name: smwdc_S1_u1_dtdx_0
+    type: art::TParameterLoader
+    parameter:
+      Name:     smwdc_S1_u1_dtdx_0
+      Type:     art::TMonotoneTableConverter
+      FileName: prm/mwdc/smwdc_S1/Zero/u1.dat
+
+  - name: smwdc_S1_u2_dtdx_0
+    type: art::TParameterLoader
+    parameter:
+      Name:     smwdc_S1_u2_dtdx_0
+      Type:     art::TMonotoneTableConverter
+      FileName: prm/mwdc/smwdc_S1/Zero/u2.dat
+
+  - name: smwdc_S1_v1_dtdx_0
+    type: art::TParameterLoader
+    parameter:
+      Name:     smwdc_S1_v1_dtdx_0
+      Type:     art::TMonotoneTableConverter
+      FileName: prm/mwdc/smwdc_S1/Zero/v1.dat
+
+  - name: smwdc_S1_v2_dtdx_0
+    type: art::TParameterLoader
+    parameter:
+      Name:     smwdc_S1_v2_dtdx_0
+      Type:     art::TMonotoneTableConverter
+      FileName: prm/mwdc/smwdc_S1/Zero/v2.dat
+      
+  - name: mwdc_S1_geo_0
+    type: art::TParameterLoader
+    parameter:
+      Name:     smwdc_S1_0
+      Type:     art::TMWDCParameter
+      FileName: prm/mwdc/smwdc_S1/geometry.yaml   
+
+#========================== Start                
+                
+  - name: smwdc_S1_raw_0
+    type: art::TTimingChargeMappingProcessor
+    parameter:
+      CatID:              13
+      TimingTypeID:       0
+      TrailingComesFirst: 0       # 1 = positive voltage
+      OutputCollection:   smwdc_S1_raw_0
+      OutputTransparency: 1
+        
+  - name: smwdc_S1_cal_0
+    type: art::TTimingChargeCalibrationProcessor
+    parameter:
+      InputCollection:      smwdc_S1_raw_0
+      OutputCollection:     smwdc_S1_cal_0
+      TimingConverterArray: prm_smwdc_S1_ch2ns_0
+      ChargeConverterArray: prm_smwdc_S1_ch2q_0
+      OutputTransparency:   1
+        
+  - name: smwdc_S1_cal_2_DT_0
+    type: art::TTimingSubtractionProcessor
+    parameter:
+      InputCollection:        smwdc_S1_cal_0
+      OutputCollection:       smwdc_S1_DT_0
+      StartTimingCollection:  nyoki_t
+      StartTimingDetID:       0           #ref noyki plastic
+      UseMultipleStartTiming: 0
+      OutputTransparency:     1 
+                
+  - name: mwdc_smwdc_S1_0
+    type: art::TMWDCPlaneProcessor
+    parameter:
+      InputCollection: smwdc_S1_DT_0
+      MWDCName:        smwdc_S1_0
+      ConverterList:
+          - smwdc_S1_x1_dtdx_0
+          - smwdc_S1_x2_dtdx_0
+          - smwdc_S1_u1_dtdx_0
+          - smwdc_S1_u2_dtdx_0
+          - smwdc_S1_v1_dtdx_0
+          - smwdc_S1_v2_dtdx_0
+      OutputTransparency: 0
+          
+#==================================================      

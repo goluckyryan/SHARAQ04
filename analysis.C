@@ -5,7 +5,7 @@
 	gStyle->SetOptStat(0);
 
 	//TFile *f1 = new TFile ("23F_1201_nyoki_run23.root"); 
-	TFile *f1 = new TFile ("23F_1204_nyoki_run2425.root"); 
+	TFile *f1 = new TFile ("test.root"); 
 
 	Int_t nyokiID = 7;
 
@@ -35,12 +35,13 @@
 	Int_t totnumEntry = tree->GetEntries();
 	
 	printf(" --------------------- total entry = %d \n", totnumEntry);
-	/*tree->SetBranchStatus("gate",1);
+	tree->SetBranchStatus("*",0);
+	tree->SetBranchStatus("gate",1);
 	tree->SetBranchStatus("coinReg",1);
 	tree->SetBranchStatus("plaV775",1);
 	tree->SetBranchStatus("plaV1190_FH9",1);
 	tree->SetBranchStatus("nyoki",1);
-	tree->SetBranchStatus("tof_D1",1);*/
+	tree->SetBranchStatus("tof_D1",1);
 	 
 	tree->SetBranchAddress("coinReg",&coinReg); 
 	tree->SetBranchAddress("gate",&gate); 

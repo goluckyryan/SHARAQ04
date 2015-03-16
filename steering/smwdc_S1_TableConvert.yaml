@@ -3,17 +3,17 @@
 
 Processor:
 #========================= Parameter
-  - name: smwdc_S1_prm
+  - name: smwdc_S1_prm_ch2ns
     type: art::TParameterArrayLoader
     parameter:
       Name:     prm_smwdc_S1_ch2ns
       Type:     art::TAffineConverter
-      FileName: prm/mwdc/smwdc_S1/ch2ns.dat.ryan2
+      FileName: prm/mwdc/smwdc_S1/ch2ns.dat.kawase   
       
   - name: smwdc_S1_prm_ch2q
     type: art::TParameterArrayLoader
     parameter:
-      Name:     prm_smwdc_S1_ch22
+      Name:     prm_smwdc_S1_ch2q
       Type:     art::TAffineConverter
       FileName: prm/mwdc/smwdc_S1/ch2q.dat.ryan
 
@@ -83,7 +83,7 @@ Processor:
       InputCollection:      smwdc_S1_raw
       OutputCollection:     smwdc_S1_cal
       TimingConverterArray: prm_smwdc_S1_ch2ns
-#      ChargeConverterArray: prm_smwdc_S1_ch2q
+      ChargeConverterArray: prm_smwdc_S1_ch2q
       OutputTransparency:   1
         
   - name: smwdc_S1_cal_2_DT

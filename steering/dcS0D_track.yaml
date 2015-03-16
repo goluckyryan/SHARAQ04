@@ -6,16 +6,16 @@ Processor:
   - name: mwdctrack_dcs0d
     type: art::TMWDCTrackingProcessor
     parameter:
-      - name: InputCollection
-        value:
-          - dcs0d_x1
-          - dcs0d_x2
-          - dcs0d_y1
-          - dcs0d_y2
-      - name: OutputCollection
-        value: dcs0d
-      - name: UseGlobalPos
-        value: 0          
+      InputCollection:
+        - dcs0d_x1
+        - dcs0d_x2
+        - dcs0d_y1
+        - dcs0d_y2
+      OutputCollection:  dcs0d
+      UseGlobalPos:      0    
+      TimingGate:        [-60, 120]
+      ChargeGate:        [900, 5000]
+      MaxSSR:            200000      
           
 
 #==================================================      

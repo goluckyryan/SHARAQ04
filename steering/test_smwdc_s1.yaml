@@ -21,7 +21,7 @@ Processor:
   - include: nyoki.yaml                    # reuire plastic_V775 for tof
   - include: smwdc_S1_TableConvert.yaml    # require nyoki
 #  - include: smwdc_S1_track.yaml
-  - include: smwdc_S1_cal.yaml #no coinReg gate
+#  - include: smwdc_S1_cal.yaml #no coinReg gate
       
 #==================================================      
   - name: outputtree

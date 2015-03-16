@@ -1,0 +1,40 @@
+# require : 
+# output : 
+
+Processor:
+  - name: proc_pid_upstream
+    type: art::sh04::TResidualPIDProcessor #this is made for downstream residual. using it for upstream may fail.
+    parameter:
+      ChargeCollection:  plaV1190_FH9
+      TOFCollection:     tof_US
+      Output:     pid_us
+      MWDCCollection: S0img   # dummy
+      Parameter0:  -4960.      #-4930.   # L = Q - p0
+      Parameter1:  8.042       # g = k*A, dE = k z^2/beta^2 
+      Parameter2:  0.003698    # h = k*B, L = A *dE/(1+B*dE)
+      Dispersion:  999999999
+      TimeOffset:  1845.06  # tof = t + TimeOffset
+      FlightLength:  74075.
+      FL1:           0.
+      FL2:           0.
+      BeamParameter: beam  #over-rided by Brho_D1
+      Brho_D1:     7.1315
+      
+  - name: proc_pid_downstream
+    type: art::sh04::TResidualPIDProcessor
+    parameter:
+      ChargeCollection:  nyoki_t
+      TOFCollection:     tof_D1
+      Output:     pid_ds
+      MWDCCollection: smwdc_S1   
+      Parameter0:  -500.   # L = Q - p0
+      Parameter1:  18.4    #
+      Parameter2:  0.00898 #
+      Dispersion:  -1427  # tetatively
+      TimeOffset:  0.
+      FlightLength:   6903 #
+      FL1:           -0.451752. 
+      FL2:           0.0003021347
+      BeamParameter: beam
+      Brho_D1:       7.1315
+#===========================================================

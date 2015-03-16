@@ -1,7 +1,7 @@
 aliases:
   - &beamZ      0.
-  - &tofShift_L 0.  #time shift (tgt to Tpla)
-  - &tofShift_R 0.  #time shift (tgt to Tpla)
+  - &tofShift_L -1.1  #time shift (tgt to Tpla)
+  - &tofShift_R -0.9  #time shift (tgt to Tpla)
 #============== PROCESSORS     =============================
 Processor:
   - name: tpla_tof

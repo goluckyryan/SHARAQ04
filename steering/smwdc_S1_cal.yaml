@@ -1,13 +1,13 @@
 ######################################################################
 # TMWDCCalibrationProcessor, run for first time. run $ mwdccalib
-# only run for frist time to geneterate DT2DL table
 # change the TimingGate and ChargeGate
 alias:
 - &tmin -100
-- &tmax 300
+- &tmax 170
 - &qmin 350
 - &qmax 5000
-- &usemax 1
+- &usemax 0  #use max charge
+- &useSingleHit 0
 
 Processor:
   - name: mwdccalib_smwdc_S1_x1
@@ -17,7 +17,8 @@ Processor:
       TimingGate:        [*tmin, *tmax]
       ChargeGate:        [*qmin, *qmax]
       UseMax:            *usemax
-      Gate:              abs(smwdc_S1_x1.fID-29)>2
+      SingleHit:         *useSingleHit
+#      Gate:              "smwdc_S1_x1.fID!=+29"
 
   - name: mwdccalib_smwdc_S1_x2
     type: art::TMWDCCalibrationProcessor
@@ -26,7 +27,8 @@ Processor:
       TimingGate:       [*tmin, *tmax]
       ChargeGate:       [*qmin, *qmax]
       UseMax:            *usemax
-      Gate:              abs(smwdc_S1_x2.fID-29)>2
+      SingleHit:         *useSingleHit
+#      Gate:              "smwdc_S1_x2.fID!=+29"
 
   - name: mwdccalib_smwdc_S1_u1
     type: art::TMWDCCalibrationProcessor
@@ -35,7 +37,8 @@ Processor:
       TimingGate:       [*tmin, *tmax]
       ChargeGate:       [*qmin, *qmax]
       UseMax:            *usemax
-      Gate:              abs(smwdc_S1_u1.fID-24)>1
+      SingleHit:         *useSingleHit
+#      Gate:              "smwdc_S1_u1.fID!=+24"
 
   - name: mwdccalib_smwdc_S1_u2
     type: art::TMWDCCalibrationProcessor
@@ -44,7 +47,8 @@ Processor:
       TimingGate:     [*tmin, *tmax]
       ChargeGate:     [*qmin, *qmax]
       UseMax:            *usemax
-      Gate:              abs(smwdc_S1_u2.fID-24)>1
+      SingleHit:         *useSingleHit
+#      Gate:              "smwdc_S1_u2.fID!=+24"
 
   - name: mwdccalib_smwdc_S1_v1
     type: art::TMWDCCalibrationProcessor
@@ -52,8 +56,9 @@ Processor:
       InputCollection: smwdc_S1_v1
       TimingGate:     [*tmin, *tmax]
       ChargeGate:     [*qmin, *qmax]
-      UseMax:            *usemax
-      Gate:           abs(smwdc_S1_u1.fID-22)>1
+      UseMax:         *usemax
+      SingleHit:         *useSingleHit
+#      Gate:           smwdc_S1_v1.fCharge>350
 
   - name: mwdccalib_smwdc_S1_v2
     type: art::TMWDCCalibrationProcessor
@@ -62,7 +67,8 @@ Processor:
       TimingGate:     [*tmin, *tmax]
       ChargeGate:     [*qmin, *qmax]
       UseMax:            *usemax
-      Gate:           abs(smwdc_S1_u2.fID-22)>1
+      SingleHit:         *useSingleHit
+#      Gate:           smwdc_S1_v2.fCharge>350
       
 #==================================================      
 

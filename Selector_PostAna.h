@@ -5,8 +5,8 @@
 // found on file: 23F_0208.root
 //////////////////////////////////////////////////////////
 
-#ifndef PostSelector_h
-#define PostSelector_h
+#ifndef Selector_PostAna_h
+#define Selector_PostAna_h
 
 #include <TROOT.h>
 #include <TChain.h>
@@ -23,13 +23,15 @@
 
 // Fixed size dimensions of array or collections stored in the TTree if any.
 
-class PostSelector : public TSelector {
+class Selector_PostAna : public TSelector {
 public :
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
    
    //  STore in new ROOT file
    TFile * saveFile;
    TTree * newTree;
+   
+   TString saveFileName;
    
    Int_t totnumEntry;
    Double_t kInvalidD = TMath::QuietNaN();
@@ -81,11 +83,9 @@ public :
    TClonesArray    *nyoki;
    TClonesArray    *nyoki_t;
    TClonesArray    *tof_D1;
-   TClonesArray    *tof_D1_t;
    TClonesArray    *smwdc_S1;
    art::sh04::TParticleIdentifier *pid_us;
    art::sh04::TParticleIdentifier *pid_ds;
-   art::sh04::TParticleIdentifier *pid_ds_t;
    TClonesArray    *vertex;
    TClonesArray    *tofL;
    TClonesArray    *tofR;
@@ -112,11 +112,9 @@ public :
    TBranch        *b_nyoki;   //!
    TBranch        *b_nyoki_t;   //!
    TBranch        *b_tof_D1;   //!
-   TBranch        *b_tof_D1_t;   //!
    TBranch        *b_smwdc_S1;   //!
    TBranch        *b_pid_us;   //!
    TBranch        *b_pid_ds;   //!
-   TBranch        *b_pid_ds_t;   //!
    TBranch        *b_vertex;   //!
    TBranch        *b_tofL;   //!
    TBranch        *b_tofR;   //!
@@ -126,8 +124,8 @@ public :
    TBranch        *b_p2p_c;   //!
    TBranch        *b_p2p_c_lab;   //!
 
-   PostSelector(TTree * /*tree*/ =0) : fChain(0) { }
-   virtual ~PostSelector() { }
+   Selector_PostAna(TTree * /*tree*/ =0) : fChain(0) { }
+   virtual ~Selector_PostAna() { }
    virtual Int_t   Version() const { return 2; }
    virtual void    Begin(TTree *tree);
    virtual void    SlaveBegin(TTree *tree);
@@ -142,13 +140,13 @@ public :
    virtual void    SlaveTerminate();
    virtual void    Terminate();
 
-   ClassDef(PostSelector,0);
+   ClassDef(Selector_PostAna,0);
 };
 
 #endif
 
-#ifdef PostSelector_cxx
-void PostSelector::Init(TTree *tree)
+#ifdef Selector_PostAna_cxx
+void Selector_PostAna::Init(TTree *tree)
 {
    // The Init() function is called when the selector needs to initialize
    // a new tree or chain. Typically here the branch addresses and branch
@@ -177,11 +175,9 @@ void PostSelector::Init(TTree *tree)
    nyoki = 0;
    nyoki_t = 0;
    tof_D1 = 0;
-   tof_D1_t = 0;
    smwdc_S1 = 0;
    pid_us = 0;
    pid_ds = 0;
-   pid_ds_t = 0;
    vertex = 0;
    tofL = 0;
    tofR = 0;
@@ -211,11 +207,9 @@ void PostSelector::Init(TTree *tree)
    fChain->SetBranchAddress("nyoki", &nyoki, &b_nyoki);
    fChain->SetBranchAddress("nyoki_t", &nyoki_t, &b_nyoki_t);
    fChain->SetBranchAddress("tof_D1", &tof_D1, &b_tof_D1);
-   fChain->SetBranchAddress("tof_D1_t", &tof_D1_t, &b_tof_D1_t);
    fChain->SetBranchAddress("smwdc_S1", &smwdc_S1, &b_smwdc_S1);
    fChain->SetBranchAddress("pid_us", &pid_us, &b_pid_us);
    fChain->SetBranchAddress("pid_ds", &pid_ds, &b_pid_ds);
-   fChain->SetBranchAddress("pid_ds_t", &pid_ds_t, &b_pid_ds_t);
    fChain->SetBranchAddress("vertex", &vertex, &b_vertex);
    fChain->SetBranchAddress("tofL", &tofL, &b_tofL);
    fChain->SetBranchAddress("tofR", &tofR, &b_tofR);
@@ -226,7 +220,12 @@ void PostSelector::Init(TTree *tree)
    fChain->SetBranchAddress("p2p_c_lab", &p2p_c_lab, &b_p2p_c_lab);
    
    //Store in New ROOT file
-   saveFile = new TFile( "test.root","recreate");
+   saveFileName = fChain->GetDirectory()->GetName();
+   saveFileName = "P_"+saveFileName;
+   
+   printf("Converting %s ------> %s \n", fChain->GetDirectory()->GetName(), saveFileName.Data());
+   
+   saveFile = new TFile( saveFileName,"recreate");
    newTree =  new TTree("tree","tree");
    
    eventID = -1;
@@ -321,7 +320,7 @@ void PostSelector::Init(TTree *tree)
    
 }
 
-Bool_t PostSelector::Notify()
+Bool_t Selector_PostAna::Notify()
 {
    // The Notify() function is called when a new file is opened. This
    // can be either for a new TTree in a TChain or when when a new TTree
@@ -332,4 +331,4 @@ Bool_t PostSelector::Notify()
    return kTRUE;
 }
 
-#endif // #ifdef PostSelector_cxx
+#endif // #ifdef Selector_PostAna_cxx

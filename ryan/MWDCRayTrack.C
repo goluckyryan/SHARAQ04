@@ -4,7 +4,7 @@ void MWDCRayTrack() {
 //############################################################################  
 //   const char* rootfile="PrimaryData/phys23F.root"; 
 //   const char* rootfile="ppAll_1105.root";
-   const char* rootfile="23F_0112.root"; 
+   const char* rootfile="test_run24_LRS1.root"; 
    
    TString mwdcName = "smwdc_S1";
    

@@ -1,0 +1,18 @@
+aliases:
+  - &gate "Gate: 23F"
+
+#=========================================================
+group:
+  - name: transportation
+    title: Transportation
+    contents:
+    - name: h1
+      title: *gate
+      x: [plaV775.fID, 15, -2, 13]
+      cut: *gate
+      
+    - name: h2
+      title: coinReg
+      x: [plaV775.fID, 15, -2, 13]
+      cut: *gate  
+    
