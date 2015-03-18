@@ -5,7 +5,8 @@ void NyokiTCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t a_adj=0, Double
 
 //############################################################################  
 //   const char* rootfile="PrimaryData/phys23F.root"; 
-   const char* rootfile="23F_run24_nyokiCali.root"; 
+   //const char* rootfile="23F_ppcoin_0314.root"; 
+   const char* rootfile="test_run24.root"; 
    
    Bool_t allentry  = 1;
    Int_t firstEntry = 0;
@@ -15,7 +16,7 @@ void NyokiTCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t a_adj=0, Double
    
    Int_t nBin = 100;
    Double_t diffRange[2] = {-3,3};
-   Double_t nyokiRange[2] = {-260, -230};
+   Double_t nyokiRange[2] = {-260, -200};
 
 //############################################################################
    TFile *f = new TFile(rootfile,"read");
@@ -30,8 +31,8 @@ void NyokiTCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t a_adj=0, Double
    printf("totEntries:%d, nEntries:%.d [%5.2f%%]\n", totEntries, nEntries, 100.*nEntries/totEntries);
    
 //############################################################################ 
-	if ( gROOT->FindObject("cNyokiQ")){
-		delete cNyokiQ;
+	if ( gROOT->FindObject("cNyokiT")){
+		delete cNyokiT;
 	}
 	
 	if( gROOT->FindObject("hTab")){
@@ -40,8 +41,8 @@ void NyokiTCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t a_adj=0, Double
 	}
  
    Int_t Div[2] = {2,1};
-   TCanvas * cNyokiQ = new TCanvas("cNyokiQ", "Nyoki Q Calibaration", 2000, 50, 400*Div[0], 400*Div[1]);
-   cNyokiQ->Divide(Div[0],Div[1]);
+   TCanvas * cNyokiT = new TCanvas("cNyokiT", "Nyoki Q Calibaration", 2000, 50, 400*Div[0], 400*Div[1]);
+   cNyokiT->Divide(Div[0],Div[1]);
 
    gStyle->SetOptStat(0);
    TString hTitle;
@@ -76,6 +77,8 @@ void NyokiTCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t a_adj=0, Double
    clock.Reset();
    clock.Start("timer");
    Bool_t shown = 0;
+
+   Int_t count = 0;
    
 //############################################################################  
    for( Int_t eventID = firstEntry; eventID < endEntry; eventID ++){
@@ -121,7 +124,7 @@ void NyokiTCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t a_adj=0, Double
       //--------- Fill Hist      	
 		hTab->Fill(b_adj*timing[nyokiID[0]]+a_adj, timing[nyokiID[1]]);
 		hTdiff->Fill(timing[nyokiID[1]] - (b_adj*timing[nyokiID[0]]+a_adj) );
-   	
+        count ++;
       	//printf(" nyoki-7, nyoki-8 = %.3f, %.3f \n", timing[7], timing[8]);
 
 		//------------------
@@ -154,14 +157,16 @@ void NyokiTCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t a_adj=0, Double
 	
 	TF1* fit = new TF1("fit", "[0]+[1]*x", nyokiRange[0], nyokiRange[1]);
 	
-	cNyokiQ->cd(1);
+	cNyokiT->cd(1);
 	hTab->Draw("colz");
 	TLine line;
 	line.DrawLine(nyokiRange[0], nyokiRange[0], nyokiRange[1], nyokiRange[1]);
 	
 	
-	cNyokiQ->cd(2);
+	cNyokiT->cd(2);
 	hTdiff->Draw();
+
+    printf("effective count: %d \n",count);
 	
 	/*
 	hTab->ProfileY("_pfy")->Draw();
@@ -180,7 +185,7 @@ void NyokiTCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t a_adj=0, Double
 	textStr.Form("slope: %5.3f (%5.3f)", b, err_b); text.DrawLatex(0.5,0.35, textStr);
 	
 	/*
-	cNyokiQ->cd(3);
+	cNyokiT->cd(3);
 	hTab->ProfileX("_pfx")->Draw();
 	hTab_pfx->SetTitle("ProfileX");
 	hTab_pfx->SetMinimum(nyokiRange[0]);

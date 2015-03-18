@@ -1,6 +1,6 @@
 aliases:
 # beware to overwrite !!!
-  - &output 23F_ppcoin_0316_timeoffset.root
+  - &output test_run24.root
  
 #  - &beamprm prm/kinematics/proton.yaml
 #  - &beamprm prm/kinematics/14O.yaml  
@@ -15,8 +15,8 @@ Processor:
 #  - include: RunsProtonUp.yaml
 #  - include: RunsProtonDown.yaml
 #----------------------------------
-  - include: RunsO22.yaml
-#  - include: RunsO22_single.yaml
+#  - include: RunsO22.yaml
+  - include: RunsO22_single.yaml
 #  - include: RunsO22_clean.yaml
 #  - include: RunsO22_optics.yaml
 #----------------------------------
@@ -35,7 +35,7 @@ Processor:
 #============== PROCESSORS     =============================
   - include: coinReg.yaml
   - include: Gate_Initialtor.yaml
-  - include: Gate_stop_ppcoin.yaml
+#  - include: Gate_stop_ppcoin.yaml
 
 ########----------------- BigRIPS & plastics
   - include: plastic_V1190_prm.yaml
@@ -54,7 +54,7 @@ Processor:
 #  - include: Gate_PID_14Orun.yaml
 #  - include: Gate_PID_24Orun.yaml
 
-  - include: Gate_stop_PID_23F.yaml 
+#  - include: Gate_stop_PID_23F.yaml 
 #  - include: Gate_stop_PID_22O.yaml
 #  - include: Gate_stop_PID_14O.yaml
 #  - include: Gate_stop_PID_25F.yaml 
@@ -70,17 +70,17 @@ Processor:
 #  - include: Gate_stop_Crystal_r7.yaml
 
 ########----------------- DCS0D  
-  - include: dcS0D.yaml    
-  - include: dcS0D_track.yaml   
+#  - include: dcS0D.yaml    
+#  - include: dcS0D_track.yaml   
 
 ########----------------- MWDC-L and R
-  - include: plastic_V767_timeRef.yaml
-  - include: plastic_V767.yaml
-  - include: smwdc_l_PolyConvert.yaml
-  - include: smwdc_l_track.yaml  
-  - include: smwdc_r_PolyConvert.yaml     
-  - include: smwdc_r_track.yaml
-
+#  - include: plastic_V767_timeRef.yaml
+#  - include: plastic_V767.yaml
+#  - include: smwdc_l_PolyConvert.yaml
+#  - include: smwdc_l_track.yaml  
+#  - include: smwdc_r_PolyConvert.yaml     
+#  - include: smwdc_r_track.yaml
+#
 ########----------------- D1 analysis
   - include: s1_time_ref.yaml              # required
 #  - include: nyoki_NoAdjust.yaml
@@ -97,22 +97,22 @@ Processor:
 #  - include: PID_24Orun.yaml
 
 ########----------------- Physics
-  - name: proc_beam
-    type: art::TParameterLoader
-    parameter:
-      Name:     beam
-      Type:     art::sh04::TBeamParameter
-      FileName: *beamprm
-  
-#  - include: RecoilTOF.yaml # should be switch off when recoil switch on
-  - include: smwdc_geo.yaml
-  - include: beamZ.yaml
-  - include: vertex.yaml
-  - include: recoil.yaml                   # set beamZ, angle correction
-  - include: recoil_carbon.yaml
-#  - include: recoil_multiOffset.yaml
-#  - include: Gate_PIDdownstream_polygon.yaml
-  - include: Gate_PIDdownstream_rectangle.yaml
+#  - name: proc_beam
+#    type: art::TParameterLoader
+#    parameter:
+#      Name:     beam
+#      Type:     art::sh04::TBeamParameter
+#      FileName: *beamprm
+#  
+##  - include: RecoilTOF.yaml # should be switch off when recoil switch on
+#  - include: smwdc_geo.yaml
+#  - include: beamZ.yaml
+#  - include: vertex.yaml
+#  - include: recoil.yaml                   # set beamZ, angle correction
+#  - include: recoil_carbon.yaml
+##  - include: recoil_multiOffset.yaml
+##  - include: Gate_PIDdownstream_polygon.yaml
+#  - include: Gate_PIDdownstream_rectangle.yaml
 
 ########----------------- Hist
 #  - name: projection

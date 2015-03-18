@@ -178,8 +178,9 @@ Bool_t Selector_PostAna::Process(Long64_t entry)
         }
         
         
-        Ex = p2p->GetSp2()-13.26;	
-        if( TMath::IsNaN(p2p->GetSp()) && TMath::IsNaN(Ex) ) {return kTRUE;}
+        Ex = p2p->GetSp2()-13.26;
+        ExS = p2p->GetSp()-13.26;
+        //if( TMath::IsNaN(ExS) && TMath::IsNaN(Ex) ) {return kTRUE;}
         //printf("%f, %f \n", s1x, Ex);
 
         //______________________________________________________________ p2p_c

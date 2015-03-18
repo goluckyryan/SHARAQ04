@@ -78,7 +78,7 @@ Processor:
       StartTimingCollection:  plaV775         
       StartTimingDetID:       4
       UseMultipleStartTiming: 0         
-      OutputTransparency:     0  
+      OutputTransparency:     1
                 
   - name: mwdc_dcs0d
     type: art::TMWDCPlaneProcessor
@@ -90,6 +90,6 @@ Processor:
         - dcs0d_x2_dtdx
         - dcs0d_y1_dtdx
         - dcs0d_y2_dtdx 
-      OutputTransparency: 0
+      OutputTransparency: 1
           
 #==================================================      

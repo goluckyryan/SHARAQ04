@@ -60,6 +60,7 @@ public :
 	Double_t theta1, theta2;
 	Double_t phi1, phi2;
 	Double_t Ex;// Sp2 - 13.26;
+	Double_t ExS;// Sp - 13.26;
 	Double_t kMomt; // redisual momentum
 	//carbon
 	Double_t theta1c, theta2c;
@@ -259,6 +260,7 @@ void Selector_PostAna::Init(TTree *tree)
 	phi1 = kInvalidD; 
 	phi2 = kInvalidD;
 	Ex = kInvalidD; // Sp2 - 13.26;
+	ExS = kInvalidD; // Sp - 13.26;
 	kMomt = kInvalidD; // redisual momentum
 	
 	theta1c = kInvalidD;
@@ -308,6 +310,7 @@ void Selector_PostAna::Init(TTree *tree)
 	newTree->Branch("phi1",&phi1,"phi1/D");
 	newTree->Branch("phi2",&phi2,"phi2/D");
 	newTree->Branch("Ex",&Ex,"Ex/D");
+	newTree->Branch("ExS",&ExS,"ExS/D");
 	newTree->Branch("kMomt",&kMomt,"kMomt/D");
 
 	

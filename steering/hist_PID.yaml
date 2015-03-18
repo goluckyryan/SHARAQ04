@@ -4,7 +4,7 @@ group:
     contents:      
 #============================ CoinReg, 3 bits 
     - name: CoinReg
-      title: CoinReg Bin=ABC, Dec = 4*A + 2*B + C
+      title: CoinReg Bin=ABC, Dec = 4*A + 2*B + C, A = ppcoin, B = beam
       x: ["coinReg.fQuality & 7", 10, -1, 9] 
     
 #============================ Upstream PID 
@@ -12,6 +12,7 @@ group:
       title: PID updtream
       x: [tof_US.fTiming, 500, -1490, -1420]
       y: [plaV1190_FH9.fCharge, 500, 4900, 6200]
+      async: 1
       
     - name: PIDupstream_Z_AoQ
       title: PID upstream 

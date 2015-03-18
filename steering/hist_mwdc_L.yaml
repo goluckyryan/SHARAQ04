@@ -20,11 +20,12 @@ group:
       x: [plaV767.fTiming, 500, -500, 500]
       cut: plaV767.fID == 0
       
-    - name:  raw_time
-      title: MWDC-L vs Tpla v767 Raw Time
+    - name:  time_Correlation
+      title: MWDC-L vs Tpla v767 Timing
       x: [plaV767.fTiming, 500, -500, 500]
       y: [smwdc_L_cal.fTiming, 500, -500, 500]
       cut: plaV767.fID == 0
+      async: 1
 
     #------------------ DT
     - name:  L_DT

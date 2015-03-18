@@ -45,6 +45,8 @@ void NyokiQCali_single() {
    hQab->SetYTitle(hQabY);
 //############################################################################   
    TClonesArray  *hoge_nyoki;
+   tree->SetBranchStatus("*",0);
+   tree->SetBranchStatus("nyoki",1);
    tree->SetBranchAddress("nyoki",&hoge_nyoki);
 	//art::TTimingChargeData * data;
    
@@ -55,7 +57,7 @@ void NyokiQCali_single() {
    
 //############################################################################  
    for( Int_t eventID = firstEntry; eventID < endEntry; eventID ++){
-      tree->GetEntry(eventID);
+     tree->GetEntry(eventID,0);
       
 		//--------- initialization
    	Double_t Qa = TMath::QuietNaN();

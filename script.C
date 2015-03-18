@@ -18,16 +18,15 @@
         printf("=====> /// %15s //// is loaded. Total #Entry: %10d \n", rootfile,  tree->GetEntries());
 /**/
 //======================================================== Browser or Canvas
-        TBrowser B("Bscript",rootfile, 900,600); 	
+//        TBrowser B("Bscript",rootfile, 900,600); 	
         
         
         //tree->Process("Selector_Nyoki.C");
         //tree->Process("Selector_PostAna.C");
         //tree->Process("Selector_MWDC_S0D_charge.C");
         //tree->Process("Selector_Aux.C");
-        //tree->Process("Selector_DTDL.C");
 
-/*        
+        
         Int_t Div[2] = {5,3};  //x,y
         Int_t size[2] = {300,300}; //x,y
         TCanvas * cScript = new TCanvas("cScript", "cScript", 0,0 , size[0]*Div[0], size[1]*Div[1]);
