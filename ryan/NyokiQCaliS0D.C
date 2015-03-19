@@ -4,7 +4,8 @@ void NyokiQCaliS0D() {
   gStyle->SetOptStat(0);
 
   //const char* rootfile="23F_ppcoin_0314.root";
-  const char* rootfile="test_run23.root";
+  //const char* rootfile="test_run23_nyokiQ_ppcoin_Q_calib.root";
+  const char* rootfile="test.root";
 
   TString plotName = "Multiplicity of nyoki";
   TString branch = "nyoki"; // branch anme
@@ -62,19 +63,26 @@ void NyokiQCaliS0D() {
   tree->SetBranchStatus("*",0);
   tree->SetBranchStatus("plaV775",1);
   tree->SetBranchStatus("nyoki",1);
+  tree->SetBranchStatus("gate",1);
 
   TClonesArray *hoge_v775 = 0;
   TClonesArray *hoge_nyoki = 0;
+  art::TGateArray *hoge_gate;
   tree->SetBranchAddress("plaV775",&hoge_v775);
   tree->SetBranchAddress("nyoki",&hoge_nyoki);
+  tree->SetBranchAddress("gate",&hoge_gate);
   
   Double_t s0DQ = kInvalidD;
-  Double_t nQ[14];
+  Double_t nQ[14], nT[14];
 
   for( Int_t eventID = 0; eventID < totnumEntry; eventID ++ ){
     tree->GetEntry(eventID,0);
     
+    if( !hoge_gate->Test(0) )continue;
+    
     h1D->Fill(hoge_nyoki->GetEntriesFast());
+    
+    
     
     //____________________ get S0DPL Q
     s0DQ = kInvalidD;
@@ -93,11 +101,17 @@ void NyokiQCaliS0D() {
     if( hitFlag == 0 ) continue; 
       
     //____________________ get nyoki Q 
-    for( Int_t p = 0; p < 14; p++){ nQ[p] = kInvalidD;}
+    for( Int_t p = 0; p < 14; p++){ 
+      nQ[p] = kInvalidD;
+      nT[p] = kInvalidD;
+    }
     Int_t nHit = hoge_nyoki -> GetEntriesFast();
     for( Int_t p = 0; p < nHit; p++){
         Int_t id = (art::TTimingChargeData*) hoge_nyoki->At(p))->GetID(); 
         nQ[id] = ((art::TTimingChargeData*) hoge_nyoki->At(p))->GetCharge();
+        nT[id] = ((art::TTimingChargeData*) hoge_nyoki->At(p))->GetTiming();
+        
+        if( nT[id] < timeGate[0] || nT[id] > timeGate[1]) continue;
         
         hn->Fill(id, nQ[id]);
         

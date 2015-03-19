@@ -4,7 +4,8 @@ void NyokiQCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t intercept_adj=0
 //############################################################################  
   //const char* rootfile="PrimaryData/phys23F.root"; 
   //const char* rootfile="23F_ppcoin_0314.root"; 
-  const char* rootfile="test_run23.root"; 
+  //const char* rootfile="test_run24_nyokiQ_ppcoin_Q_calib.root"; 
+  const char* rootfile="test_run24.root"; 
 
   Bool_t allentry  = 1;
   Int_t firstEntry = 0;

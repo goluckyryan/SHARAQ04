@@ -11,25 +11,26 @@ void test(TString rootfile, TString branch_name){
   tree->SetBranchStatus("*",0);
   tree->SetBranchStatus(branch_name,1);
 
-  TClonesArray    *plaV775 = 0;
-  TBranch        *b_plaV775;   //!
-  tree->SetBranchAddress("plaV775", &plaV775, &b_plaV775);
+  //TClonesArray    *plaV775 = 0;
+  //TBranch        *b_plaV775;   //!
+  //tree->SetBranchAddress("plaV775", &plaV775, &b_plaV775);
 
   //art::TTimingChargeData * event = new art::TTimingChargeData();
   //TBranch * branch = tree->GetBranch(branch_name);
   //branch->SetAddress(&event);
   
-  //TClonesArray  *hoge;
-  //tree->SetBranchAddress(branch_name,&hoge);
+  TClonesArray  *hoge = 0;
+  tree->SetBranchAddress(branch_name,&hoge);
   
   
 //############################################################################  
   for( Int_t eventID = 0; eventID < totEntries; eventID ++){
-    //tree->GetEntry(eventID,0);
+    tree->GetEntry(eventID,0);
 
-    b_plaV775->GetEntry(eventID);
+    //b_plaV775->GetEntry(eventID);
     
     
+    hoge->Clear();
     
     //event->Clear();
     //________________________________ Get S0D charge
