@@ -5,7 +5,7 @@ void NyokiQCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t intercept_adj=0
   //const char* rootfile="PrimaryData/phys23F.root"; 
   //const char* rootfile="23F_ppcoin_0314.root"; 
   //const char* rootfile="test_run24_nyokiQ_ppcoin_Q_calib.root"; 
-  const char* rootfile="test_run24.root"; 
+  const char* rootfile="test.root"; 
 
   Bool_t allentry  = 1;
   Int_t firstEntry = 0;
@@ -13,17 +13,17 @@ void NyokiQCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t intercept_adj=0
 
   Int_t nyokiID[2] = {nyokiIDa, nyokiIDb};
 
-  Double_t nyokiRange[2] = {700, 2200};
+  Double_t nyokiRange[2] = {500, 4500};
   Double_t timeGate[2] = {-270,-210};
-
+  
 //############################################################################
   TFile *f = new TFile(rootfile,"read");
   printf(">> %s <<< is loaded.\n",rootfile);
   TTree *tree = (TTree*)f->Get("tree");
   Int_t totEntries = tree->GetEntries();
   if(allentry){
-  firstEntry = 0;
-  nEntries = totEntries;
+    firstEntry = 0;
+    nEntries = totEntries;
   }
   Int_t endEntry = firstEntry + nEntries;
   printf("totEntries:%d, nEntries:%.d [%5.2f%%]\n", totEntries, nEntries, 100.*nEntries/totEntries);
@@ -55,7 +55,7 @@ void NyokiQCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t intercept_adj=0
   hQab->SetYTitle(yTitle);
 
   hTitle.Form("Nyoki Q diff, %d - %d", nyokiID[1], nyokiID[0]);
-  TH1F* hDiff = new TH1F("hDiff", hTitle, 100,  -100, 100);
+  TH1F* hDiff = new TH1F("hDiff", hTitle, 100,  -300, 300);
 
   hTitle.Form("Nyoki Q ratio, %d / %d", nyokiID[1], nyokiID[0]);
   TH1F* hRatio = new TH1F("hRatio", hTitle, 100,  0.8, 1.2);
@@ -63,9 +63,12 @@ void NyokiQCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t intercept_adj=0
 //############################################################################   
   tree->SetBranchStatus("*",0);
   tree->SetBranchStatus("nyoki",1);
+  tree->SetBranchStatus("gate",1);
 
+  art::TGateArray *gate;
   TClonesArray  *hoge_nyoki;
   tree->SetBranchAddress("nyoki",&hoge_nyoki);
+  tree->SetBranchAddress("gate",&gate);
   //art::TTimingChargeData * data;
 
   Double_t charge[14];
@@ -80,7 +83,10 @@ void NyokiQCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t intercept_adj=0
 
 //############################################################################  
   for( Int_t eventID = firstEntry; eventID < endEntry; eventID ++){
-  tree->GetEntry(eventID,0);
+    tree->GetEntry(eventID,0);
+    
+    if( !gate->Test(12)) continue;
+    //if( !gate->Test(1)) continue;
 
     //--------- initialization
     for( Int_t i = 0; i < 14; i++){
@@ -106,18 +112,17 @@ void NyokiQCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t intercept_adj=0
     if( TMath::IsNaN(charge[nyokiID[0]]) || TMath::IsNaN(charge[nyokiID[1]]) ) continue;
 
     if( charge[nyokiID[0]]<nyokiRange[0] || charge[nyokiID[0]]>nyokiRange[1] ) continue;
-
     if( charge[nyokiID[1]]<nyokiRange[0] || charge[nyokiID[1]]>nyokiRange[1] ) continue;
 
-    if( TMath::Abs(charge[nyokiID[0]] - charge[nyokiID[1]]) > 300 ) continue;
+    //if( TMath::Abs(charge[nyokiID[0]] - charge[nyokiID[1]]) > 300 ) continue;
 
-    hQab->Fill(slope_adj*charge[nyokiID[0]]+intercept_adj, charge[nyokiID[1]]);
+    hQab->Fill(slope_adj*charge[nyokiID[0]] + intercept_adj, charge[nyokiID[1]]);
 
     //printf(" nyoki-7, nyoki-8 = %.3f, %.3f \n", charge[7], charge[8]);
 
-    hDiff->Fill(charge[nyokiID[1]] - (slope_adj*charge[nyokiID[0]]+intercept_adj) );
+    hDiff->Fill(charge[nyokiID[1]] - (slope_adj*charge[nyokiID[0]] + intercept_adj) );
 
-    hRatio->Fill(charge[nyokiID[1]] /( slope_adj*charge[nyokiID[0]]+intercept_adj ));
+    hRatio->Fill(charge[nyokiID[1]] /( slope_adj*charge[nyokiID[0]] + intercept_adj ));
     
     count ++;
 

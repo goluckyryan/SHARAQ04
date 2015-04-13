@@ -1,6 +1,6 @@
 aliases:
 # beware to overwrite !!!
-  - &output 23F_run24.root
+  - &output test_X.root
  
 #  - &beamprm prm/kinematics/proton.yaml
 #  - &beamprm prm/kinematics/14O.yaml  
@@ -16,9 +16,9 @@ Processor:
 #  - include: RunsProtonDown.yaml
 #----------------------------------
 #  - include: RunsO22.yaml
-#  - include: RunsO22_single.yaml
+  - include: RunsO22_single.yaml
 #  - include: RunsO22_clean.yaml
-  - include: RunsO22_optics.yaml
+#  - include: RunsO22_optics.yaml
 #----------------------------------
 #  - include: RunsO14_single.yaml
 #  - include: RunsO14_Up.yaml
@@ -62,13 +62,13 @@ Processor:
 #  - include: Gate_stop_PID_25F.yaml 
 
 ########----------------- S0img  
-#  - include: dcx1x2_timeRef.yaml           # required for dcx1 and dcx2
-#  - include: dcx1.yaml
+  - include: dcx1x2_timeRef.yaml           # required for dcx1 and dcx2
+  - include: dcx1.yaml
 #  - include: dcx1_track.yaml
-#  - include: dcx2.yaml
+  - include: dcx2.yaml
 #  - include: dcx2_track.yaml
-#  - include: S0img.yaml
-#  - include: Gate_S0img.yaml
+  - include: S0img.yaml
+  - include: Gate_S0img.yaml
 #  - include: Gate_stop_Crystal_r7.yaml
 
 ########----------------- DCS0D  
@@ -85,10 +85,11 @@ Processor:
 #
 ########----------------- D1 analysis
   - include: s1_time_ref.yaml              # required
-  - include: nyoki_NoAdjust.yaml
+#  - include: nyoki_NoAdjust.yaml
   - include: nyoki.yaml                    # require plastic_V775 for tof, and s1_time_ref
-#  - include: smwdc_S1_TableConvert.yaml    # require nyoki and s1_time_ref
-#  - include: smwdc_S1_track.yaml
+  - include: smwdc_S1_TableConvert.yaml    # require nyoki and s1_time_ref
+#  - include: smwdc_s1_PolyConvert.yaml
+  - include: smwdc_S1_track.yaml
 #  - include: smwdc_S1_TableConvert_Zero.yaml
 #  - include: smwdc_S1_track_Zero.yaml
 #  - include: smwdc_S1_cal.yaml
@@ -116,11 +117,11 @@ Processor:
 #  - include: Gate_PIDdownstream_rectangle.yaml
 
 ########----------------- Hist
-#  - name: projection
-#    type: art::TTreeProjectionProcessor
-#    parameter:
-#      Type:  art::TTreeProjection
-#      FileName: steering/hist.yaml
+  - name: projection
+    type: art::TTreeProjectionProcessor
+    parameter:
+      Type:  art::TTreeProjection
+      FileName: steering/hist.yaml
 #      FileName: steering/hist_dsPID_2.yaml
 
 #============== Output     =============================

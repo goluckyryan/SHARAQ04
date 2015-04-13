@@ -1,4 +1,3 @@
-
 # require :plastic_V767_timeRef.yaml
 # output : plaV767
 
@@ -9,7 +8,14 @@ Processor:
       Name:     prm_pla_V767
       Type:     art::TAffineConverter
       FileName: prm/plastic/V767_ch2ns.dat
-
+      
+#  - name: timeGate_V767
+#    type: art::TParameterArrayLoader
+#    parameter:
+#      Name:     timeGate_pla_V767
+#      Type:     art::TIDGatingConverter
+#      FileName: prm/plastic/V767_timeGate.dat
+      
   - name: plastic_V767_L_raw
     type: art::TTimingChargeMappingProcessor
     parameter:

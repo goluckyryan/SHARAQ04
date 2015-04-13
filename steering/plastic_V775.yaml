@@ -35,7 +35,7 @@ Processor:
       InputCollection:      plaV775_L_raw
       OutputCollection:     plaV775_L_cal
       TimingConverterArray: prm_pla_V775_L
-      OutputTransparency:   1
+      OutputTransparency:   0
 
   - name: plastic_V775_R_raw
     type: art::TTimingChargeMappingProcessor
@@ -53,7 +53,7 @@ Processor:
       InputCollection:      plaV775_R_raw
       OutputCollection:     plaV775_R_cal
       TimingConverterArray: prm_pla_V775_R
-      OutputTransparency:   1
+      OutputTransparency:   0
 
   - name: plastic_cal_V775
     type: art::TTwoSidedPlasticCalibrationProcessor

@@ -3,8 +3,8 @@
 # change the TimingGate and ChargeGate
 alias:
 - &tmin -100
-- &tmax 170
-- &qmin 350
+- &tmax 200
+- &qmin 00
 - &qmax 5000
 - &usemax 0  #use max charge
 - &useSingleHit 0

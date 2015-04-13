@@ -7,7 +7,6 @@ void NyokiQCaliS0D() {
   //const char* rootfile="test_run23_nyokiQ_ppcoin_Q_calib.root";
   const char* rootfile="test.root";
 
-  TString plotName = "Multiplicity of nyoki";
   TString branch = "nyoki"; // branch anme
   TString branch_2 = "";
   TCut cut ="";
@@ -17,8 +16,8 @@ void NyokiQCaliS0D() {
   
   Double_t timeGate[2] = {-270,-210};
   
-  Int_t S0DQRange[2] = {800, 2200};
-  Int_t nyokiQRange[2] = {800, 2200};
+  Int_t S0DQRange[2]   = {800, 2200};
+  Int_t nyokiQRange[2] = {800, 4000};
 
 //###########################  load tree
   TFile *f0 = new TFile (rootfile, "read"); 
@@ -35,29 +34,13 @@ void NyokiQCaliS0D() {
     delete cSimple;
   }
 
-  Int_t Div[2] = {5, 2};
-  TCanvas* cSimple = new TCanvas("cSimple", "cSimple", 100, 100, Div[0]*300, Div[1]*300);
+  Int_t Div[2] = {3, 1};
+  TCanvas* cSimple = new TCanvas("cSimple", "cSimple", 2000, 100, Div[0]*400, Div[1]*400);
   cSimple->Divide(Div[0],Div[1]);
 
-  //Int_t NumEvent = tree->GetEntries();
-  TString hTitle;
-  hTitle.Form("%s.%s {%s}",branch_2.Data(),plotName.Data(), rootfile);
-
-  TH1F * h1D = new TH1F("h1D", hTitle, nBin, minX, maxX);
-  //h1D->SetLineColor(kRed);
-
-  TH2F * hn03 = new TH2F("hn03", "Nyoki-03 Calibrated" , 100, S0DQRange[0], S0DQRange[1], 100, S0DQRange[0], S0DQRange[1]); hn03->SetXTitle("nyoki [ch]"); hn03->SetYTitle("S0DPL [ch]");
-  TH2F * hn04 = new TH2F("hn04", "Nyoki-04 Calibrated" , 100, S0DQRange[0], S0DQRange[1], 100, S0DQRange[0], S0DQRange[1]); hn04->SetXTitle("nyoki [ch]"); hn04->SetYTitle("S0DPL [ch]");
-  TH2F * hn05 = new TH2F("hn05", "Nyoki-05 Calibrated" , 100, S0DQRange[0], S0DQRange[1], 100, S0DQRange[0], S0DQRange[1]); hn05->SetXTitle("nyoki [ch]"); hn05->SetYTitle("S0DPL [ch]");
-  TH2F * hn06 = new TH2F("hn06", "Nyoki-06 Calibrated" , 100, S0DQRange[0], S0DQRange[1], 100, S0DQRange[0], S0DQRange[1]); hn06->SetXTitle("nyoki [ch]"); hn06->SetYTitle("S0DPL [ch]");
-  TH2F * hn07 = new TH2F("hn07", "Nyoki-07 Calibrated" , 100, S0DQRange[0], S0DQRange[1], 100, S0DQRange[0], S0DQRange[1]); hn07->SetXTitle("nyoki [ch]"); hn07->SetYTitle("S0DPL [ch]");
-  TH2F * hn08 = new TH2F("hn08", "Nyoki-08 Calibrated" , 100, S0DQRange[0], S0DQRange[1], 100, S0DQRange[0], S0DQRange[1]); hn08->SetXTitle("nyoki [ch]"); hn08->SetYTitle("S0DPL [ch]");
-  TH2F * hn09 = new TH2F("hn09", "Nyoki-09 Calibrated" , 100, S0DQRange[0], S0DQRange[1], 100, S0DQRange[0], S0DQRange[1]); hn09->SetXTitle("nyoki [ch]"); hn09->SetYTitle("S0DPL [ch]");
-  TH2F * hn10 = new TH2F("hn10", "Nyoki-10 Calibrated" , 100, S0DQRange[0], S0DQRange[1], 100, S0DQRange[0], S0DQRange[1]); hn10->SetXTitle("nyoki [ch]"); hn10->SetYTitle("S0DPL [ch]");
-
-  TH2F * hn = new TH2F("hn", "Nyoki Q Calibrated" , 8, 3, 11, 100, S0DQRange[0], S0DQRange[1]);	
-  hn->SetXTitle("nyoki ID");
-  hn->SetYTitle("nyoki Q [ch]");
+  TH2F * hn06 = new TH2F("hn06", "Nyoki-06 Calibrated" , 100, nyokiQRange[0], nyokiQRange[1], 100, S0DQRange[0], S0DQRange[1]); hn06->SetXTitle("nyoki [ch]"); hn06->SetYTitle("S0DPL [ch]");
+  TH2F * hn07 = new TH2F("hn07", "Nyoki-07 Calibrated" , 100, nyokiQRange[0], nyokiQRange[1], 100, S0DQRange[0], S0DQRange[1]); hn07->SetXTitle("nyoki [ch]"); hn07->SetYTitle("S0DPL [ch]");
+  TH2F * hn08 = new TH2F("hn08", "Nyoki-08 Calibrated" , 100, nyokiQRange[0], nyokiQRange[1], 100, S0DQRange[0], S0DQRange[1]); hn08->SetXTitle("nyoki [ch]"); hn08->SetYTitle("S0DPL [ch]");
 
 //###################################
   tree->SetBranchStatus("*",0);
@@ -78,11 +61,8 @@ void NyokiQCaliS0D() {
   for( Int_t eventID = 0; eventID < totnumEntry; eventID ++ ){
     tree->GetEntry(eventID,0);
     
-    if( !hoge_gate->Test(0) )continue;
-    
-    h1D->Fill(hoge_nyoki->GetEntriesFast());
-    
-    
+    if( !hoge_gate->Test(12) )continue;
+    //if( !hoge_gate->Test(3) )continue;
     
     //____________________ get S0DPL Q
     s0DQ = kInvalidD;
@@ -113,20 +93,11 @@ void NyokiQCaliS0D() {
         
         if( nT[id] < timeGate[0] || nT[id] > timeGate[1]) continue;
         
-        hn->Fill(id, nQ[id]);
-        
-        if( id == 3) hn03->Fill(nQ[id], s0DQ);
-        if( id == 4) hn04->Fill(nQ[id], s0DQ);
-        if( id == 5) hn05->Fill(nQ[id], s0DQ);
         if( id == 6) hn06->Fill(nQ[id], s0DQ);
         if( id == 7) hn07->Fill(nQ[id], s0DQ);
         if( id == 8) hn08->Fill(nQ[id], s0DQ);
-        if( id == 9) hn09->Fill(nQ[id], s0DQ);
-        if( id ==10) hn10->Fill(nQ[id], s0DQ);
         //printf("%d, %7.2f, %7.2f \n", id, nQ[id], s0DQ);
     }
-    
-    
     
     clock.Stop("timer");
     Double_t time = clock.GetRealTime("timer");
@@ -151,20 +122,12 @@ void NyokiQCaliS0D() {
   }
 
 //###################################
-
-  cSimple->cd(10); h1D->Draw();
   
   TLine line;
   
-  cSimple->cd(1); hn03->Draw("colz"); line.DrawLine(S0DQRange[0], S0DQRange[0], S0DQRange[1], S0DQRange[1]);
-  cSimple->cd(2); hn04->Draw("colz"); line.DrawLine(S0DQRange[0], S0DQRange[0], S0DQRange[1], S0DQRange[1]);
-  cSimple->cd(3); hn05->Draw("colz"); line.DrawLine(S0DQRange[0], S0DQRange[0], S0DQRange[1], S0DQRange[1]);
-  cSimple->cd(4); hn06->Draw("colz"); line.DrawLine(S0DQRange[0], S0DQRange[0], S0DQRange[1], S0DQRange[1]);
-  cSimple->cd(5); hn07->Draw("colz"); line.DrawLine(S0DQRange[0], S0DQRange[0], S0DQRange[1], S0DQRange[1]);
-  cSimple->cd(6); hn08->Draw("colz"); line.DrawLine(S0DQRange[0], S0DQRange[0], S0DQRange[1], S0DQRange[1]);
-  cSimple->cd(7); hn09->Draw("colz"); line.DrawLine(S0DQRange[0], S0DQRange[0], S0DQRange[1], S0DQRange[1]);
-  cSimple->cd(8); hn10->Draw("colz"); line.DrawLine(S0DQRange[0], S0DQRange[0], S0DQRange[1], S0DQRange[1]);
-  cSimple->cd(9); hn->Draw("colz");
+  cSimple->cd(1); hn06->Draw("colz"); line.DrawLine(S0DQRange[0], S0DQRange[0], S0DQRange[1], S0DQRange[1]);
+  cSimple->cd(2); hn07->Draw("colz"); line.DrawLine(S0DQRange[0], S0DQRange[0], S0DQRange[1], S0DQRange[1]);
+  cSimple->cd(3); hn08->Draw("colz"); line.DrawLine(S0DQRange[0], S0DQRange[0], S0DQRange[1], S0DQRange[1]);
 //###################################	
   /*
   TLatex text;

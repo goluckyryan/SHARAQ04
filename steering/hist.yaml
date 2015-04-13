@@ -1,10 +1,10 @@
 include:
-  - hist_PID.yaml  # all plastics
-  - hist_ana.yaml
-  - hist_plastic.yaml
-  - hist_mwdc_L.yaml
-  - hist_mwdc_R.yaml
-  - hist_mwdc_LR.yaml
+#  - hist_PID.yaml  # all plastics
+#  - hist_ana.yaml
+#  - hist_plastic.yaml
+#  - hist_mwdc_L.yaml
+#  - hist_mwdc_R.yaml
+#  - hist_mwdc_LR.yaml
   - hist_mwdc_s1.yaml
 #  - hist_DCS0D.yaml
 #  - hist_FindGatesforEx.yaml

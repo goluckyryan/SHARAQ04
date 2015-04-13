@@ -37,6 +37,7 @@ void coinReg() {
    char* eventBranch = "eventheader";
    if( eventShift ) eventBranch = "eventheader0";
    
+   tree->SetBranchStatus("*",0);
    tree->SetBranchStatus(eventBranch,1);
    tree->SetBranchStatus("coinReg",1);
 
@@ -66,7 +67,7 @@ void coinReg() {
    
 //##############################################################################
    for( Int_t eventID = firstEntry; eventID < endEntry; eventID += sampleRate){
-      tree->GetEntry(eventID);
+      tree->GetEntry(eventID,0);
       
 //----------------Get Event Number
       Int_t runNum = hoge_run->GetRunNumber();

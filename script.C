@@ -5,7 +5,7 @@
 
 //========================================================
 
-        char * rootfile = "P_23F_ppcoin_0314.root";
+        char * rootfile = "P_test_s1ref.root";
         
         TFile *f0 = new TFile (rootfile, "read"); 
         if( f0==0){
@@ -27,9 +27,9 @@
         //tree->Process("Selector_Aux.C");
 
         
-        Int_t Div[2] = {5,3};  //x,y
-        Int_t size[2] = {300,300}; //x,y
-        TCanvas * cScript = new TCanvas("cScript", "cScript", 0,0 , size[0]*Div[0], size[1]*Div[1]);
+        Int_t Div[2] = {3,2};  //x,y
+        Int_t size[2] = {400,400}; //x,y
+        TCanvas * cScript = new TCanvas("cScript", "cScript", 2000,0 , size[0]*Div[0], size[1]*Div[1]);
         cScript->Divide(Div[0],Div[1]);
    
 //======================================================== load histogram
@@ -40,6 +40,260 @@
 //	f0->Close();
 /**/
 //======================================================== analysis
+/************** Tpla Timing on coinReg *********************/
+
+        Int_t coinRegBit = 2;
+        
+        TString gate;
+        gate.Form("coinReg & %d", coinRegBit);
+        TString gateTitle;
+        if( coinRegBit == 0 )  gateTitle = "F3 trigger";
+        if( coinRegBit == 2 )  gateTitle = "FH9 trigger";
+        if( coinRegBit == 4 )  gateTitle = "ppcoin trigger";
+        if( coinRegBit == 8 )  gateTitle = "NDcoin trigger";
+        if( coinRegBit == 16 ) gateTitle = "p-single trigger";
+        if( coinRegBit == 32 ) gateTitle = "ND-single trigger";
+        if( coinRegBit == 64 ) gateTitle = "ND-cosmic trigger";
+        TString hTitle;
+        
+        
+        cScript->cd(1);
+        tree->Draw("tTplaLB:tTplaLF>>hLBLF(400, -250, -100, 400, -250, -100)", gate, "colz");
+        hTitle = "Tpla-L : F vs B | " + gateTitle; 
+        hLBLF->SetXTitle("TplaLF");
+        hLBLF->SetYTitle("TplaLB");
+        hLBLF->SetTitle(hTitle);
+
+        cScript->cd(2);
+        tree->Draw("tTplaRB:tTplaRF>>hRBRF(400, -250, -100, 400, -250, -100)", gate, "colz");
+        hTitle = "Tpla-R : F vs B | " + gateTitle; 
+        hRBRF->SetXTitle("TplaRF");
+        hRBRF->SetYTitle("TplaRB");
+        hRBRF->SetTitle(hTitle);
+        
+        cScript->cd(3);
+        tree->Draw("tTplaRB:tTplaLF>>hRBLF(400, -250, -100, 400, -250, -100)", gate, "colz");
+        hTitle = "tTplaRB:tTplaLF | " + gateTitle; 
+        hRBLF->SetXTitle("TplaLF");
+        hRBLF->SetYTitle("TplaRB");
+        hRBLF->SetTitle(hTitle);
+        
+        cScript->cd(4);
+        tree->Draw("tTplaRB:tTplaLB>>hRBLB(400, -250, -100, 400, -250, -100)", gate, "colz");
+        hTitle = "B : L vs R | " + gateTitle; 
+        hRBLB->SetXTitle("TplaLB");
+        hRBLB->SetYTitle("TplaRB");
+        hRBLB->SetTitle(hTitle);
+        
+        cScript->cd(5);
+        tree->Draw("tTplaRF:tTplaLF>>hRFLF(400, -250, -100, 400, -250, -100)", gate, "colz");
+        hTitle = "F : L vs R | " + gateTitle; 
+        hRFLF->SetXTitle("TplaLF");
+        hRFLF->SetYTitle("TplaRF");
+        hRFLF->SetTitle(hTitle);
+        
+        cScript->cd(6);
+        tree->Draw("tTplaRF:tTplaLB>>hRFLB(400, -250, -100, 400, -250, -100)", gate, "colz");
+        hTitle = "tTplaRF:tTplaLB | " + gateTitle; 
+        hRFLB->SetXTitle("TplaLB");
+        hRFLB->SetYTitle("TplaRF");
+        hRFLB->SetTitle(hTitle);
+        
+
+
+/************** Nyoki Q  ppcoin *********************/
+/*
+        cScript->cd(1);
+        tree->Draw("qS1[4]*1.02-320:tofS1[4]>>h04b(300, 30, 40, 300, 100, 4500)", "gate==1 && coinReg[1] && TMath::Abs(nyokiT[4]+240)<30 && pidusGate==0", "colz");
+        
+        cScript->cd(2);
+        tree->Draw("qS1[5]*1.00-25:tofS1[5]>>h05b(300, 30, 40, 300, 100, 4500)", "gate==1 && coinReg[1] && TMath::Abs(nyokiT[5]+240)<30 && pidusGate==0", "colz");
+
+        cScript->cd(3);
+        tree->Draw("qS1[6]*1.07-140:tofS1[6]>>h06b(300, 30, 40, 300, 100, 4500)", "gate==1 && coinReg[1] && TMath::Abs(nyokiT[6]+240)<30 && pidusGate==0", "colz");
+        
+        cScript->cd(4);
+        tree->Draw("qS1[7]:tofS1[7]>>h07b(300, 30, 40, 300, 100, 4500)", "gate==1 && coinReg[1] && TMath::Abs(nyokiT[7]+240)<30 && pidusGate==0", "colz");
+        
+        cScript->cd(5);
+        tree->Draw("qS1[8]*1.00-291:tofS1[8]>>h08b(300, 30, 40, 300, 100, 4500)", "gate==1 && coinReg[1] && TMath::Abs(nyokiT[8]+240)<30 && pidusGate==0", "colz");
+        
+        cScript->cd(6);
+        tree->Draw("qS1[9]*0.78+64:tofS1[9]>>h09b(300, 30, 40, 300, 100, 4500)", "gate==1 && coinReg[1] && TMath::Abs(nyokiT[9]+240)<30 && pidusGate==0", "colz");
+        
+        cScript->cd(7);
+        tree->Draw("qS1[10]*0.60-162:tofS1[10]>>h10b(300, 30, 40, 300, 100, 4500)", "gate==1 && coinReg[1] && TMath::Abs(nyokiT[10]+240)<30 && pidusGate==0", "colz");
+        
+        /*
+        
+        cScript->cd(8);
+        tree->Draw("qS1[4]*1.02-371:nyokiT[4]>>h04(300, -270, -210, 300, 100, 4500)", "gate==1 && coinReg[1]", "colz");
+        
+        cScript->cd(9);
+        tree->Draw("qS1[5]*1.00- 25:nyokiT[5]>>h05(300, -270, -210, 300, 100, 4500)", "gate==1 && coinReg[1]", "colz");
+
+        cScript->cd(10);
+        tree->Draw("qS1[6]*1.07-140:nyokiT[6]>>h06(300, -270, -210, 300, 100, 4500)", "gate==1 && coinReg[1]", "colz");
+        
+        cScript->cd(11);
+        tree->Draw("qS1[7]*1.00 + 0:nyokiT[7]>>h07(300, -270, -210, 300, 100, 4500)", "gate==1 && coinReg[1]", "colz");
+        
+        cScript->cd(12);
+        tree->Draw("qS1[8]*1.00-291:nyokiT[8]>>h08(300, -270, -210, 300, 100, 4500)", "gate==1 && coinReg[1]", "colz");
+        
+        cScript->cd(13);
+        tree->Draw("qS1[9]*0.79+9:nyokiT[9]>>h09(300, -270, -210, 300, 100, 4500)", "gate==1 && coinReg[1]", "colz");
+        
+        cScript->cd(14);
+        tree->Draw("qS1[10]*0.61-220:nyokiT[10]>>h10(300, -270, -210, 300, 100, 4500)", "gate==1 && coinReg[1]", "colz");
+        
+/************** S0D Q vs Nyoki Q  *********************/
+/*
+        cScript->cd(1);
+        tree->Draw("qS0D:nyokiQ[8]>>h1a(200,200, 4500, 200, 200, 2500)", "gate==1 && runNum==23 && nyokiT[8]>-270 && nyokiT[8]<210 && pidusGate==0", "colz");
+        h1a->SetTitle("run=23 && 23F && Crystal < 5 mm && nyokiTimeGate");
+        h1a->SetXTitle("nyoki8.Charge");
+        h1a->SetYTitle("S0D.Charge");
+
+        cScript->cd(2);
+        tree->Draw("qS0D:nyokiQ[8]>>h2a(200,200, 4500, 200, 200, 2500)", "gate==1 && runNum!=23 && nyokiT[8]>-270 && nyokiT[8]<210 && pidusGate==0", "colz");
+        h2a->SetTitle("run=24 && 23F && Crystal < 5 mm && nyokiTimeGate");
+        h2a->SetXTitle("nyoki8.Charge");
+        h2a->SetYTitle("S0D.Charge");
+        
+        cScript->cd(4);
+        tree->Draw("qS0D:nyokiQ[8]>>h1b(200,200, 4500, 200, 200, 2500)", "gate==1 && runNum==23 && nyokiT[8]>-270 && nyokiT[8]<210 && pidusGate==1", "colz");
+        h1b->SetTitle("run=23 && 22O && Crystal < 5 mm && nyokiTimeGate");
+        h1b->SetXTitle("nyoki8.Charge");
+        h1b->SetYTitle("S0D.Charge");
+        
+        cScript->cd(5);
+        tree->Draw("qS0D:nyokiQ[8]>>h2b(200,200, 4500, 200, 200, 2500)", "gate==1 && runNum!=23 && nyokiT[8]>-270 && nyokiT[8]<210 && pidusGate==1", "colz");
+        h2b->SetTitle("run=24 && 22O && Crystal < 5 mm && nyokiTimeGate");
+        h2b->SetXTitle("nyoki8.Charge");
+        h2b->SetYTitle("S0D.Charge");
+        
+        cScript->cd(3);
+        tree->Draw("qS0D:nyokiQ[8]>>hall(200,200, 4500, 200, 200, 2500)", "gate==1 && runNum>=23 && nyokiT[8]>-270 && nyokiT[8]<210", "colz");
+        hall->SetTitle("run=23,24 && Crystal < 5 mm && nyokiTimeGate");
+        hall->SetXTitle("nyoki8.Charge");
+        hall->SetYTitle("S0D.Charge");
+/************** S0D Q   *********************/
+/*
+        cScript->cd(1);
+        tree->Draw("qS0D:tofS0D>>h1(500,-25,-15, 500,200, 2500)", "gate==1 && runNum==23", "colz");
+        h1->SetXTitle("TOF(FH9-S0D)");
+        h1->SetYTitle("S0D.Charge");
+        h1->SetTitle("Crystal < 5 mm && run=23");
+        
+        cScript->cd(5);
+        tree->Draw("qS0D:tofS0D>>h2(500,-25,-15, 500,200, 2500)", "gate==1 && runNum!=23", "colz");
+        h2->SetXTitle("TOF(FH9-S0D)");
+        h2->SetYTitle("S0D.Charge");
+        h2->SetTitle("Crystal < 5 mm && run=24");
+        
+        cScript->cd(2);
+        tree->Draw("qS0D:tofS0D>>h3(500,-25,-15, 500,200, 2500)", "gate==1 && runNum==23 && pidusGate==0", "colz");
+        h3->SetXTitle("TOF(FH9-S0D)");
+        h3->SetYTitle("S0D.Charge");
+        h3->SetTitle("23F && Crystal < 5 mm && run=23");
+        
+        cScript->cd(6);
+        tree->Draw("qS0D:tofS0D>>h4(500,-25,-15, 500,200, 2500)", "gate==1 && runNum!=23 && pidusGate==0", "colz");
+        h4->SetXTitle("TOF(FH9-S0D)");
+        h4->SetYTitle("S0D.Charge");
+        h4->SetTitle("23F && Crystal < 5 mm && run=24");
+        
+        cScript->cd(3);
+        tree->Draw("qS0D:tofS0D>>h5(500,-25,-15, 500,200, 2500)", "gate==1 && runNum==23 && pidusGate==1", "colz");
+        h5->SetXTitle("TOF(FH9-S0D)");
+        h5->SetYTitle("S0D.Charge");
+        h5->SetTitle("22O && Crystal < 5 mm && run=23");
+        
+        cScript->cd(7);
+        tree->Draw("qS0D:tofS0D>>h6(500,-25,-15, 500,200, 2500)", "gate==1 && runNum!=23 && pidusGate==1", "colz");
+        h6->SetXTitle("TOF(FH9-S0D)");
+        h6->SetYTitle("S0D.Charge");
+        h6->SetTitle("22O && Crystal < 5 mm && run=24");
+        
+        cScript->cd(4);
+        h3->ProjectionY()->Draw();
+        h5->ProjectionY()->Draw("same");
+        
+        cScript->cd(8);
+        h4->ProjectionY()->Draw();
+        h6->ProjectionY()->Draw("same");
+        
+        
+/************** Nyoki Q   *********************/
+/*
+        cScript->cd(1);
+        tree->Draw("nyokiQ[7]:nyokiT[7]>>h1(200, -270, -210, 200, 30, 4000)","pidusGate==0 && gate==1 && runNum!=23", "colz");
+        h1->SetXTitle("nyoki.Timing");
+        h1->SetYTitle("nyoki.Charge");
+        h1->SetTitle("nyoki.ID==7 && 23F && Crystal < 5 mm && run=24");
+        cScript->cd(2);
+        tree->Draw("nyokiQ[7]:tofS1[7]>>h2(200, 30, 40, 200, 30, 4000)",  "pidusGate==0 && gate==1 && runNum!=23 && nyokiT[7]>-270 && nyokiT[7]<-210", "colz");
+        h2->SetXTitle("TOF(S0D-Nyoki-7)");
+        h2->SetYTitle("nyoki.Charge");
+        h2->SetTitle("nyoki.ID==7 && 23F && Crystal < 5 mm && run=24");
+        cScript->cd(3);
+        tree->Draw("nyokiT[7]:tofS0D>>h3(200, -50,  10, 200, -270, -210)","pidusGate==0 && gate==1 && runNum!=23", "colz");
+        h3->SetXTitle("TOF(FH9-S0D)");
+        h3->SetYTitle("nyoki.Timing");
+        h3->SetTitle("nyoki.ID==7 && 23F && Crystal < 5 mm && run=24");
+        
+        
+        cScript->cd(4);
+        tree->Draw("nyokiQ[7]:nyokiT[7]>>h4(200, -270, -210, 200, 30, 4000)","pidusGate==1 && gate==1 && runNum!=23", "colz");
+        h4->SetXTitle("nyoki.Timing");
+        h4->SetYTitle("nyoki.Charge");
+        h4->SetTitle("nyoki.ID==7 && 22O && Crystal < 5 mm && run=24");
+        cScript->cd(5);
+        tree->Draw("nyokiQ[7]:tofS1[7]>>h5(200, 30, 40, 200, 30, 4000)",     "pidusGate==1 && gate==1 && runNum!=23 && nyokiT[7]>-270 && nyokiT[7]<-210", "colz");
+        h5->SetXTitle("TOF(S0D-Nyoki-7)");
+        h5->SetYTitle("nyoki.Charge");
+        h5->SetTitle("nyoki.ID==7 && 22O && Crystal < 5 mm && run=24");
+        cScript->cd(6);
+        tree->Draw("nyokiT[7]:tofS0D>>h6(200, -50, 10, 200, -270, -210)",    "pidusGate==1 && gate==1 && runNum!=23", "colz");
+        h6->SetXTitle("TOF(FH9-S0D)");
+        h6->SetYTitle("nyoki.Timing");
+        h6->SetTitle("nyoki.ID==7 && 23F && Crystal < 5 mm && run=24");
+        
+/************** Nyoki TOF(S0D-Hodo)    *********************/
+/*
+        tree->Draw("tof_D1.fTiming>>h1(150,33,37)", "tof_D1.fID==7 && gate.Test(0) && gate.Test(12)", ""    ); h1->SetLineColor(2); h1->Draw();
+        tree->Draw("tof_D1.fTiming>>h2(150,33,37)", "tof_D1.fID==7 && gate.Test(1) && gate.Test(12)", "same"); h2->SetLineColor(2); h2->Draw("same");
+        tree->Draw("tof_D1.fTiming>>h3(150,33,37)", "tof_D1.fID==8 && gate.Test(0) && gate.Test(12)", "same");
+        tree->Draw("tof_D1.fTiming>>h4(150,33,37)", "tof_D1.fID==8 && gate.Test(1) && gate.Test(12)", "same");
+
+/************** Nyoki Q  23F  *********************/
+/*
+        cScript->cd(1);
+        tree->Draw("tof_D1.fCharge>>h1(150, 2000, 4500)", "tof_D1.fID==7 && gate.Test(0) && gate.Test(12) && nyoki.fTiming >-270 && nyoki.fTiming<-210 & Sum$(nyoki.fID==7 || nyoki.fID==8)==2", ""    ); 
+        h1->SetLineColor(2); h1->Draw();
+        tree->Draw("tof_D1.fCharge>>h2(150, 2000, 4500)", "tof_D1.fID==7 && gate.Test(1) && gate.Test(12) && nyoki.fTiming >-270 && nyoki.fTiming<-210 & Sum$(nyoki.fID==7 || nyoki.fID==8)==2", "same"); 
+        h2->SetLineColor(6); h2->Draw("same");
+        tree->Draw("tof_D1.fCharge*1.1914-1302.5>>h3(150, 2000, 4500)", "tof_D1.fID==8 && gate.Test(0) && gate.Test(12) && nyoki.fTiming >-270 && nyoki.fTiming<-210 & Sum$(nyoki.fID==7 || nyoki.fID==8)==2", "same"); 
+        h3->SetLineColor(4); h3->Draw("same");
+        tree->Draw("tof_D1.fCharge*1.1914-1302.5>>h4(150, 2000, 4500)", "tof_D1.fID==8 && gate.Test(1) && gate.Test(12) && nyoki.fTiming >-270 && nyoki.fTiming<-210 & Sum$(nyoki.fID==7 || nyoki.fID==8)==2", "same"); 
+        h4->SetLineColor(7); h4->Draw("same");
+        tree->Draw("tof_D1.fCharge>>h5(150, 2000, 4500)", "tof_D1.fID==7 && gate.Test(3) && gate.Test(12) && nyoki.fTiming >-270 && nyoki.fTiming<-210 & Sum$(nyoki.fID==7 || nyoki.fID==8)==2", "same"); 
+        //h5->SetLineColor(3); h5->Scale(40); h5->Draw("same");
+        //tree->Draw("tof_D1.fCharge*1.1914-1302.5>>h6(150, 2000, 4500)", "tof_D1.fID==8 && gate.Test(3) && gate.Test(12) && nyoki.fTiming >-270 && nyoki.fTiming<-210 & Sum$(nyoki.fID==7 || nyoki.fID==8)==2", "same"); 
+        //h6->SetLineColor(9); h6->Scale(40);  h6->Draw("same");
+
+/************** Nyoki Q  23F  *********************/
+/*
+        TCut cut = "gate.Test(12) && nyoki.fTiming>-270 && nyoki.fTiming<-210 ";
+        
+        cScript->cd(1);        tree->Draw("tof_D1.fCharge:tof_D1.fTiming>>h5(100, 30, 40, 100, 0, 4000)", cut + "tof_D1.fID==5", "colz");
+        cScript->cd(2);        tree->Draw("tof_D1.fCharge:tof_D1.fTiming>>h6(100, 30, 40, 100, 0, 4000)", cut + "tof_D1.fID==6", "colz");
+        cScript->cd(3);        tree->Draw("tof_D1.fCharge:tof_D1.fTiming>>h7(100, 30, 40, 100, 0, 4000)", cut + "tof_D1.fID==7", "colz");
+        cScript->cd(4);        tree->Draw("tof_D1.fCharge:tof_D1.fTiming>>h8(100, 30, 40, 100, 0, 4000)", cut + "tof_D1.fID==8", "colz");
+        cScript->cd(5);        tree->Draw("tof_D1.fCharge:tof_D1.fTiming>>h9(100, 30, 40, 100, 0, 4000)", cut + "tof_D1.fID==9", "colz");
+        
+        
 /************** PID.Downstream    *********************/
 /*
         TH2F* h1 = new TH2F("h1", "h1: Beam Profile | Beam trigger", 100, -10, 10, 100, -10, 10);
@@ -76,8 +330,6 @@
         h3->Add(h2);
         h3->Divide(h1);
         h3->Draw("colz");
-
-
 
 /************** Sp ***********************************/
 /*
@@ -136,6 +388,12 @@
         h3->Draw();
 
 /************************************************/
+
+//tree->Scan("smwdc_S1.fTrack.fX:smwdc_S1.IsGood():smwdc_S1.fNPlaneValid", "smwdc_S1.GetWireIDAdopted(0)-smwdc_S1.GetWireIDAdopted(1) == 1");
+
+//-------------- Check input
+//tree->Scan("smwdc_S1_x1.fID:smwdc_S1_x1.fCharge:smwdc_S1_x1.fDriftLength:smwdc_S1_x2.fID:smwdc_S1_x2.fCharge:smwdc_S1_x2.fDriftLength:smwdc_S1_u1.fID:smwdc_S1_u1.fCharge:smwdc_S1_u1.fDriftLength:smwdc_S1_u2.fID:smwdc_S1_u2.fCharge:smwdc_S1_u2.fDriftLength:smwdc_S1_v1.fID:smwdc_S1_v1.fCharge:smwdc_S1_v1.fDriftLength:smwdc_S1_v2.fID:smwdc_S1_v2.fCharge:smwdc_S1_v2.fDriftLength:smwdc_S1.fWireIDAdopted:smwdc_S1.fLRAdopted:smwdc_S1.fNPlaneValid:smwdc_S1.fTrack.fX:smwdc_S1.fTrack.fA:smwdc_S1.fTrack.fY:smwdc_S1.fTrack.fB:smwdc_S1.IsGood()", "", "", 100000, 80);
+
 //tree->Draw("smwdc_S1_x1.fTiming>>h1(300, -100, 200)", "smwdc_S1_x1.fCharge>350 && smwdc_S1_x1.fID!= 29", "");
 //tree->Draw("smwdc_S1_x1.fTiming>>h2(300, -100, 200)", "smwdc_S1_x1.fCharge>350 && smwdc_S1_x1.fID!= 29 && @smwdc_S1_x1.fSize==1", "same");
 
@@ -190,13 +448,13 @@
 
 //        tree->Draw("smwdc_S1.fTrack.fA:smwdc_S1.GetWireIDAdopted(0)-smwdc_S1.GetWireIDAdopted(1)>>h1(10,-5,6, 200, -3, 3)", "smwdc_S1.IsGood() && smwdc_S1.fNPlaneValid==6", "colz", 100000);
 
-
 /*
+
         TCanvas haha("haha", "haha", 800,800);
         haha.Divide(2,2);
         Int_t nEvent = 1000000;
         
-        TString gate = "";//"gate.Test(0)";
+        TString gate = "gate.Test(0)";//"gate.Test(0)";
         
         //haha.cd(1); 
         //tree->Draw( "smwdc_S1.GetSigma(1)*1000>>h1(200,0,10)", gate, ""    , nEvent); h1->SetLineColor(2);
@@ -210,7 +468,7 @@
         haha.cd(2); tree->Draw("smwdc_S1.fTrack.fA:smwdc_S1.fTrack.fX>>h2(400,-500, 500, 200,    -0.5,    0.5)", gate, "colz");
         haha.cd(3); tree->Draw("smwdc_S1.fTrack.fB:smwdc_S1.fTrack.fY>>h3(200,-150, 150, 200,    -0.25,   0.25)", gate, "colz");
         haha.cd(4); tree->Draw("smwdc_S1.fTrack.fB:smwdc_S1.fTrack.fA>>h4(200,  -0.5,   0.5, 200,    -0.25,    0.25)", gate, "colz");
-*/
+/**/
 
 /*****************************************************************/
 /*
@@ -301,165 +559,6 @@
 /*        cScript->cd(9);
         tree->Draw(Ecoin, "", "colz");
 */
-/***************************************************************************/
-/*
- //with Post-tree
-
-        TCut vertexZcut = "abs(vertexZ-10)<60";
-        TCut carboncut = "abs(vertexZ-10)<60";
-        TCut s1xcut = "";//"s1x>0";
-        //TCut s1xcut = "s1x>0 && s1x < 200";
-        TCut pidZcut = "pidZ>1 && pidZ<4";
-        TCut tofS1cut = "abs(tofS1-36.0)<2";
-        TCut s0cut = "";//"gateNum==1";
-        TCut Aux = "";//"TMath::Abs(theta1+theta2-82)<2";//"abs(Ex-10)<10";
-        Double_t bgScale = 0.1;
-        
-        Double_t binWidth = 1;
-        Int_t binRange[2] = {-40,80};
-        
-        Bool_t Fiton = 0;
-        
-        TLatex text;
-        text.SetNDC();
-        
-        cScript->cd(1);
-        tree->Draw("s1x:Ex>>h1(70,-40,100, 100, -200, 300)", s1xcut + s0cut + pidZcut + vertexZcut + tofS1cut + Aux, "colz");
-        h1->SetTitle("s1x vs Ex");
-        h1->SetXTitle("Ex [MeV]");
-        h1->SetYTitle("s1x [mm]");
-        text->DrawLatex(0.6, 0.8, s1xcut);
-        
-        cScript->cd(2);
-        tree->Draw("tofS1:Ex>>h2(70,-40,100, 100, 32, 40)", s1xcut + s0cut + pidZcut + vertexZcut + tofS1cut + Aux, "colz");
-        h2->SetTitle("tofS1 vs Ex");
-        h2->SetXTitle("Ex [MeV]");
-        h2->SetYTitle("tofS1 [mm]");
-        text->DrawLatex(0.3, 0.8, tofS1cut);
-        
-        cScript->cd(3);
-        tree->Draw("pidAOQ:Ex>>h3(70,-40,100, 100, 1.8, 3.2)", s1xcut + s0cut + pidZcut + vertexZcut + tofS1cut + Aux, "colz");
-        h3->SetTitle("A/Q vs Ex");
-        h3->SetXTitle("Ex [MeV]");
-        h3->SetYTitle("A/Q");
-        
-        cScript->cd(4);
-        tree->Draw("pidZ:Ex>>h4(70,-40,100,100,1, 11)", s1xcut + s0cut + pidZcut + vertexZcut + tofS1cut + Aux, "colz");
-        h4->SetTitle("Z vs Ex");
-        h4->SetXTitle("Ex [MeV]");
-        h4->SetYTitle("Z ");
-        text->DrawLatex(0.6, 0.95, pidZcut);
-        
-        cScript->cd(5);
-        tree->Draw("pidZ:pidAOQ>>h5(100,1.8,3.2,100,1, 11)", s1xcut + s0cut + pidZcut + vertexZcut + tofS1cut + Aux, "colz");
-        h5->SetTitle("Z vs A/Q");
-        h5->SetXTitle("A/Q");
-        h5->SetYTitle("Z ");
-        
-        cScript->cd(6);
-        tree->Draw("vertexZ:Ex>>h6(70,-40,100,100,-100, 250)", s1xcut + s0cut + pidZcut + vertexZcut + tofS1cut + Aux, "colz");
-        h6->SetTitle("vertex.Z vs Ex");
-        h6->SetXTitle("Ex [MeV]");
-        h6->SetYTitle("vertex.Z [mm]");
-        text->DrawLatex(0.3, 0.8, vertexZcut);
-        
-        cScript->cd(7);
-        tree->Draw("s1x:pidAOQ>>h7(100,1.8,3.2,100,-200,300)", s1xcut + s0cut + pidZcut + vertexZcut + tofS1cut + Aux, "colz");
-        h7->SetTitle("s1x vs A/Q");
-        h7->SetXTitle("A/Q ");
-        h7->SetYTitle("s1x [mm]");
-        
-        cScript->cd(8);
-        TString plot1; plot1.Form("Ex>>hEx(%3.0f,%d,%d)", (binRange[1]-binRange[0])/binWidth, binRange[0], binRange[1]);
-        TString plot2; plot2.Form("Ex>>hExbg(%3.0f,%d,%d)", (binRange[1]-binRange[0])/binWidth, binRange[0], binRange[1]);
-        
-        //tree->Draw("s1x:vertexZ>>h7(100,-100,250,100,-200,300)", "", "colz");
-        tree->Draw(plot1, s1xcut + s0cut + pidZcut + vertexZcut + tofS1cut, "colz");
-        hEx->SetMinimum(0);
-        hEx->SetTitle("Ex | gated");
-        hEx->SetXTitle("Ex [MeV]");
-        TString hExYTitle; hExYTitle.Form("count / %1.1f MeV", binWidth);
-        hEx->SetYTitle(hExYTitle);
-        hEx->Draw();
-        tree->Draw(plot2, s1xcut + s0cut + !pidZcut + carboncut + tofS1cut, "same");
-        hExbg->Scale(bgScale);
-        hExbg->SetLineColor(2);
-        hExbg->Draw("same");
-        text->SetTextColor(2);
-        text->DrawLatex(0.6,0.8,"carbon");
-        
-        cScript->cd(9);
-        TH1F* hExsub = new TH1F(*hEx);
-        hExsub->Sumw2();
-        hExsub->Add(hExbg,-1);
-        hExsub->Draw();
-        
-        if( Fiton){
-                TF1 * fit = new TF1("fit", "gaus(0)+gaus(3)+gaus(6)+gaus(9)", -15, 40);
-                Double_t par[12] = {50, 0, 5, 40, 10, 5, 20, 30, 5};
-                fit->SetParameters(50, 0, 5, 40, 10, 5, 20, 30, 5);
-                fit->FixParameter(1,0);                
-                hExsub->Fit("fit","R");
-        }
-        
-        cScript->cd(10);
-        tree->Draw("kMomt>>h10(50,0,400)", s1xcut + s0cut + pidZcut + vertexZcut + tofS1cut + Aux, "colz");
-        h10->SetTitle("Momt [MeV/c]");
-        h10->SetXTitle("Momt [MeV/c]");
-        tree->Draw("kMomt>>h10a(50,0,400)", s1xcut + s0cut + !pidZcut + carboncut + tofS1cut + Aux, "same");
-        h10a->SetLineColor(2);
-        h10a->SetXTitle("Momt [MeV/c]");
-        h10a->Scale(bgScale);
-        h10a->Draw("same");
-        
-        cScript->cd(11);
-        TH1F* h10b = new TH1F(*h10);
-        h10b->Sumw2();
-        h10b->Add(h10a,-1);
-        h10b->Draw();
-        
-        cScript->cd(12);
-        tree->Draw("phi2-phi1>>h11(50,-50,50)", s1xcut + s0cut + pidZcut + vertexZcut + tofS1cut + Aux, "colz");
-        h11->SetTitle("Off-Plane Angle");
-        h11->SetXTitle("Off-Plane Angle [deg]");
-        tree->Draw("phi2-phi1>>h11a(50,-50,50)", s1xcut + s0cut + !pidZcut + carboncut + tofS1cut + Aux, "same");
-        h11a->SetLineColor(2);
-        h11a->Scale(bgScale);
-        h11a->Draw("same");
-        
-        cScript->cd(13);
-        TH1F* h11b = new TH1F(*h11);
-        h11b->Sumw2();
-        h11b->Add(h11a,-1);
-        h11b->Draw();
-        
-        cScript->cd(14);
-        tree->Draw("theta1+theta2>>h14(90, 60, 90)", s1xcut + s0cut + pidZcut + vertexZcut + tofS1cut + Aux, "colz");
-        h14->SetTitle("Open Theta");
-        h14->SetXTitle("theta1+theta2 [deg]");
-        tree->Draw("theta1+theta2>>h14a(90, 60, 90)", s1xcut + s0cut + !pidZcut + carboncut + tofS1cut + Aux, "same");
-        h14a->SetLineColor(2);
-        h14a->Scale(bgScale);
-        h14a->Draw("same");
-        
-        cScript->cd(15);
-        TH1F* h14b = new TH1F(*h14);
-        h14b->Sumw2();
-        h14b->Add(h14a,-1);
-        h14b->Draw();
-        
-/********************************************************************/
-//tree->Draw("s1x:pidAOQ>>h8(100,1.4,3.2,100,-200,300)", "abs(tofS1-34.5)<1 && abs(vertexZ-15)<20 && pidZ>5", "colz");
-//tree->Draw("pidZ:pidAOQ>>h8(100,1.4,3.2,100,1, 11)", "abs(tofS1-34.5)<1 && abs(vertexZ-15)<20 && pidZ>5", "colz");
-/*
-//	TString cut = "gate.Test(9) & abs(vertex-10)<60 & abs(tof_D1.fTiming-35)<2 & abs((p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()-80)<15 & abs(p2p.fSp-20)<30"
-
-TString cut = "gate.Test(9) && abs(vertex.fZ-10)<60 && abs(tof_D1.fTiming-35)<1 ";
-TString cutbg = "gate.Test(11) && !gate.Test(9) && abs(vertex.fZ-10)<60 && abs(tof_D1.fTiming-35)<2";
-TString cutbg2 = "!gate.Test(9) && abs(vertex.fZ-10)<60 && abs(tof_D1.fTiming-35)<1";
-
-TCut tgt = "gate.Test(9)";
-TCut vertexZ = "abs(vertex.fZ-10)<60";
 
 /*
 TString openAng = "";//"&& TMath::Abs((p2p.fRecoilL.Theta()+p2p.fRecoilR.Theta())*TMath::RadToDeg()-80)<15";

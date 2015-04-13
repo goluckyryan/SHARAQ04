@@ -6,7 +6,7 @@ void NyokiTCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t a_adj=0, Double
 //############################################################################  
 //   const char* rootfile="PrimaryData/phys23F.root"; 
    //const char* rootfile="23F_ppcoin_0314.root"; 
-   const char* rootfile="test_run24.root"; 
+   const char* rootfile="test.root"; 
    
    Bool_t allentry  = 1;
    Int_t firstEntry = 0;
@@ -63,9 +63,14 @@ void NyokiTCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t a_adj=0, Double
    tree->SetBranchStatus("*",0);
    //tree->SetBranchStatus("plaV775",1);
    tree->SetBranchStatus("nyoki",1);
-
-   TClonesArray  *hoge_nyoki, *hoge_v775 = 0;
+   tree->SetBranchStatus("gate",1);
+   tree->SetBranchStatus("S0img",1);
+   
+   art::TGateArray *gate;
+   TClonesArray  *hoge_nyoki, *hoge_v775 = 0, *hoge_S0img;
    tree->SetBranchAddress("nyoki",&hoge_nyoki);
+   tree->SetBranchAddress("gate",&gate);
+   tree->SetBranchAddress("S0img",&hoge_S0img);
    //tree->SetBranchAddress("plaV775",&hoge_v775);
 
 	//art::TTimingChargeData * data;
@@ -86,6 +91,9 @@ void NyokiTCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t a_adj=0, Double
       
       tree->GetEntry(eventID,0);
       
+      //________________gate
+      if(!gate->Test(12)) continue;
+      
    	//--------- Get S0D timing
 		/*S0Dt = TMath::QuietNaN();
 		Bool_t hitFlag = 0;
@@ -101,8 +109,11 @@ void NyokiTCali(Int_t nyokiIDa = 7, Int_t nyokiIDb = 8, Double_t a_adj=0, Double
       if( hitFlag == 0 ) continue; 
       /**/
       
+      //______________ S0img
+      
+      
    
-		//--------- Get nyoki T
+        //--------- Get nyoki T
       Int_t nHit = hoge_nyoki->GetEntriesFast();
       if( nHit < 2) continue;
       

@@ -77,43 +77,195 @@ Bool_t Selector_PostAna::Process(Long64_t entry)
         eventID = entry;
 
         //______________________________________________________________ run number
-        runNum = eventheader0->GetRunNumber();
-
+        b_eventheader->GetEntry(entry);
+        runNum = eventheader->GetRunNumber();
+        //runNum = eventheader0->GetRunNumber();
+        
+        if( runNum == 29 ) return kTRUE;
+        
+        //______________________________________________________________ conReg
+        b_coinReg->GetEntry(entry);
+        coinRegNum = 0; 
+        if( coinReg->Test(0) ) {coinRegNum += 0;} // F3 
+        if( coinReg->Test(1) ) {coinRegNum += 2;}  // FH9 downscale 
+        if( coinReg->Test(2) ) {coinRegNum += 4;}   // ppcoin
+        
+        if( coinReg->Test(3) ) {coinRegNum += 8;} // ND coin
+        if( coinReg->Test(4) ) {coinRegNum += 16;} // ppsingle
+        if( coinReg->Test(5) ) {coinRegNum += 32;} // NDsingle
+        if( coinReg->Test(6) ) {coinRegNum += 64;} // ND cosmic
+        
+        //if( coinRegNum[0] == 0 && coinRegNum[0] == 0) return kTRUE;
+        //if( coinRegNum == 64) return kTRUE;
+        
+        //printf(" %d, %d, %d, %d \n", coinReg->Test(1), coinRegNum[0], coinReg->Test(2), coinRegNum[1]); 
+        
         //______________________________________________________________ gate Num
         b_gate->GetEntry(entry);
-        if( gate->Test(9) ) {gateNum = 1;} //radius <= 7
-        if( gate->Test(11) && !gate->Test(9)) {gateNum = 2;} //radius <= 14
-
+        gateNum = 4;
+        if( gate->Test(12) ) {gateNum = 1;} //radius <= 5
+        if( gate->Test(9) && !gate->Test(12)) {gateNum = 2;} //radius <= 7
+        if( gate->Test(11) && !gate->Test(9)) {gateNum = 3;} //radius <= 14
+        
+        pidusGate = -10;
+        for( Int_t p = 0; p < 9; p++){
+                if( gate->Test(p) ) {
+                        pidusGate = p;
+                }
+        }
+        piddsGate[0] = 0;
+        piddsGate[1] = 0;
+        if( gate->Test(13)) {piddsGate[0] = 1;}
+        if( gate->Test(14)) {piddsGate[1] = 1;}
+        
         //______________________________________________________________ FH9
         /*b_plaV1190_FH9->GetEntry(entry);
         b_tof_US->GetEntry(entry);
         for( Int_t p = 0; p < plaV1190_FH9 -> GetEntriesFast(); p++){
         Int_t HitID  = ((art::TTimeDifference*)plaV1190_FH9->At(p))->GetHitID();
         tofFH9  = ((art::TTimeDifference*)plaV1190_FH9->At(p))->GetTiming();
-        QFH9 = ((art::TTwoSidedPlasticData*) tof_US->At(HitID-1))->GetCharge();
+        qFH9 = ((art::TTwoSidedPlasticData*) tof_US->At(HitID-1))->GetCharge();
         if( TMath::Abs(tofFH9+1463)<3 ) break;
         }
         */
         
-        //______________________________________________________________ NyokiQ = QS1
-        //b_nyoki_t->GetEntry(entry);
-        //Int_t nyoki_ID = -1;
-        //for( Int_t p = 0; p < nyoki_t->GetEntriesFast(); p++){
-        //        QS1 = ((art::TTimingChargeData*)nyoki_t->At(p))->GetCharge() ;
-        //        nyoki_ID = ((art::TTimingChargeData*)nyoki_t->At(p))->GetAuxID() ;
-        //}
+        //______________________________________________________________ plaV775_cal
+        tTplaLB = TMath::QuietNaN();
+        tTplaRF = TMath::QuietNaN();
+        b_plaV775_L_cal->GetEntry(entry,0);
+        for( Int_t p = 0; p < plaV775_L_cal -> GetEntriesFast(); p++){
+                Int_t DetID = ((art::TTimingChargeData*)plaV775_L_cal->At(p))->GetID();
+                Double_t timing = ((art::TTimingChargeData*)plaV775_L_cal->At(p))->GetTiming(); 
+                if ( DetID == 0 ) {
+                        tTplaLB = timing;
+                }
+                if ( DetID == 1 ) {
+                        tTplaRF = timing;
+                }
+                if ( DetID == 4 ) {
+                        tS0DU = timing;
+                        qS0DU = ((art::TTimingChargeData*)plaV775_L_cal->At(p))->GetCharge();
+                }
+        }
         
+        //______________________________________________________________ plaV775_cal
+        tTplaLF = TMath::QuietNaN();
+        tTplaRB = TMath::QuietNaN();
+        b_plaV775_R_cal->GetEntry(entry,0);
+        for( Int_t p = 0; p < plaV775_R_cal -> GetEntriesFast(); p++){
+                Int_t DetID = ((art::TTimingChargeData*)plaV775_R_cal->At(p))->GetID();
+                Double_t timing = ((art::TTimingChargeData*)plaV775_R_cal->At(p))->GetTiming(); 
+                if ( DetID == 0 ) {
+                        tTplaLF = timing;
+                }
+                if ( DetID == 1 ) {
+                        tTplaRB = timing;
+                }
+                if ( DetID == 4 ) {
+                        tS0DD = timing;
+                        qS0DD = ((art::TTimingChargeData*)plaV775_R_cal->At(p))->GetCharge();
+                }
+        }
+
+        if(tTplaLB == 0) tTplaLB = TMath::QuietNaN();
+        if(tTplaRF == 0) tTplaRF = TMath::QuietNaN();
+        if(tTplaLF == 0) tTplaLF = TMath::QuietNaN();
+        if(tTplaRB == 0) tTplaRB = TMath::QuietNaN();        
+        
+        //______________________________________________________________ time, charge and TOF
+        b_plaV775->GetEntry(entry,0);
+        tS0D = TMath::QuietNaN();
+        qS0D = TMath::QuietNaN();
+        tTplaL = TMath::QuietNaN();
+        qTplaL = TMath::QuietNaN();
+        tTplaR = TMath::QuietNaN();
+        qTplaR = TMath::QuietNaN();
+        tF3 = TMath::QuietNaN();
+        qF3 = TMath::QuietNaN();
+        tFH9 = TMath::QuietNaN();
+        for( Int_t p = 0; p < plaV775 -> GetEntriesFast(); p++){
+                Int_t DetID = ((art::TTimingChargeData*)plaV775->At(p))->GetID();
+                Double_t timing = ((art::TTimingChargeData*)plaV775->At(p))->GetTiming(); 
+                Double_t charge = ((art::TTimingChargeData*)plaV775->At(p))->GetCharge();
+                if ( DetID == 0 ) {
+                        tTplaL = timing;
+                        qTplaL = charge;
+                        //tTplaLB = ((art::TTwoSidedPlasticData*)plaV775->At(p))->GetT1();
+                        //tTplaLF = ((art::TTwoSidedPlasticData*)plaV775->At(p))->GetT2();
+                }
+                if ( DetID == 1 ) {
+                        tTplaR = timing;
+                        qTplaR = charge;
+                        //tTplaRB = ((art::TTwoSidedPlasticData*)plaV775->At(p))->GetT1();
+                        //tTplaRF = ((art::TTwoSidedPlasticData*)plaV775->At(p))->GetT2();
+                }
+                if ( DetID == 2 ) {
+                        tF3 = timing;
+                        qF3 = charge;
+                }
+                if ( DetID == 3 ) {
+                        tFH9 = timing;
+                }
+                if ( DetID == 4 ) {
+                        tS0D = timing;
+                        qS0D = charge;
+                }
+        }
+        
+        if( tFH9 == 0 ) tFH9 = TMath::QuietNaN();
+        if( tF3 == 0 ) tF3 = TMath::QuietNaN();
+        if( tTplaL == 0 ) tTplaL = TMath::QuietNaN();
+        if( tTplaR == 0 ) tTplaR = TMath::QuietNaN();
+        if( qTplaL == 0 ) qTplaL = TMath::QuietNaN();
+        if( qTplaR == 0 ) qTplaR = TMath::QuietNaN();
+        
+        tTgt = tFH9 + (tFH9-tF3)*10865./74075.;
+        
+        
+        tof_S0D = TMath::QuietNaN();
+        b_tofS0D->GetEntry(entry);
+        for( Int_t p = 0; p < tofS0D -> GetEntriesFast(); p++){
+                tof_S0D = ((art::TTimingData*)tofS0D->At(p))->GetTiming();
+        }
+        
+        tofTplaL = TMath::QuietNaN();
+        b_tofL->GetEntry(entry);
+        for( Int_t p = 0; p < tofL -> GetEntriesFast(); p++){
+                tofTplaL = ((art::TTimingData*)tofL->At(p))->GetTiming();
+        }
+        
+        
+        tofTplaR = TMath::QuietNaN();
+        b_tofR->GetEntry(entry);
+        for( Int_t p = 0; p < tofR -> GetEntriesFast(); p++){
+                tofTplaR = ((art::TTimingData*)tofR->At(p))->GetTiming();
+        }
+        
+        
+        //______________________________________________________________ nyoki
+        b_nyoki->GetEntry(entry);
+        for( Int_t p = 0; p < 14; p++){
+                tS1[p] = TMath::QuietNaN();
+                qS1[p] = TMath::QuietNaN();
+        }
+        for( Int_t p = 0; p < nyoki->GetEntriesFast(); p++){
+                Int_t nS1 = ((art::TTimingChargeData*)nyoki->At(p))->GetID() ;
+                tS1[nS1] = ((art::TTimingChargeData*)nyoki->At(p))->GetTiming() ;
+                if( tS1[nS1] == 0) tS1[nS1] == TMath::QuietNaN();
+                qS1[nS1] = ((art::TTimingChargeData*)nyoki->At(p))->GetCharge() ;
+                if( qS1[nS1] == 0) qS1[nS1] == TMath::QuietNaN();
+        }
+
         //______________________________________________________________ tofS1
         b_tof_D1->GetEntry(entry);
+        for( Int_t p = 0; p < 14; p++){
+                tofS1[p] = TMath::QuietNaN();
+        }
         for( Int_t p = 0; p < tof_D1->GetEntriesFast(); p++){
-                tofS1 = ((art::TTimingChargeData*)tof_D1->At(p))->GetTiming() ;
-                if( TMath::Abs(tofS1-36)>20) {
-                        tofS1 = kInvalidD;
-                        continue;
-                }
-                QS1 = ((art::TTimingChargeData*)tof_D1->At(p))->GetCharge() ;
-                if( QS1<0) {
-                        QS1 = kInvalidD;
+                Int_t nS1 = ((art::TTimingChargeData*)tof_D1->At(p))->GetID() ;
+                tofS1[nS1] = ((art::TTimingChargeData*)tof_D1->At(p))->GetTiming() ;
+                if( TMath::Abs(tofS1[nS1]-34)>20) {
+                        tofS1[nS1] = TMath::QuietNaN();
                         continue;
                 }
         }
@@ -121,20 +273,25 @@ Bool_t Selector_PostAna::Process(Long64_t entry)
 
         //______________________________________________________________ S0img
         b_S0img->GetEntry(entry);
+        s0x = TMath::QuietNaN();
+        s0y = TMath::QuietNaN();
+        s0a = TMath::QuietNaN();
+        s0b = TMath::QuietNaN();
         for( Int_t p = 0; p < S0img->GetEntriesFast(); p++){
                 s0x = ((art::TTrack*)((art::TMWDCTrackingResult*)S0img->At(p))->GetTrack())->GetX();
-                //s1a = ((art::TTrack*)((art::TMWDCTrackingResult*)smwdc_S1->At(p))->GetTrack())->GetA();
+                s0a = ((art::TTrack*)((art::TMWDCTrackingResult*)S0img->At(p))->GetTrack())->GetA();
                 s0y = ((art::TTrack*)((art::TMWDCTrackingResult*)S0img->At(p))->GetTrack())->GetY();
-                //s1b = ((art::TTrack*)((art::TMWDCTrackingResult*)smwdc_S1->At(p))->GetTrack())->GetB();
+                s0b = ((art::TTrack*)((art::TMWDCTrackingResult*)S0img->At(p))->GetTrack())->GetB();
         }   
 
+/*
         //______________________________________________________________ vertex Z
         b_vertex->GetEntry(entry);
         for( Int_t p = 0; p < vertex->GetEntriesFast(); p++){
                 vertexZ = ((art::TTrack*)vertex->At(p))->GetZ();
         }
         //if( TMath::Abs(vertexZ-10)>40 ) {return kTRUE;}
-
+*/
         //______________________________________________________________ MWDC-S1
         b_smwdc_S1->GetEntry(entry);
         for( Int_t p = 0; p < smwdc_S1->GetEntriesFast(); p++){
@@ -145,7 +302,7 @@ Bool_t Selector_PostAna::Process(Long64_t entry)
         }   
         //if( TMath::IsNaN(s1x) ) {return kTRUE;}
         //if( s1x> 3 ) {return kTRUE;}
-
+/*
         //______________________________________________________________ PID downstream
         b_pid_ds->GetEntry(entry);
         pidAOQ = pid_ds->GetAOQ(); 
@@ -195,6 +352,7 @@ Bool_t Selector_PostAna::Process(Long64_t entry)
         Exc = p2p_c->GetSp2()-13.26;
         kMomtc = p2p_c->GetResidual()->P();
 
+*/
         //______________________________________________________________   
         saveFile->cd(); //set focus on this file
         newTree->Fill();  
@@ -221,4 +379,6 @@ void Selector_PostAna::Terminate()
         saveFile->cd(); //set focus on this file
         newTree->Write(); 
         saveFile->Close();
+        
+        printf("-------------- done. \n");
 }

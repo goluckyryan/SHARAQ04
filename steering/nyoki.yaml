@@ -22,11 +22,11 @@ Processor:
     parameter:
       CatID:              48
       TimingTypeID:       0       #colnumber of map file[0=first]
-      TrailingComesFirst: 0      # 0 negative voltage input
+      TrailingComesFirst: 1      # 0 negative voltage input
       ChargeType:         1       # 1 seems to be OK, but it is V1190.
       ChargeTypeID:       1
       OutputCollection:   nyoki_raw
-      OutputTransparency: 1                       # 1 = no output
+      OutputTransparency: 0                       # 1 = no output
 
   - name: plastic_nyoki_cal
     type: art::TTimingChargeCalibrationProcessor

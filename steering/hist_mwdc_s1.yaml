@@ -19,9 +19,14 @@ group:
       x: ["plaV775.fID==4", 6, -1, 5]
       cut: plaV775.fID == 4
 
-    - name:  nyoki_t_ID
-      title: nyoki_t ID
+    - name:  nyoki_ID
+      title: nyoki ID
+      x: [nyoki.fID, 14, 0, 14]
+
+    - name:  nyoki_t_ID_gated
+      title: nyoki_t ID | time (-270,-210)
       x: [nyoki_t.fAuxID, 14, 0, 14]
+      cut: nyoki_t.fTiming > -270 && nyoki_t.fTiming<-210
 
     - name:  nyoki_t
       title: nyoki_t Time
@@ -56,6 +61,43 @@ group:
       x: [smwdc_S1.fNCombinationProcessed, 11, 0, 11]
       cut: smwdc_S1.IsGood()
       
+    - name:  S1_NCP_2
+      title: MWDC-S1 Number of Combination Processed | IsGood
+      x: [smwdc_S1.fNCombinationProcessed, 11, 0, 11]
+      cut: smwdc_S1.IsGood() && smwdc_S1.fNPlaneValid==6
+
+    #------------------ Multiplicity
+    - name: S1_x1_multi
+      title: S1 x1 Multiplicity
+      x: ["Sum$(smwdc_S1_x1.fCharge>350 && !TMath::IsNaN(smwdc_S1_x1.fDriftLength) )", 10, 0, 10]
+      cut: !TMath::IsNaN(smwdc_S1_x1.fID) && !TMath::IsNaN(smwdc_S1_x1.fDriftLength)
+      
+    - name: S1_x2_multi
+      title: S1 x2 Multiplicity
+      x: ["Sum$(smwdc_S1_x2.fCharge>350 && !TMath::IsNaN(smwdc_S1_x2.fDriftLength) )", 10, 0, 10]
+      cut: !TMath::IsNaN(smwdc_S1_x2.fID) && !TMath::IsNaN(smwdc_S1_x2.fDriftLength)
+      
+    - name: S1_u1_multi
+      title: S1 u1 Multiplicity
+      x: ["Sum$(smwdc_S1_u1.fCharge>350 && !TMath::IsNaN(smwdc_S1_u1.fDriftLength) )", 10, 0, 10]
+      cut: !TMath::IsNaN(smwdc_S1_u1.fID) && !TMath::IsNaN(smwdc_S1_u1.fDriftLength)
+
+    - name: S1_u2_multi
+      title: S1 u2 Multiplicity
+      x: ["Sum$(smwdc_S1_u2.fCharge>350 && !TMath::IsNaN(smwdc_S1_u2.fDriftLength) )", 10, 0, 10]
+      cut: !TMath::IsNaN(smwdc_S1_u2.fID) && !TMath::IsNaN(smwdc_S1_u2.fDriftLength)
+
+    - name: S1_v1_multi
+      title: S1 v1 Multiplicity
+      x: ["Sum$(smwdc_S1_v1.fCharge>350 && !TMath::IsNaN(smwdc_S1_v1.fDriftLength) )", 10, 0, 10]
+      cut: !TMath::IsNaN(smwdc_S1_v1.fID) && !TMath::IsNaN(smwdc_S1_v1.fDriftLength)
+
+    - name: S1_v2_multi
+      title: S1 v2 Multiplicity
+      x: ["Sum$(smwdc_S1_v2.fCharge>350 && !TMath::IsNaN(smwdc_S1_v2.fDriftLength) )", 10, 0, 10]
+      cut: !TMath::IsNaN(smwdc_S1_v2.fID) && !TMath::IsNaN(smwdc_S1_v2.fDriftLength)
+ 
+      
     #------------------ DT
     - name:  S1_DT
       title: MWDC-S1 Drift Time
@@ -79,11 +121,7 @@ group:
       title: MWDC-S1 Energy Loss vd Drift-time
       y: [smwdc_S1_DT.fCharge, 300,    0, 1500]
       x: [smwdc_S1_DT.fTiming, 300, -100, 300]
-      
-#    - name: S1_x1_multi
-#      title: S1 x1 Multiplicity
-#      x: ["@smwdc_S1_x1.fSize", 20, 0, 20]
-# 
+
     #------------------ plane
     - name: S1_x1_dt
       title: *ChargeGate_S1
@@ -229,6 +267,11 @@ group:
       title: MWDC-S1 Q Adopted
       x: [smwdc_S1.fChargeAdopted, 300, 0, 1500]
       
+    - name:  S1_AvgQ_A
+      title: MWDC-S1 Avg(Q) Adopted | IsGood
+      x: [smwdc_S1.fAuxID, 300, 0, 1500]
+      cut: smwdc_S1.IsGood()
+      
     - name:  S1_DL_org
       title: MWDC-S1 Drift Length Original
       x: [smwdc_S1.fDriftLengthOriginal, 300, -1, 11]
@@ -285,34 +328,6 @@ group:
       title: MWDC-S1 SSR
       x: [smwdc_S1.fSSR, 100, 0, 0.5]
     
-    #------------------ Sigma
-    - name: S1_sX
-      title: MWDC-S1 Sigma(X) [mm]
-      x: [smwdc_S1.GetSigma(0), 100, 0, 1]
-    - name: S1_sA
-      title: MWDC-S1 Sigma(A) [mrad]
-      x: [smwdc_S1.GetSigma(1)*1000, 100, 0, 30]
-    - name: S1_sY
-      title: MWDC-S1 Sigma(Y) [mm]
-      x: [smwdc_S1.GetSigma(2), 100, 0, 1]
-    - name: S1_sB
-      title: MWDC-S1 Sigma(B) [mrad]
-      x: [smwdc_S1.GetSigma(3)*1000, 100, 0, 30]
-    
-    #------------------ CI
-    - name: S1_C1X
-      title: MWDC-S1 CI(X) [mm]
-      x: [smwdc_S1.GetCI(0), 100, 0, 10]
-    - name: S1_CIA
-      title: MWDC-S1 CI(A) [mrad]
-      x: [smwdc_S1.GetCI(1)*1000, 100, 0, 60]
-    - name: S1_CIY
-      title: MWDC-S1 CI(Y) [mm]
-      x: [smwdc_S1.GetCI(2), 100, 0, 10]
-    - name: S1_CIB
-      title: MWDC-S1 CI(B) [mrad]
-      x: [smwdc_S1.GetCI(3)*1000, 100, 0, 200]
-    
     #------------------ Track Ray
     - name:  S1_X
       title: MWDC-S1 X | IsGood()
@@ -358,11 +373,145 @@ group:
       y: [smwdc_S1.fTrack.fB, 400, -1, 1]
       cut: smwdc_S1.IsGood()
       
-    - name:  S1_XA_2
-      title: MWDC-S1 A vs X | IsGood()
+    - name:  S1_XA_m30
+      title: MWDC-S1 A vs X(-30) | IsGood()
       x: [smwdc_S1.fTrack.X(-30), 800, -200, 600]
       y: [smwdc_S1.fTrack.fA, 400, -1, 1]
       cut: smwdc_S1.IsGood()
+
+    - name:  S1_XA_singleHit
+      title: MWDC-S1 A vs X | IsGood() & SingleHit
+      x: [smwdc_S1.fTrack.fX, 800, -200, 600]
+      y: [smwdc_S1.fTrack.fA, 400, -1, 1]
+      cut: smwdc_S1.IsGood() & smwdc_S1.fNCombination == 1
+ 
+    - name:  S1_XY_singleHit
+      title: MWDC-S1 Y vs X | IsGood() & SingleHit
+      x: [smwdc_S1.fTrack.fX, 800, -200, 600]
+      y: [smwdc_S1.fTrack.fY, 400, -200, 200]
+      cut: smwdc_S1.IsGood() & smwdc_S1.fNCombination == 1
+ 
+    - name:  S1_YB_singleHit
+      title: MWDC-S1 B vs Y | IsGood() & SingleHit
+      x: [smwdc_S1.fTrack.fY, 400, -200, 200]
+      y: [smwdc_S1.fTrack.fB, 400, -1, 1]
+      cut: smwdc_S1.IsGood() & smwdc_S1.fNCombination == 1
+ 
+    - name:  S1_AB_singleHit
+      title: MWDC-S1 A vs B | IsGood() & SingleHit
+      x: [smwdc_S1.fTrack.fA, 400, -1, 1]
+      y: [smwdc_S1.fTrack.fB, 400, -1, 1]
+      cut: smwdc_S1.IsGood() & smwdc_S1.fNCombination == 1
+      
+   #-------------------- DT vs DLi
+    - name: S1_DT_DL1
+      title: MWDC-S1, DT vs DL(x1)
+      y: ["TMath::Abs(smwdc_S1.GetYhati(0) - (smwdc_S1.GetWireIDAdopted(0)-28.375)*20)", 200,  0, 12]
+      x: ["smwdc_S1.GetDriftTimeAdopted(0)", 200, -50, 200]
+      cut: smwdc_S1.IsGood() && smwdc_S1.fNCombination == 1
+      
+    - name: S1_DT_DL_x1
+      title: MWDC-S1, DT vs DL, x1
+      y: ["smwdc_S1.GetDriftLengthAdopted(0)", 200, 0, 10]
+      x: ["smwdc_S1.GetDriftTimeAdopted(0)", 200, -50, 200]
+      cut: smwdc_S1.IsGood() && smwdc_S1.fNCombination == 1
+
+    - name: S1_DT_DL2
+      title: MWDC-S1, DT vs DL(x2)
+      y: ["TMath::Abs(smwdc_S1.GetYhati(1) - (smwdc_S1.GetWireIDAdopted(1)-28.625)*20)", 200, 0, 12]
+      x: ["smwdc_S1.GetDriftTimeAdopted(1)", 200, -50, 200]
+      cut: smwdc_S1.IsGood() && smwdc_S1.fNCombination == 1
+
+    - name: S1_DT_DL_x2
+      title: MWDC-S1, DT vs DL, x2
+      y: ["smwdc_S1.GetDriftLengthAdopted(1)", 200, 0, 10]
+      x: ["smwdc_S1.GetDriftTimeAdopted(1)", 200, -50, 200]
+      cut: smwdc_S1.IsGood() && smwdc_S1.fNCombination == 1
+      
+    - name: S1_DT_DL3
+      title: MWDC-S1, DT vs DL(u1)
+      y: ["TMath::Abs(smwdc_S1.GetYhati(2) - (smwdc_S1.GetWireIDAdopted(2)-22.375)*20)", 200, 0, 12]
+      x: ["smwdc_S1.GetDriftTimeAdopted(2)", 200, -50, 200]
+      cut: smwdc_S1.IsGood() && smwdc_S1.fNCombination == 1
+
+    - name: S1_DT_DL_u1
+      title: MWDC-S1, DT vs DL, u1
+      y: ["smwdc_S1.GetDriftLengthAdopted(2)", 200, 0, 10]
+      x: ["smwdc_S1.GetDriftTimeAdopted(2)", 200, -50, 200]
+      cut: smwdc_S1.IsGood() && smwdc_S1.fNCombination == 1
+
+    - name: S1_DT_DL4
+      title: MWDC-S1, DT vs DL(u2)
+      y: ["TMath::Abs(smwdc_S1.GetYhati(3) - (smwdc_S1.GetWireIDAdopted(3)-22.625)*20)", 200, 0, 12]
+      x: ["smwdc_S1.GetDriftTimeAdopted(3)", 200, -50, 200]
+      cut: smwdc_S1.IsGood() && smwdc_S1.fNCombination == 1
+
+    - name: S1_DT_DL_u2
+      title: MWDC-S1, DT vs DL, u2
+      y: ["smwdc_S1.GetDriftLengthAdopted(3)", 200, 0, 10]
+      x: ["smwdc_S1.GetDriftTimeAdopted(3)", 200, -50, 200]
+      cut: smwdc_S1.IsGood() && smwdc_S1.fNCombination == 1
+
+    - name: S1_DT_DL5
+      title: MWDC-S1, DT vs DL(v1)
+      y: ["TMath::Abs(smwdc_S1.GetYhati(4) - (smwdc_S1.GetWireIDAdopted(4)-22.375)*20)", 200, 0, 12]
+      x: ["smwdc_S1.GetDriftTimeAdopted(4)", 200, -50, 200]
+      cut: smwdc_S1.IsGood() && smwdc_S1.fNCombination == 1
+
+    - name: S1_DT_DL_v1
+      title: MWDC-S1, DT vs DL, v1
+      y: ["smwdc_S1.GetDriftLengthAdopted(4)", 200, 0, 10]
+      x: ["smwdc_S1.GetDriftTimeAdopted(4)", 200, -50, 200]
+      cut: smwdc_S1.IsGood() && smwdc_S1.fNCombination == 1
+
+    - name: S1_DT_DL6
+      title: MWDC-S1, DT vs DL(v2)
+      y: ["TMath::Abs(smwdc_S1.GetYhati(5) - (smwdc_S1.GetWireIDAdopted(5)-22.625)*20)", 200, 0, 12]
+      x: ["smwdc_S1.GetDriftTimeAdopted(5)", 200, -50, 200]
+      cut: smwdc_S1.IsGood() && smwdc_S1.fNCombination == 1
+
+    - name: S1_DT_DL_v2
+      title: MWDC-S1, DT vs DL, v2
+      y: ["smwdc_S1.GetDriftLengthAdopted(5)", 200, 0, 10]
+      x: ["smwdc_S1.GetDriftTimeAdopted(5)", 200, -50, 200]
+      cut: smwdc_S1.IsGood() && smwdc_S1.fNCombination == 1
+
+   #-------------------- DL vs DLi
+    - name: S1_DL_DL1
+      title: MWDC-S1, DL vs DL(x1)
+      x: ["smwdc_S1.GetYhati(0) - (smwdc_S1.GetWireIDAdopted(0)-28.375)*20", 200, -10, 10]
+      y: ["smwdc_S1.GetDriftLengthAdopted(0)", 200, 0, 10]
+      cut: smwdc_S1.IsGood() && smwdc_S1.fNCombination == 1
+
+    - name: S1_DL_DL2
+      title: MWDC-S1, DL vs DL(x2)
+      x: ["smwdc_S1.GetYhati(1) - (smwdc_S1.GetWireIDAdopted(1)-28.625)*20", 200, -10, 10]
+      y: ["smwdc_S1.GetDriftLengthAdopted(1)", 200, 0, 10]
+      cut: smwdc_S1.IsGood() && smwdc_S1.fNCombination == 1
+      
+    - name: S1_DL_DL3
+      title: MWDC-S1, DL vs DL(u1)
+      x: ["smwdc_S1.GetYhati(2) - (smwdc_S1.GetWireIDAdopted(2)-22.375)*20", 200, -10, 10]
+      y: ["smwdc_S1.GetDriftLengthAdopted(2)", 200, 0, 10]
+      cut: smwdc_S1.IsGood() && smwdc_S1.fNCombination == 1
+
+    - name: S1_DL_DL4
+      title: MWDC-S1, DL vs DL(u2)
+      x: ["smwdc_S1.GetYhati(3) - (smwdc_S1.GetWireIDAdopted(3)-22.625)*20", 200, -10, 10]
+      y: ["smwdc_S1.GetDriftLengthAdopted(3)", 200, 0, 10]
+      cut: smwdc_S1.IsGood() && smwdc_S1.fNCombination == 1
+      
+    - name: S1_DL_DL5
+      title: MWDC-S1, DL vs DL(v1)
+      x: ["smwdc_S1.GetYhati(4) - (smwdc_S1.GetWireIDAdopted(4)-22.375)*20", 200, -10, 10]
+      y: ["smwdc_S1.GetDriftLengthAdopted(4)", 200, 0, 10]
+      cut: smwdc_S1.IsGood() && smwdc_S1.fNCombination == 1
+
+    - name: S1_DL_DL6
+      title: MWDC-S1, DL vs DL(v2)
+      x: ["smwdc_S1.GetYhati(5) - (smwdc_S1.GetWireIDAdopted(5)-22.625)*20", 200, -10, 10]
+      y: ["smwdc_S1.GetDriftLengthAdopted(5)", 200, 0, 10]
+      cut: smwdc_S1.IsGood() && smwdc_S1.fNCombination == 1
 
    #-------------------- DL correlation
     - name: S1_x_DL
@@ -382,7 +531,54 @@ group:
       x: ["smwdc_S1.GetLRAdopted(4)*smwdc_S1.GetDriftLengthAdopted(4)", 200, -10, 10]
       y: ["smwdc_S1.GetLRAdopted(5)*smwdc_S1.GetDriftLengthAdopted(5)", 200, -10, 10]
       cut: smwdc_S1.IsGood() & smwdc_S1.fNPlaneValid == 6 & smwdc_S1.GetWireIDAdopted(4) == smwdc_S1.GetWireIDAdopted(5)
- 
+
+   #-------------------- Check wire Direction
+    - name: S1_XA_wireID_i
+      title: S1 A vs X | wireID(0) - wireID(1) == -1
+      x: [smwdc_S1.fTrack.fX, 800, -200, 600]
+      y: [smwdc_S1.fTrack.fA, 400, -1, 1]
+      cut: smwdc_S1.IsGood() && smwdc_S1.GetWireIDAdopted(0) - smwdc_S1.GetWireIDAdopted(1) == -1
+
+    - name: S1_XA_wireID_0
+      title: S1 A vs X | wireID(0) - wireID(1) == 0
+      x: [smwdc_S1.fTrack.fX, 800, -200, 600]
+      y: [smwdc_S1.fTrack.fA, 400, -1, 1]
+      cut: smwdc_S1.IsGood() && smwdc_S1.GetWireIDAdopted(0) - smwdc_S1.GetWireIDAdopted(1) == 0
+      
+    - name: S1_XA_wireID_1
+      title: S1 A vs X | wireID(0) - wireID(1) == 1
+      x: [smwdc_S1.fTrack.fX, 800, -200, 600]
+      y: [smwdc_S1.fTrack.fA, 400, -1, 1]
+      cut: smwdc_S1.IsGood() && smwdc_S1.GetWireIDAdopted(0) - smwdc_S1.GetWireIDAdopted(1) == 1
+
+    #------------------ Sigma
+    - name: S1_sX
+      title: MWDC-S1 Sigma(X) [mm]
+      x: [smwdc_S1.GetSigma(0), 100, 0, 1]
+    - name: S1_sA
+      title: MWDC-S1 Sigma(A) [mrad]
+      x: [smwdc_S1.GetSigma(1)*1000, 100, 0, 30]
+    - name: S1_sY
+      title: MWDC-S1 Sigma(Y) [mm]
+      x: [smwdc_S1.GetSigma(2), 100, 0, 1]
+    - name: S1_sB
+      title: MWDC-S1 Sigma(B) [mrad]
+      x: [smwdc_S1.GetSigma(3)*1000, 100, 0, 30]
+    
+    #------------------ CI
+    - name: S1_C1X
+      title: MWDC-S1 CI(X) [mm]
+      x: [smwdc_S1.GetCI(0), 100, 0, 10]
+    - name: S1_CIA
+      title: MWDC-S1 CI(A) [mrad]
+      x: [smwdc_S1.GetCI(1)*1000, 100, 0, 60]
+    - name: S1_CIY
+      title: MWDC-S1 CI(Y) [mm]
+      x: [smwdc_S1.GetCI(2), 100, 0, 10]
+    - name: S1_CIB
+      title: MWDC-S1 CI(B) [mrad]
+      x: [smwdc_S1.GetCI(3)*1000, 100, 0, 200]
+
    #-------------------- Check wire Direction
     - name: S1_x1_wiredir
       title: MWDC-S1 x1 wire dir

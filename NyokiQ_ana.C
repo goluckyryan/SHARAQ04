@@ -95,8 +95,8 @@
                 //if( coinReg->Test(0) != 1) continue;
                 //if ( gate->Test(6) != 1) continue; 
                 //if ( gate->Test(8) == 1) continue; 
-                if ( gate->Test(0) != 1) continue; 
-                //if ( gate->Test(15) != 1) continue;
+                //if ( gate->Test(0) != 1) continue; 
+                if ( gate->Test(15) != 1) continue;
                 
                 //intialization
                 QS0D = TMath::QuietNaN();
