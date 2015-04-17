@@ -1,18 +1,7 @@
-alias:
-  pid23F : gate.Test(0)
-  pid22O : gate.Test(1)
-  pid20N : gate.Test(2)
-  pid16C : gate.Test(3)
-  pid13B : gate.Test(4)
-  pid10Be : gate.Test(5)
-  pid8Li : ggate.Test(6)
-  pid7Li : gate.Test(7)
-  
-  
 #=========================================================
 group:
-  - name: Nyoki_Analysis
-    title: PID downstream
+  - name: Nyoki_run
+    title: Nyoki run
     contents:
     - name: run01
       title: Nyoki PID run01

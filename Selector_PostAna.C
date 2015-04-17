@@ -253,8 +253,20 @@ Bool_t Selector_PostAna::Process(Long64_t entry)
                 tS1[nS1] = ((art::TTimingChargeData*)nyoki->At(p))->GetTiming() ;
                 if( tS1[nS1] == 0) tS1[nS1] == TMath::QuietNaN();
                 qS1[nS1] = ((art::TTimingChargeData*)nyoki->At(p))->GetCharge() ;
-                if( qS1[nS1] == 0) qS1[nS1] == TMath::QuietNaN();
+                if( qS1[nS1] == 0) {
+                        qS1[nS1] == TMath::QuietNaN();
+                        qS1c[nS1] == TMath::QuietNaN();
+                }
+                //___________________________ nyoki - Q correlation
+                Double_t tc = -237;
+                if (tS1[nS1] < tc){
+                        qS1c[nS1] = qS1[nS1]/ (10800*TMath::Exp((tS1[nS1]+205)/17.75)+1740*TMath::Exp((tS1[nS1]+250)/400));
+                }else{
+                        qS1c[nS1] = qS1[nS1]/ (10800*TMath::Exp((tc+205)/17.75)+1740*TMath::Exp((tc+250)/400));
+                }
         }
+        
+        
 
         //______________________________________________________________ tofS1
         b_tof_D1->GetEntry(entry);
@@ -293,7 +305,7 @@ Bool_t Selector_PostAna::Process(Long64_t entry)
         //if( TMath::Abs(vertexZ-10)>40 ) {return kTRUE;}
 */
         //______________________________________________________________ MWDC-S1
-        b_smwdc_S1->GetEntry(entry);
+       /* b_smwdc_S1->GetEntry(entry);
         for( Int_t p = 0; p < smwdc_S1->GetEntriesFast(); p++){
                 s1x = ((art::TTrack*)((art::TMWDCTrackingResult*)smwdc_S1->At(p))->GetTrack())->GetX();
                 s1a = ((art::TTrack*)((art::TMWDCTrackingResult*)smwdc_S1->At(p))->GetTrack())->GetA();

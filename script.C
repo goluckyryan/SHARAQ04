@@ -1,3 +1,5 @@
+#include <fstream>
+
 {
         gROOT->Reset();
         gROOT->ProcessLine(".!date");
@@ -27,8 +29,8 @@
         //tree->Process("Selector_Aux.C");
 
         
-        Int_t Div[2] = {3,2};  //x,y
-        Int_t size[2] = {400,400}; //x,y
+        Int_t Div[2] = {1,1};  //x,y
+        Int_t size[2] = {500,500}; //x,y
         TCanvas * cScript = new TCanvas("cScript", "cScript", 2000,0 , size[0]*Div[0], size[1]*Div[1]);
         cScript->Divide(Div[0],Div[1]);
    
@@ -40,8 +42,54 @@
 //	f0->Close();
 /**/
 //======================================================== analysis
-/************** Tpla Timing on coinReg *********************/
+/************** nyoki Q correction table *********************/
 
+        Int_t nyokiID = 6;
+        TString gate  = "pidusGate == 1";
+        Int_t nBin = 140;
+        Int_t Range[2] = {-320, -180};
+        
+        TString filename; filename.Form("nyoki%0d.dat",nyokiID);
+        
+        File * fout;
+        fout = fopen(filename, "w");
+        
+        
+        TString h1Title; h1Title.Form("qS1[%d]:tS1[%d] | ", nyokiID, nyokiID);
+        h1Title += gate;
+        TH2F * h1 = new TH2F("h1", h1Title, nBin, Range[0], Range[1], 100, 1000, 4500);
+        TH1F * g1 = new TH1F("g1",  "g1"  , nBin, Range[0], Range[1]);
+        g1->SetLineColor(2);
+        
+        TString plot; plot.Form("qS1[%d]:tS1[%d]>>h1", nyokiID, nyokiID);
+        
+        cScript->cd(1);
+        tree->Draw(plot, gate, "colz");
+        
+        Double_t charge_temp = 1400;
+        for(Int_t bin = 1; bin <= nBin; bin ++){
+                Double_t time = h1->GetBinCenter(bin);
+                h1->ProjectionY("htemp", bin, bin);
+                Int_t maxQbin = htemp->GetMaximumBin();
+                Double_t charge = htemp->GetBinCenter(maxQbin);
+                if( time < -220 && charge < charge_temp ) continue;
+                //if( time > -220 && TMath::Abs(charge-charge_temp)>300 ) continue;
+                g1->Fill(time, charge);
+                charge_temp = charge;
+                
+                fprintf(fout, "%8.3f\t%8.3f\n", time, charge);
+        }
+        fclose(fout);
+        g1->Draw("E same");
+        
+        
+        
+        
+        
+        
+
+/************** Tpla Timing on coinReg *********************/
+/*
         Int_t coinRegBit = 2;
         
         TString gate;

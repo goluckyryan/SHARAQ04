@@ -61,10 +61,11 @@ public :
    Double_t tTgt;
 	// tof from S0DPL to nyoki
 	Double_t tofS1[14], qS1[14], tS1[14];
+	Double_t qS1c[14];
 	// SMWDC X Y
 //	Double_t x1, y1, a1, b1; // for smwdc-L
 //	Double_t x2, y2, a2, b2; // for smwdc-R
-   Double_t s1x, s1y, s1a, s1b; // for smwdc-S1
+//   Double_t s1x, s1y, s1a, s1b; // for smwdc-S1
 //	// pid_ds
 //	Double_t pidZ, pidAOQ;
 //	//vertex
@@ -100,7 +101,7 @@ public :
    TClonesArray    *nyoki;
 //   TClonesArray    *nyoki_t;
    TClonesArray    *tof_D1;
-   TClonesArray    *smwdc_S1;
+//   TClonesArray    *smwdc_S1;
 //   art::sh04::TParticleIdentifier *pid_us;
 //   art::sh04::TParticleIdentifier *pid_ds;
 //   TClonesArray    *vertex;
@@ -131,7 +132,7 @@ public :
    TBranch        *b_nyoki;   //!
 //   TBranch        *b_nyoki_t;   //!
    TBranch        *b_tof_D1;   //!
-   TBranch        *b_smwdc_S1;   //!
+//   TBranch        *b_smwdc_S1;   //!
 //   TBranch        *b_pid_us;   //!
 //   TBranch        *b_pid_ds;   //!
 //   TBranch        *b_vertex;   //!
@@ -212,8 +213,8 @@ void Selector_PostAna::Init(TTree *tree)
    fChain = tree;
    fChain->SetMakeClass(1);
 
-   fChain->SetBranchAddress("eventheader", &eventheader, &b_eventheader);
-//   fChain->SetBranchAddress("eventheader0", &eventheader, &b_eventheader);
+//   fChain->SetBranchAddress("eventheader", &eventheader, &b_eventheader);
+   fChain->SetBranchAddress("eventheader0", &eventheader, &b_eventheader);
 //   fChain->SetBranchAddress("eventheader_shvmism", &eventheader_shvmism, &b_eventheader_shvmism);
 //   fChain->SetBranchAddress("eventheader_shvmif3", &eventheader_shvmif3, &b_eventheader_shvmif3);
    fChain->SetBranchAddress("coinReg", &coinReg, &b_coinReg);
@@ -231,7 +232,7 @@ void Selector_PostAna::Init(TTree *tree)
    fChain->SetBranchAddress("nyoki", &nyoki, &b_nyoki);
 //   fChain->SetBranchAddress("nyoki_t", &nyoki_t, &b_nyoki_t);
    fChain->SetBranchAddress("tof_D1", &tof_D1, &b_tof_D1);
-   fChain->SetBranchAddress("smwdc_S1", &smwdc_S1, &b_smwdc_S1);
+//   fChain->SetBranchAddress("smwdc_S1", &smwdc_S1, &b_smwdc_S1);
 //   fChain->SetBranchAddress("pid_us", &pid_us, &b_pid_us);
 //   fChain->SetBranchAddress("pid_ds", &pid_ds, &b_pid_ds);
 //   fChain->SetBranchAddress("vertex", &vertex, &b_vertex);
@@ -277,6 +278,7 @@ void Selector_PostAna::Init(TTree *tree)
       tofS1[p] = TMath::QuietNaN();
       tS1[p] = TMath::QuietNaN();
       qS1[p] = TMath::QuietNaN();
+      qS1c[p] = TMath::QuietNaN();
    }
 //	x1 = TMath::QuietNaN();
 //	y1 = TMath::QuietNaN();
@@ -286,10 +288,10 @@ void Selector_PostAna::Init(TTree *tree)
 //	y2 = TMath::QuietNaN(); 
 //	a2 = TMath::QuietNaN(); 
 //	b2 = TMath::QuietNaN(); 
-   s1x = TMath::QuietNaN();
-   s1y = TMath::QuietNaN(); 
-   s1a = TMath::QuietNaN(); 
-   s1b = TMath::QuietNaN();
+//s1x = TMath::QuietNaN();
+//s1y = TMath::QuietNaN(); 
+//s1a = TMath::QuietNaN(); 
+//s1b = TMath::QuietNaN();
 //	pidZ = TMath::QuietNaN();
 //	pidAOQ = TMath::QuietNaN();
 //	vertexZ = TMath::QuietNaN();
@@ -355,6 +357,7 @@ void Selector_PostAna::Init(TTree *tree)
 	
 	newTree->Branch("tofS1", tofS1, "tofS1[14]/D");
 	newTree->Branch("qS1", qS1, "qS1[14]/D");
+//	newTree->Branch("qS1c", qS1c, "qS1c[14]/D");
 	newTree->Branch("tS1", tS1, "tS1[14]/D");
 	/*
 	newTree->Branch("x1",&x1,"x1/D");
@@ -366,7 +369,7 @@ void Selector_PostAna::Init(TTree *tree)
 	newTree->Branch("a2",&a2,"a2/D");
 	newTree->Branch("y2",&y2,"y2/D");
 	newTree->Branch("b2",&b2,"b2/D");
-	*/
+	
 	newTree->Branch("s1x",&s1x,"s1x/D");
 	newTree->Branch("s1a",&s1a,"s1a/D");
 	newTree->Branch("s1y",&s1y,"s1y/D");

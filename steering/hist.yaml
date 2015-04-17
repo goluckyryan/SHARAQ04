@@ -5,7 +5,8 @@ include:
 #  - hist_mwdc_L.yaml
 #  - hist_mwdc_R.yaml
 #  - hist_mwdc_LR.yaml
-  - hist_mwdc_s1.yaml
+#  - hist_mwdc_s1.yaml
+  - hist_nyoki_Qcorr.yaml
 #  - hist_DCS0D.yaml
 #  - hist_FindGatesforEx.yaml
 #  - hist_ana_proton.yaml

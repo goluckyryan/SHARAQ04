@@ -1,0 +1,197 @@
+#=========================================================
+group:
+  - name: Nyoki_Qcorrection
+    title: Nyoki Qcorrection
+    contents:
+#=========================================================
+    - name: nyoki_00_org
+      title: Nyoki 00 Q vs time
+      x: [nyoki.fTiming, 200, -270, -210]
+      y: [nyoki.fCharge, 200,    0, 4500]
+      cut: nyoki.fID==0
+      
+    - name: nyoki_01_org
+      title: Nyoki 01 Q vs time
+      x: [nyoki.fTiming, 200, -270, -210]
+      y: [nyoki.fCharge, 200,    0, 4500]
+      cut: nyoki.fID==1
+      
+    - name: nyoki_02_org
+      title: Nyoki 02 Q vs time
+      x: [nyoki.fTiming, 200, -270, -210]
+      y: [nyoki.fCharge, 200,    0, 4500]
+      cut: nyoki.fID==2
+      
+    - name: nyoki_03_org
+      title: Nyoki 03 Q vs time
+      x: [nyoki.fTiming, 200, -270, -210]
+      y: [nyoki.fCharge, 200,    0, 4500]
+      cut: nyoki.fID==3
+      
+    - name: nyoki_04_org
+      title: Nyoki 04 Q vs time
+      x: [nyoki.fTiming, 200, -270, -210]
+      y: [nyoki.fCharge, 200,    0, 4500]
+      cut: nyoki.fID==4
+      
+    - name: nyoki_05_org
+      title: Nyoki 05 Q vs time
+      x: [nyoki.fTiming, 200, -270, -210]
+      y: [nyoki.fCharge, 200,    0, 4500]
+      cut: nyoki.fID==5
+      
+    - name: nyoki_06_org
+      title: Nyoki 06 Q vs time
+      x: [nyoki.fTiming, 200, -270, -210]
+      y: [nyoki.fCharge, 200,    0, 4500]
+      cut: nyoki.fID==6
+      
+    - name: nyoki_07_org
+      title: Nyoki 07 Q vs time
+      x: [nyoki.fTiming, 200, -270, -210]
+      y: [nyoki.fCharge, 200,    0, 4500]
+      cut: nyoki.fID==7
+      
+    - name: nyoki_08_org
+      title: Nyoki 08 Q vs time
+      x: [nyoki.fTiming, 200, -270, -210]
+      y: [nyoki.fCharge, 200,    0, 4500]
+      cut: nyoki.fID==8
+      
+    - name: nyoki_09_org
+      title: Nyoki 09 Q vs time
+      x: [nyoki.fTiming, 200, -270, -210]
+      y: [nyoki.fCharge, 200,    0, 4500]
+      cut: nyoki.fID==9
+      
+    - name: nyoki_10_org
+      title: Nyoki 10 Q vs time
+      x: [nyoki.fTiming, 200, -270, -210]
+      y: [nyoki.fCharge, 200,    0, 4500]
+      cut: nyoki.fID==10
+      
+      #===========================================
+    - name: nyoki_00
+      title: Nyoki 00 Q vs time
+      x: [nyoki_c.fTiming, 200, -270, -210]
+      y: [nyoki_c.fCharge, 200,    0,  1.3]
+      cut: nyoki_c.fID==0
+      
+    - name: nyoki_01
+      title: Nyoki 01 Q vs time
+      x: [nyoki_c.fTiming, 200, -270, -210]
+      y: [nyoki_c.fCharge, 200,    0,  1.3]
+      cut: nyoki_c.fID==1
+      
+    - name: nyoki_02
+      title: Nyoki 02 Q vs time
+      x: [nyoki_c.fTiming, 200, -270, -210]
+      y: [nyoki_c.fCharge, 200,    0,  1.3]
+      cut: nyoki_c.fID==2
+      
+    - name: nyoki_03
+      title: Nyoki 03 Q vs time
+      x: [nyoki_c.fTiming, 200, -270, -210]
+      y: [nyoki_c.fCharge, 200,    0,  1.3]
+      cut: nyoki_c.fID==3
+      
+    - name: nyoki_04
+      title: Nyoki 04 Q vs time
+      x: [nyoki_c.fTiming, 200, -270, -210]
+      y: [nyoki_c.fCharge, 200,    0,  1.3]
+      cut: nyoki_c.fID==4
+      
+    - name: nyoki_05
+      title: Nyoki 05 Q vs time
+      x: [nyoki_c.fTiming, 200, -270, -210]
+      y: [nyoki_c.fCharge, 200,    0,  1.3]
+      cut: nyoki_c.fID==5
+      
+    - name: nyoki_06
+      title: Nyoki 06 Q vs time
+      x: [nyoki_c.fTiming, 200, -270, -210]
+      y: [nyoki_c.fCharge, 200,    0,  1.3]
+      cut: nyoki_c.fID==6
+      
+    - name: nyoki_07
+      title: Nyoki 07 Q vs time
+      x: [nyoki_c.fTiming, 200, -270, -210]
+      y: [nyoki_c.fCharge, 200,    0,  1.3]
+      cut: nyoki_c.fID==7
+      
+    - name: nyoki_08
+      title: Nyoki 08 Q vs time
+      x: [nyoki_c.fTiming, 200, -270, -210]
+      y: [nyoki_c.fCharge, 200,    0,  1.3]
+      cut: nyoki_c.fID==8
+      
+    - name: nyoki_09
+      title: Nyoki 09 Q vs time
+      x: [nyoki_c.fTiming, 200, -270, -210]
+      y: [nyoki_c.fCharge, 200,    0,  1.3]
+      cut: nyoki_c.fID==9
+      
+    - name: nyoki_10
+      title: Nyoki 10 Q vs time
+      x: [nyoki_c.fTiming, 200, -270, -210]
+      y: [nyoki_c.fCharge, 200,    0,  1.3]
+      cut: nyoki_c.fID==10
+      
+      #===========================================
+      
+    - name: nyoki_00_pry
+      title: Nyoki 00 Q
+      x: [nyoki_c.fCharge, 200,    0,  1.3]
+      cut: nyoki_c.fID==0
+      
+    - name: nyoki_01_pry
+      title: Nyoki 01 Q
+      x: [nyoki_c.fCharge, 200,    0,  1.3]
+      cut: nyoki_c.fID==1
+      
+    - name: nyoki_02_pry
+      title: Nyoki 02 Q
+      x: [nyoki_c.fCharge, 200,    0,  1.3]
+      cut: nyoki_c.fID==2
+      
+    - name: nyoki_03_pry
+      title: Nyoki 03 Q
+      x: [nyoki_c.fCharge, 200,    0,  1.3]
+      cut: nyoki_c.fID==3
+      
+    - name: nyoki_04_pry
+      title: Nyoki 04 Q
+      x: [nyoki_c.fCharge, 200,    0,  1.3]
+      cut: nyoki_c.fID==4
+      
+    - name: nyoki_05_pry
+      title: Nyoki 05 Q
+      x: [nyoki_c.fCharge, 200,    0,  1.3]
+      cut: nyoki_c.fID==5
+      
+    - name: nyoki_06_pry
+      title: Nyoki 06 Q
+      x: [nyoki_c.fCharge, 200,    0,  1.3]
+      cut: nyoki_c.fID==6
+      
+    - name: nyoki_07_pry
+      title: Nyoki 07 Q
+      x: [nyoki_c.fCharge, 200,    0,  1.3]
+      cut: nyoki_c.fID==7
+      
+    - name: nyoki_08_pry
+      title: Nyoki 08 Q
+      x: [nyoki_c.fCharge, 200,    0,  1.3]
+      cut: nyoki_c.fID==8
+      
+    - name: nyoki_09_pry
+      title: Nyoki 09 Q
+      x: [nyoki_c.fCharge, 200,    0,  1.3]
+      cut: nyoki_c.fID==9
+      
+    - name: nyoki_10_pry
+      title: Nyoki 10 Q
+      x: [nyoki_c.fCharge, 200,    0,  1.3]
+      cut: nyoki_c.fID==10
+      
+

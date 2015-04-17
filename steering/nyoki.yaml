@@ -8,14 +8,14 @@ Processor:
     parameter:
       Name:     prm_nyoki_ch2ns
       Type:     art::TAffineConverter
-      FileName: prm/nyoki/ch2ns.dat
+      FileName: prm/nyoki/ch2ns.dat.20150413
       
   - name: nyoki_prm_ch2q
     type: art::TParameterArrayLoader
     parameter:
       Name:     prm_nyoki_ch2q
       Type:     art::TAffineConverter
-      FileName: prm/nyoki/ch2q.dat
+      FileName: prm/nyoki/ch2q.dat.noAdjust
 
   - name: plastic_nyoki_raw     #must be different from output name and no "-"
     type: art::TTimingChargeMappingProcessor
@@ -26,7 +26,7 @@ Processor:
       ChargeType:         1       # 1 seems to be OK, but it is V1190.
       ChargeTypeID:       1
       OutputCollection:   nyoki_raw
-      OutputTransparency: 0                       # 1 = no output
+      OutputTransparency: 1                       # 1 = no output
 
   - name: plastic_nyoki_cal
     type: art::TTimingChargeCalibrationProcessor
@@ -34,8 +34,44 @@ Processor:
       InputCollection:      nyoki_raw
       OutputCollection:     nyoki
       TimingConverterArray: prm_nyoki_ch2ns
-      ChargeConverterArray: prm_nyoki_ch2q
+      #ChargeConverterArray: prm_nyoki_ch2q
       OutputTransparency:   0
+      
+  - name: proc_nyoki_qcor
+    type: art::sh04::TNyokiChargeCorrectionProcessor
+    parameter:
+      InputCollection:  nyoki
+      OutputCollection: nyoki_c
+      Pedestal:
+        - 200. # 0
+        - 200.
+        - 200.
+        - 200.
+        - 200.
+        - 40. # 5
+        - 80.
+        - 40.
+        - 300.
+        - 40.
+        - 40. # 10
+        - 0.
+        - 0.
+        - 0.
+      TableFiles:
+        - prm/nyoki/correction/nyoki00.dat # 0
+        - prm/nyoki/correction/nyoki01.dat
+        - prm/nyoki/correction/nyoki02.dat
+        - prm/nyoki/correction/nyoki03.dat
+        - prm/nyoki/correction/nyoki04.dat
+        - prm/nyoki/correction/nyoki05.dat # 5
+        - prm/nyoki/correction/nyoki06.dat
+        - prm/nyoki/correction/nyoki07.dat
+        - prm/nyoki/correction/nyoki08.dat
+        - prm/nyoki/correction/nyoki09.dat
+        - prm/nyoki/correction/nyoki10.dat # 10
+        - prm/nyoki/correction/nyoki10.dat
+        - prm/nyoki/correction/nyoki10.dat
+        - prm/nyoki/correction/nyoki10.dat
       
   - name: nyoki_time_ref
     type: art::sh04::TNyokiTimingProcessor
@@ -44,15 +80,15 @@ Processor:
       OutputCollection:       nyoki_t
       TimingGate:            [-270,-210]
       
-  - name: tof_S0D_to_D1
-    type: art::TTimingSubtractionProcessor
-    parameter:
-      InputCollection:        nyoki   # tof = [t] - tref
-      OutputCollection:       tof_D1
-      StartTimingCollection:  plaV775     #  tof= t - [tref]
-      StartTimingDetID:       4           # S0D
-      UseMultipleStartTiming: 0
-      OutputTransparency:     0
+#  - name: tof_S0D_to_D1
+#    type: art::TTimingSubtractionProcessor
+#    parameter:
+#      InputCollection:        nyoki   # tof = [t] - tref
+#      OutputCollection:       tof_D1
+#      StartTimingCollection:  plaV775     #  tof= t - [tref]
+#      StartTimingDetID:       4           # S0D
+#      UseMultipleStartTiming: 0
+#      OutputTransparency:     0
 
 
 #===========================================================
