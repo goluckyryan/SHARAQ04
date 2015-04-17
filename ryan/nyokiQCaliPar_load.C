@@ -35,12 +35,26 @@ void nyokiQCaliPar_load(){
    
 //======================================================== analysis
 
-        Int_t nyokiID = 6;
-        Int_t nBin = 160;
-        Int_t QRange[2] = {0, 4500};
-        Int_t Range[2] = {-280, -200};
+        Int_t nyokiID = 0;
+        Int_t nBin = 200;
+        Int_t nQBin = 200;
+        Int_t QRange[2] = {100, 4500};
+        Int_t Range[2] = {-280, -210};
+        Double_t newQRange[2] = {0.0, 1.6};
         
-        Double_t pedestal = 50;
+        Double_t pedestal = 240;
+        
+        if( nyokiID ==  0 ) pedestal = 150;
+        if( nyokiID ==  1 ) pedestal = 200;
+        if( nyokiID ==  2 ) pedestal = 300;
+        if( nyokiID ==  3 ) pedestal = 240;
+        if( nyokiID ==  4 ) pedestal = 220;
+        if( nyokiID ==  5 ) pedestal = 40;
+        if( nyokiID ==  6 ) pedestal = 110;
+        if( nyokiID ==  7 ) pedestal = 40;
+        if( nyokiID ==  8 ) pedestal = 320;
+        if( nyokiID ==  9 ) pedestal = 70;
+        if( nyokiID == 10 ) pedestal = 70;
 
         TString filename; filename.Form("prm/nyoki/correction/nyoki%02d.dat",nyokiID);        
         ifstream fin;
@@ -48,9 +62,9 @@ void nyokiQCaliPar_load(){
                 
         printf("parameter file loaded --> %s \n", filename.Data());
         
-        TString h1Title; h1Title.Form("qS1[%d]:tS1[%d] | ", nyokiID, nyokiID);
-        TH2F * h1 = new TH2F("h1", h1Title, nBin, Range[0], Range[1], 500, QRange[0], QRange[1]);
-        TH2F * k1 = new TH2F("k1", h1Title, nBin, Range[0], Range[1], 500, 0.1, 1.4);
+        TString h1Title; h1Title.Form("qS1[%d]:tS1[%d] pedestal:%4.0f", nyokiID, nyokiID, pedestal);
+        TH2F * h1 = new TH2F("h1", h1Title, nBin, Range[0], Range[1], nQBin, QRange[0], QRange[1]);
+        TH2F * k1 = new TH2F("k1", h1Title, nBin, Range[0], Range[1], nQBin, newQRange[0], newQRange[1]);
         TH1F * g1 = new TH1F("g1", h1Title, nBin, Range[0], Range[1]);
         g1->SetLineColor(2);
         
@@ -92,7 +106,7 @@ void nyokiQCaliPar_load(){
         printf("..... done loading parameters, number of data loaded: %d\n", lineNumEff);
         
         //___________________________ Load the nyokiQ and apply correction
-        printf("..... start loading and correcting nyokiQ\n");
+        printf("..... start loading and correcting nyokiQ, pedestal: %6.1f\n", pedestal);
 
         Double_t hoge_Q[14], hoge_T[14];
         tree->SetBranchStatus("*",0);
@@ -148,7 +162,7 @@ void nyokiQCaliPar_load(){
         cNyokiQCorr->cd(1);
         h1->Draw("colz");
         g1->Draw("E same");
-        cNyokiQCorr_1->SetLogz(1);
+        //cNyokiQCorr_1->SetLogz(1);
         
 
         cNyokiQCorr->cd(3);

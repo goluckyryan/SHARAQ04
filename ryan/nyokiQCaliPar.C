@@ -26,9 +26,9 @@ void nyokiQCaliPar(){
 //======================================================== analysis
 /************** nyoki Q correction table *********************/
 
-        Int_t nyokiID = 8;
+        Int_t nyokiID = 11;
         TString gate  = "";
-        TString gate  = "pidusGate == 1";
+        //TString gate  = "pidusGate == 1";
         //TString gate  = "pidusGate == 1 && TMath::Abs(qS0D-1700)<200";
         Int_t nBin = 80;
         Int_t Range[2] = {-280, -200};
