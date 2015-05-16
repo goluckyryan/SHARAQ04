@@ -1,0 +1,542 @@
+alias:
+  AoQ: tof_s1[0].fTiming * 9.713e-2 - smwdc_S1[0].fX * 2.12e-3 - 0.716
+  ZgateN: abs(nyoki_z[0].fCharge - 7.0) < 0.3
+  TOF_S0S1: abs(tof_s1[0].fTiming - 36) < 1.5
+
+group:
+  - name: nyoki_chk
+    title: hists for nyoki q check
+    contents:
+      - name: nyoki6
+        title: nyoki6 t vs q
+        cut: nyoki.fID == 6
+        x: [nyoki.fTiming, 160,-320,-160]
+        y: [nyoki.fCharge, 150,0.,4500]
+      - name: nyoki7
+        title: nyoki7 t vs q
+        cut: nyoki.fID == 7
+        x: [nyoki.fTiming, 160,-320,-160]
+        y: [nyoki.fCharge, 150,0.,4500]
+      - name: nyoki8
+        title: nyoki8 t vs q
+        cut: nyoki.fID == 8
+        x: [nyoki.fTiming, 160,-320,-160]
+        y: [nyoki.fCharge, 150,0.,4500]
+
+      - name: nyoki6_q
+        title: nyoki6 q
+        cut: nyoki.fID == 6
+        x: [nyoki.fCharge, 450,0.,4500]
+      - name: nyoki7_q
+        title: nyoki7 q
+        cut: nyoki.fID == 7
+        x: [nyoki.fCharge, 450,0.,4500]
+      - name: nyoki8_q
+        title: nyoki8 q
+        cut: nyoki.fID == 8
+        x: [nyoki.fCharge, 450,0.,4500]
+
+  - name: nyoki_chk_corr
+    title: hists for nyoki q corr check
+    contents:
+      - name: nyoki6
+        title: nyoki6 t vs q
+        cut: nyoki_c.fID == 6
+        x: [nyoki_c.fTiming, 160,-320,-160]
+        y: [nyoki_c.fCharge, 150,0.,1.5]
+      - name: nyoki7
+        title: nyoki7 t vs q
+        cut: nyoki_c.fID == 7
+        x: [nyoki_c.fTiming, 160,-320,-160]
+        y: [nyoki_c.fCharge, 150,0.,1.5]
+      - name: nyoki8
+        title: nyoki8 t vs q
+        cut: nyoki_c.fID == 8
+        x: [nyoki_c.fTiming, 160,-320,-160]
+        y: [nyoki_c.fCharge, 150,0.,1.5]
+
+      - name: nyoki0_q
+        title: nyoki0 q
+        cut: nyoki_c.fID == 0
+        x: [nyoki_c.fCharge, 150,0.,1.5]
+      - name: nyoki1_q
+        title: nyoki1 q
+        cut: nyoki_c.fID == 1
+        x: [nyoki_c.fCharge, 150,0.,1.5]
+      - name: nyoki2_q
+        title: nyoki2 q
+        cut: nyoki_c.fID == 2
+        x: [nyoki_c.fCharge, 150,0.,1.5]
+      - name: nyoki3_q
+        title: nyoki3 q
+        cut: nyoki_c.fID == 3
+        x: [nyoki_c.fCharge, 150,0.,1.5]
+      - name: nyoki4_q
+        title: nyoki4 q
+        cut: nyoki_c.fID == 4
+        x: [nyoki_c.fCharge, 150,0.,1.5]
+      - name: nyoki5_q
+        title: nyoki5 q
+        cut: nyoki_c.fID == 5
+        x: [nyoki_c.fCharge, 150,0.,1.5]
+      - name: nyoki6_q
+        title: nyoki6 q
+        cut: nyoki_c.fID == 6
+        x: [nyoki_c.fCharge, 150,0.,1.5]
+      - name: nyoki7_q
+        title: nyoki7 q
+        cut: nyoki_c.fID == 7
+        x: [nyoki_c.fCharge, 150,0.,1.5]
+      - name: nyoki8_q
+        title: nyoki8 q
+        cut: nyoki_c.fID == 8
+        x: [nyoki_c.fCharge, 150,0.,1.5]
+      - name: nyoki9_q
+        title: nyoki9 q
+        cut: nyoki_c.fID == 9
+        x: [nyoki_c.fCharge, 150,0.,1.5]
+      - name: nyoki10_q
+        title: nyoki10 q
+        cut: nyoki_c.fID == 10
+        x: [nyoki_c.fCharge, 150,0.,1.5]
+
+      - name: nyoki0_z
+        title: nyoki0 z
+        cut: nyoki_z.fID == 0
+        x: [nyoki_z.fCharge, 200,0.,10.]
+      - name: nyoki1_z
+        title: nyoki1 z
+        cut: nyoki_z.fID == 1
+        x: [nyoki_z.fCharge, 200,0.,10.]
+      - name: nyoki2_z
+        title: nyoki2 z
+        cut: nyoki_z.fID == 2
+        x: [nyoki_z.fCharge, 200,0.,10.]
+      - name: nyoki3_z
+        title: nyoki3 z
+        cut: nyoki_z.fID == 3
+        x: [nyoki_z.fCharge, 200,0.,10.]
+      - name: nyoki4_z
+        title: nyoki4 z
+        cut: nyoki_z.fID == 4
+        x: [nyoki_z.fCharge, 200,0.,10.]
+      - name: nyoki5_z
+        title: nyoki5 z
+        cut: nyoki_z.fID == 5
+        x: [nyoki_z.fCharge, 200,0.,10.]
+      - name: nyoki6_z
+        title: nyoki6 z
+        cut: nyoki_z.fID == 6
+        x: [nyoki_z.fCharge, 200,0.,10.]
+      - name: nyoki7_z
+        title: nyoki7 z
+        cut: nyoki_z.fID == 7
+        x: [nyoki_z.fCharge, 200,0.,10.]
+      - name: nyoki8_z
+        title: nyoki8 z
+        cut: nyoki_z.fID == 8
+        x: [nyoki_z.fCharge, 200,0.,10.]
+      - name: nyoki9_z
+        title: nyoki9 z
+        cut: nyoki_z.fID == 9
+        x: [nyoki_z.fCharge, 200,0.,10.]
+      - name: nyoki10_z
+        title: nyoki10 z
+        cut: nyoki_z.fID == 10
+        x: [nyoki_z.fCharge, 200,0.,10.]
+
+  - name: s1pid
+    title: s1 particle identification
+    contents:
+      - name: nyoki0q_s1x
+        title: nyoki0q vs s1x
+        cut: nyoki_c.fID == 0 && TMath::Finite(smwdc_S1.fY)
+        x: [smwdc_S1.fX,450,460,580]
+        y: [nyoki_c.fCharge, 150,0.,1.5]
+        async: 1
+      - name: nyoki1q_s1x
+        title: nyoki1q vs s1x
+        cut: nyoki_c.fID == 1 && TMath::Finite(smwdc_S1.fY)
+        x: [smwdc_S1.fX,120,390,510]
+        y: [nyoki_c.fCharge, 150,0.,1.5]
+        async: 1
+      - name: nyoki2q_s1x
+        title: nyoki2q vs s1x
+        cut: nyoki_c.fID == 2 && TMath::Finite(smwdc_S1.fY)
+        x: [smwdc_S1.fX,120,320,440]
+        y: [nyoki_c.fCharge, 150,0.,1.5]
+        async: 1
+      - name: nyoki3q_s1x
+        title: nyoki3q vs s1x
+        cut: nyoki_c.fID == 3 && TMath::Finite(smwdc_S1.fY)
+        x: [smwdc_S1.fX,120,250,370]
+        y: [nyoki_c.fCharge, 150,0.,1.5]
+        async: 1
+      - name: nyoki4q_s1x
+        title: nyoki4q vs s1x
+        cut: nyoki_c.fID == 4 && TMath::Finite(smwdc_S1.fY)
+        x: [smwdc_S1.fX,120,180,300]
+        y: [nyoki_c.fCharge, 150,0.,1.5]
+        async: 1
+      - name: nyoki5q_s1x
+        title: nyoki5q vs s1x
+        cut: nyoki_c.fID == 5 && TMath::Finite(smwdc_S1.fY)
+        x: [smwdc_S1.fX,120,110,230]
+        y: [nyoki_c.fCharge, 150,0.,1.5]
+        async: 1
+      - name: nyoki6q_s1x
+        title: nyoki6q vs s1x
+        cut: nyoki_c.fID == 6 && TMath::Finite(smwdc_S1.fY)
+        x: [smwdc_S1.fX,120,40,160]
+        y: [nyoki_c.fCharge, 150,0.,1.5]
+        async: 1
+      - name: nyoki7q_s1x
+        title: nyoki7q vs s1x
+        cut: nyoki_c.fID == 7 && TMath::Finite(smwdc_S1.fY)
+        x: [smwdc_S1.fX,120,-30,90]
+        y: [nyoki_c.fCharge, 150,0.,1.5]
+        async: 1
+      - name: nyoki8q_s1x
+        title: nyoki8q vs s1x
+        cut: nyoki_c.fID == 8 && TMath::Finite(smwdc_S1.fY)
+        x: [smwdc_S1.fX,120,-100,20]
+        y: [nyoki_c.fCharge, 150,0.,1.5]
+        async: 1
+      - name: nyoki9q_s1x
+        title: nyoki9q vs s1x
+        cut: nyoki_c.fID == 9 && TMath::Finite(smwdc_S1.fY)
+        x: [smwdc_S1.fX,120,-170,-50]
+        y: [nyoki_c.fCharge, 150,0.,1.5]
+        async: 1
+      - name: nyoki10q_s1x
+        title: nyoki10q vs s1x
+        cut: nyoki_c.fID == 10 && TMath::Finite(smwdc_S1.fY)
+        x: [smwdc_S1.fX,120,-240,-120]
+        y: [nyoki_c.fCharge, 150,0.,1.5]
+        async: 1
+      - name: nyoki0q_s1y
+        title: nyoki0q vs s1y
+        cut: nyoki_c.fID == 0 && TMath::Finite(smwdc_S1.fY)
+        x: &s1y [smwdc_S1.fY,100,-150,100]
+        y: &nyoki_q [nyoki_c.fCharge, 100,0.,1.5]
+        async: 1
+      - name: nyoki1q_s1y
+        title: nyoki1q vs s1y
+        cut: nyoki_c.fID == 1 && TMath::Finite(smwdc_S1.fY)
+        x: *s1y
+        y: *nyoki_q
+        async: 1
+      - name: nyoki2q_s1y
+        title: nyoki2q vs s1y
+        cut: nyoki_c.fID == 2 && TMath::Finite(smwdc_S1.fY)
+        x: *s1y
+        y: *nyoki_q
+        async: 1
+      - name: nyoki3q_s1y
+        title: nyoki3q vs s1y
+        cut: nyoki_c.fID == 3 && TMath::Finite(smwdc_S1.fY)
+        x: *s1y
+        y: *nyoki_q
+        async: 1
+      - name: nyoki4q_s1y
+        title: nyoki4q vs s1y
+        cut: nyoki_c.fID == 4 && TMath::Finite(smwdc_S1.fY)
+        x: *s1y
+        y: *nyoki_q
+        async: 1
+      - name: nyoki5q_s1y
+        title: nyoki5q vs s1y
+        cut: nyoki_c.fID == 5 && TMath::Finite(smwdc_S1.fY)
+        x: *s1y
+        y: *nyoki_q
+        async: 1
+      - name: nyoki6q_s1y
+        title: nyoki6q vs s1y
+        cut: nyoki_c.fID == 6 && TMath::Finite(smwdc_S1.fY)
+        x: *s1y
+        y: *nyoki_q
+        async: 1
+      - name: nyoki7q_s1y
+        title: nyoki7q vs s1y
+        cut: nyoki_c.fID == 7 && TMath::Finite(smwdc_S1.fY)
+        x: *s1y
+        y: *nyoki_q
+        async: 1
+      - name: nyoki8q_s1y
+        title: nyoki8q vs s1y
+        cut: nyoki_c.fID == 8 && TMath::Finite(smwdc_S1.fY)
+        x: *s1y
+        y: *nyoki_q
+        async: 1
+      - name: nyoki9q_s1y
+        title: nyoki9q vs s1y
+        cut: nyoki_c.fID == 9 && TMath::Finite(smwdc_S1.fY)
+        x: *s1y
+        y: *nyoki_q
+        async: 1
+      - name: nyoki10q_s1y
+        title: nyoki10q vs s1y
+        cut: nyoki_c.fID == 10 && TMath::Finite(smwdc_S1.fY)
+        x: *s1y
+        y: *nyoki_q
+        async: 1
+      - name: nyoki_c_s1x
+        title: nyokiq vs s1x
+        cut: nyoki_c.fID < 9 && nyoki_c.fID > 5
+        x: ["smwdc_S1[0].fX",100,-250,250]
+        y: [nyoki_c.fCharge,100,0,1.5]
+      - name: nyoki_c_s1x_tofgate
+        title: nyokiq vs s1x (tof s0s1 gated)
+        cut: nyoki_c.fID < 9 && nyoki_c.fID > 5 && abs(tof_s1[0].fTiming - 36) < 1
+        x: ["smwdc_S1[0].fX",100,-250,250]
+        y: [nyoki_c.fCharge,100,0,1.5]
+      - name: nyoki_c_tof
+        title: nyokiq vs tof_s1
+        cut: nyoki_c.fID < 9 && nyoki_c.fID > 5
+        x: ["tof_s1[0].fTiming",100,25,50]
+        y: [nyoki_c.fCharge,100,0,1.5]
+      - name: s1x_tof
+        title: s1x vs tof_s1
+        x: [tof_s1.fTiming,100,34,39]
+        y: [smwdc_S1.fX,100,-100,400]
+      - name: s1x_tof_zgate_o
+        title: s1x vs tof_s1 (qgate = O)
+        cut: abs(nyoki_z.fCharge - 8) < 0.3
+        x: ["tof_s1[0].fTiming",100,34,39]
+        y: ["smwdc_S1[0].fX",140,-200,500]
+      - name: s1x_tof_zgate_n
+        title: s1x vs tof_s1 (qgate = N)
+        cut: abs(nyoki_z.fCharge - 7) < 0.3
+        x: ["tof_s1[0].fTiming",100,34,39]
+        y: ["smwdc_S1[0].fX",140,-200,500]
+      - name: s1x_tof_zgate_c
+        title: s1x vs tof_s1 (qgate = C)
+        cut: abs(nyoki_z.fCharge - 6) < 0.3
+        x: ["tof_s1[0].fTiming",100,34,39]
+        y: ["smwdc_S1[0].fX",140,-200,500]
+      - name: s1x_tof_zgate_b
+        title: s1x vs tof_s1 (qgate = B)
+        cut: abs(nyoki_z.fCharge - 5) < 0.3
+        x: ["tof_s1[0].fTiming",100,34,39]
+        y: ["smwdc_S1[0].fX",140,-200,500]
+      - name: s1x_tof_zgate_be
+        title: s1x vs tof_s1 (qgate = Be)
+        cut: abs(nyoki_z.fCharge - 4) < 0.3
+        x: ["tof_s1[0].fTiming",100,34,39]
+        y: ["smwdc_S1[0].fX",140,-200,500]
+      - name: s1x_tof_zgate_li
+        title: s1x vs tof_s1 (qgate = Li)
+        cut: abs(nyoki_z.fCharge - 3) < 0.3
+        x: ["tof_s1[0].fTiming",100,34,39]
+        y: ["smwdc_S1[0].fX",140,-200,500]
+      - name: s1x_tof_zgate_he
+        title: s1x vs tof_s1 (qgate = He)
+        cut: abs(nyoki_z.fCharge - 2) < 0.3
+        x: ["tof_s1[0].fTiming",100,34,39]
+        y: ["smwdc_S1[0].fX",140,-200,500]
+      - name: s1x_tof_zgate_h
+        title: s1x vs tof_s1 (qgate = H)
+        cut: abs(nyoki_z.fCharge - 1) < 0.3
+        x: ["tof_s1[0].fTiming",100,34,39]
+        y: ["smwdc_S1[0].fX",140,-200,500]
+      - name: q_aoq
+        title: nyoki q vs A/Q
+        x: [AoQ, 200,1.6,3.6]
+        y: [nyoki_c.fCharge,150,0,1.5]
+      - name: z_aoq
+        title: nyoki z vs A/Q
+        x: [AoQ, 200,1.6,3.6]
+        y: [nyoki_z.fCharge,100,0,10]
+      - name: z_aoq_g
+        title: nyoki z vs A/Q (TOF S0S1 gated)
+        cut: TOF_S0S1
+        x: [AoQ, 200,1.6,3.6]
+        y: [nyoki_z.fCharge,100,0,10]
+
+
+
+  - name: s1pid_22O
+    title: s1 particle identification for 22O
+    clone: s1pid
+    cut: gate.Test("22O")
+    suffix: _22o
+
+  - name: dcs0d
+    title: DCS0D plots
+    contents:
+      - name: dcs0d_x1_tq
+        title: DCS0D X1 Charge vs Timing
+        x: [dcs0d_x1.fTiming,100,-100,150]
+        y: [dcs0d_x1.fCharge,100,0,2500]
+      - name: dcs0d_x2_tq
+        title: DCS0D X2 Charge vs Timing
+        x: [dcs0d_x2.fTiming,100,-100,150]
+        y: [dcs0d_x2.fCharge,100,0,2500]
+      - name: dcs0d_y1_tq
+        title: DCS0D Y1 Charge vs Timing
+        x: [dcs0d_y1.fTiming,100,-100,150]
+        y: [dcs0d_y1.fCharge,100,0,2500]
+      - name: dcs0d_y2_tq
+        title: DCS0D Y2 Charge vs Timing
+        x: [dcs0d_y2.fTiming,100,-100,150]
+        y: [dcs0d_y2.fCharge,100,0,2500]
+      - name: dcs0d_x1_tq_g
+        title: DCS0D X1 Charge vs Timing Gated
+        cut: gate.Test("nyoki")
+        x: [dcs0d_x1.fTiming,100,-100,150]
+        y: [dcs0d_x1.fCharge,100,0,2500]
+      - name: dcs0d_x2_tq_g
+        title: DCS0D X2 Charge vs Timing
+        cut: gate.Test("nyoki")
+        x: [dcs0d_x2.fTiming,100,-100,150]
+        y: [dcs0d_x2.fCharge,100,0,2500]
+      - name: dcs0d_y1_tq_g
+        title: DCS0D Y1 Charge vs Timing
+        cut: gate.Test("nyoki")
+        x: [dcs0d_y1.fTiming,100,-100,150]
+        y: [dcs0d_y1.fCharge,100,0,2500]
+      - name: dcs0d_y2_tq_g
+        title: DCS0D Y2 Charge vs Timing
+        cut: gate.Test("nyoki")
+        x: [dcs0d_y2.fTiming,100,-100,150]
+        y: [dcs0d_y2.fCharge,100,0,2500]
+      - name: dcs0d_x1_tq_g_max
+        title: DCS0D X1 Charge vs Timing Gated
+        cut: gate.Test("nyoki")
+        x: ["dcs0d_x1.fTiming[0]",100,-100,150]
+        y: ["dcs0d_x1.fCharge[0]",100,0,2500]
+      - name: dcs0d_x2_tq_g_max
+        title: DCS0D X2 Charge vs Timing
+        cut: gate.Test("nyoki")
+        x: ["dcs0d_x2.fTiming[0]",100,-100,150]
+        y: ["dcs0d_x2.fCharge[0]",100,0,2500]
+      - name: dcs0d_y1_tq_g_max
+        title: DCS0D Y1 Charge vs Timing
+        cut: gate.Test("nyoki")
+        x: ["dcs0d_y1.fTiming[0]",100,-100,150]
+        y: ["dcs0d_y1.fCharge[0]",100,0,2500]
+      - name: dcs0d_y2_tq_g_max
+        title: DCS0D Y2 Charge vs Timing
+        cut: gate.Test("nyoki")
+        x: ["dcs0d_y2.fTiming[0]",100,-100,150]
+        y: ["dcs0d_y2.fCharge[0]",100,0,2500]
+      - name: dcs0d_id
+        title: DCS0D tracking ID
+        cut: gate.Test("nyoki")
+        x: [dcs0d.fID,4,-2.5,1.5]
+      - name: dcs0d_id_nyoki_z
+        title: DCS0D tracking ID
+        cut: gate.Test("nyoki")
+        x: [dcs0d.fID,4,-2.5,1.5]
+        y: [nyoki_z.fCharge,8,0.5,8.5]
+      - name: dcs0d_xy
+        title: DCS0D XY
+        x: [dcs0d.fX,100,-150,150]
+        y: [dcs0d.fY,100,-200,200]
+      - name: dcs0d_x_s1x
+        title: S1X vs DCS0D X
+        cut: ZgateN
+        x: [dcs0d.fX,100,-50,50]
+        y: ["smwdc_S1[0].fX",140,-200,500]
+      - name: dcs0d_y_s1x
+        title: S1X vs DCS0D Y
+        cut: ZgateN
+        x: [dcs0d.fY,100,-50,50]
+        y: ["smwdc_S1[0].fX",140,-200,500]
+      - name: dcs0d_x_tof
+        title: TOF S0S1 vs DCS0D X
+        cut: ZgateN
+        x: ["dcs0d[0].fX",100,-50,50]
+        y: ["tof_s1[0].fTiming",100,34,39]
+      - name: dcs0d_y_tof
+        title: TOF S0S1 vs DCS0D Y
+        cut: ZgateN
+        x: ["dcs0d[0].fY",100,-50,50]
+        y: ["tof_s1[0].fTiming",100,34,39]
+      - name: dcs0d_x_aoq
+        title: A/Q vs DCS0D X
+        cut: ZgateN
+        x: ["dcs0d[0].fX",100,-50,50]
+        y: [AoQ,     80,2.4,3.2]
+      - name: dcs0d_y_aoq
+        title: A/Q vs DCS0D Y
+        cut: ZgateN
+        x: ["dcs0d[0].fY",100,-50,50]
+        y: [AoQ,     80,2.4,3.2]
+      - name: x01_21n
+        title: S1X vs S0X for 21N
+        cut: ZgateN && abs(14 * AoQ - 42) < 1
+        x: [dcs0d.fX, 50,-50,50]
+        y: [smwdc_S1.fX,200,-200,200]
+      - name: x01_20n
+        title: S1X vs S0X for 20N
+        cut: ZgateN && abs(14 * AoQ - 40) < 1
+        x: [dcs0d.fX, 50,-50,50]
+        y: [smwdc_S1.fX,200,-200,200]
+      - name: x01_19n
+        title: S1X vs S0X for 19N
+        cut: ZgateN && abs(14 * AoQ - 38) < 1
+        x: [dcs0d.fX, 50,-50,50]
+        y: [smwdc_S1.fX,200,-200,200]
+      - name: x01_18n
+        title: S1X vs S0X for 18N
+        cut: ZgateN && abs(14 * AoQ - 36) < 1
+        x: [dcs0d.fX, 50,-50,50]
+        y: [smwdc_S1.fX,200,-200,200]
+      - name: x0_tof_21n
+        title: TOF S0S1 vs S0X for 21N
+        cut: ZgateN && abs(14 * AoQ - 42) < 1
+        x: [dcs0d.fX, 50,-50,50]
+        y: [tof_s1.fTiming,100,34,39]
+      - name: x0_tof_20n
+        title: TOF S0S1 vs S0X for 20N
+        cut: ZgateN && abs(14 * AoQ - 40) < 1
+        x: [dcs0d.fX, 50,-50,50]
+        y: [tof_s1.fTiming,100,34,39]
+      - name: x0_tof_19n
+        title: TOF S0S1 vs S0X for 19N
+        cut: ZgateN && abs(14 * AoQ - 38) < 1
+        x: [dcs0d.fX, 50,-50,50]
+        y: [tof_s1.fTiming,100,34,39]
+      - name: x0_tof_18n
+        title: TOF S0S1 vs S0X for 18N
+        cut: ZgateN && abs(14 * AoQ - 36) < 1
+        x: [dcs0d.fX, 50,-50,50]
+        y: [tof_s1.fTiming,100,34,39]
+
+  - name: pid_s1
+    title: S1 PID plots
+    contents:
+      - name: pid
+        title: pid
+        x: &AOQ [pid_s1.fAOQ,200,1.6,3.6]
+        y: &NyokiZ [pid_s1.fZ,200,0.,10.]
+      - name: pid_g
+        title: pid dcs0d gated
+        cut: dcs0d.fID == 1 && abs(tof_c.fTiming - 36) < 1.5
+        x: *AOQ
+        y: *NyokiZ
+      - name: s1x_tof_zgate_n
+        title: s1x vs tof_s1 corrected (qgate = N)
+        cut: abs(pid_s1.fZ - 7) < 0.3
+        x: [tof_c.fTiming,100,34,39]
+        y: [s1_c.fX      ,140,-200,500]
+      - name: z_tof
+        title: z vs tof_s1 corrected
+        x: [tof_c.fTiming,  100,34.,39.]
+        y: [nyoki_z.fCharge,100,0.,10.]
+      - name: x01_n
+        title: S1X vs S0X
+        cut: abs(nyoki_z.fCharge - 7) < 0.3
+        x: [S0img.fX,200,-10.,10.]
+        y: [s1_c.fX,140,-200.,500.]
+      - name: x0d1_n
+        title: S1X vs S0DX for N
+        cut: ZgateN
+        x: [dcs0d.fX, 100,-50,50]
+        y: [smwdc_S1.fX,140,-200,500]
+      - name: x0d1_n_c
+        title: S1X vs S0DX for N corrected
+        cut: ZgateN
+        x: [dcs0d.fX, 100,-50,50]
+        y: [s1_c.fX,140,-200,500]

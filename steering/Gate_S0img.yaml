@@ -2,12 +2,13 @@ Processor:
   - name: proc_xygate
     type: art::TTrackXYGateProcessor
     parameter:
-      TrackingResult:  S0img
+      Track:  S0img
       Circle:     #gate name, Xpos, Ypos, Radius
+        - [target_r02_x0.4_y1.8, 0.4, 1.8,  2.]
+        - [target_r05_x0.4_y1.8, 0.4, 1.8,  5.]
         - [target_r07_x0.4_y1.8, 0.4, 1.8,  7.]
         - [target_r10_x0.4_y1.8, 0.4, 1.8, 10.]
         - [target_r14_x0.4_y1.8, 0.4, 1.8, 14.]
-        - [target_r05_x0.4_y1.8, 0.4, 1.8,  5.]
       HistogramOption: [hS0XY,hS0XY;X (mm);Y (mm),500,-25,25,500,-25,25]
        
 #===========================================================

@@ -16,6 +16,7 @@ Processor:
       TimingGate:        [-60, 120]
       ChargeGate:        [900, 5000]
       MaxSSR:            200000      
+      OutputTransparency:   0
           
 
 #==================================================      

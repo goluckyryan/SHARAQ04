@@ -28,10 +28,56 @@ Processor:
       OutputCollection:   nyoki_raw
       OutputTransparency: 1                       # 1 = no output
       
+  - name: proc_nyoki
+    type: art::TDataCalibrationProcessor
+    parameter:
+      InputCollection:      nyoki_raw
+      OutputCollection:     nyoki
+      DataClass:            ITiming
+      ConverterArray:       prm_nyoki_ch2ns
+      OutputTransparency:   0
+    
+  - name: proc_nyoki_gate
+    type: art::TParameterArrayLoader
+    parameter:
+      Name:     prm_nyoki_tgate
+      Type:     art::T1DGatingConverter
+      FileName: prm/nyoki/tgate.dat
+      
+  - name: proc_nyoki_gated
+    type: art::TTimingChargeCalibrationProcessor
+    parameter:
+      InputCollection:      nyoki
+      OutputCollection:     nyoki_gated
+      TimingConverterArray: prm_nyoki_tgate
+      InputIsDigital:       1
+      OutputTransparency:   0
+
+# for SMWDC-S1    
+  - name: nyoki_time_ref
+    type: art::sh04::TNyokiTimingProcessor
+    parameter:
+      InputCollection:        nyoki_gated
+      OutputCollection:       nyoki_t
+      TimingGate:            [-270,-210]
+      OutputTransparency:   1
+      
+  - name: tof_S0D_to_D1
+    type: art::TTimingSubtractionProcessor
+    parameter:
+      InputCollection:        nyoki   # tof = [t] - tref
+      OutputCollection:       tof_D1
+      StartTimingCollection:  plaV775     #  tof= t - [tref]
+      StartTimingDetID:       4           # S0D
+      UseMultipleStartTiming: 1
+      OutputTransparency:     0
+      
+  # correction of nyoki Q    
   - name: proc_nyoki_qcor
     type: art::sh04::TNyokiChargeCorrectionProcessor
     parameter:
       InputCollection:  nyoki_raw
+      Track:            smwdc_S1
       OutputCollection: nyoki_c
       Pedestal:
         - 150. # 0
@@ -75,23 +121,7 @@ Processor:
       InputIsDigital:       0
       OutputTransparency:   0
       
-  - name: nyoki_time_ref
-    type: art::sh04::TNyokiTimingProcessor
-    parameter:
-      InputCollection:        nyoki
-      OutputCollection:       nyoki_t
-      TimingGate:            [-270,-210]
-      OutputTransparency:   1
-      
-  - name: tof_S0D_to_D1
-    type: art::TTimingSubtractionProcessor
-    parameter:
-      InputCollection:        nyoki   # tof = [t] - tref
-      OutputCollection:       tof_D1
-      StartTimingCollection:  plaV775     #  tof= t - [tref]
-      StartTimingDetID:       4           # S0D
-      UseMultipleStartTiming: 0
-      OutputTransparency:     0
+
 
 
 #===========================================================

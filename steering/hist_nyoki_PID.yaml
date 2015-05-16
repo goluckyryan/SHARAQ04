@@ -1,0 +1,71 @@
+#=========================================================
+group:
+  - name: Nyoki_PID
+    title: Nyoki PID
+    contents:
+#=========================================================
+    - name: nyoki_00
+      title: Nyoki 00 Q vs time
+      x: [tof_D1.fTiming, 200, 30, 40]
+      y: [nyoki.fCharge, 200, 1.8, 10.8]
+      cut: nyoki.fID==0
+      
+    - name: nyoki_01
+      title: Nyoki 01 Q vs time
+      x: [tof_D1.fTiming, 200, 30, 40]
+      y: [nyoki.fCharge, 200, 1.8, 10.8]
+      cut: nyoki.fID==1
+      
+    - name: nyoki_02
+      title: Nyoki 02 Q vs time
+      x: [tof_D1.fTiming, 200, 30, 40]
+      y: [nyoki.fCharge, 200, 1.8, 10.8]
+      cut: nyoki.fID==2
+      
+    - name: nyoki_03
+      title: Nyoki 03 Q vs time
+      x: [tof_D1.fTiming, 200, 30, 40]
+      y: [nyoki.fCharge, 200, 1.8, 10.8]
+      cut: nyoki.fID==3
+      
+    - name: nyoki_04
+      title: Nyoki 04 Q vs time
+      x: [tof_D1.fTiming, 200, 30, 40]
+      y: [nyoki.fCharge, 200, 1.8, 10.8]
+      cut: nyoki.fID==4
+      
+    - name: nyoki_05
+      title: Nyoki 05 Q vs time
+      x: [tof_D1.fTiming, 200, 30, 40]
+      y: [nyoki.fCharge, 200, 1.8, 10.8]
+      cut: nyoki.fID==5
+      
+    - name: nyoki_06
+      title: Nyoki 06 Q vs time
+      x: [tof_D1.fTiming, 200, 30, 40]
+      y: [nyoki.fCharge, 200, 1.8, 10.8]
+      cut: nyoki.fID==6
+      
+    - name: nyoki_07
+      title: Nyoki 07 Q vs time
+      x: [tof_D1.fTiming, 200, 30, 40]
+      y: [nyoki.fCharge, 200, 1.8, 10.8]
+      cut: nyoki.fID==7
+      
+    - name: nyoki_08
+      title: Nyoki 08 Q vs time
+      x: [tof_D1.fTiming, 200, 30, 40]
+      y: [nyoki.fCharge, 200, 1.8, 10.8]
+      cut: nyoki.fID==8
+      
+    - name: nyoki_09
+      title: Nyoki 09 Q vs time
+      x: [tof_D1.fTiming, 200, 30, 40]
+      y: [nyoki.fCharge, 200, 1.8, 10.8]
+      cut: nyoki.fID==9
+      
+    - name: nyoki_10
+      title: Nyoki 10 Q vs time
+      x: [tof_D1.fTiming, 200, 30, 40]
+      y: [nyoki.fCharge, 200, 1.8, 10.8]
+      cut: nyoki.fID==10

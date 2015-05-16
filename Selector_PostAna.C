@@ -81,7 +81,7 @@ Bool_t Selector_PostAna::Process(Long64_t entry)
         runNum = eventheader->GetRunNumber();
         //runNum = eventheader0->GetRunNumber();
         
-        if( runNum == 29 ) return kTRUE;
+        //if( runNum == 29 ) return kTRUE;
         
         //______________________________________________________________ conReg
         b_coinReg->GetEntry(entry);
@@ -113,7 +113,7 @@ Bool_t Selector_PostAna::Process(Long64_t entry)
                         pidusGate = p;
                 }
         }
-        piddsGate[0] = 0;
+/*        piddsGate[0] = 0;
         piddsGate[1] = 0;
         if( gate->Test(13)) {piddsGate[0] = 1;}
         if( gate->Test(14)) {piddsGate[1] = 1;}
@@ -128,7 +128,7 @@ Bool_t Selector_PostAna::Process(Long64_t entry)
         if( TMath::Abs(tofFH9+1463)<3 ) break;
         }
         */
-        
+/*        
         //______________________________________________________________ plaV775_cal
         tTplaLB = TMath::QuietNaN();
         tTplaRF = TMath::QuietNaN();
@@ -171,7 +171,7 @@ Bool_t Selector_PostAna::Process(Long64_t entry)
         if(tTplaRF == 0) tTplaRF = TMath::QuietNaN();
         if(tTplaLF == 0) tTplaLF = TMath::QuietNaN();
         if(tTplaRB == 0) tTplaRB = TMath::QuietNaN();        
-        
+*/        
         //______________________________________________________________ time, charge and TOF
         b_plaV775->GetEntry(entry,0);
         tS0D = TMath::QuietNaN();
@@ -221,7 +221,9 @@ Bool_t Selector_PostAna::Process(Long64_t entry)
         
         tTgt = tFH9 + (tFH9-tF3)*10865./74075.;
         
+        tof_S0D = tS0D - tTgt;
         
+        /*
         tof_S0D = TMath::QuietNaN();
         b_tofS0D->GetEntry(entry);
         for( Int_t p = 0; p < tofS0D -> GetEntriesFast(); p++){
@@ -241,12 +243,13 @@ Bool_t Selector_PostAna::Process(Long64_t entry)
                 tofTplaR = ((art::TTimingData*)tofR->At(p))->GetTiming();
         }
         
-        
+*/        
         //______________________________________________________________ nyoki
         b_nyoki->GetEntry(entry);
         for( Int_t p = 0; p < 14; p++){
                 tS1[p] = TMath::QuietNaN();
                 qS1[p] = TMath::QuietNaN();
+                //qS1c[p] = TMath::QuietNaN();
         }
         for( Int_t p = 0; p < nyoki->GetEntriesFast(); p++){
                 Int_t nS1 = ((art::TTimingChargeData*)nyoki->At(p))->GetID() ;
@@ -255,15 +258,15 @@ Bool_t Selector_PostAna::Process(Long64_t entry)
                 qS1[nS1] = ((art::TTimingChargeData*)nyoki->At(p))->GetCharge() ;
                 if( qS1[nS1] == 0) {
                         qS1[nS1] == TMath::QuietNaN();
-                        qS1c[nS1] == TMath::QuietNaN();
+                        //qS1c[nS1] == TMath::QuietNaN();
                 }
                 //___________________________ nyoki - Q correlation
-                Double_t tc = -237;
-                if (tS1[nS1] < tc){
-                        qS1c[nS1] = qS1[nS1]/ (10800*TMath::Exp((tS1[nS1]+205)/17.75)+1740*TMath::Exp((tS1[nS1]+250)/400));
-                }else{
-                        qS1c[nS1] = qS1[nS1]/ (10800*TMath::Exp((tc+205)/17.75)+1740*TMath::Exp((tc+250)/400));
-                }
+                //Double_t tc = -237;
+                //if (tS1[nS1] < tc){
+                //        qS1c[nS1] = qS1[nS1]/ (10800*TMath::Exp((tS1[nS1]+205)/17.75)+1740*TMath::Exp((tS1[nS1]+250)/400));
+                //}else{
+                //        qS1c[nS1] = qS1[nS1]/ (10800*TMath::Exp((tc+205)/17.75)+1740*TMath::Exp((tc+250)/400));
+                //}
         }
         
         
@@ -276,14 +279,14 @@ Bool_t Selector_PostAna::Process(Long64_t entry)
         for( Int_t p = 0; p < tof_D1->GetEntriesFast(); p++){
                 Int_t nS1 = ((art::TTimingChargeData*)tof_D1->At(p))->GetID() ;
                 tofS1[nS1] = ((art::TTimingChargeData*)tof_D1->At(p))->GetTiming() ;
-                if( TMath::Abs(tofS1[nS1]-34)>20) {
+                if( TMath::Abs(tS1[nS1]+240)>30) {
                         tofS1[nS1] = TMath::QuietNaN();
                         continue;
                 }
         }
         //if( TMath::Abs(tofS1-35) > 15 ) {return kTRUE;}
 
-        //______________________________________________________________ S0img
+/*        //______________________________________________________________ S0img
         b_S0img->GetEntry(entry);
         s0x = TMath::QuietNaN();
         s0y = TMath::QuietNaN();
@@ -304,8 +307,8 @@ Bool_t Selector_PostAna::Process(Long64_t entry)
         }
         //if( TMath::Abs(vertexZ-10)>40 ) {return kTRUE;}
 */
-        //______________________________________________________________ MWDC-S1
-       /* b_smwdc_S1->GetEntry(entry);
+/*        //______________________________________________________________ MWDC-S1
+        b_smwdc_S1->GetEntry(entry);
         for( Int_t p = 0; p < smwdc_S1->GetEntriesFast(); p++){
                 s1x = ((art::TTrack*)((art::TMWDCTrackingResult*)smwdc_S1->At(p))->GetTrack())->GetX();
                 s1a = ((art::TTrack*)((art::TMWDCTrackingResult*)smwdc_S1->At(p))->GetTrack())->GetA();
@@ -314,7 +317,38 @@ Bool_t Selector_PostAna::Process(Long64_t entry)
         }   
         //if( TMath::IsNaN(s1x) ) {return kTRUE;}
         //if( s1x> 3 ) {return kTRUE;}
-/*
+        
+        
+/*        //_____________________________________________ custom PID caluclation 
+        //____find the largest charge in nyoki
+        pidZ = 0;
+        Int_t hitID = -1;
+        for( Int_t p = 0; p < 14; p++){
+                if ( qS1[p] > pidZ ) {
+                        pidZ = qS1[p];
+                        hitID = p;
+                }
+        }
+        if( hitID > -1){ 
+                Double_t tofPID = tofS1[hitID];
+                // flight length (mm) 
+                Double_t fl = 6290.4 -0.451752 * s1x + 0.0003021347 * s1x * s1x ;  
+                
+                Double_t beta = fl / 299.792458 / tofPID;
+                Double_t gamma = 1. / TMath::Sqrt(1 - beta * beta);
+                
+                // proton number
+                pidZ = beta * pidZ;
+                
+                // brho (Tm) 25F = 7.1315
+                Double_t brho = 6.5269 * (1. + s1x / (-1134.8254));
+                
+                // A/Q 
+                pidAOQ = 299.792458 * brho / 931.5 / gamma / beta;
+                
+                //printf("%d, %f, %f, %f, %f, %f\n",hitID, tofPID, fl, beta, brho, pidAOQ);
+        }
+/*      
         //______________________________________________________________ PID downstream
         b_pid_ds->GetEntry(entry);
         pidAOQ = pid_ds->GetAOQ(); 

@@ -1,0 +1,222 @@
+# require : plastic_V775.yaml
+# output : nyoki
+#          tof_s1
+
+Processor:
+
+  - include: s1_time_ref.yaml              # required
+
+  - name: nyoki_prm_ch2ns
+    type: art::TParameterArrayLoader
+    parameter:
+      Name:     prm_nyoki_ch2ns
+      Type:     art::TAffineConverter
+      FileName: prm/nyoki/ch2ns.dat.20150413
+
+  - name: plastic_nyoki_raw     #must be different from output name and no "-"
+    type: art::TTimingChargeMappingProcessor
+    parameter:
+      CatID:              48
+      TimingTypeID:       0       #colnumber of map file[0=first]
+      TrailingComesFirst: 1      # 0 negative voltage input
+      ChargeType:         1       # 1 seems to be OK, but it is V1190.
+      ChargeTypeID:       1
+      OutputCollection:   nyoki_raw
+      OutputTransparency: 1                       # 1 = no output
+      
+  - name: proc_nyoki
+    type: art::TDataCalibrationProcessor
+    parameter:
+      InputCollection:      nyoki_raw
+      OutputCollection:     nyoki
+      DataClass:            ITiming
+      ConverterArray:       prm_nyoki_ch2ns
+      OutputTransparency:   0
+    
+  - name: proc_nyoki_gate
+    type: art::TParameterArrayLoader
+    parameter:
+      Name:     prm_nyoki_tgate
+      Type:     art::T1DGatingConverter
+      FileName: prm/nyoki/tgate.dat
+      
+  - name: proc_nyoki_gated
+    type: art::TTimingChargeCalibrationProcessor
+    parameter:
+      InputCollection:      nyoki
+      OutputCollection:     nyoki_gated
+      TimingConverterArray: prm_nyoki_tgate
+      InputIsDigital:       0
+      OutputTransparency:   1
+
+# for SMWDC-S1    
+  - name: nyoki_time_ref
+    type: art::sh04::TNyokiTimingProcessor
+    parameter:
+      InputCollection:        nyoki_gated
+      OutputCollection:       nyoki_t
+      OutputTransparency:   1
+      
+  - name: tof_S0D_to_D1
+    type: art::TTimingSubtractionProcessor
+    parameter:
+      InputCollection:        nyoki_t   # tof = [t] - tref
+      OutputCollection:       tof_s1
+      StartTimingCollection:  plaV775     #  tof= t - [tref]
+      StartTimingDetID:       4           # S0D
+      UseMultipleStartTiming: 1
+      MaxDetID:               1
+      OutputTransparency:     0
+      
+  - include: smwdc_S1_TableConvert.yaml    # require nyoki and s1_time_ref
+  - include: smwdc_S1_track.yaml
+      
+  # correction of nyoki Q    
+  - name: proc_nyoki_qcor
+    type: art::sh04::TNyokiChargeCorrectionProcessor
+    parameter:
+      InputCollection:  nyoki
+      #InputCollection:  nyoki_gated # will crash
+      Track:            smwdc_S1
+      OutputCollection: nyoki_c
+      Pedestal:
+        - 150. # 0
+        - 300.
+        - 300.
+        - 240.
+        - 220.
+        - 40. # 5
+        - 110.
+        - 40.
+        - 320.
+        - 70.
+        - 70. # 10
+        - 0.
+        - 0.
+        - 0.
+      TableFiles:
+        - prm/nyoki/correction_ns/nyoki00.dat # 0
+        - prm/nyoki/correction_ns/nyoki01.dat
+        - prm/nyoki/correction_ns/nyoki02.dat
+        - prm/nyoki/correction_ns/nyoki03.dat
+        - prm/nyoki/correction_ns/nyoki04.dat
+        - prm/nyoki/correction_ns/nyoki05.dat # 5
+        - prm/nyoki/correction_ns/nyoki06.dat
+        - prm/nyoki/correction_ns/nyoki07.dat
+        - prm/nyoki/correction_ns/nyoki08.dat
+        - prm/nyoki/correction_ns/nyoki09.dat
+        - prm/nyoki/correction_ns/nyoki10.dat # 10
+        - prm/nyoki/correction_ns/nyoki10.dat
+        - prm/nyoki/correction_ns/nyoki10.dat
+        - prm/nyoki/correction_ns/nyoki10.dat
+      YTableFiles:
+        - prm/nyoki/correction_s1y/ycorr_const.dat
+        - prm/nyoki/correction_s1y/ycorr_const.dat
+        - prm/nyoki/correction_s1y/ycorr_const.dat
+        - prm/nyoki/correction_s1y/ycorr_const.dat
+        - prm/nyoki/correction_s1y/ycorr_const.dat
+        - prm/nyoki/correction_s1y/ycorr_const.dat
+        - prm/nyoki/correction_s1y/ycorr_const.dat
+        - prm/nyoki/correction_s1y/ycorr_const.dat
+        - prm/nyoki/correction_s1y/ycorr_const.dat
+        - prm/nyoki/correction_s1y/ycorr_const.dat
+        - prm/nyoki/correction_s1y/ycorr_const.dat #10
+        - prm/nyoki/correction_s1y/ycorr_const.dat
+        - prm/nyoki/correction_s1y/ycorr_const.dat
+        - prm/nyoki/correction_s1y/ycorr_const.dat
+      OutputTransparency:   0
+              
+  - name: proc_nyoki_qtoz_load
+    type: art::TMultiFileParameterArrayLoader
+    parameter:
+      Name: prm_nyoki_q2z
+      Type: art::TSplineConverter
+      FileList:
+        - prm/nyoki/q2z/q2z_0.dat
+        - prm/nyoki/q2z/q2z_1.dat
+        - prm/nyoki/q2z/q2z_2.dat
+        - prm/nyoki/q2z/q2z_3.dat
+        - prm/nyoki/q2z/q2z_4.dat
+        - prm/nyoki/q2z/q2z_5.dat
+        - prm/nyoki/q2z/q2z_6.dat
+        - prm/nyoki/q2z/q2z_7.dat
+        - prm/nyoki/q2z/q2z_8.dat
+        - prm/nyoki/q2z/q2z_9.dat
+        - prm/nyoki/q2z/q2z_a.dat
+        - prm/nyoki/q2z/q2z_a.dat
+        - prm/nyoki/q2z/q2z_a.dat
+        - prm/nyoki/q2z/q2z_a.dat
+
+  - name: proc_nyoki
+    type: art::TDataCalibrationProcessor
+    parameter:
+      InputCollection:      nyoki_c
+      OutputCollection:     nyoki_z
+      DataClass:            ICharge
+      ConverterArray:       prm_nyoki_q2z
+      InputIsDigital:       0
+      OutputTransparency:   0
+
+  - name: proc_nyoki_z_gated
+    type: art::TTimingChargeCalibrationProcessor
+    parameter:
+      InputCollection:      nyoki_z
+      OutputCollection:     nyoki_z_gated
+      TimingConverterArray: prm_nyoki_tgate
+      InputIsDigital:       0
+      OutputTransparency:   1
+
+  - name: nyoki_z_time_selection
+    type: art::sh04::TNyokiTimingProcessor
+    parameter:
+      InputCollection:        nyoki_z_gated
+      OutputCollection:       nyoki_zt
+      OutputTransparency:     0
+
+  - name: tf_gate
+    type: art::TTreeFormulaGateProcessor
+    parameter:
+      Definitions:
+        - nyoki;   TMath::Finite(nyoki_t.fID)
+        
+  - name: proc_s1pid
+    type: art::sh04::TS1PIDProcessor
+    parameter:
+      S0Track:    S0img
+      S0DTrack:   dcs0d
+      S1Track:    smwdc_S1
+      #Nyoki:      nyoki_z
+      Nyoki:      nyoki_z
+      TOF:        tof_s1
+      PIDOut:     pid_s1
+      TOFOut:     tof_c
+      S1TrackOut: s1_c
+      OutputTransparency:   0
+      
+#  - name: proc_beam_PID
+#    type: art::TParameterLoader
+#    parameter:
+#      Name:     beam_PID
+#      Type:     art::sh04::TBeamParameter
+#      FileName:   prm/kinematics/23F.yaml
+#      
+#  - name: proc_pid_downstream
+#    type: art::sh04::TResidualPIDProcessor
+#    parameter:
+#      ChargeCollection:  nyoki_t
+#      TOFCollection:     tof_s1
+#      Output:     pid_ds
+#      MWDCCollection: smwdc_S1   
+#      Parameter0:  0.   # p0, L = Q + p0
+#      Parameter1:  1      # g = k*A, dE = k z^2/beta^2
+#      Parameter2:  0  # h = k*B, L = A *dE/(1+B*dE)
+#      Dispersion:  -1427  # tetatively
+#      TimeOffset:  0.
+#      FlightLength:   6290.4 #6575.6 #6575.6
+#      FL1:           -0.451752. 
+#      FL2:           0.0003021347
+#      BeamParameter: beam_PID
+#      Brho_D1:       6.5269    
+
+
+#===========================================================
