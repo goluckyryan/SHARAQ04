@@ -1,8 +1,7 @@
-#include "Compress/TBeamData.h"
-void BeamFraction() {
-   const char* rootfile="23F_optics_0603.root";
-   TBeamData *beam = new TBeamData("23F");
-   
+
+void BeamFraction_v775() {
+   const char* rootfile="23F_run23_0603.root";
+   TString beam = "23F";
    Bool_t allentry  = 1;
    Int_t firstEntry = 0;
    Int_t nEntries   =5000000;
@@ -11,7 +10,12 @@ void BeamFraction() {
    Double_t center[2]={0.4, 1.8};
    Double_t radius = 7.;
    
-   beam->Print();
+   Double_t tGate[2];
+   Double_t qGate[2];
+   
+   if( beam == "23F") {tGate[0] = -323; tGate[1] = -318; qGate[0] = 770; qGate[1] = 1000;};
+   if( beam == "22O") {tGate[0] = -306; tGate[1] = -302; qGate[0] = 700; qGate[1] =  900;};
+   if( beam == "25F") {tGate[0] = -319; tGate[1] = -311; qGate[0] = 762; qGate[1] = 1060;};
    
 //#########################################################   
    TCanvas *cBeamFract = new TCanvas ("cBeamFract", "Beam Fraction", 1300, 50, 800, 800); 
@@ -20,7 +24,7 @@ void BeamFraction() {
    
    gStyle->SetOptStat(0);
    
-   TH1F * hPIDUS      = new TH1F("PIDUS"    , "PID upstream", 100, beam->fTofGate[0]-3,beam->fTofGate[1]+3);
+   TH1F * hPIDUS      = new TH1F("PIDUS"    , "PID upstream", 100, tGate[0]-3,tGate[1]+3);
    hPIDUS->SetXTitle("ToF(F3-FH9) [ns]");
    hPIDUS->SetYTitle("Count");
    TH2F * hS0img      = new TH2F("S0img"    , "S0img X Y"                , nBin, -30, 30, nBin, -30, 30);
@@ -41,7 +45,7 @@ void BeamFraction() {
    Bool_t shown = 0;
 
    art::TCoinRegData *hoge_coinReg;
-   TClonesArray *hoge_S0img, *hoge_fh9, *hoge_us;
+   TClonesArray *hoge_S0img, *hoge_v775, *hoge_ds;
    TFile *f = new TFile(rootfile,"read");
    printf(">> %s <<< is loaded.\n",rootfile);
    TTree *tree = (TTree*)f->Get("tree");
@@ -49,13 +53,13 @@ void BeamFraction() {
    tree->SetBranchStatus("*",0);
    tree->SetBranchStatus("coinReg",1);
    tree->SetBranchStatus("S0img",1);
-   tree->SetBranchStatus("plaV1190_FH9",1); //get charge for PID
-   tree->SetBranchStatus("tof_US",1);
+   tree->SetBranchStatus("plaV775",1); //get charge for PID
+   tree->SetBranchStatus("tof_DS",1);
 
    tree->SetBranchAddress("coinReg",&hoge_coinReg);
    tree->SetBranchAddress("S0img",&hoge_S0img);
-   tree->SetBranchAddress("plaV1190_FH9",&hoge_fh9);
-   tree->SetBranchAddress("tof_US",&hoge_us);
+   tree->SetBranchAddress("plaV775",&hoge_v775);
+   tree->SetBranchAddress("tof_DS",&hoge_ds);
 
 //############################################################################   
    Int_t endEntry = firstEntry + nEntries;
@@ -66,12 +70,10 @@ void BeamFraction() {
    }
    printf("====== totnumEntry:%d, 1stEntry:%d, nEntries:%d[%5.1f%%]\n",totnumEntry,firstEntry,nEntries,nEntries*100./totnumEntry);
    
-   art::TTimeDifference * tofusdata;
-   art::TTwoSidedPlasticData * Qusdata;
    art::TMWDCTrackingResult * xyS0;
    art::TTrack * trackS0;
    
-   Int_t countFH9 = 0, countS0img = 0, countCrystal = 0;
+   Int_t countPID = 0, countS0img = 0, countCrystal = 0;
    
 //#############################################################################   
    for( Int_t eventID = firstEntry; eventID < endEntry; eventID ++){
@@ -81,24 +83,22 @@ void BeamFraction() {
       if ( hoge_coinReg->Test(1) != 1 ) continue;
       
 //----------------Get tof and charge upstream V1190
-      Int_t nHit = hoge_us -> GetEntriesFast();
-      Double_t tof_usV1190 = 0 , Q_usG = 0;
+      Int_t nHit = hoge_ds -> GetEntriesFast();
+      Double_t tof_us = 0 , Q_us = 0;
       Bool_t PID = 0;
       for( Int_t p = 0; p < nHit; p++){
-         tofusdata = (art::TTimeDifference*)hoge_us->At(p) ;
-         Int_t HitID        = tofusdata->GetHitID();
-         Double_t tof_us   = tofusdata->GetTiming();
-         Qusdata = (art::TTwoSidedPlasticData*) hoge_fh9->At(HitID-1);
-         Double_t Q_us      = Qusdata->GetCharge();
-         if ( tof_us < beam->fTofGate[0] || tof_us> beam->fTofGate[1]) continue; //PID gate
-         if ( Q_us < beam->fQGate[0] || Q_us > beam->fQGate[1]) continue; // PID gate
-         tof_usV1190 = tof_us;
-         Q_usG   = Q_us;
+         Int_t detID = ((art::TTimeDifference*)hoge_ds->At(p))->GetID() ;
+         if( detID != 2) continue;
+         tof_us    = -((art::TTimeDifference*)hoge_ds->At(p))->GetTiming(); // minus sign
+         Q_us = ((art::TTwoSidedPlasticData*) hoge_v775->At(p))->GetCharge();
+         //printf("%d, %f, %f \n", eventID, tof_us, Q_us);
+         if ( tof_us < tGate[0] || tof_us > tGate[1]) continue; //PID gate
+         if ( Q_us < qGate[0] || Q_us > qGate[1]) continue; // PID gate
          PID = 1;
       }
       if ( PID == 0 ) continue;
-      countFH9++;
-      hPIDUS->Fill(tof_usV1190);
+      countPID++;
+      hPIDUS->Fill(tof_us);
       
 //---------Get S0img image, should be one 1 instance
       nHit = hoge_S0img->GetEntriesFast();
@@ -126,6 +126,8 @@ void BeamFraction() {
       if ( (s0x-center[0])*(s0x-center[0]) + (s0y-center[1])*(s0y-center[1]) < radius*radius){
          countCrystal ++ ;
          hS0imgCrys->Fill(s0x,s0y);
+         //hS0AB ->Fill(s0a*1000,s0b*1000);
+      
       }
       
 //------------Clock      
@@ -175,12 +177,12 @@ void BeamFraction() {
    
    cBeamFract->cd(3);
    hS0imgCrys->Draw("colz");
-//   countText.Form("count:%d[%4.1f%%]", countCrystal, countCrystal*100./countFH9);
-   countText.Form("count:%d", countCrystal);
+//   countText.Form("count:%d[%4.1f%%]", countCrystal, countCrystal*100./countPID);
+   countText.Form("count:%d [%4.1f%%]", countCrystal, countCrystal*100./countS0img);
    text.DrawText(0.15, 0.8, countText);
 
    cBeamFract->cd(4);
    hPIDUS->Draw("colz");
-   countText.Form("count:%d",countFH9);
+   countText.Form("count:%d",countPID);
    text.DrawText(0.15, 0.8, countText);
 }

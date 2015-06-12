@@ -1,6 +1,6 @@
 aliases:
 # beware to overwrite !!!
-  - &output test.root
+  - &output 23F_timeoffset_58.9_59.7.root
  
 #  - &beamprm prm/kinematics/proton.yaml
 #  - &beamprm prm/kinematics/14O.yaml  
@@ -35,6 +35,7 @@ Processor:
 #============== PROCESSORS     =============================
   - include: coinReg.yaml
   - include: Gate_Initialtor.yaml
+#  - include: Gate_stop_beam.yaml
   - include: Gate_stop_ppcoin.yaml
 
 ########----------------- BigRIPS & plastics
@@ -69,7 +70,8 @@ Processor:
   - include: Gate_S0img.yaml
 #  - include: dcx1_track.yaml
 #  - include: dcx2_track.yaml
-#  - include: Gate_stop_Crystal_r7.yaml
+  - include: Gate_stop_Crystal_r7.yaml
+#  - include: Gate_stop_Crystal_r14.yaml
 
 ########----------------- DCS0D  
   - include: dcS0D.yaml    
@@ -82,11 +84,11 @@ Processor:
   - include: smwdc_l_track.yaml  
   - include: smwdc_r_PolyConvert.yaml     
   - include: smwdc_r_track.yaml
-#
+
 ########----------------- D1 analysis
 
   - include: D1_analysis.yaml   # require dcS0D, S0img
-
+#  - include: D1_analysis_25F.yaml   # require dcS0D, S0img
 
 #  - include: s1_time_ref.yaml              # required
 #  - include: nyoki.yaml                    # require plastic_V775 for tof, and s1_time_ref
@@ -95,8 +97,6 @@ Processor:
 #  - include: smwdc_S1_track.yaml
 #  - include: smwdc_S1_cal.yaml
 #  - include: Gate_nyokiQ.yaml
-
-
 #  - include: PID_22Orun.yaml
 #  - include: PID_24Orun.yaml
 
@@ -109,11 +109,11 @@ Processor:
       FileName: *beamprm
   
   - include: smwdc_geo.yaml
-  - include: beamZ.yaml
   - include: vertex.yaml
-  - include: recoil.yaml                   # set beamZ, angle correction
+#  - include: recoil.yaml                   # set beamZ, angle correction
+#  - include: beamZ.yaml
 #  - include: recoil_carbon.yaml
-##  - include: recoil_multiOffset.yaml
+  - include: recoil_multiOffset.yaml
 ##  - include: Gate_PIDdownstream_polygon.yaml
 #  - include: Gate_PIDdownstream_rectangle.yaml
 

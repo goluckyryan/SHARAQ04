@@ -65,8 +65,9 @@ public :
    //Double_t qS0DU, qS0DD, tS0DU, tS0DD;
    Double_t tTgt;
 	//-----------tof from S0DPL to nyoki
-	Double_t tofS1[14], qS1[14], tS1[14];
-	Double_t tofTgtS1;
+	Double_t tofS1, qS1[14], tS1[14];
+	Double_t tofTgtS1, tofS0DS1;
+   Int_t nyokiM;
 	//Double_t qS1c[14];
 	//-----------SMWDC X Y
    Double_t x1, y1, a1, b1; // for smwdc-L
@@ -91,10 +92,11 @@ public :
 	Double_t Ex;// Sp2 - 13.26;
 	Double_t ExS;// Sp - 13.26;
 	Double_t kMomt; // redisual momentum
-//	//carbon
-//	Double_t theta1c, theta2c;
-//	Double_t phi1c, phi2c;
-//	Double_t Exc, kMomtc;
+   Double_t thetaR, phiR;
+   //carbon
+	Double_t theta1c, theta2c;
+	Double_t phi1c, phi2c;
+	Double_t Exc, kMomtc;
 
    //============================================= Declaration of leaf types
 
@@ -117,7 +119,7 @@ public :
    TClonesArray    *smwdc_S1;
    TClonesArray    *nyoki_c;
    TClonesArray    *nyoki_z;
-   TClonesArray    *nyoki_zt;
+   TClonesArray    *nyoki_t;
    art::sh04::TParticleIdentifier *pid_s1;
    art::TTimingData *tof_c;
    art::TTrack     *s1_c;
@@ -128,6 +130,8 @@ public :
    TClonesArray    *tofS0D;
    art::sh04::TP2PKinematicsData *p2p;
    art::sh04::TP2PKinematicsData *p2p_Lab;
+   art::sh04::TP2PKinematicsData *p2p_c;
+   art::sh04::TP2PKinematicsData *p2p_c_Lab;
 
    //==================================================== List of branches
    TBranch        *b_eventheader;   //!
@@ -147,7 +151,7 @@ public :
    TBranch        *b_smwdc_S1;   //!
    TBranch        *b_nyoki_c;   //!
    TBranch        *b_nyoki_z;   //!
-   TBranch        *b_nyoki_zt;   //!
+   TBranch        *b_nyoki_t;   //!
    TBranch        *b_pid_s1;   //!
    TBranch        *b_tof_c;   //!
    TBranch        *b_s1_c;   //!
@@ -158,6 +162,8 @@ public :
    TBranch        *b_tofS0D;   //!
    TBranch        *b_p2p;   //!
    TBranch        *b_p2p_Lab;   //!
+   TBranch        *b_p2p_c;   //!
+   TBranch        *b_p2p_c_Lab;   //!
 
    Selector_Post(TTree * /*tree*/ =0) : fChain(0) { }
    virtual ~Selector_Post() { }
@@ -211,7 +217,7 @@ void Selector_Post::Init(TTree *tree)
    smwdc_S1 = 0;
    nyoki_c = 0;
    nyoki_z = 0;
-   nyoki_zt = 0;
+   nyoki_t = 0;
    pid_s1 = 0;
    tof_c = 0;
    s1_c = 0;
@@ -222,22 +228,24 @@ void Selector_Post::Init(TTree *tree)
    tofS0D = 0;
    p2p = 0;
    p2p_Lab = 0;
+   p2p_c = 0;
+   p2p_c_Lab = 0;
    
    //===================================== Set branch addresses and branch pointers
    if (!tree) return;
    fChain = tree;
    fChain->SetMakeClass(1);
 
-   fChain->SetBranchAddress("eventheader0", &eventheader, &b_eventheader);
-   //fChain->SetBranchAddress("eventheader0", &eventheader0, &b_eventheader0);
+   //fChain->SetBranchAddress("eventheader0", &eventheader, &b_eventheader);
+   fChain->SetBranchAddress("eventheader", &eventheader, &b_eventheader);
    //fChain->SetBranchAddress("coinReg", &coinReg, &b_coinReg);
-   fChain->SetBranchAddress("gate", &gate, &b_gate);
+   //fChain->SetBranchAddress("gate", &gate, &b_gate);
    //fChain->SetBranchAddress("plaV1190_F3", &plaV1190_F3, &b_plaV1190_F3);
    //fChain->SetBranchAddress("plaV1190_FH9", &plaV1190_FH9, &b_plaV1190_FH9);
    //fChain->SetBranchAddress("tof_US", &tof_US, &b_tof_US);
-   fChain->SetBranchAddress("plaV775", &plaV775, &b_plaV775);
+   //fChain->SetBranchAddress("plaV775", &plaV775, &b_plaV775);
    //fChain->SetBranchAddress("tof_DS", &tof_DS, &b_tof_DS);
-   //fChain->SetBranchAddress("S0img", &S0img, &b_S0img);
+   fChain->SetBranchAddress("S0img", &S0img, &b_S0img);
    fChain->SetBranchAddress("dcs0d", &dcs0d, &b_dcs0d);
    //fChain->SetBranchAddress("smwdc_L", &smwdc_L, &b_smwdc_L);
    //fChain->SetBranchAddress("smwdc_R", &smwdc_R, &b_smwdc_R);
@@ -245,19 +253,23 @@ void Selector_Post::Init(TTree *tree)
    fChain->SetBranchAddress("tof_s1", &tof_s1, &b_tof_s1);
    fChain->SetBranchAddress("smwdc_S1", &smwdc_S1, &b_smwdc_S1);
    //fChain->SetBranchAddress("nyoki_c", &nyoki_c, &b_nyoki_c);
-   //fChain->SetBranchAddress("nyoki_z", &nyoki_z, &b_nyoki_z);
-   fChain->SetBranchAddress("nyoki_zt", &nyoki_zt, &b_nyoki_zt);
+   fChain->SetBranchAddress("nyoki_z", &nyoki_z, &b_nyoki_z);
+   fChain->SetBranchAddress("nyoki_t", &nyoki_t, &b_nyoki_t);
    fChain->SetBranchAddress("pid_s1", &pid_s1, &b_pid_s1);
-   //fChain->SetBranchAddress("tof_c", &tof_c, &b_tof_c);
-   //fChain->SetBranchAddress("s1_c", &s1_c, &b_s1_c);
+   fChain->SetBranchAddress("tof_c", &tof_c, &b_tof_c);
+   fChain->SetBranchAddress("s1_c", &s1_c, &b_s1_c);
    //fChain->SetBranchAddress("beamZ", &beamZ, &b_beamZ);
    fChain->SetBranchAddress("vertex", &vertex, &b_vertex);
-   //fChain->SetBranchAddress("tofL", &tofL, &b_tofL);
-   //fChain->SetBranchAddress("tofR", &tofR, &b_tofR);
-   //fChain->SetBranchAddress("tofS0D", &tofS0D, &b_tofS0D);
+   fChain->SetBranchAddress("tofL", &tofL, &b_tofL);
+   fChain->SetBranchAddress("tofR", &tofR, &b_tofR);
+   fChain->SetBranchAddress("tofS0D", &tofS0D, &b_tofS0D);
    fChain->SetBranchAddress("p2p", &p2p, &b_p2p);
    //fChain->SetBranchAddress("p2p_Lab", &p2p_Lab, &b_p2p_Lab);
+   //fChain->SetBranchAddress("p2p_c", &p2p_c, &b_p2p_c);
+   //fChain->SetBranchAddress("p2p_c_Lab", &p2p_c_Lab, &b_p2p_c_Lab);
    
+   if (b_coinReg       ) printf("%10s....on\n", "coinReg");
+   if (b_gate          ) printf("%10s....on\n", "gate");
    if (b_plaV1190_FH9  ) printf("%10s....on\n", "plaV1190_FH9");
    if (b_tof_US        ) printf("%10s....on\n", "tof_US");
    if (b_plaV775       ) printf("%10s....on\n", "plaV775");
@@ -267,11 +279,11 @@ void Selector_Post::Init(TTree *tree)
    if (b_smwdc_L       ) printf("%10s....on\n", "smwdc-L");
    if (b_smwdc_R       ) printf("%10s....on\n", "smwdc_R");
    if (b_nyoki         ) printf("%10s....on\n", "nyoki");
-   if (b_tof_s1        ) printf("%10s....on\n", "tof_S1");
+   if (b_tof_s1        ) printf("%10s....on\n", "tof_s1");
    if (b_smwdc_S1      ) printf("%10s....on\n", "smwdc_S1");
    if (b_nyoki_c       ) printf("%10s....on\n", "nyoki_c");
    if (b_nyoki_z       ) printf("%10s....on\n", "nyoki_z");
-   if (b_nyoki_zt      ) printf("%10s....on\n", "nyoki_zt");
+   if (b_nyoki_t       ) printf("%10s....on\n", "nyoki_t");
    if (b_pid_s1        ) printf("%10s....on\n", "pid_s1");
    if (b_tof_c         ) printf("%10s....on\n", "tof_c");
    if (b_s1_c          ) printf("%10s....on\n", "s1_c");
@@ -282,6 +294,8 @@ void Selector_Post::Init(TTree *tree)
    if (b_tofS0D        ) printf("%10s....on\n", "tofS0D");
    if (b_p2p           ) printf("%10s....on\n", "p2p");
    if (b_p2p_Lab       ) printf("%10s....on\n", "p2p_Lab");
+   if (b_p2p_c         ) printf("%10s....on\n", "p2p_c");
+   if (b_p2p_c_Lab     ) printf("%10s....on\n", "p2p_c_Lab");
    
    
    //================================Store in New ROOT file
@@ -315,12 +329,15 @@ void Selector_Post::Init(TTree *tree)
 //   qS0DU = TMath::QuietNaN(); tS0DU = TMath::QuietNaN();
 //   qS0DD = TMath::QuietNaN(); tS0DD = TMath::QuietNaN();
    for( Int_t p = 0; p < 14; p++){
-      tofS1[p] = TMath::QuietNaN();
       tS1[p] = TMath::QuietNaN();
       qS1[p] = TMath::QuietNaN();
    }
-   tofTgtS1 = TMath::QuietNaN();
-	x1 = TMath::QuietNaN(); y1 = TMath::QuietNaN(); a1 = TMath::QuietNaN(); b1 = TMath::QuietNaN(); 
+   nyokiM = 0;
+   
+   tofS1 = TMath::QuietNaN();
+   tofS0DS1 = TMath::QuietNaN();
+	
+   x1 = TMath::QuietNaN(); y1 = TMath::QuietNaN(); a1 = TMath::QuietNaN(); b1 = TMath::QuietNaN(); 
 	x2 = TMath::QuietNaN(); y2 = TMath::QuietNaN(); a2 = TMath::QuietNaN(); b2 = TMath::QuietNaN(); 
    s1x = TMath::QuietNaN(); s1y = TMath::QuietNaN(); s1a = TMath::QuietNaN(); s1b = TMath::QuietNaN();
    s1xr = TMath::QuietNaN(); s1ar = TMath::QuietNaN();
@@ -352,20 +369,29 @@ void Selector_Post::Init(TTree *tree)
    s1xc = TMath::QuietNaN();
    tofc = TMath::QuietNaN();
    
-//	
-//	theta1c = TMath::QuietNaN();
-//	theta2c = TMath::QuietNaN();
-//	phi1c = TMath::QuietNaN(); 
-//	phi2c = TMath::QuietNaN();
-//	Exc = TMath::QuietNaN();
-//	kMomtc = TMath::QuietNaN();
+   if( b_p2p_c ){
+      theta1c = TMath::QuietNaN();
+      theta2c = TMath::QuietNaN();
+      phi1c = TMath::QuietNaN(); 
+      phi2c = TMath::QuietNaN();
+      Exc = TMath::QuietNaN();
+      kMomtc = TMath::QuietNaN();
+      thetaR = TMath::QuietNaN();
+      phiR = TMath::QuietNaN();
+      
+   }
+   
+   //________________________________________________ Branch
 
 	newTree->Branch("eventID",&eventID,"eventID/I");   
 	newTree->Branch("runNum", &runNum, "runNum/I");
-	newTree->Branch("coinReg", &coinRegNum, "coinRegNum/I");
-	newTree->Branch("s0imgGate",&s0imgGate,"s0imgGate/I");
-	newTree->Branch("pidusGate", &pidusGate, "pidusGate/I");
-	
+	if( b_coinReg) {
+      newTree->Branch("coinReg", &coinRegNum, "coinRegNum/I");
+   }
+   if( b_gate){
+      newTree->Branch("s0imgGate",&s0imgGate,"s0imgGate/I");
+      newTree->Branch("pidusGate", &pidusGate, "pidusGate/I");
+   }
    if( b_plaV1190_FH9){
       newTree->Branch("tofFH9",&tofFH9,"tofFH9/D");
       newTree->Branch("qFH9",&qFH9,"qFH9/D");
@@ -377,7 +403,11 @@ void Selector_Post::Init(TTree *tree)
       newTree->Branch("tF3",&tF3,"tF3/D");
    }
    
-   if( b_plaV775)){
+   newTree->Branch("tofTplaL",&tofTplaL,"tofTplaL/D");
+   newTree->Branch("tofTplaR",&tofTplaR,"tofTplaR/D");
+   newTree->Branch("tofS0D",&tof_S0D,"tof_S0D/D");
+   
+   if( b_plaV775){
       newTree->Branch("tTgt",&tTgt,"tTgt/D");
    //   
    //	newTree->Branch("tTplaLB",&tTplaLB,"tTplaLB/D");
@@ -418,12 +448,13 @@ void Selector_Post::Init(TTree *tree)
    }
    
    if( b_tof_s1){
-      newTree->Branch("tofS1", tofS1, "tofS1[14]/D");
+      newTree->Branch("tofS1", &tofS1, "tofS1/D");
    }
    
    if( b_nyoki_z){
       newTree->Branch("qS1", qS1, "qS1[14]/D");
       newTree->Branch("tS1", tS1, "tS1[14]/D");
+      newTree->Branch("nyokiM", &nyokiM, "nyokiM/I");
    }
    
    if( b_smwdc_L){
@@ -449,46 +480,64 @@ void Selector_Post::Init(TTree *tree)
       newTree->Branch("s1ar",&s1ar,"s1ar/D");
    }
    
-   
-	newTree->Branch("tofTgtS1",&tofTgtS1,"tofTgtS1/D");
-	newTree->Branch("pidZ",&pidZ,"pidZ/D");
-	newTree->Branch("nyokiID",&nyokiID,"nyokiID/I");
-	newTree->Branch("pidAOQ",&pidAOQ,"pidAOQ/D");
-	newTree->Branch("brho",&brho,"brho/D");
-	newTree->Branch("FL",&FL,"FL/D");
-	newTree->Branch("beta",&beta,"beta/D");
-	
-	newTree->Branch("pidZc",&pidZc,"pidZc/D");
-	newTree->Branch("pidAOQc",&pidAOQc,"pidAOQc/D");
-	newTree->Branch("brhoc",&brhoc,"brhoc/D");
-	newTree->Branch("FLc",&FLc,"FLc/D");
-	newTree->Branch("betac",&betac,"betac/D");
-	
-	newTree->Branch("vertexZ",&vertexZ,"vertexZ/D");
-	
-	newTree->Branch("E1",&E1,"E1/D");
-	newTree->Branch("E2",&E2,"E2/D");
-	newTree->Branch("theta1",&theta1,"theta1/D");
-	newTree->Branch("theta2",&theta2,"theta2/D");
-	newTree->Branch("phi1",&phi1,"phi1/D");
-	newTree->Branch("phi2",&phi2,"phi2/D");
-	newTree->Branch("Ex",&Ex,"Ex/D");
-	newTree->Branch("ExS",&ExS,"ExS/D");
-	newTree->Branch("kMomt",&kMomt,"kMomt/D");
+   if( b_plaV775 && b_nyoki_zt) {
+      newTree->Branch("tofTgtS1",&tofTgtS1,"tofTgtS1/D");
+   }
 
-   newTree->Branch("s1xc",&s1xc,"s1xc/D");
-   newTree->Branch("tofc",&tofc,"tofc/D");
-
-/*
-	
-	newTree->Branch("theta1c",&theta1c,"theta1c/D");
-	newTree->Branch("theta2c",&theta2c,"theta2c/D");
-	newTree->Branch("phi1c",&phi1c,"phi1c/D");
-	newTree->Branch("phi2c",&phi2c,"phi2c/D");
-	newTree->Branch("Exc",&Exc,"Exc/D");
-	newTree->Branch("kMomtc",&kMomtc,"kMomtc/D");
-   */
+   if( b_nyoki_t){
+      //newTree->Branch("pidZc",&pidZc,"pidZc/D");
+      newTree->Branch("nyokiID",&nyokiID,"nyokiID/I");
+   }
    
+   if( b_pid_s1){
+      newTree->Branch("pidZ",&pidZ,"pidZ/D");
+      newTree->Branch("pidAOQ",&pidAOQ,"pidAOQ/D");
+      newTree->Branch("brho",&brho,"brho/D");
+      newTree->Branch("FL",&FL,"FL/D");
+      newTree->Branch("beta",&beta,"beta/D");
+	
+      newTree->Branch("pidAOQc",&pidAOQc,"pidAOQc/D");
+      newTree->Branch("brhoc",&brhoc,"brhoc/D");
+      newTree->Branch("FLc",&FLc,"FLc/D");
+      newTree->Branch("betac",&betac,"betac/D");
+   }
+   
+   if( b_vertex){
+      newTree->Branch("vertexZ",&vertexZ,"vertexZ/D");
+   }
+   
+   if( b_p2p){
+      newTree->Branch("E1",&E1,"E1/D");
+      newTree->Branch("E2",&E2,"E2/D");
+      newTree->Branch("theta1",&theta1,"theta1/D");
+      newTree->Branch("theta2",&theta2,"theta2/D");
+      newTree->Branch("phi1",&phi1,"phi1/D");
+      newTree->Branch("phi2",&phi2,"phi2/D");
+      newTree->Branch("Ex",&Ex,"Ex/D");
+      newTree->Branch("ExS",&ExS,"ExS/D");
+      newTree->Branch("kMomt",&kMomt,"kMomt/D");
+      newTree->Branch("thetaR",&thetaR,"thetaR/D");
+      newTree->Branch("phiR",&phiR,"phiR/D");
+   }
+   
+   if( b_s1_c ){
+      newTree->Branch("s1xc",&s1xc,"s1xc/D");
+   }
+   
+   if( b_tof_c){
+      newTree->Branch("tofc",&tofc,"tofc/D");
+   }
+
+   
+   if( b_p2p_c){
+      printf("......................\n");
+      newTree->Branch("theta1c",&theta1c,"theta1c/D");
+      newTree->Branch("theta2c",&theta2c,"theta2c/D");
+      newTree->Branch("phi1c",&phi1c,"phi1c/D");
+      newTree->Branch("phi2c",&phi2c,"phi2c/D");
+      newTree->Branch("Exc",&Exc,"Exc/D");
+      newTree->Branch("kMomtc",&kMomtc,"kMomtc/D");
+   }
    
 }
 

@@ -423,20 +423,20 @@ group:
         
         
       - name: nyoki_z_s1x
-        title: nyokiz vs s1x | 9 > nyoki.ID > 5
-        cut: nyoki_z.fID < 9 && nyoki_z.fID > 5
+        title: nyokiz vs s1x | 11 > nyoki.ID > 4
+        cut: nyoki_z.fID < 11 && nyoki_z.fID > 4
         x: ["smwdc_S1[0].fX",100,-250,250]
         y: [nyoki_z.fCharge,100,0,10]
         
       - name: nyoki_z_s1x_tofgate
-        title: nyokiq vs s1x | |tof-34|<1.5 + 9 > nyoki.fID| > 5
-        cut: nyoki_z.fID < 9 && nyoki_z.fID > 5 && abs(tof_s1[0].fTiming - 34) < 1.5
+        title: nyokiq vs s1x | |tof-34|<1.5 + 11 > nyoki.fID| > 4
+        cut: nyoki_z.fID < 11 && nyoki_z.fID > 4 && abs(tof_s1[0].fTiming - 34) < 1.5
         x: ["smwdc_S1[0].fX",100,-250,250]
         y: [nyoki_z.fCharge,100,0,10]
         
       - name: nyoki_z_tof
         title: nyokiq vs tof_s1
-        cut: nyoki_z.fID < 9 && nyoki_z.fID > 5
+        cut: nyoki_z.fID < 11 && nyoki_z.fID > 4
         x: ["tof_s1[0].fTiming",200,25,50]
         y: [nyoki_z.fCharge,200,0,10]
         

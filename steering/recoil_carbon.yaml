@@ -1,7 +1,5 @@
 aliases:
   - &beamZc      160.
-  - &tofShift_Lc  -1.1  #time shift (tgt to Tpla)
-  - &tofShift_Rc  -0.9  #time shift (tgt to Tpla)
 #============== PROCESSORS     =============================
 Processor:
   - name: tpla_tof_c
@@ -20,8 +18,8 @@ Processor:
       TPlasticLDetID:     0
       TPlasticRDetID:     1
       BeamZ:              *beamZc
-      ShiftL:             *tofShift_Lc
-      ShiftL:             *tofShift_Rc 
+      ShiftL:             0.
+      ShiftL:             0.
       OutputTransparency: 1
 
   - name: Recoil_L_c

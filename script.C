@@ -1,19 +1,17 @@
-#include <fstream>
-
 {
         gROOT->Reset();
         gROOT->ProcessLine(".!date");
         gStyle->SetOptStat(0);
 
 //========================================================
-
-        char * rootfile = "P_test_s1ref.root";
+        //char * rootfile = "O_23F_timeoffset.root";
+        //char * rootfile = "O_23F_timeoffset_58.4_59.2.root";
+        char * rootfile = "O_23F_timeoffset_58.9_59.7.root";
+        //char * rootfile = "O_pp_0605.root";
+        //char * rootfile = "O_pp_0605_fine.root";
+        //char * rootfile = "O_test.root";
         
         TFile *f0 = new TFile (rootfile, "read"); 
-        if( f0==0){
-        printf("cannot load file: %s \n", rootfile);
-        return;
-        }
                 
         TTree *tree = (TTree*)f0->Get("tree");
         gROOT->ProcessLine("listg tree");
@@ -29,11 +27,17 @@
         //tree->Process("Selector_Aux.C");
 
         
-        Int_t Div[2] = {1,1};  //x,y
+        Int_t Div[2] = {2,1};  //x,y
         Int_t size[2] = {500,500}; //x,y
-        TCanvas * cScript = new TCanvas("cScript", "cScript", 2000,0 , size[0]*Div[0], size[1]*Div[1]);
+        TCanvas * cScript = new TCanvas("cScript", "cScript", 2000,10 , size[0]*Div[0], size[1]*Div[1]);
         cScript->Divide(Div[0],Div[1]);
+        
+        
+        TH2F* h2 = new TH2F("h2", rootfile, 11, -1.1, 1.1, 11, -1.1, 1.1);
    
+        TCanvas * cScript2 = new TCanvas("cScript2", "cScript", 0,0 , 1500, 1500);
+        cScript2->Divide(11,11);
+        
 //======================================================== load histogram
 //	TFile *f1 = new TFile ("hist_23F_0112_new_smwdc_S1_config.root", "read");
 
@@ -42,8 +46,450 @@
 //	f0->Close();
 /**/
 //======================================================== analysis
-/************** nyoki Q correction table *********************/
 
+//TCut central = "TMath::Abs((p2p_0000_0000.fRecoilL.Theta()+p2p_0000_0000.fRecoilR.Theta())*TMath::RadToDeg()-86.5)<2.5";
+//TCut side = "TMath::Abs((p2p_0000_0000.fRecoilL.Theta()+p2p_0000_0000.fRecoilR.Theta())*TMath::RadToDeg()-86.5)<5" + !central;
+//TCut vertexZ = "TMath::Abs(beamZ.fAverage-10)<50";
+/*
+TCut central = "TMath::Abs(theta1+theta2-86.5)<2.5";
+TCut side = "TMath::Abs(theta1+theta2-86.5)<5" + !central;
+TCut vertexZ = "TMath::Abs(vertexZ-10)<50";
+
+TCut gate  = central + vertexZ;
+TCut gatec = side + vertexZ;
+
+Int_t mBin, mPeak;
+
+TString plotStr;
+TString pmi, pmj;
+
+TString getBinStr, getPeakStr, subStr;
+
+
+cScript->cd(2);
+
+Int_t maxPeak = 0;
+
+for( Int_t i = -5; i <= 5; i++){
+        for( Int_t j = -5; j <= 5; j++){
+                Int_t  ni = TMath::Abs(i);
+                Int_t  nj = TMath::Abs(j);
+                
+                if( i < 0 ) {
+                        pmi = "m";
+                }else if( i == 0){
+                        pmi = "0";
+                        ni = 0;
+                }else{
+                        pmi = "p";
+                }
+                
+                if( j < 0 ) {
+                        pmj = "m";
+                }else if( j == 0){
+                        pmj = "0";
+                        nj = 0;
+                }else{
+                        pmj = "p";
+                }
+                
+                //if( i == 0 && j == 0) continue;
+                
+                //plotStr.Form("p2p_%1s%03d_%1s%03d.fSp>>h%1s%d%1s%d(60, -30, 30)", pmi.Data(), ni*100 , pmj.Data(), nj*100, pmi.Data(), ni, pmj.Data(), nj);
+                //printf("%30s    ", plotStr.Data());
+                //tree->Draw(plotStr, gate);
+                //
+                //plotStr.Form("p2p_%1s%03d_%1s%03d.fSp>>h%1s%d%1s%dc(60, -30, 30)", pmi.Data(), ni*100 , pmj.Data(), nj*100, pmi.Data(), ni, pmj.Data(), nj);
+                //tree->Draw(plotStr, gatec);
+                
+                plotStr.Form("Ex%1s%d[%d]>>h%1s%d%1s%d(21, -10.5, 10.5)", pmi.Data(), ni , j+5, pmi.Data(), ni, pmj.Data(), nj);
+                printf("%38s    ", plotStr.Data());
+                tree->Draw(plotStr, gate);
+                
+                plotStr.Form("Ex%1s%d[%d]>>h%1s%d%1s%dc(21, -10.5, 10.5)", pmi.Data(), ni , j+5, pmi.Data(), ni, pmj.Data(), nj);
+                tree->Draw(plotStr, gatec);
+                
+                
+                subStr.Form("TH1F* p%1s%d%1s%d = new TH1F(*h%1s%d%1s%d - *h%1s%d%1s%dc)", pmi.Data(), ni, pmj.Data(), nj, pmi.Data(), ni, pmj.Data(), nj, pmi.Data(), ni, pmj.Data(), nj);
+                gROOT->ProcessLine(subStr.Data());
+                
+                getBinStr.Form("mBin = p%1s%d%1s%d->GetMaximumBin();", pmi.Data(), ni, pmj.Data(), nj);
+                gROOT->ProcessLine(getBinStr.Data());
+
+                getPeakStr.Form("mPeak = p%1s%d%1s%d->GetBinContent(mBin);", pmi.Data(), ni, pmj.Data(), nj);
+                //getPeakStr.Form("mPeak = p%1s%d%1s%d->Integral();", pmi.Data(), ni, pmj.Data(), nj);
+                gROOT->ProcessLine(getPeakStr.Data());
+                if( mPeak > maxPeak) maxPeak = mPeak;
+                h2->Fill(i/10.,j/10. , mPeak); 
+                printf("%2d, %2d : Bin:%3d, Peak:%3d \n", i, j, mBin, mPeak);
+        }
+}
+
+for( Int_t i = -5; i <= 5; i++){
+        for( Int_t j = -5; j <= 5; j++){
+                Int_t  ni = TMath::Abs(i);
+                Int_t  nj = TMath::Abs(j);
+                
+                if( i < 0 ) {
+                        pmi = "m";
+                }else if( i == 0){
+                        pmi = "0";
+                        ni = 0;
+                }else{
+                        pmi = "p";
+                }
+                
+                if( j < 0 ) {
+                        pmj = "m";
+                }else if( j == 0){
+                        pmj = "0";
+                        nj = 0;
+                }else{
+                        pmj = "p";
+                }
+                
+                cScript2->cd(11*(10-(j+5))+ (i+5)+1);
+                
+                //plotStr.Form("p%1s%d%1s%d->SetMaximum(%d); p%1s%d%1s%d->SetMinimum(%d); p%1s%d%1s%d->Draw()", pmi.Data(), ni, pmj.Data(), nj, maxPeak*1.1, pmi.Data(), ni, pmj.Data(), nj, 0, pmi.Data(), ni, pmj.Data(), nj);
+                plotStr.Form("p%1s%d%1s%d->SetMaximum(%d);  p%1s%d%1s%d->Draw()", pmi.Data(), ni, pmj.Data(), nj, maxPeak + 100, pmi.Data(), ni, pmj.Data(), nj);
+                gROOT->ProcessLine(plotStr.Data());
+        }
+}
+
+cScript->cd(1);
+h2->Draw("colz");
+
+cScript->cd(2);
+
+/**/
+
+TCut cut22o = "TMath::Abs(pidAOQ*8-22)<0.5";
+TCut cut21o = "TMath::Abs(pidAOQ*8-21)<0.5";
+TCut cut20o = "TMath::Abs(pidAOQ*8-20)<0.5";
+TCut cut19o = "TMath::Abs(pidAOQ*8-19)<0.5";
+TCut cut18o = "TMath::Abs(pidAOQ*8-18)<0.5";
+
+TCut gateVertexZ = "TMath::Abs(vertexZ-10)<30";
+TCut gateVertexZc = "TMath::Abs(vertexZ-160)<30";
+
+TCut gate20  = cut20o + gateVertexZ;
+TCut gate20c = cut20o + gateVertexZc;
+
+TCut gate21  = cut21o + gateVertexZ;
+TCut gate21c = cut21o + gateVertexZc;
+
+TCut gate22  = cut22o + gateVertexZ;
+TCut gate22c = cut22o + gateVertexZc;
+
+Int_t mBin1, mPeak1;
+Int_t mBin2, mPeak2;
+Int_t mBin3, mPeak3;
+
+cScript->cd(1);
+tree->Draw("pidAOQ*8>>hA(80,16,24)", gateVertexZ);
+tree->Draw("pidAOQ*8>>hAg(80,16,24)", gateVertexZc, "same");
+
+TString plotStr;
+TString pmi, pmj;
+
+TString getBinStr, getPeakStr, subStr;
+
+TH1F * htemp = new TH1F();
+
+cScript->cd(1);
+
+Int_t maxPeak = 0;
+
+Int_t nBin = 30;
+Int_t range[2] = {-30,60};
+
+for( Int_t i = -5; i <= 5; i++){
+        for( Int_t j = -5; j <= 5; j++){
+                Int_t  ni = TMath::Abs(i);
+                Int_t  nj = TMath::Abs(j);
+                
+                if( i < 0 ) {
+                        pmi = "m";
+                }else if( i == 0){
+                        pmi = "0";
+                        ni = 0;
+                }else{
+                        pmi = "p";
+                }
+                
+                if( j < 0 ) {
+                        pmj = "m";
+                }else if( j == 0){
+                        pmj = "0";
+                        nj = 0;
+                }else{
+                        pmj = "p";
+                }
+                
+                //---------------
+                plotStr.Form("Ex%1s%d[%d]>>h%1s%d%1s%d(%d, %d, %d)", pmi.Data(), ni , j+5, pmi.Data(), ni, pmj.Data(), nj, nBin, range[0], range[1]);
+                printf("%30s    ", plotStr.Data());
+                tree->Draw(plotStr, gate22);
+                
+                plotStr.Clear();
+                plotStr.Form("Ex%1s%d[%d]>>h%1s%d%1s%dc(%d, %d, %d)", pmi.Data(), ni , j+5, pmi.Data(), ni, pmj.Data(), nj, nBin, range[0], range[1]);
+                tree->Draw(plotStr, gate22c);
+                
+                subStr.Form("TH1F* p%1s%d%1s%d = new TH1F(*h%1s%d%1s%d - *h%1s%d%1s%dc); htemp = p%1s%d%1s%d;", pmi.Data(), ni, pmj.Data(), nj, pmi.Data(), ni, pmj.Data(), nj, pmi.Data(), ni, pmj.Data(), nj, pmi.Data(), ni, pmj.Data(), nj);
+                gROOT->ProcessLine(subStr.Data());
+                
+                mBin1 = htemp->GetMaximumBin();
+                mPeak1 = htemp->GetBinContent(mBin1);
+                if( mPeak1 > maxPeak) maxPeak = mPeak1;
+                htemp = 0;
+
+                //-------------
+                plotStr.Form("Ex%1s%d[%d]>>g%1s%d%1s%d(%d, %d, %d)", pmi.Data(), ni , j+5, pmi.Data(), ni, pmj.Data(), nj, nBin, range[0], range[1]);
+                printf("%30s    ", plotStr.Data());
+                tree->Draw(plotStr, gate21);
+                
+                plotStr.Clear();
+                plotStr.Form("Ex%1s%d[%d]>>g%1s%d%1s%dc(%d, %d, %d)", pmi.Data(), ni , j+5, pmi.Data(), ni, pmj.Data(), nj, nBin, range[0], range[1]);
+                tree->Draw(plotStr, gate21c);
+                
+                subStr.Form("TH1F* q%1s%d%1s%d = new TH1F(*g%1s%d%1s%d - *g%1s%d%1s%dc); htemp = q%1s%d%1s%d;", pmi.Data(), ni, pmj.Data(), nj, pmi.Data(), ni, pmj.Data(), nj, pmi.Data(), ni, pmj.Data(), nj, pmi.Data(), ni, pmj.Data(), nj);
+                gROOT->ProcessLine(subStr.Data());
+                
+                mBin2 = htemp->GetMaximumBin();
+                mPeak2 = htemp->GetBinContent(mBin2);
+                if( mPeak2 > maxPeak) maxPeak = mPeak2;
+                htemp = 0;
+                
+                //-------------
+                plotStr.Form("Ex%1s%d[%d]>>k%1s%d%1s%d(%d, %d, %d)", pmi.Data(), ni , j+5, pmi.Data(), ni, pmj.Data(), nj, nBin, range[0], range[1]);
+                printf("%30s    ", plotStr.Data());
+                tree->Draw(plotStr, gate20);
+                
+                plotStr.Form("Ex%1s%d[%d]>>k%1s%d%1s%dc(%d, %d, %d)", pmi.Data(), ni , j+5, pmi.Data(), ni, pmj.Data(), nj, nBin, range[0], range[1]);
+                tree->Draw(plotStr, gate20c);
+                
+                subStr.Form("TH1F* r%1s%d%1s%d = new TH1F(*k%1s%d%1s%d - *k%1s%d%1s%dc); htemp = r%1s%d%1s%d;", pmi.Data(), ni, pmj.Data(), nj, pmi.Data(), ni, pmj.Data(), nj, pmi.Data(), ni, pmj.Data(), nj, pmi.Data(), ni, pmj.Data(), nj);
+                gROOT->ProcessLine(subStr.Data());
+                
+                mBin3 = htemp->GetMaximumBin();
+                mPeak3 = htemp->GetBinContent(mBin3);
+                if( mPeak3 > maxPeak) maxPeak = mPeak3;
+                htemp = 0;
+                
+                //-----------------------
+                Int_t mPeak = mPeak1+ mPeak2+mPeak3;
+        
+                h2->Fill(2*i/10.,2*j/10. , mPeak); 
+                printf("%2d, %2d : Peak:%3d \n", i, j,  mPeak);
+        }
+}
+
+for( Int_t i = -5; i <= 5; i++){
+        for( Int_t j = -5; j <= 5; j++){
+                Int_t  ni = TMath::Abs(i);
+                Int_t  nj = TMath::Abs(j);
+                
+                if( i < 0 ) {
+                        pmi = "m";
+                }else if( i == 0){
+                        pmi = "0";
+                        ni = 0;
+                }else{
+                        pmi = "p";
+                }
+                
+                if( j < 0 ) {
+                        pmj = "m";
+                }else if( j == 0){
+                        pmj = "0";
+                        nj = 0;
+                }else{
+                        pmj = "p";
+                }
+                
+                cScript2->cd(11*(10-(j+5))+ (i+5)+1);
+                
+                plotStr.Form("p%1s%d%1s%d->SetMaximum(%d); p%1s%d%1s%d->SetLineColor(2); p%1s%d%1s%d->Draw()", pmi.Data(), ni, pmj.Data(), nj, maxPeak+2, pmi.Data(), ni, pmj.Data(), nj, pmi.Data(), ni, pmj.Data(), nj);
+                gROOT->ProcessLine(plotStr.Data());
+                
+                plotStr.Form("q%1s%d%1s%d->SetMaximum(%d); q%1s%d%1s%d->SetLineColor(8); htemp = q%1s%d%1s%d;", pmi.Data(), ni, pmj.Data(), nj, maxPeak+2, pmi.Data(), ni, pmj.Data(), nj, pmi.Data(), ni, pmj.Data(), nj);
+                gROOT->ProcessLine(plotStr.Data());
+                htemp->Draw("same");
+                
+                plotStr.Form("r%1s%d%1s%d->SetMaximum(%d); r%1s%d%1s%d->SetLineColor(4); htemp = r%1s%d%1s%d;", pmi.Data(), ni, pmj.Data(), nj, maxPeak+2, pmi.Data(), ni, pmj.Data(), nj, pmi.Data(), ni, pmj.Data(), nj);
+                gROOT->ProcessLine(plotStr.Data());
+                htemp->Draw("same");
+                
+                //if(i == 0 && j ==0){
+                //        TLatex text;
+                //        text.SetTextSizePixels(5000);
+                //        text.SetNDC();
+                //        text.SetTextColor(1);
+                //        text.DrawText(0.2, 0.8, "0,0");
+                //}
+        }
+}
+
+cScript->cd(1);
+h2->Draw("colz");
+
+cScript->cd(2);
+/**/
+
+}
+
+
+
+
+/*
+TCut cut = "TMath::Finite(dcs0d.fX) && gate.Test(11) && TMath::Abs(vertex.fZ-10)<30 && TMath::Abs(tof_s1.fTiming-33.5)<1.5 && TMath::Abs(nyoki_zt.fCharge-8)<0.6";
+
+        TCutG * o20 = new TCutG("o20", 6);
+        o20->SetVarX("pid_s1.fAOQ");
+        o20->SetVarY("nyoki_zt.fCharge");
+        o20->SetPoint(0, 2.42, 8.27);
+        o20->SetPoint(1, 2.42, 7.65);
+        o20->SetPoint(2, 2.50, 7.20);
+        o20->SetPoint(3, 2.56, 7.53);
+        o20->SetPoint(4, 2.56, 8.24);
+        o20->SetPoint(5, 2.49, 8.71);
+        o20->SetPoint(6, 2.42, 8.27);
+        
+        
+        tree->Draw("p2p_m500_m500.fSp2-13.26>>hm5m5(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m500_m400.fSp2-13.26>>hm5m4(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m500_m300.fSp2-13.26>>hm5m3(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m500_m200.fSp2-13.26>>hm5m2(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m500_m100.fSp2-13.26>>hm5m1(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m500_0000.fSp2-13.26>>hm500(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m500_p100.fSp2-13.26>>hm5p1(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m500_p200.fSp2-13.26>>hm5p2(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m500_p300.fSp2-13.26>>hm5p3(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m500_p400.fSp2-13.26>>hm5p4(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m500_p500.fSp2-13.26>>hm5p5(100,-40,60)", cut + o20);
+                                                    
+        tree->Draw("p2p_m400_m500.fSp2-13.26>>hm4m5(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m400_m400.fSp2-13.26>>hm4m4(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m400_m300.fSp2-13.26>>hm4m3(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m400_m200.fSp2-13.26>>hm4m2(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m400_m100.fSp2-13.26>>hm4m1(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m400_0000.fSp2-13.26>>hm400(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m400_p100.fSp2-13.26>>hm4p1(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m400_p200.fSp2-13.26>>hm4p2(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m400_p300.fSp2-13.26>>hm4p3(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m400_p400.fSp2-13.26>>hm4p4(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m400_p500.fSp2-13.26>>hm4p5(100,-40,60)", cut + o20);
+                                                    
+        tree->Draw("p2p_m300_m500.fSp2-13.26>>hm3m5(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m300_m400.fSp2-13.26>>hm3m4(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m300_m300.fSp2-13.26>>hm3m3(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m300_m200.fSp2-13.26>>hm3m2(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m300_m100.fSp2-13.26>>hm3m1(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m300_0000.fSp2-13.26>>hm300(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m300_p100.fSp2-13.26>>hm3p1(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m300_p200.fSp2-13.26>>hm3p2(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m300_p300.fSp2-13.26>>hm3p3(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m300_p400.fSp2-13.26>>hm3p4(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m300_p500.fSp2-13.26>>hm3p5(100,-40,60)", cut + o20);
+
+        tree->Draw("p2p_m200_m500.fSp2-13.26>>hm2m5(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m200_m400.fSp2-13.26>>hm2m4(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m200_m300.fSp2-13.26>>hm2m3(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m200_m200.fSp2-13.26>>hm2m2(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m200_m100.fSp2-13.26>>hm2m1(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m200_0000.fSp2-13.26>>hm200(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m200_p100.fSp2-13.26>>hm2p1(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m200_p200.fSp2-13.26>>hm2p2(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m200_p300.fSp2-13.26>>hm2p3(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m200_p400.fSp2-13.26>>hm2p4(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m200_p500.fSp2-13.26>>hm2p5(100,-40,60)", cut + o20);
+        
+        tree->Draw("p2p_m100_m500.fSp2-13.26>>hm1m5(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m100_m400.fSp2-13.26>>hm1m4(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m100_m300.fSp2-13.26>>hm1m3(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m100_m200.fSp2-13.26>>hm1m2(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m100_m100.fSp2-13.26>>hm1m1(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m100_0000.fSp2-13.26>>hm100(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m100_p100.fSp2-13.26>>hm1p1(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m100_p200.fSp2-13.26>>hm1p2(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m100_p300.fSp2-13.26>>hm1p3(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m100_p400.fSp2-13.26>>hm1p4(100,-40,60)", cut + o20);
+        tree->Draw("p2p_m100_p500.fSp2-13.26>>hm1p5(100,-40,60)", cut + o20);
+        
+        tree->Draw("p2p_0000_m500.fSp2-13.26>>h00m5(100,-40,60)", cut + o20);
+        tree->Draw("p2p_0000_m400.fSp2-13.26>>h00m4(100,-40,60)", cut + o20);
+        tree->Draw("p2p_0000_m300.fSp2-13.26>>h00m3(100,-40,60)", cut + o20);
+        tree->Draw("p2p_0000_m200.fSp2-13.26>>h00m2(100,-40,60)", cut + o20);
+        tree->Draw("p2p_0000_m100.fSp2-13.26>>h00m1(100,-40,60)", cut + o20);
+        tree->Draw("p2p.fSp2-13.26>>h0000(100,-40,60)", cut + o20);
+        tree->Draw("p2p_0000_p100.fSp2-13.26>>h00p1(100,-40,60)", cut + o20);
+        tree->Draw("p2p_0000_p200.fSp2-13.26>>h00p2(100,-40,60)", cut + o20);
+        tree->Draw("p2p_0000_p300.fSp2-13.26>>h00p3(100,-40,60)", cut + o20);
+        tree->Draw("p2p_0000_p400.fSp2-13.26>>h00p4(100,-40,60)", cut + o20);
+        tree->Draw("p2p_0000_p500.fSp2-13.26>>h00p5(100,-40,60)", cut + o20);
+        
+        tree->Draw("p2p_p100_m500.fSp2-13.26>>hp1m5(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p100_m400.fSp2-13.26>>hp1m4(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p100_m300.fSp2-13.26>>hp1m3(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p100_m200.fSp2-13.26>>hp1m2(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p100_m100.fSp2-13.26>>hp1m1(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p100_0000.fSp2-13.26>>hp100(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p100_p100.fSp2-13.26>>hp1p1(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p100_p200.fSp2-13.26>>hp1p2(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p100_p300.fSp2-13.26>>hp1p3(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p100_p400.fSp2-13.26>>hp1p4(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p100_p500.fSp2-13.26>>hp1p5(100,-40,60)", cut + o20);
+        
+        tree->Draw("p2p_p200_m500.fSp2-13.26>>hp2m5(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p200_m400.fSp2-13.26>>hp2m4(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p200_m300.fSp2-13.26>>hp2m3(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p200_m200.fSp2-13.26>>hp2m2(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p200_m100.fSp2-13.26>>hp2m1(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p200_0000.fSp2-13.26>>hp200(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p200_p100.fSp2-13.26>>hp2p1(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p200_p200.fSp2-13.26>>hp2p2(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p200_p300.fSp2-13.26>>hp2p3(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p200_p400.fSp2-13.26>>hp2p4(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p200_p500.fSp2-13.26>>hp2p5(100,-40,60)", cut + o20);
+        
+        tree->Draw("p2p_p300_m500.fSp2-13.26>>hp3m5(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p300_m400.fSp2-13.26>>hp3m4(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p300_m300.fSp2-13.26>>hp3m3(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p300_m200.fSp2-13.26>>hp3m2(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p300_m100.fSp2-13.26>>hp3m1(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p300_0000.fSp2-13.26>>hp300(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p300_p100.fSp2-13.26>>hp3p1(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p300_p200.fSp2-13.26>>hp3p2(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p300_p300.fSp2-13.26>>hp3p3(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p300_p400.fSp2-13.26>>hp3p4(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p300_p500.fSp2-13.26>>hp3p5(100,-40,60)", cut + o20);
+        
+        tree->Draw("p2p_p400_m500.fSp2-13.26>>hp4m5(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p400_m400.fSp2-13.26>>hp4m4(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p400_m300.fSp2-13.26>>hp4m3(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p400_m200.fSp2-13.26>>hp4m2(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p400_m100.fSp2-13.26>>hp4m1(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p400_0000.fSp2-13.26>>hp400(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p400_p100.fSp2-13.26>>hp4p1(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p400_p200.fSp2-13.26>>hp4p2(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p400_p300.fSp2-13.26>>hp4p3(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p400_p400.fSp2-13.26>>hp4p4(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p400_p500.fSp2-13.26>>hp4p5(100,-40,60)", cut + o20);
+        
+        tree->Draw("p2p_p500_m500.fSp2-13.26>>hp5m5(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p500_m400.fSp2-13.26>>hp5m4(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p500_m300.fSp2-13.26>>hp5m3(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p500_m200.fSp2-13.26>>hp5m2(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p500_m100.fSp2-13.26>>hp5m1(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p500_0000.fSp2-13.26>>hp500(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p500_p100.fSp2-13.26>>hp5p1(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p500_p200.fSp2-13.26>>hp5p2(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p500_p300.fSp2-13.26>>hp5p3(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p500_p400.fSp2-13.26>>hp5p4(100,-40,60)", cut + o20);
+        tree->Draw("p2p_p500_p500.fSp2-13.26>>hp5p5(100,-40,60)", cut + o20);
+        
+/************** nyoki Q correction table *********************/
+/*
         Int_t nyokiID = 6;
         TString gate  = "pidusGate == 1";
         Int_t nBin = 140;

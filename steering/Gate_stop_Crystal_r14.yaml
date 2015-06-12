@@ -1,0 +1,6 @@
+Processor:
+  - name: proc_stop_crystal
+    type: art::TGateStopProcessor
+    parameter:
+      GateName: target_r14_x0.4_y1.8
+#===========================================================

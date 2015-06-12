@@ -21,12 +21,12 @@ void BeamPurity() {
    
 //############################################################################   
    //const char* rootfile="PrimaryData/phys22Optics.root";
-   const char* rootfile="23F_0910_test.root";
+   const char* rootfile="23F_optics_0603.root";
    TBeamData *beam = new TBeamData("23F");
    Bool_t allentry  = 1;
    Int_t firstEntry = 0;
    Int_t nEntries=600000;
-   Int_t runRange[2] = {1, 1};
+   Int_t runRange[2] = {1, 3000};
    
    beam->Print();
    Double_t Principle_tof = tofByBrho(L_F3FH9,beam->fBrho, beam->fMass, beam->fZ);
@@ -60,13 +60,13 @@ void BeamPurity() {
    TTree *tree = (TTree*)f->Get("tree");
    Int_t totnumEntry = tree->GetEntries();
    tree->SetBranchStatus("*",0);
-   tree->SetBranchStatus("eventheader0",1);
+   tree->SetBranchStatus("eventheader",1);
    tree->SetBranchStatus("coinReg",1);
    tree->SetBranchStatus("plaV1190_FH9",1); //get charge for PID
    tree->SetBranchStatus("tof_US",1);
    //tree->SetBranchStatus("tof_DS",1);
 
-   tree->SetBranchAddress("eventheader0",&hoge_run);
+   tree->SetBranchAddress("eventheader",&hoge_run);
    tree->SetBranchAddress("coinReg",&hoge_coinReg);
    tree->SetBranchAddress("plaV1190_FH9",&hoge_fh9);
    tree->SetBranchAddress("tof_US",&hoge_us);
@@ -90,7 +90,7 @@ void BeamPurity() {
    
 //##############################################################
    for( eventID = firstEntry; eventID < endEntry; eventID ++){
-      tree->GetEntry(eventID);
+      tree->GetEntry(eventID,0);
       
       // initialization
       coinReg = 0;

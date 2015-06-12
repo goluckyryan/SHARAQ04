@@ -1,640 +1,19 @@
 aliases:
-  - &beamZ    0.
+  - &beamZ    10.
+  - &p5       1.0
+  - &p4       0.8
+  - &p3       0.6
+  - &p2       0.4
+  - &p1       0.2
+  - &h0       0.0
+  - &m1       -0.2
+  - &m2       -0.3
+  - &m3       -0.6
+  - &m4       -0.8
+  - &m5       -1.0
 #============== PROCESSORS     =============================
 Processor:
-#=========================== 0 offset                
-  - name: tpla_tof
-    type: art::sh04::TRecoilTOFProcessor
-    parameter:
-      OutputL:            tofL
-      OutputR:            tofR
-      OutputS0D:          tofS0D
-      F3PlasticColName:   plaV775
-      F3PlasticDetID:     2
-      FH9PlasticColName:  plaV775
-      FH9PlasticDetID:    3
-      S0DPlasticColName:  plaV775
-      S0DPlasticDetID:    4
-      TPlasticColName:    plaV775
-      TPlasticLDetID:     0
-      TPlasticRDetID:     1
-      BeamZ:              *beamZ
-      ShiftL:             0
-      ShiftR:             0
-      OutputTransparency: 0
-
-  - name: Recoil_L
-    type: art::sh04::TRecoilProcessor
-    parameter:
-      OutputCollection: recoil_L
-      TrackCollection:  smwdc_L
-      TOFCollection:    tofL
-      S0Track:          S0img
-      Vertex:           vertex
-      Geometry:         SMWDC_geometry
-      Side:             0           # 0 = left, !0 = right
-      BeamZ:            *beamZ
-      UseReactionPointCollection:   1   #s0XY
-      UseIncidentAngleCollection:   1   #s0AB
-      UsePolarizedMagnetCollection: 1
-      OutputTransparency:           1
-        
-  - name: Recoil_R
-    type: art::sh04::TRecoilProcessor
-    parameter:
-      OutputCollection: recoil_R
-      TrackCollection:  smwdc_R
-      TOFCollection:    tofR
-      S0Track:          S0img
-      Vertex:           vertex
-      Geometry:         SMWDC_geometry
-      Side:             1
-      BeamZ:            *beamZ
-      UseReactionPointCollection:   1
-      UseIncidentAngleCollection:   1
-      UsePolarizedMagnetCollection: 1
-      OutputTransparency:           1
-
-  - name: proc_p2p
-    type: art::sh04::TP2PKinematicsProcessor
-    parameter:
-      OutputCollection:   p2p
-      RecoilL:            recoil_L
-      RecoilR:            recoil_R
-      PPAC:               ppac
-      PPACDetID:          0
-      BeamParameter:      beam  # declare before and elsewhere
-      OutputTransparency: 0
-      
-#=========================== +100 ps offset                
-  - name: tpla_tof_p100
-    type: art::sh04::TRecoilTOFProcessor
-    parameter:
-      OutputL:            tofL_p100
-      OutputR:            tofR_p100
-      OutputS0D:          tofS0D_p100
-      F3PlasticColName:   plaV775
-      F3PlasticDetID:     2
-      FH9PlasticColName:  plaV775
-      FH9PlasticDetID:    3
-      S0DPlasticColName:  plaV775
-      S0DPlasticDetID:    4
-      TPlasticColName:    plaV775
-      TPlasticLDetID:     0
-      TPlasticRDetID:     1
-      BeamZ:              *beamZ
-      ShiftL:             0.1
-      ShiftR:             0.1
-      OutputTransparency: 0
-
-  - name: Recoil_L_p100
-    type: art::sh04::TRecoilProcessor
-    parameter:
-      OutputCollection: recoil_L_p100
-      TrackCollection:  smwdc_L
-      TOFCollection:    tofL_p100
-      S0Track:          S0img
-      Vertex:           vertex
-      Geometry:         SMWDC_geometry
-      Side:             0           # 0 = left, !0 = right
-      BeamZ:            *beamZ
-      UseReactionPointCollection:   1   #s0XY
-      UseIncidentAngleCollection:   1   #s0AB
-      UsePolarizedMagnetCollection: 1
-      OutputTransparency:           1
-        
-  - name: Recoil_R_p100
-    type: art::sh04::TRecoilProcessor
-    parameter:
-      OutputCollection: recoil_R_p100
-      TrackCollection:  smwdc_R
-      TOFCollection:    tofR_p100
-      S0Track:          S0img
-      Vertex:           vertex
-      Geometry:         SMWDC_geometry
-      Side:             1
-      BeamZ:            *beamZ
-      UseReactionPointCollection:   1
-      UseIncidentAngleCollection:   1
-      UsePolarizedMagnetCollection: 1
-      OutputTransparency:           1
-
-  - name: proc_p2p_p100
-    type: art::sh04::TP2PKinematicsProcessor
-    parameter:
-      OutputCollection:   p2p_p100
-      RecoilL:            recoil_L_p100
-      RecoilR:            recoil_R_p100
-      PPAC:               ppac
-      PPACDetID:          0
-      BeamParameter:      beam  # declare before and elsewhere
-      OutputTransparency: 0
-      
-#=========================== +200 ps offset                
-  - name: tpla_tof_p200
-    type: art::sh04::TRecoilTOFProcessor
-    parameter:
-      OutputL:            tofL_p200
-      OutputR:            tofR_p200
-      OutputS0D:          tofS0D_p200
-      F3PlasticColName:   plaV775
-      F3PlasticDetID:     2
-      FH9PlasticColName:  plaV775
-      FH9PlasticDetID:    3
-      S0DPlasticColName:  plaV775
-      S0DPlasticDetID:    4
-      TPlasticColName:    plaV775
-      TPlasticLDetID:     0
-      TPlasticRDetID:     1
-      BeamZ:              *beamZ
-      Shift:              0.2
-      OutputTransparency: 0
-
-  - name: Recoil_L_p200
-    type: art::sh04::TRecoilProcessor
-    parameter:
-      OutputCollection: recoil_L_p200
-      TrackCollection:  smwdc_L
-      TOFCollection:    tofL_p200
-      S0Track:          S0img
-      Vertex:           vertex
-      Geometry:         SMWDC_geometry
-      Side:             0           # 0 = left, !0 = right
-      BeamZ:            *beamZ
-      UseReactionPointCollection:   1   #s0XY
-      UseIncidentAngleCollection:   1   #s0AB
-      UsePolarizedMagnetCollection: 1
-      OutputTransparency:           1
-        
-  - name: Recoil_R_p200
-    type: art::sh04::TRecoilProcessor
-    parameter:
-      OutputCollection: recoil_R_p200
-      TrackCollection:  smwdc_R
-      TOFCollection:    tofR_p200
-      S0Track:          S0img
-      Vertex:           vertex
-      Geometry:         SMWDC_geometry
-      Side:             1
-      BeamZ:            *beamZ
-      UseReactionPointCollection:   1
-      UseIncidentAngleCollection:   1
-      UsePolarizedMagnetCollection: 1
-      OutputTransparency:           1
-
-  - name: proc_p2p_p200
-    type: art::sh04::TP2PKinematicsProcessor
-    parameter:
-      OutputCollection:   p2p_p200
-      RecoilL:            recoil_L_p200
-      RecoilR:            recoil_R_p200
-      PPAC:               ppac
-      PPACDetID:          0
-      BeamParameter:      beam  # declare before and elsewhere
-      OutputTransparency: 0
-      
-#=========================== +300 ps offset                
-  - name: tpla_tof_p300
-    type: art::sh04::TRecoilTOFProcessor
-    parameter:
-      OutputL:            tofL_p300
-      OutputR:            tofR_p300
-      OutputS0D:          tofS0D_p300
-      F3PlasticColName:   plaV775
-      F3PlasticDetID:     2
-      FH9PlasticColName:  plaV775
-      FH9PlasticDetID:    3
-      S0DPlasticColName:  plaV775
-      S0DPlasticDetID:    4
-      TPlasticColName:    plaV775
-      TPlasticLDetID:     0
-      TPlasticRDetID:     1
-      BeamZ:              *beamZ
-      Shift:              0.3
-      OutputTransparency: 0
-
-  - name: Recoil_L_p300
-    type: art::sh04::TRecoilProcessor
-    parameter:
-      OutputCollection: recoil_L_p300
-      TrackCollection:  smwdc_L
-      TOFCollection:    tofL_p300
-      S0Track:          S0img
-      Vertex:           vertex
-      Geometry:         SMWDC_geometry
-      Side:             0           # 0 = left, !0 = right
-      BeamZ:            *beamZ
-      UseReactionPointCollection:   1   #s0XY
-      UseIncidentAngleCollection:   1   #s0AB
-      UsePolarizedMagnetCollection: 1
-      OutputTransparency:           1
-        
-  - name: Recoil_R_p300
-    type: art::sh04::TRecoilProcessor
-    parameter:
-      OutputCollection: recoil_R_p300
-      TrackCollection:  smwdc_R
-      TOFCollection:    tofR_p300
-      S0Track:          S0img
-      Vertex:           vertex
-      Geometry:         SMWDC_geometry
-      Side:             1
-      BeamZ:            *beamZ
-      UseReactionPointCollection:   1
-      UseIncidentAngleCollection:   1
-      UsePolarizedMagnetCollection: 1
-      OutputTransparency:           1
-
-  - name: proc_p2p_p300
-    type: art::sh04::TP2PKinematicsProcessor
-    parameter:
-      OutputCollection:   p2p_p300
-      RecoilL:            recoil_L_p300
-      RecoilR:            recoil_R_p300
-      PPAC:               ppac
-      PPACDetID:          0
-      BeamParameter:      beam  # declare before and elsewhere
-      OutputTransparency: 0
-
-#=========================== +400 ps offset                
-  - name: tpla_tof_p400
-    type: art::sh04::TRecoilTOFProcessor
-    parameter:
-      OutputL:            tofL_p400
-      OutputR:            tofR_p400
-      OutputS0D:          tofS0D_p400
-      F3PlasticColName:   plaV775
-      F3PlasticDetID:     2
-      FH9PlasticColName:  plaV775
-      FH9PlasticDetID:    3
-      S0DPlasticColName:  plaV775
-      S0DPlasticDetID:    4
-      TPlasticColName:    plaV775
-      TPlasticLDetID:     0
-      TPlasticRDetID:     1
-      BeamZ:              *beamZ
-      Shift:              0.4
-      OutputTransparency: 0
-
-  - name: Recoil_L_p400
-    type: art::sh04::TRecoilProcessor
-    parameter:
-      OutputCollection: recoil_L_p400
-      TrackCollection:  smwdc_L
-      TOFCollection:    tofL_p400
-      S0Track:          S0img
-      Vertex:           vertex
-      Geometry:         SMWDC_geometry
-      Side:             0           # 0 = left, !0 = right
-      BeamZ:            *beamZ
-      UseReactionPointCollection:   1   #s0XY
-      UseIncidentAngleCollection:   1   #s0AB
-      UsePolarizedMagnetCollection: 1
-      OutputTransparency:           1
-        
-  - name: Recoil_R_p400
-    type: art::sh04::TRecoilProcessor
-    parameter:
-      OutputCollection: recoil_R_p400
-      TrackCollection:  smwdc_R
-      TOFCollection:    tofR_p400
-      S0Track:          S0img
-      Vertex:           vertex
-      Geometry:         SMWDC_geometry
-      Side:             1
-      BeamZ:            *beamZ
-      UseReactionPointCollection:   1
-      UseIncidentAngleCollection:   1
-      UsePolarizedMagnetCollection: 1
-      OutputTransparency:           1
-
-  - name: proc_p2p_p400
-    type: art::sh04::TP2PKinematicsProcessor
-    parameter:
-      OutputCollection:   p2p_p400
-      RecoilL:            recoil_L_p400
-      RecoilR:            recoil_R_p400
-      PPAC:               ppac
-      PPACDetID:          0
-      BeamParameter:      beam  # declare before and elsewhere
-      OutputTransparency: 0
-      
-#=========================== +500 ps offset                
-  - name: tpla_tof_p500
-    type: art::sh04::TRecoilTOFProcessor
-    parameter:
-      OutputL:            tofL_p500
-      OutputR:            tofR_p500
-      OutputS0D:          tofS0D_p500
-      F3PlasticColName:   plaV775
-      F3PlasticDetID:     2
-      FH9PlasticColName:  plaV775
-      FH9PlasticDetID:    3
-      S0DPlasticColName:  plaV775
-      S0DPlasticDetID:    4
-      TPlasticColName:    plaV775
-      TPlasticLDetID:     0
-      TPlasticRDetID:     1
-      BeamZ:              *beamZ
-      Shift:              0.5
-      OutputTransparency: 0
-
-  - name: Recoil_L_p500
-    type: art::sh04::TRecoilProcessor
-    parameter:
-      OutputCollection: recoil_L_p500
-      TrackCollection:  smwdc_L
-      TOFCollection:    tofL_p500
-      S0Track:          S0img
-      Vertex:           vertex
-      Geometry:         SMWDC_geometry
-      Side:             0           # 0 = left, !0 = right
-      BeamZ:            *beamZ
-      UseReactionPointCollection:   1   #s0XY
-      UseIncidentAngleCollection:   1   #s0AB
-      UsePolarizedMagnetCollection: 1
-      OutputTransparency:           1
-        
-  - name: Recoil_R_p500
-    type: art::sh04::TRecoilProcessor
-    parameter:
-      OutputCollection: recoil_R_p500
-      TrackCollection:  smwdc_R
-      TOFCollection:    tofR_p500
-      S0Track:          S0img
-      Vertex:           vertex
-      Geometry:         SMWDC_geometry
-      Side:             1
-      BeamZ:            *beamZ
-      UseReactionPointCollection:   1
-      UseIncidentAngleCollection:   1
-      UsePolarizedMagnetCollection: 1
-      OutputTransparency:           1
-
-  - name: proc_p2p_p500
-    type: art::sh04::TP2PKinematicsProcessor
-    parameter:
-      OutputCollection:   p2p_p500
-      RecoilL:            recoil_L_p500
-      RecoilR:            recoil_R_p500
-      PPAC:               ppac
-      PPACDetID:          0
-      BeamParameter:      beam  # declare before and elsewhere
-      OutputTransparency: 0      
-
-#=========================== -100 ps offset                
-  - name: tpla_tof_m100
-    type: art::sh04::TRecoilTOFProcessor
-    parameter:
-      OutputL:            tofL_m100
-      OutputR:            tofR_m100
-      OutputS0D:          tofS0D_m100
-      F3PlasticColName:   plaV775
-      F3PlasticDetID:     2
-      FH9PlasticColName:  plaV775
-      FH9PlasticDetID:    3
-      S0DPlasticColName:  plaV775
-      S0DPlasticDetID:    4
-      TPlasticColName:    plaV775
-      TPlasticLDetID:     0
-      TPlasticRDetID:     1
-      BeamZ:              *beamZ
-      Shift:              -0.1
-      OutputTransparency: 0
-
-  - name: Recoil_L_m100
-    type: art::sh04::TRecoilProcessor
-    parameter:
-      OutputCollection: recoil_L_m100
-      TrackCollection:  smwdc_L
-      TOFCollection:    tofL_m100
-      S0Track:          S0img
-      Vertex:           vertex
-      Geometry:         SMWDC_geometry
-      Side:             0           # 0 = left, !0 = right
-      BeamZ:            *beamZ
-      UseReactionPointCollection:   1   #s0XY
-      UseIncidentAngleCollection:   1   #s0AB
-      UsePolarizedMagnetCollection: 1
-      OutputTransparency:           1
-        
-  - name: Recoil_R_m100
-    type: art::sh04::TRecoilProcessor
-    parameter:
-      OutputCollection: recoil_R_m100
-      TrackCollection:  smwdc_R
-      TOFCollection:    tofR_m100
-      S0Track:          S0img
-      Vertex:           vertex
-      Geometry:         SMWDC_geometry
-      Side:             1
-      BeamZ:            *beamZ
-      UseReactionPointCollection:   1
-      UseIncidentAngleCollection:   1
-      UsePolarizedMagnetCollection: 1
-      OutputTransparency:           1
-
-  - name: proc_p2p_m100
-    type: art::sh04::TP2PKinematicsProcessor
-    parameter:
-      OutputCollection:   p2p_m100
-      RecoilL:            recoil_L_m100
-      RecoilR:            recoil_R_m100
-      PPAC:               ppac
-      PPACDetID:          0
-      BeamParameter:      beam  # declare before and elsewhere
-      OutputTransparency: 0
-      
-#=========================== -200 ps offset                
-  - name: tpla_tof_m200
-    type: art::sh04::TRecoilTOFProcessor
-    parameter:
-      OutputL:            tofL_m200
-      OutputR:            tofR_m200
-      OutputS0D:          tofS0D_m200
-      F3PlasticColName:   plaV775
-      F3PlasticDetID:     2
-      FH9PlasticColName:  plaV775
-      FH9PlasticDetID:    3
-      S0DPlasticColName:  plaV775
-      S0DPlasticDetID:    4
-      TPlasticColName:    plaV775
-      TPlasticLDetID:     0
-      TPlasticRDetID:     1
-      BeamZ:              *beamZ
-      Shift:              -0.2
-      OutputTransparency: 0
-
-  - name: Recoil_L_m200
-    type: art::sh04::TRecoilProcessor
-    parameter:
-      OutputCollection: recoil_L_m200
-      TrackCollection:  smwdc_L
-      TOFCollection:    tofL_m200
-      S0Track:          S0img
-      Vertex:           vertex
-      Geometry:         SMWDC_geometry
-      Side:             0           # 0 = left, !0 = right
-      BeamZ:            *beamZ
-      UseReactionPointCollection:   1   #s0XY
-      UseIncidentAngleCollection:   1   #s0AB
-      UsePolarizedMagnetCollection: 1
-      OutputTransparency:           1
-        
-  - name: Recoil_R_m200
-    type: art::sh04::TRecoilProcessor
-    parameter:
-      OutputCollection: recoil_R_m200
-      TrackCollection:  smwdc_R
-      TOFCollection:    tofR_m200
-      S0Track:          S0img
-      Vertex:           vertex
-      Geometry:         SMWDC_geometry
-      Side:             1
-      BeamZ:            *beamZ
-      UseReactionPointCollection:   1
-      UseIncidentAngleCollection:   1
-      UsePolarizedMagnetCollection: 1
-      OutputTransparency:           1
-
-  - name: proc_p2p_m200
-    type: art::sh04::TP2PKinematicsProcessor
-    parameter:
-      OutputCollection:   p2p_m200
-      RecoilL:            recoil_L_m200
-      RecoilR:            recoil_R_m200
-      PPAC:               ppac
-      PPACDetID:          0
-      BeamParameter:      beam  # declare before and elsewhere
-      OutputTransparency: 0
-      
-#=========================== -300 ps offset                
-  - name: tpla_tof_m300
-    type: art::sh04::TRecoilTOFProcessor
-    parameter:
-      OutputL:            tofL_m300
-      OutputR:            tofR_m300
-      OutputS0D:          tofS0D_m300
-      F3PlasticColName:   plaV775
-      F3PlasticDetID:     2
-      FH9PlasticColName:  plaV775
-      FH9PlasticDetID:    3
-      S0DPlasticColName:  plaV775
-      S0DPlasticDetID:    4
-      TPlasticColName:    plaV775
-      TPlasticLDetID:     0
-      TPlasticRDetID:     1
-      BeamZ:              *beamZ
-      Shift:              -0.3
-      OutputTransparency: 0
-
-  - name: Recoil_L_m300
-    type: art::sh04::TRecoilProcessor
-    parameter:
-      OutputCollection: recoil_L_m300
-      TrackCollection:  smwdc_L
-      TOFCollection:    tofL_m300
-      S0Track:          S0img
-      Vertex:           vertex
-      Geometry:         SMWDC_geometry
-      Side:             0           # 0 = left, !0 = right
-      BeamZ:            *beamZ
-      UseReactionPointCollection:   1   #s0XY
-      UseIncidentAngleCollection:   1   #s0AB
-      UsePolarizedMagnetCollection: 1
-      OutputTransparency:           1
-        
-  - name: Recoil_R_m300
-    type: art::sh04::TRecoilProcessor
-    parameter:
-      OutputCollection: recoil_R_m300
-      TrackCollection:  smwdc_R
-      TOFCollection:    tofR_m300
-      S0Track:          S0img
-      Vertex:           vertex
-      Geometry:         SMWDC_geometry
-      Side:             1
-      BeamZ:            *beamZ
-      UseReactionPointCollection:   1
-      UseIncidentAngleCollection:   1
-      UsePolarizedMagnetCollection: 1
-      OutputTransparency:           1
-
-  - name: proc_p2p_m300
-    type: art::sh04::TP2PKinematicsProcessor
-    parameter:
-      OutputCollection:   p2p_m300
-      RecoilL:            recoil_L_m300
-      RecoilR:            recoil_R_m300
-      PPAC:               ppac
-      PPACDetID:          0
-      BeamParameter:      beam  # declare before and elsewhere
-      OutputTransparency: 0
-      
-#=========================== -400 ps offset                
-  - name: tpla_tof_m400
-    type: art::sh04::TRecoilTOFProcessor
-    parameter:
-      OutputL:            tofL_m400
-      OutputR:            tofR_m400
-      OutputS0D:          tofS0D_m400
-      F3PlasticColName:   plaV775
-      F3PlasticDetID:     2
-      FH9PlasticColName:  plaV775
-      FH9PlasticDetID:    3
-      S0DPlasticColName:  plaV775
-      S0DPlasticDetID:    4
-      TPlasticColName:    plaV775
-      TPlasticLDetID:     0
-      TPlasticRDetID:     1
-      BeamZ:              *beamZ
-      Shift:              -0.4
-      OutputTransparency: 0
-
-  - name: Recoil_L_m400
-    type: art::sh04::TRecoilProcessor
-    parameter:
-      OutputCollection: recoil_L_m400
-      TrackCollection:  smwdc_L
-      TOFCollection:    tofL_m400
-      S0Track:          S0img
-      Vertex:           vertex
-      Geometry:         SMWDC_geometry
-      Side:             0           # 0 = left, !0 = right
-      BeamZ:            *beamZ
-      UseReactionPointCollection:   1   #s0XY
-      UseIncidentAngleCollection:   1   #s0AB
-      UsePolarizedMagnetCollection: 1
-      OutputTransparency:           1
-        
-  - name: Recoil_R_m400
-    type: art::sh04::TRecoilProcessor
-    parameter:
-      OutputCollection: recoil_R_m400
-      TrackCollection:  smwdc_R
-      TOFCollection:    tofR_m400
-      S0Track:          S0img
-      Vertex:           vertex
-      Geometry:         SMWDC_geometry
-      Side:             1
-      BeamZ:            *beamZ
-      UseReactionPointCollection:   1
-      UseIncidentAngleCollection:   1
-      UsePolarizedMagnetCollection: 1
-      OutputTransparency:           1
-
-  - name: proc_p2p_m400
-    type: art::sh04::TP2PKinematicsProcessor
-    parameter:
-      OutputCollection:   p2p_m400
-      RecoilL:            recoil_L_m400
-      RecoilR:            recoil_R_m400
-      PPAC:               ppac
-      PPACDetID:          0
-      BeamParameter:      beam  # declare before and elsewhere
-      OutputTransparency: 0
-      
-#=========================== +300 ps offset                
+#=========================== +100 ps offset  
   - name: tpla_tof_m500
     type: art::sh04::TRecoilTOFProcessor
     parameter:
@@ -651,9 +30,210 @@ Processor:
       TPlasticLDetID:     0
       TPlasticRDetID:     1
       BeamZ:              *beamZ
-      Shift:              -0.5
+      ShiftL:             *m5
+      ShiftR:             *m5
       OutputTransparency: 0
-
+      
+  - name: tpla_tof_m400
+    type: art::sh04::TRecoilTOFProcessor
+    parameter:
+      OutputL:            tofL_m400
+      OutputR:            tofR_m400
+      OutputS0D:          tofS0D_m400
+      F3PlasticColName:   plaV775
+      F3PlasticDetID:     2
+      FH9PlasticColName:  plaV775
+      FH9PlasticDetID:    3
+      S0DPlasticColName:  plaV775
+      S0DPlasticDetID:    4
+      TPlasticColName:    plaV775
+      TPlasticLDetID:     0
+      TPlasticRDetID:     1
+      BeamZ:              *beamZ
+      ShiftL:             *m4
+      ShiftR:             *m4
+      OutputTransparency: 0
+       
+  - name: tpla_tof_m300
+    type: art::sh04::TRecoilTOFProcessor
+    parameter:
+      OutputL:            tofL_m300
+      OutputR:            tofR_m300
+      OutputS0D:          tofS0D_m300
+      F3PlasticColName:   plaV775
+      F3PlasticDetID:     2
+      FH9PlasticColName:  plaV775
+      FH9PlasticDetID:    3
+      S0DPlasticColName:  plaV775
+      S0DPlasticDetID:    4
+      TPlasticColName:    plaV775
+      TPlasticLDetID:     0
+      TPlasticRDetID:     1
+      BeamZ:              *beamZ
+      ShiftL:             *m3
+      ShiftR:             *m3
+      OutputTransparency: 0
+      
+  - name: tpla_tof_m200
+    type: art::sh04::TRecoilTOFProcessor
+    parameter:
+      OutputL:            tofL_m200
+      OutputR:            tofR_m200
+      OutputS0D:          tofS0D_m200
+      F3PlasticColName:   plaV775
+      F3PlasticDetID:     2
+      FH9PlasticColName:  plaV775
+      FH9PlasticDetID:    3
+      S0DPlasticColName:  plaV775
+      S0DPlasticDetID:    4
+      TPlasticColName:    plaV775
+      TPlasticLDetID:     0
+      TPlasticRDetID:     1
+      BeamZ:              *beamZ
+      ShiftL:             *m2
+      ShiftR:             *m2
+      OutputTransparency: 0
+      
+  - name: tpla_tof_m100
+    type: art::sh04::TRecoilTOFProcessor
+    parameter:
+      OutputL:            tofL_m100
+      OutputR:            tofR_m100
+      OutputS0D:          tofS0D_m100
+      F3PlasticColName:   plaV775
+      F3PlasticDetID:     2
+      FH9PlasticColName:  plaV775
+      FH9PlasticDetID:    3
+      S0DPlasticColName:  plaV775
+      S0DPlasticDetID:    4
+      TPlasticColName:    plaV775
+      TPlasticLDetID:     0
+      TPlasticRDetID:     1
+      BeamZ:              *beamZ
+      ShiftL:             *m1
+      ShiftR:             *m1
+      OutputTransparency: 0
+      
+  - name: tpla_tof
+    type: art::sh04::TRecoilTOFProcessor
+    parameter:
+      OutputL:            tofL
+      OutputR:            tofR
+      OutputS0D:          tofS0D
+      F3PlasticColName:   plaV775
+      F3PlasticDetID:     2
+      FH9PlasticColName:  plaV775
+      FH9PlasticDetID:    3
+      S0DPlasticColName:  plaV775
+      S0DPlasticDetID:    4
+      TPlasticColName:    plaV775
+      TPlasticLDetID:     0
+      TPlasticRDetID:     1
+      BeamZ:              *beamZ
+      ShiftL:             *h0
+      ShiftR:             *h0
+      OutputTransparency: 0
+             
+  - name: tpla_tof_p100
+    type: art::sh04::TRecoilTOFProcessor
+    parameter:
+      OutputL:            tofL_p100
+      OutputR:            tofR_p100
+      OutputS0D:          tofS0D_p100
+      F3PlasticColName:   plaV775
+      F3PlasticDetID:     2
+      FH9PlasticColName:  plaV775
+      FH9PlasticDetID:    3
+      S0DPlasticColName:  plaV775
+      S0DPlasticDetID:    4
+      TPlasticColName:    plaV775
+      TPlasticLDetID:     0
+      TPlasticRDetID:     1
+      BeamZ:              *beamZ
+      ShiftL:             *p1
+      ShiftR:             *p1
+      OutputTransparency: 0
+      
+  - name: tpla_tof_p200
+    type: art::sh04::TRecoilTOFProcessor
+    parameter:
+      OutputL:            tofL_p200
+      OutputR:            tofR_p200
+      OutputS0D:          tofS0D_p200
+      F3PlasticColName:   plaV775
+      F3PlasticDetID:     2
+      FH9PlasticColName:  plaV775
+      FH9PlasticDetID:    3
+      S0DPlasticColName:  plaV775
+      S0DPlasticDetID:    4
+      TPlasticColName:    plaV775
+      TPlasticLDetID:     0
+      TPlasticRDetID:     1
+      BeamZ:              *beamZ
+      ShiftL:             *p2
+      ShiftR:             *p2
+      OutputTransparency: 0
+      
+  - name: tpla_tof_p300
+    type: art::sh04::TRecoilTOFProcessor
+    parameter:
+      OutputL:            tofL_p300
+      OutputR:            tofR_p300
+      OutputS0D:          tofS0D_p300
+      F3PlasticColName:   plaV775
+      F3PlasticDetID:     2
+      FH9PlasticColName:  plaV775
+      FH9PlasticDetID:    3
+      S0DPlasticColName:  plaV775
+      S0DPlasticDetID:    4
+      TPlasticColName:    plaV775
+      TPlasticLDetID:     0
+      TPlasticRDetID:     1
+      BeamZ:              *beamZ
+      ShiftL:             *p3
+      ShiftR:             *p3
+      OutputTransparency: 0
+      
+  - name: tpla_tof_p400
+    type: art::sh04::TRecoilTOFProcessor
+    parameter:
+      OutputL:            tofL_p400
+      OutputR:            tofR_p400
+      OutputS0D:          tofS0D_p400
+      F3PlasticColName:   plaV775
+      F3PlasticDetID:     2
+      FH9PlasticColName:  plaV775
+      FH9PlasticDetID:    3
+      S0DPlasticColName:  plaV775
+      S0DPlasticDetID:    4
+      TPlasticColName:    plaV775
+      TPlasticLDetID:     0
+      TPlasticRDetID:     1
+      BeamZ:              *beamZ
+      ShiftL:             *p4
+      ShiftR:             *p4
+      OutputTransparency: 0
+      
+  - name: tpla_tof_p500
+    type: art::sh04::TRecoilTOFProcessor
+    parameter:
+      OutputL:            tofL_p500
+      OutputR:            tofR_p500
+      OutputS0D:          tofS0D_p500
+      F3PlasticColName:   plaV775
+      F3PlasticDetID:     2
+      FH9PlasticColName:  plaV775
+      FH9PlasticDetID:    3
+      S0DPlasticColName:  plaV775
+      S0DPlasticDetID:    4
+      TPlasticColName:    plaV775
+      TPlasticLDetID:     0
+      TPlasticRDetID:     1
+      BeamZ:              *beamZ
+      ShiftL:             *p5
+      ShiftR:             *p5
+      OutputTransparency: 0
+#=========================== Recoil_L 
   - name: Recoil_L_m500
     type: art::sh04::TRecoilProcessor
     parameter:
@@ -665,11 +245,183 @@ Processor:
       Geometry:         SMWDC_geometry
       Side:             0           # 0 = left, !0 = right
       BeamZ:            *beamZ
-      UseReactionPointCollection:   1   #s0XY
-      UseIncidentAngleCollection:   1   #s0AB
-      UsePolarizedMagnetCollection: 1
+      AngleShift:       0.00524
+      UseReactionPointCorrection:   1   #s0XY
+      UseIncidentAngleCorrection:   1   #s0AB
+      UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1
-        
+      
+  - name: Recoil_L_m400
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_L_m400
+      TrackCollection:  smwdc_L
+      TOFCollection:    tofL_m400
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             0           # 0 = left, !0 = right
+      BeamZ:            *beamZ
+      AngleShift:       0.00524
+      UseReactionPointCorrection:   1   #s0XY
+      UseIncidentAngleCorrection:   1   #s0AB
+      UsePolarizedMagnetCorrection: 1
+      OutputTransparency:           1
+
+  - name: Recoil_L_m300
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_L_m300
+      TrackCollection:  smwdc_L
+      TOFCollection:    tofL_m300
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             0           # 0 = left, !0 = right
+      BeamZ:            *beamZ
+      AngleShift:       0.00524
+      UseReactionPointCorrection:   1   #s0XY
+      UseIncidentAngleCorrection:   1   #s0AB
+      UsePolarizedMagnetCorrection: 1
+      OutputTransparency:           1
+      
+  - name: Recoil_L_m200
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_L_m200
+      TrackCollection:  smwdc_L
+      TOFCollection:    tofL_m200
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             0           # 0 = left, !0 = right
+      BeamZ:            *beamZ
+      AngleShift:       0.00524
+      UseReactionPointCorrection:   1   #s0XY
+      UseIncidentAngleCorrection:   1   #s0AB
+      UsePolarizedMagnetCorrection: 1
+      OutputTransparency:           1
+      
+  - name: Recoil_L_m100
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_L_m100
+      TrackCollection:  smwdc_L
+      TOFCollection:    tofL_m100
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             0           # 0 = left, !0 = right
+      BeamZ:            *beamZ
+      UseReactionPointCorrection:   1   #s0XY
+      UseIncidentAngleCorrection:   1   #s0AB
+      UsePolarizedMagnetCorrection: 1
+      OutputTransparency:           1
+      
+  - name: Recoil_L
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_L
+      TrackCollection:  smwdc_L
+      TOFCollection:    tofL
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             0           # 0 = left, !0 = right
+      BeamZ:            *beamZ
+      AngleShift:       0.00524
+      UseReactionPointCorrection:   1   #s0? s0; vertex, 
+      UseIncidentAngleCorrection:   1   #s0AB
+      UsePolarizedMagnetCorrection: 1
+      OutputTransparency:           1   #store in p2p.fRecoilL
+      
+  - name: Recoil_L_p100
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_L_p100
+      TrackCollection:  smwdc_L
+      TOFCollection:    tofL_p100
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             0           # 0 = left, !0 = right
+      BeamZ:            *beamZ
+      AngleShift:       0.00524
+      UseReactionPointCorrection:   1   #s0XY
+      UseIncidentAngleCorrection:   1   #s0AB
+      UsePolarizedMagnetCorrection: 1
+      OutputTransparency:           1
+      
+  - name: Recoil_L_p200
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_L_p200
+      TrackCollection:  smwdc_L
+      TOFCollection:    tofL_p200
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             0           # 0 = left, !0 = right
+      BeamZ:            *beamZ
+      AngleShift:       0.00524
+      UseReactionPointCorrection:   1   #s0XY
+      UseIncidentAngleCorrection:   1   #s0AB
+      UsePolarizedMagnetCorrection: 1
+      OutputTransparency:           1
+
+  - name: Recoil_L_p300
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_L_p300
+      TrackCollection:  smwdc_L
+      TOFCollection:    tofL_p300
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             0           # 0 = left, !0 = right
+      BeamZ:            *beamZ
+      AngleShift:       0.00524
+      UseReactionPointCorrection:   1   #s0XY
+      UseIncidentAngleCorrection:   1   #s0AB
+      UsePolarizedMagnetCorrection: 1
+      OutputTransparency:           1
+      
+  - name: Recoil_L_p400
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_L_p400
+      TrackCollection:  smwdc_L
+      TOFCollection:    tofL_p400
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             0           # 0 = left, !0 = right
+      BeamZ:            *beamZ
+      AngleShift:       0.00524
+      UseReactionPointCorrection:   1   #s0XY
+      UseIncidentAngleCorrection:   1   #s0AB
+      UsePolarizedMagnetCorrection: 1
+      OutputTransparency:           1
+      
+  - name: Recoil_L_p500
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_L_p500
+      TrackCollection:  smwdc_L
+      TOFCollection:    tofL_p500
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             0           # 0 = left, !0 = right
+      BeamZ:            *beamZ
+      AngleShift:       0.00524
+      UseReactionPointCorrection:   1   #s0XY
+      UseIncidentAngleCorrection:   1   #s0AB
+      UsePolarizedMagnetCorrection: 1
+      OutputTransparency:           1
+      
+      
+#=========================== Recoil_R  
   - name: Recoil_R_m500
     type: art::sh04::TRecoilProcessor
     parameter:
@@ -681,17 +433,1520 @@ Processor:
       Geometry:         SMWDC_geometry
       Side:             1
       BeamZ:            *beamZ
-      UseReactionPointCollection:   1
-      UseIncidentAngleCollection:   1
-      UsePolarizedMagnetCollection: 1
+      AngleShift:       -0.00524
+      UseReactionPointCorrection:   1
+      UseIncidentAngleCorrection:   1
+      UsePolarizedMagnetCorrection: 1
+      OutputTransparency:           1
+      
+  - name: Recoil_R_m400
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_R_m400
+      TrackCollection:  smwdc_R
+      TOFCollection:    tofR_m400
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             1
+      BeamZ:            *beamZ
+      AngleShift:       -0.00524
+      UseReactionPointCorrection:   1
+      UseIncidentAngleCorrection:   1
+      UsePolarizedMagnetCorrection: 1
+      OutputTransparency:           1
+      
+  - name: Recoil_R_m300
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_R_m300
+      TrackCollection:  smwdc_R
+      TOFCollection:    tofR_m300
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             1
+      BeamZ:            *beamZ
+      AngleShift:       -0.00524
+      UseReactionPointCorrection:   1
+      UseIncidentAngleCorrection:   1
+      UsePolarizedMagnetCorrection: 1
+      OutputTransparency:           1
+      
+  - name: Recoil_R_m200
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_R_m200
+      TrackCollection:  smwdc_R
+      TOFCollection:    tofR_m200
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             1
+      BeamZ:            *beamZ
+      AngleShift:       -0.00524
+      UseReactionPointCorrection:   1
+      UseIncidentAngleCorrection:   1
+      UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1
 
-  - name: proc_p2p_m500
+  - name: Recoil_R_m100
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_R_m100
+      TrackCollection:  smwdc_R
+      TOFCollection:    tofR_m100
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             1
+      BeamZ:            *beamZ
+      AngleShift:       -0.00524
+      UseReactionPointCorrection:   1
+      UseIncidentAngleCorrection:   1
+      UsePolarizedMagnetCorrection: 1
+      OutputTransparency:           1
+
+  - name: Recoil_R
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_R
+      TrackCollection:  smwdc_R
+      TOFCollection:    tofR
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             1
+      BeamZ:            *beamZ
+      AngleShift:       -0.00524
+      UseReactionPointCorrection:   1
+      UseIncidentAngleCorrection:   1
+      UsePolarizedMagnetCorrection: 1
+      OutputTransparency:           1      
+
+  - name: Recoil_R_p100
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_R_p100
+      TrackCollection:  smwdc_R
+      TOFCollection:    tofR_p100
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             1
+      BeamZ:            *beamZ
+      AngleShift:       -0.00524
+      UseReactionPointCorrection:   1
+      UseIncidentAngleCorrection:   1
+      UsePolarizedMagnetCorrection: 1
+      OutputTransparency:           1
+
+  - name: Recoil_R_p200
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_R_p200
+      TrackCollection:  smwdc_R
+      TOFCollection:    tofR_p200
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             1
+      BeamZ:            *beamZ
+      AngleShift:       -0.00524
+      UseReactionPointCorrection:   1
+      UseIncidentAngleCorrection:   1
+      UsePolarizedMagnetCorrection: 1
+      OutputTransparency:           1
+
+  - name: Recoil_R_p300
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_R_p300
+      TrackCollection:  smwdc_R
+      TOFCollection:    tofR_p300
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             1
+      BeamZ:            *beamZ
+      AngleShift:       -0.00524
+      UseReactionPointCorrection:   1
+      UseIncidentAngleCorrection:   1
+      UsePolarizedMagnetCorrection: 1
+      OutputTransparency:           1
+      
+  - name: Recoil_R_p400
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_R_p400
+      TrackCollection:  smwdc_R
+      TOFCollection:    tofR_p400
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             1
+      BeamZ:            *beamZ
+      AngleShift:       -0.00524
+      UseReactionPointCorrection:   1
+      UseIncidentAngleCorrection:   1
+      UsePolarizedMagnetCorrection: 1
+      OutputTransparency:           1
+      
+  - name: Recoil_R_p500
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_R_p500
+      TrackCollection:  smwdc_R
+      TOFCollection:    tofR_p500
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             1
+      BeamZ:            *beamZ
+      AngleShift:       -0.00524
+      UseReactionPointCorrection:   1
+      UseIncidentAngleCorrection:   1
+      UsePolarizedMagnetCorrection: 1
+      OutputTransparency:           1
+      
+#=========================== p2p L, m500
+  - name: proc_p2p_m500_m500
     type: art::sh04::TP2PKinematicsProcessor
     parameter:
-      OutputCollection:   p2p_m500
+      OutputCollection:   p2p_m500_m500
       RecoilL:            recoil_L_m500
       RecoilR:            recoil_R_m500
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_m500_m400
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m500_m400
+      RecoilL:            recoil_L_m500
+      RecoilR:            recoil_R_m400
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_m500_m300
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m500_m300
+      RecoilL:            recoil_L_m500
+      RecoilR:            recoil_R_m300
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_m500_m200
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m500_m200
+      RecoilL:            recoil_L_m500
+      RecoilR:            recoil_R_m200
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_m500_m100
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m500_m100
+      RecoilL:            recoil_L_m500
+      RecoilR:            recoil_R_m100
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_m500_0000
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m500_0000
+      RecoilL:            recoil_L_m500
+      RecoilR:            recoil_R
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_m500_p100
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m500_p100
+      RecoilL:            recoil_L_m500
+      RecoilR:            recoil_R_p100
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_m500_p200
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m500_p200
+      RecoilL:            recoil_L_m500
+      RecoilR:            recoil_R_p200
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_m500_p300
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m500_p300
+      RecoilL:            recoil_L_m500
+      RecoilR:            recoil_R_p300
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_m500_p400
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m500_p400
+      RecoilL:            recoil_L_m500
+      RecoilR:            recoil_R_p400
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_m500_p500
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m500_p500
+      RecoilL:            recoil_L_m500
+      RecoilR:            recoil_R_p500
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+#=========================== p2p L, m400
+  - name: proc_p2p_m400_m500
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m400_m500
+      RecoilL:            recoil_L_m400
+      RecoilR:            recoil_R_m500
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_m400_m400
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m400_m400
+      RecoilL:            recoil_L_m400
+      RecoilR:            recoil_R_m400
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_m400_m300
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m400_m300
+      RecoilL:            recoil_L_m400
+      RecoilR:            recoil_R_m300
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_m400_m200
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m400_m200
+      RecoilL:            recoil_L_m400
+      RecoilR:            recoil_R_m200
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_m400_m100
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m400_m100
+      RecoilL:            recoil_L_m400
+      RecoilR:            recoil_R_m100
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_m400_0000
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m400_0000
+      RecoilL:            recoil_L_m400
+      RecoilR:            recoil_R
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_m400_p100
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m400_p100
+      RecoilL:            recoil_L_m400
+      RecoilR:            recoil_R_p100
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_m400_p200
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m400_p200
+      RecoilL:            recoil_L_m400
+      RecoilR:            recoil_R_p200
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_m400_p300
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m400_p300
+      RecoilL:            recoil_L_m400
+      RecoilR:            recoil_R_p300
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_m400_p400
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m400_p400
+      RecoilL:            recoil_L_m400
+      RecoilR:            recoil_R_p400
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_m400_p500
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m400_p500
+      RecoilL:            recoil_L_m400
+      RecoilR:            recoil_R_p500
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+#=========================== p2p L, m300
+  - name: proc_p2p_m300_m500
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m300_m500
+      RecoilL:            recoil_L_m300
+      RecoilR:            recoil_R_m500
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_m300_m400
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m300_m400
+      RecoilL:            recoil_L_m300
+      RecoilR:            recoil_R_m400
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_m300_m300
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m300_m300
+      RecoilL:            recoil_L_m300
+      RecoilR:            recoil_R_m300
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_m300_m200
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m300_m200
+      RecoilL:            recoil_L_m300
+      RecoilR:            recoil_R_m200
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_m300_m100
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m300_m100
+      RecoilL:            recoil_L_m300
+      RecoilR:            recoil_R_m100
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_m300_0000
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m300_0000
+      RecoilL:            recoil_L_m300
+      RecoilR:            recoil_R
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_m300_p100
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m300_p100
+      RecoilL:            recoil_L_m300
+      RecoilR:            recoil_R_p100
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_m300_p200
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m300_p200
+      RecoilL:            recoil_L_m300
+      RecoilR:            recoil_R_p200
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_m300_p300
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m300_p300
+      RecoilL:            recoil_L_m300
+      RecoilR:            recoil_R_p300
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_m300_p400
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m300_p400
+      RecoilL:            recoil_L_m300
+      RecoilR:            recoil_R_p400
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_m300_p500
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m300_p500
+      RecoilL:            recoil_L_m300
+      RecoilR:            recoil_R_p500
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+#=========================== p2p L, m200
+  - name: proc_p2p_m200_m500
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m200_m500
+      RecoilL:            recoil_L_m200
+      RecoilR:            recoil_R_m500
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_m200_m400
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m200_m400
+      RecoilL:            recoil_L_m200
+      RecoilR:            recoil_R_m400
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_m200_m300
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m200_m300
+      RecoilL:            recoil_L_m200
+      RecoilR:            recoil_R_m300
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_m200_m200
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m200_m200
+      RecoilL:            recoil_L_m200
+      RecoilR:            recoil_R_m200
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_m200_m100
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m200_m100
+      RecoilL:            recoil_L_m200
+      RecoilR:            recoil_R_m100
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_m200_0000
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m200_0000
+      RecoilL:            recoil_L_m200
+      RecoilR:            recoil_R
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_m200_p100
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m200_p100
+      RecoilL:            recoil_L_m200
+      RecoilR:            recoil_R_p100
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_m200_p200
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m200_p200
+      RecoilL:            recoil_L_m200
+      RecoilR:            recoil_R_p200
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_m200_p300
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m200_p300
+      RecoilL:            recoil_L_m200
+      RecoilR:            recoil_R_p300
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_m200_p400
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m200_p400
+      RecoilL:            recoil_L_m200
+      RecoilR:            recoil_R_p400
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_m200_p500
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m200_p500
+      RecoilL:            recoil_L_m200
+      RecoilR:            recoil_R_p500
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+#=========================== p2p L, m100
+  - name: proc_p2p_m100_m500
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m100_m500
+      RecoilL:            recoil_L_m100
+      RecoilR:            recoil_R_m500
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_m100_m400
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m100_m400
+      RecoilL:            recoil_L_m100
+      RecoilR:            recoil_R_m400
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_m100_m300
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m100_m300
+      RecoilL:            recoil_L_m100
+      RecoilR:            recoil_R_m300
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_m100_m200
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m100_m200
+      RecoilL:            recoil_L_m100
+      RecoilR:            recoil_R_m200
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_m100_m100
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m100_m100
+      RecoilL:            recoil_L_m100
+      RecoilR:            recoil_R_m100
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_m100_0000
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m100_0000
+      RecoilL:            recoil_L_m100
+      RecoilR:            recoil_R
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_m100_p100
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m100_p100
+      RecoilL:            recoil_L_m100
+      RecoilR:            recoil_R_p100
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_m100_p200
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m100_p200
+      RecoilL:            recoil_L_m100
+      RecoilR:            recoil_R_p200
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_m100_p300
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m100_p300
+      RecoilL:            recoil_L_m100
+      RecoilR:            recoil_R_p300
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_m100_p400
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m100_p400
+      RecoilL:            recoil_L_m100
+      RecoilR:            recoil_R_p400
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_m100_p500
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_m100_p500
+      RecoilL:            recoil_L_m100
+      RecoilR:            recoil_R_p500
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+#=========================== p2p L, 0000
+  - name: proc_p2p_0000_m500
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_0000_m500
+      RecoilL:            recoil_L
+      RecoilR:            recoil_R_m500
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_0000_m400
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_0000_m400
+      RecoilL:            recoil_L
+      RecoilR:            recoil_R_m400
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_0000_m300
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_0000_m300
+      RecoilL:            recoil_L
+      RecoilR:            recoil_R_m300
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_0000_m200
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_0000_m200
+      RecoilL:            recoil_L
+      RecoilR:            recoil_R_m200
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_0000_m100
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_0000_m100
+      RecoilL:            recoil_L
+      RecoilR:            recoil_R_m100
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p
+      RecoilL:            recoil_L
+      RecoilR:            recoil_R
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      ResidualFrame:      0    # in Residual frame
+      OutputTransparency: 0  
+
+  - name: proc_p2p_0000_p100
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_0000_p100
+      RecoilL:            recoil_L
+      RecoilR:            recoil_R_p100
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_0000_p200
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_0000_p200
+      RecoilL:            recoil_L
+      RecoilR:            recoil_R_p200
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_0000_p300
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_0000_p300
+      RecoilL:            recoil_L
+      RecoilR:            recoil_R_p300
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_0000_p400
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_0000_p400
+      RecoilL:            recoil_L
+      RecoilR:            recoil_R_p400
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_0000_p500
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_0000_p500
+      RecoilL:            recoil_L
+      RecoilR:            recoil_R_p500
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+#=========================== p2p L, p100
+  - name: proc_p2p_p100_m500
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p100_m500
+      RecoilL:            recoil_L_p100
+      RecoilR:            recoil_R_m500
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_p100_m400
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p100_m400
+      RecoilL:            recoil_L_p100
+      RecoilR:            recoil_R_m400
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_p100_m300
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p100_m300
+      RecoilL:            recoil_L_p100
+      RecoilR:            recoil_R_m300
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_p100_m200
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p100_m200
+      RecoilL:            recoil_L_p100
+      RecoilR:            recoil_R_m200
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_p100_m100
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p100_m100
+      RecoilL:            recoil_L_p100
+      RecoilR:            recoil_R_m100
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_p100_0000
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p100_0000
+      RecoilL:            recoil_L_p100
+      RecoilR:            recoil_R
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_p100_p100
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p100_p100
+      RecoilL:            recoil_L_p100
+      RecoilR:            recoil_R_p100
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_p100_p200
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p100_p200
+      RecoilL:            recoil_L_p100
+      RecoilR:            recoil_R_p200
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_p100_p300
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p100_p300
+      RecoilL:            recoil_L_p100
+      RecoilR:            recoil_R_p300
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_p100_p400
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p100_p400
+      RecoilL:            recoil_L_p100
+      RecoilR:            recoil_R_p400
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_p100_p500
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p100_p500
+      RecoilL:            recoil_L_p100
+      RecoilR:            recoil_R_p500
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+#=========================== p2p L, p200
+  - name: proc_p2p_p200_m500
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p200_m500
+      RecoilL:            recoil_L_p200
+      RecoilR:            recoil_R_m500
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_p200_m400
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p200_m400
+      RecoilL:            recoil_L_p200
+      RecoilR:            recoil_R_m400
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_p200_m300
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p200_m300
+      RecoilL:            recoil_L_p200
+      RecoilR:            recoil_R_m300
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_p200_m200
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p200_m200
+      RecoilL:            recoil_L_p200
+      RecoilR:            recoil_R_m200
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_p200_m100
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p200_m100
+      RecoilL:            recoil_L_p200
+      RecoilR:            recoil_R_m100
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_p200_0000
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p200_0000
+      RecoilL:            recoil_L_p200
+      RecoilR:            recoil_R
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_p200_p100
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p200_p100
+      RecoilL:            recoil_L_p200
+      RecoilR:            recoil_R_p100
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_p200_p200
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p200_p200
+      RecoilL:            recoil_L_p200
+      RecoilR:            recoil_R_p200
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_p200_p300
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p200_p300
+      RecoilL:            recoil_L_p200
+      RecoilR:            recoil_R_p300
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_p200_p400
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p200_p400
+      RecoilL:            recoil_L_p200
+      RecoilR:            recoil_R_p400
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_p200_p500
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p200_p500
+      RecoilL:            recoil_L_p200
+      RecoilR:            recoil_R_p500
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+#=========================== p2p L, p300
+  - name: proc_p2p_p300_m500
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p300_m500
+      RecoilL:            recoil_L_p300
+      RecoilR:            recoil_R_m500
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_p300_m400
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p300_m400
+      RecoilL:            recoil_L_p300
+      RecoilR:            recoil_R_m400
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_p300_m300
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p300_m300
+      RecoilL:            recoil_L_p300
+      RecoilR:            recoil_R_m300
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_p300_m200
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p300_m200
+      RecoilL:            recoil_L_p300
+      RecoilR:            recoil_R_m200
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_p300_m100
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p300_m100
+      RecoilL:            recoil_L_p300
+      RecoilR:            recoil_R_m100
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_p300_0000
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p300_0000
+      RecoilL:            recoil_L_p300
+      RecoilR:            recoil_R
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_p300_p100
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p300_p100
+      RecoilL:            recoil_L_p300
+      RecoilR:            recoil_R_p100
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_p300_p200
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p300_p200
+      RecoilL:            recoil_L_p300
+      RecoilR:            recoil_R_p200
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_p300_p300
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p300_p300
+      RecoilL:            recoil_L_p300
+      RecoilR:            recoil_R_p300
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_p300_p400
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p300_p400
+      RecoilL:            recoil_L_p300
+      RecoilR:            recoil_R_p400
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_p300_p500
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p300_p500
+      RecoilL:            recoil_L_p300
+      RecoilR:            recoil_R_p500
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+#=========================== p2p L, p400
+  - name: proc_p2p_p400_m500
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p400_m500
+      RecoilL:            recoil_L_p400
+      RecoilR:            recoil_R_m500
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_p400_m400
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p400_m400
+      RecoilL:            recoil_L_p400
+      RecoilR:            recoil_R_m400
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_p400_m300
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p400_m300
+      RecoilL:            recoil_L_p400
+      RecoilR:            recoil_R_m300
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_p400_m200
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p400_m200
+      RecoilL:            recoil_L_p400
+      RecoilR:            recoil_R_m200
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_p400_m100
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p400_m100
+      RecoilL:            recoil_L_p400
+      RecoilR:            recoil_R_m100
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_p400_0000
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p400_0000
+      RecoilL:            recoil_L_p400
+      RecoilR:            recoil_R
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_p400_p100
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p400_p100
+      RecoilL:            recoil_L_p400
+      RecoilR:            recoil_R_p100
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_p400_p200
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p400_p200
+      RecoilL:            recoil_L_p400
+      RecoilR:            recoil_R_p200
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_p400_p300
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p400_p300
+      RecoilL:            recoil_L_p400
+      RecoilR:            recoil_R_p300
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_p400_p400
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p400_p400
+      RecoilL:            recoil_L_p400
+      RecoilR:            recoil_R_p400
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_p400_p500
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p400_p500
+      RecoilL:            recoil_L_p400
+      RecoilR:            recoil_R_p500
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+#=========================== p2p L, p500
+  - name: proc_p2p_p500_m500
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p500_m500
+      RecoilL:            recoil_L_p500
+      RecoilR:            recoil_R_m500
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_p500_m400
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p500_m400
+      RecoilL:            recoil_L_p500
+      RecoilR:            recoil_R_m400
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_p500_m300
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p500_m300
+      RecoilL:            recoil_L_p500
+      RecoilR:            recoil_R_m300
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_p500_m200
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p500_m200
+      RecoilL:            recoil_L_p500
+      RecoilR:            recoil_R_m200
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_p500_m100
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p500_m100
+      RecoilL:            recoil_L_p500
+      RecoilR:            recoil_R_m100
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_p500_0000
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p500_0000
+      RecoilL:            recoil_L_p500
+      RecoilR:            recoil_R
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_p500_p100
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p500_p100
+      RecoilL:            recoil_L_p500
+      RecoilR:            recoil_R_p100
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_p500_p200
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p500_p200
+      RecoilL:            recoil_L_p500
+      RecoilR:            recoil_R_p200
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+
+  - name: proc_p2p_p500_p300
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p500_p300
+      RecoilL:            recoil_L_p500
+      RecoilR:            recoil_R_p300
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_p500_p400
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p500_p400
+      RecoilL:            recoil_L_p500
+      RecoilR:            recoil_R_p400
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      OutputTransparency: 0
+      
+  - name: proc_p2p_p500_p500
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_p500_p500
+      RecoilL:            recoil_L_p500
+      RecoilR:            recoil_R_p500
       PPAC:               ppac
       PPACDetID:          0
       BeamParameter:      beam  # declare before and elsewhere

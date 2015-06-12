@@ -1,6 +1,6 @@
 aliases:
 # beware to overwrite !!!
-  - &output  ppDown_0723.root
+  - &output  pp_0605_fine.root
 #  - &output  ppUp_0723.root
 #  - &output  ppAll_1118_OpenCorr.root
 
@@ -38,8 +38,8 @@ Processor:
 
   - include: smwdc_geo.yaml
   - include: beamZ.yaml
-  - include: recoil_ppcoin.yaml
-#  - include: recoil_ppcoin_multiOffset.yaml
+#  - include: recoil_ppcoin.yaml
+  - include: recoil_ppcoin_multiOffset.yaml  #excluse recoil_ppcoin.yaml
 #============== Output     =============================
   - name: outputtree
     type: art::TOutputTreeProcessor

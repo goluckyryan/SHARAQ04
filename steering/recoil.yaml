@@ -1,7 +1,5 @@
 aliases:
-  - &beamZ      0.
-  - &tofShift_L -1.1  #time shift (tgt to Tpla)
-  - &tofShift_R -0.9  #time shift (tgt to Tpla)
+  - &beamZ      10.
 #============== PROCESSORS     =============================
 Processor:
   - name: tpla_tof
@@ -20,8 +18,8 @@ Processor:
       TPlasticLDetID:     0
       TPlasticRDetID:     1
       BeamZ:              *beamZ
-      ShiftL:             *tofShift_L
-      ShiftL:             *tofShift_R 
+      ShiftL:             -0.2
+      ShiftR:             -0.2
       OutputTransparency: 0
 
   - name: Recoil_L

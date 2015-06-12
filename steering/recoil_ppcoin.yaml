@@ -1,7 +1,5 @@
 aliases:
-  - &beamZ      0.
-  - &tofShift_L 0.4
-  - &tofShift_R 0.4
+  - &beamZ      10.
 #============== PROCESSORS     =============================
 Processor:      
   - name: tpla_tof
@@ -20,8 +18,8 @@ Processor:
       TPlasticLDetID:     0
       TPlasticRDetID:     1
       BeamZ:              *beamZ
-      ShiftL:             *tofShift_L
-      ShiftR:             *tofShift_R
+      ShiftL:             0.
+      ShiftR:             0.
       OutputTransparency: 0
 
   - name: Recoil_L
@@ -33,6 +31,7 @@ Processor:
       Geometry:         SMWDC_geometry
       Side:             0           # 0 = left, !0 = right
       BeamZ:            *beamZ
+      AngleShift:       0.00524
       UseReactionPointCorrection:   0   # s0XY
       UseIncidentAngleCorrection:   0   # s0AB
       UsePolarizedMagnetCorrection: 1
@@ -47,6 +46,7 @@ Processor:
       Geometry:         SMWDC_geometry
       Side:             1
       BeamZ:            *beamZ
+      AngleShift:       -0.00524
       UseReactionPointCorrection:   0
       UseIncidentAngleCorrection:   0
       UsePolarizedMagnetCorrection: 1
