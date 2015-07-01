@@ -92,7 +92,9 @@ public :
 	Double_t Ex;// Sp2 - 13.26;
 	Double_t ExS;// Sp - 13.26;
 	Double_t kMomt; // redisual momentum
-   Double_t thetaR, phiR;
+   Double_t thetak, phik;
+   Double_t kE, kp, kt;
+   
    //carbon
 	Double_t theta1c, theta2c;
 	Double_t phi1c, phi2c;
@@ -243,7 +245,7 @@ void Selector_Post::Init(TTree *tree)
    //fChain->SetBranchAddress("plaV1190_F3", &plaV1190_F3, &b_plaV1190_F3);
    //fChain->SetBranchAddress("plaV1190_FH9", &plaV1190_FH9, &b_plaV1190_FH9);
    //fChain->SetBranchAddress("tof_US", &tof_US, &b_tof_US);
-   //fChain->SetBranchAddress("plaV775", &plaV775, &b_plaV775);
+   fChain->SetBranchAddress("plaV775", &plaV775, &b_plaV775);
    //fChain->SetBranchAddress("tof_DS", &tof_DS, &b_tof_DS);
    fChain->SetBranchAddress("S0img", &S0img, &b_S0img);
    fChain->SetBranchAddress("dcs0d", &dcs0d, &b_dcs0d);
@@ -355,16 +357,21 @@ void Selector_Post::Init(TTree *tree)
    FLc = TMath::QuietNaN();
    betac = TMath::QuietNaN();
    
-	vertexZ = TMath::QuietNaN();
-	E1 = TMath::QuietNaN();
-	E2 = TMath::QuietNaN();
-	theta1 = TMath::QuietNaN();
-	theta2 = TMath::QuietNaN();
-	phi1 = TMath::QuietNaN(); 
-	phi2 = TMath::QuietNaN();
-	Ex = TMath::QuietNaN(); // Sp2 - 13.26;
-	ExS = TMath::QuietNaN(); // Sp - 13.26;
-	kMomt = TMath::QuietNaN(); // redisual momentum
+   vertexZ = TMath::QuietNaN();
+   E1 = TMath::QuietNaN();
+   E2 = TMath::QuietNaN();
+   theta1 = TMath::QuietNaN();
+   theta2 = TMath::QuietNaN();
+   phi1 = TMath::QuietNaN(); 
+   phi2 = TMath::QuietNaN();
+   Ex = TMath::QuietNaN(); // Sp2 - 13.26;
+   ExS = TMath::QuietNaN(); // Sp - 13.26;
+   kMomt = TMath::QuietNaN(); // redisual momentum
+   thetak = TMath::QuietNaN();
+   phik = TMath::QuietNaN();
+   kE = TMath::QuietNaN();
+   kt = TMath::QuietNaN();
+   kp = TMath::QuietNaN();
    
    s1xc = TMath::QuietNaN();
    tofc = TMath::QuietNaN();
@@ -376,9 +383,6 @@ void Selector_Post::Init(TTree *tree)
       phi2c = TMath::QuietNaN();
       Exc = TMath::QuietNaN();
       kMomtc = TMath::QuietNaN();
-      thetaR = TMath::QuietNaN();
-      phiR = TMath::QuietNaN();
-      
    }
    
    //________________________________________________ Branch
@@ -480,7 +484,7 @@ void Selector_Post::Init(TTree *tree)
       newTree->Branch("s1ar",&s1ar,"s1ar/D");
    }
    
-   if( b_plaV775 && b_nyoki_zt) {
+   if( b_plaV775 && b_nyoki_t) {
       newTree->Branch("tofTgtS1",&tofTgtS1,"tofTgtS1/D");
    }
 
@@ -516,8 +520,11 @@ void Selector_Post::Init(TTree *tree)
       newTree->Branch("Ex",&Ex,"Ex/D");
       newTree->Branch("ExS",&ExS,"ExS/D");
       newTree->Branch("kMomt",&kMomt,"kMomt/D");
-      newTree->Branch("thetaR",&thetaR,"thetaR/D");
-      newTree->Branch("phiR",&phiR,"phiR/D");
+      newTree->Branch("thetak",&thetak,"thetak/D");
+      newTree->Branch("phik",&phik,"phik/D");
+      newTree->Branch("kE",&kE,"kE/D");
+      newTree->Branch("kt",&kt,"kt/D");
+      newTree->Branch("kp",&kp,"kp/D");
    }
    
    if( b_s1_c ){

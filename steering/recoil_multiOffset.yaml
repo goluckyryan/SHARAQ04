@@ -7,10 +7,11 @@ aliases:
   - &p1       0.2
   - &h0       0.0
   - &m1       -0.2
-  - &m2       -0.3
+  - &m2       -0.4
   - &m3       -0.6
   - &m4       -0.8
   - &m5       -1.0
+  - &useTable  0
 #============== PROCESSORS     =============================
 Processor:
 #=========================== +100 ps offset  
@@ -250,6 +251,8 @@ Processor:
       UseIncidentAngleCorrection:   1   #s0AB
       UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1
+      UseTable: *useTable
+      TableFile: prm/tof2ke.dat
       
   - name: Recoil_L_m400
     type: art::sh04::TRecoilProcessor
@@ -267,6 +270,8 @@ Processor:
       UseIncidentAngleCorrection:   1   #s0AB
       UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1
+      UseTable: *useTable
+      TableFile: prm/tof2ke.dat
 
   - name: Recoil_L_m300
     type: art::sh04::TRecoilProcessor
@@ -284,6 +289,8 @@ Processor:
       UseIncidentAngleCorrection:   1   #s0AB
       UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1
+      UseTable: *useTable
+      TableFile: prm/tof2ke.dat
       
   - name: Recoil_L_m200
     type: art::sh04::TRecoilProcessor
@@ -301,6 +308,8 @@ Processor:
       UseIncidentAngleCorrection:   1   #s0AB
       UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1
+      UseTable: *useTable
+      TableFile: prm/tof2ke.dat
       
   - name: Recoil_L_m100
     type: art::sh04::TRecoilProcessor
@@ -317,6 +326,8 @@ Processor:
       UseIncidentAngleCorrection:   1   #s0AB
       UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1
+      UseTable: *useTable
+      TableFile: prm/tof2ke.dat
       
   - name: Recoil_L
     type: art::sh04::TRecoilProcessor
@@ -334,6 +345,8 @@ Processor:
       UseIncidentAngleCorrection:   1   #s0AB
       UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1   #store in p2p.fRecoilL
+      UseTable: *useTable
+      TableFile: prm/tof2ke.dat
       
   - name: Recoil_L_p100
     type: art::sh04::TRecoilProcessor
@@ -351,6 +364,8 @@ Processor:
       UseIncidentAngleCorrection:   1   #s0AB
       UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1
+      UseTable: *useTable
+      TableFile: prm/tof2ke.dat
       
   - name: Recoil_L_p200
     type: art::sh04::TRecoilProcessor
@@ -368,6 +383,8 @@ Processor:
       UseIncidentAngleCorrection:   1   #s0AB
       UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1
+      UseTable: *useTable
+      TableFile: prm/tof2ke.dat
 
   - name: Recoil_L_p300
     type: art::sh04::TRecoilProcessor
@@ -385,6 +402,8 @@ Processor:
       UseIncidentAngleCorrection:   1   #s0AB
       UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1
+      UseTable: *useTable
+      TableFile: prm/tof2ke.dat
       
   - name: Recoil_L_p400
     type: art::sh04::TRecoilProcessor
@@ -402,6 +421,8 @@ Processor:
       UseIncidentAngleCorrection:   1   #s0AB
       UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1
+      UseTable: *useTable
+      TableFile: prm/tof2ke.dat
       
   - name: Recoil_L_p500
     type: art::sh04::TRecoilProcessor
@@ -419,6 +440,8 @@ Processor:
       UseIncidentAngleCorrection:   1   #s0AB
       UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1
+      UseTable: *useTable
+      TableFile: prm/tof2ke.dat
       
       
 #=========================== Recoil_R  
@@ -438,6 +461,8 @@ Processor:
       UseIncidentAngleCorrection:   1
       UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1
+      UseTable: *useTable
+      TableFile: prm/tof2ke.dat
       
   - name: Recoil_R_m400
     type: art::sh04::TRecoilProcessor
@@ -455,6 +480,8 @@ Processor:
       UseIncidentAngleCorrection:   1
       UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1
+      UseTable: *useTable
+      TableFile: prm/tof2ke.dat
       
   - name: Recoil_R_m300
     type: art::sh04::TRecoilProcessor
@@ -472,6 +499,8 @@ Processor:
       UseIncidentAngleCorrection:   1
       UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1
+      UseTable: *useTable
+      TableFile: prm/tof2ke.dat
       
   - name: Recoil_R_m200
     type: art::sh04::TRecoilProcessor
@@ -489,6 +518,8 @@ Processor:
       UseIncidentAngleCorrection:   1
       UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1
+      UseTable: *useTable
+      TableFile: prm/tof2ke.dat
 
   - name: Recoil_R_m100
     type: art::sh04::TRecoilProcessor
@@ -506,6 +537,8 @@ Processor:
       UseIncidentAngleCorrection:   1
       UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1
+      UseTable: *useTable
+      TableFile: prm/tof2ke.dat
 
   - name: Recoil_R
     type: art::sh04::TRecoilProcessor
@@ -522,7 +555,9 @@ Processor:
       UseReactionPointCorrection:   1
       UseIncidentAngleCorrection:   1
       UsePolarizedMagnetCorrection: 1
-      OutputTransparency:           1      
+      OutputTransparency:           1   
+      UseTable: *useTable
+      TableFile: prm/tof2ke.dat   
 
   - name: Recoil_R_p100
     type: art::sh04::TRecoilProcessor
@@ -540,6 +575,8 @@ Processor:
       UseIncidentAngleCorrection:   1
       UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1
+      UseTable: *useTable
+      TableFile: prm/tof2ke.dat
 
   - name: Recoil_R_p200
     type: art::sh04::TRecoilProcessor
@@ -557,6 +594,8 @@ Processor:
       UseIncidentAngleCorrection:   1
       UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1
+      UseTable: *useTable
+      TableFile: prm/tof2ke.dat
 
   - name: Recoil_R_p300
     type: art::sh04::TRecoilProcessor
@@ -574,6 +613,8 @@ Processor:
       UseIncidentAngleCorrection:   1
       UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1
+      UseTable: *useTable
+      TableFile: prm/tof2ke.dat
       
   - name: Recoil_R_p400
     type: art::sh04::TRecoilProcessor
@@ -591,6 +632,8 @@ Processor:
       UseIncidentAngleCorrection:   1
       UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1
+      UseTable: *useTable
+      TableFile: prm/tof2ke.dat
       
   - name: Recoil_R_p500
     type: art::sh04::TRecoilProcessor
@@ -608,6 +651,8 @@ Processor:
       UseIncidentAngleCorrection:   1
       UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1
+      UseTable: *useTable
+      TableFile: prm/tof2ke.dat
       
 #=========================== p2p L, m500
   - name: proc_p2p_m500_m500

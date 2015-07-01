@@ -82,9 +82,12 @@ Bool_t Selector_offset::Process(Long64_t entry)
       Exp5[i] = TMath::QuietNaN();
    }
    
+   //Double_t Sp = 13.26; //23F
+   Double_t Sp = 14.43; //25F
+   
    //-------------------------------
    b_p2p->GetEntry(entry);
-   Ex00[5] = p2p->GetSp2()-13.26;
+   Ex00[5] = p2p->GetSp2()-Sp;
    if( TMath::IsNaN(Ex00[5])) return kTRUE;
    
    //-----------------------------
@@ -93,11 +96,12 @@ Bool_t Selector_offset::Process(Long64_t entry)
    
    //------------------------------
    b_tof_s1->GetEntry(entry);
-   Double_t tofS1 = TMath::QuietNaN();
+   tofS1 = TMath::QuietNaN();
    for( Int_t p = 0; p < tof_s1->GetEntriesFast(); p++){
       tofS1 = ((art::TTimingData*)tof_s1->At(p))->GetTiming();
    }
-   if( tofS1< 32 || tofS1 > 35 || TMath::IsNaN(tofS1)) return kTRUE;
+   //if( tofS1< 32 || tofS1 > 35 || TMath::IsNaN(tofS1)) return kTRUE; //23F
+   if( tofS1< 35 || tofS1 > 44 || TMath::IsNaN(tofS1)) return kTRUE; //25F
    
    //------------------------------
    b_dcs0d->GetEntry(entry);
@@ -130,146 +134,149 @@ Bool_t Selector_offset::Process(Long64_t entry)
    b_pid_s1->GetEntry(entry);
    pidAOQ = TMath::QuietNaN();
    pidAOQ = pid_s1->GetAOQ();
+   
+   pidAOQ = 1.05522*pidAOQ-0.0402106*tofS1+1.37253; //25F
    //if( TMath::Abs(pidAOQ*8-22)<0.5 || TMath::IsNaN(pidAOQ) ) return kTRUE;
-   Double_t pidZ = TMath::QuietNaN();
+   pidZ = TMath::QuietNaN();
    pidZ = pid_s1->GetZ();
-   if( TMath::Abs(pidZ-8.0)>0.6 || TMath::IsNaN(pidZ)) return kTRUE;
+   //if( TMath::Abs(pidZ-8.0)>0.6 || TMath::IsNaN(pidZ)) return kTRUE;
+   if( TMath::Abs(pidZ-8.0)>4.0 || TMath::IsNaN(pidZ)) return kTRUE;
    
    
    //-------------------------------
    //printf("Ex[5][5] = %4.1f, r_Cry = %d, tofS1 = %4.1f, dcs0d=%d, vZ=%4.1f, Z=%4.1f, A/Q=%4.1f \n", Ex[5][5], gate->Test(11), tofS1, track, vZ, pidZ, pidAOQ );
    count ++;
    
-   b_p2p_m500_m500->GetEntry(entry); Exm5[0]  = p2p_m500_m500->GetSp2()-13.26;
-   b_p2p_m500_m400->GetEntry(entry); Exm5[1]  = p2p_m500_m400->GetSp2()-13.26;
-   b_p2p_m500_m300->GetEntry(entry); Exm5[2]  = p2p_m500_m300->GetSp2()-13.26;
-   b_p2p_m500_m200->GetEntry(entry); Exm5[3]  = p2p_m500_m200->GetSp2()-13.26;
-   b_p2p_m500_m100->GetEntry(entry); Exm5[4]  = p2p_m500_m100->GetSp2()-13.26;
-   b_p2p_m500_0000->GetEntry(entry); Exm5[5]  = p2p_m500_0000->GetSp2()-13.26;
-   b_p2p_m500_p100->GetEntry(entry); Exm5[6]  = p2p_m500_p100->GetSp2()-13.26;
-   b_p2p_m500_p200->GetEntry(entry); Exm5[7]  = p2p_m500_p200->GetSp2()-13.26;
-   b_p2p_m500_p300->GetEntry(entry); Exm5[8]  = p2p_m500_p300->GetSp2()-13.26;
-   b_p2p_m500_p400->GetEntry(entry); Exm5[9]  = p2p_m500_p400->GetSp2()-13.26;
-   b_p2p_m500_p500->GetEntry(entry); Exm5[10] = p2p_m500_p500->GetSp2()-13.26;
+   b_p2p_m500_m500->GetEntry(entry); Exm5[0]  = p2p_m500_m500->GetSp2()-Sp;
+   b_p2p_m500_m400->GetEntry(entry); Exm5[1]  = p2p_m500_m400->GetSp2()-Sp;
+   b_p2p_m500_m300->GetEntry(entry); Exm5[2]  = p2p_m500_m300->GetSp2()-Sp;
+   b_p2p_m500_m200->GetEntry(entry); Exm5[3]  = p2p_m500_m200->GetSp2()-Sp;
+   b_p2p_m500_m100->GetEntry(entry); Exm5[4]  = p2p_m500_m100->GetSp2()-Sp;
+   b_p2p_m500_0000->GetEntry(entry); Exm5[5]  = p2p_m500_0000->GetSp2()-Sp;
+   b_p2p_m500_p100->GetEntry(entry); Exm5[6]  = p2p_m500_p100->GetSp2()-Sp;
+   b_p2p_m500_p200->GetEntry(entry); Exm5[7]  = p2p_m500_p200->GetSp2()-Sp;
+   b_p2p_m500_p300->GetEntry(entry); Exm5[8]  = p2p_m500_p300->GetSp2()-Sp;
+   b_p2p_m500_p400->GetEntry(entry); Exm5[9]  = p2p_m500_p400->GetSp2()-Sp;
+   b_p2p_m500_p500->GetEntry(entry); Exm5[10] = p2p_m500_p500->GetSp2()-Sp;
    
-   b_p2p_m400_m500->GetEntry(entry); Exm4[0]  = p2p_m400_m500->GetSp2()-13.26;
-   b_p2p_m400_m400->GetEntry(entry); Exm4[1]  = p2p_m400_m400->GetSp2()-13.26;
-   b_p2p_m400_m300->GetEntry(entry); Exm4[2]  = p2p_m400_m300->GetSp2()-13.26;
-   b_p2p_m400_m200->GetEntry(entry); Exm4[3]  = p2p_m400_m200->GetSp2()-13.26;
-   b_p2p_m400_m100->GetEntry(entry); Exm4[4]  = p2p_m400_m100->GetSp2()-13.26;
-   b_p2p_m400_0000->GetEntry(entry); Exm4[5]  = p2p_m400_0000->GetSp2()-13.26;
-   b_p2p_m400_p100->GetEntry(entry); Exm4[6]  = p2p_m400_p100->GetSp2()-13.26;
-   b_p2p_m400_p200->GetEntry(entry); Exm4[7]  = p2p_m400_p200->GetSp2()-13.26;
-   b_p2p_m400_p300->GetEntry(entry); Exm4[8]  = p2p_m400_p300->GetSp2()-13.26;
-   b_p2p_m400_p400->GetEntry(entry); Exm4[9]  = p2p_m400_p400->GetSp2()-13.26;
-   b_p2p_m400_p500->GetEntry(entry); Exm4[10] = p2p_m400_p500->GetSp2()-13.26;
+   b_p2p_m400_m500->GetEntry(entry); Exm4[0]  = p2p_m400_m500->GetSp2()-Sp;
+   b_p2p_m400_m400->GetEntry(entry); Exm4[1]  = p2p_m400_m400->GetSp2()-Sp;
+   b_p2p_m400_m300->GetEntry(entry); Exm4[2]  = p2p_m400_m300->GetSp2()-Sp;
+   b_p2p_m400_m200->GetEntry(entry); Exm4[3]  = p2p_m400_m200->GetSp2()-Sp;
+   b_p2p_m400_m100->GetEntry(entry); Exm4[4]  = p2p_m400_m100->GetSp2()-Sp;
+   b_p2p_m400_0000->GetEntry(entry); Exm4[5]  = p2p_m400_0000->GetSp2()-Sp;
+   b_p2p_m400_p100->GetEntry(entry); Exm4[6]  = p2p_m400_p100->GetSp2()-Sp;
+   b_p2p_m400_p200->GetEntry(entry); Exm4[7]  = p2p_m400_p200->GetSp2()-Sp;
+   b_p2p_m400_p300->GetEntry(entry); Exm4[8]  = p2p_m400_p300->GetSp2()-Sp;
+   b_p2p_m400_p400->GetEntry(entry); Exm4[9]  = p2p_m400_p400->GetSp2()-Sp;
+   b_p2p_m400_p500->GetEntry(entry); Exm4[10] = p2p_m400_p500->GetSp2()-Sp;
 
-   b_p2p_m300_m500->GetEntry(entry); Exm3[0]  = p2p_m300_m500->GetSp2()-13.26;
-   b_p2p_m300_m400->GetEntry(entry); Exm3[1]  = p2p_m300_m400->GetSp2()-13.26;
-   b_p2p_m300_m300->GetEntry(entry); Exm3[2]  = p2p_m300_m300->GetSp2()-13.26;
-   b_p2p_m300_m200->GetEntry(entry); Exm3[3]  = p2p_m300_m200->GetSp2()-13.26;
-   b_p2p_m300_m100->GetEntry(entry); Exm3[4]  = p2p_m300_m100->GetSp2()-13.26;
-   b_p2p_m300_0000->GetEntry(entry); Exm3[5]  = p2p_m300_0000->GetSp2()-13.26;
-   b_p2p_m300_p100->GetEntry(entry); Exm3[6]  = p2p_m300_p100->GetSp2()-13.26;
-   b_p2p_m300_p200->GetEntry(entry); Exm3[7]  = p2p_m300_p200->GetSp2()-13.26;
-   b_p2p_m300_p300->GetEntry(entry); Exm3[8]  = p2p_m300_p300->GetSp2()-13.26;
-   b_p2p_m300_p400->GetEntry(entry); Exm3[9]  = p2p_m300_p400->GetSp2()-13.26;
-   b_p2p_m300_p500->GetEntry(entry); Exm3[10] = p2p_m300_p500->GetSp2()-13.26;
+   b_p2p_m300_m500->GetEntry(entry); Exm3[0]  = p2p_m300_m500->GetSp2()-Sp;
+   b_p2p_m300_m400->GetEntry(entry); Exm3[1]  = p2p_m300_m400->GetSp2()-Sp;
+   b_p2p_m300_m300->GetEntry(entry); Exm3[2]  = p2p_m300_m300->GetSp2()-Sp;
+   b_p2p_m300_m200->GetEntry(entry); Exm3[3]  = p2p_m300_m200->GetSp2()-Sp;
+   b_p2p_m300_m100->GetEntry(entry); Exm3[4]  = p2p_m300_m100->GetSp2()-Sp;
+   b_p2p_m300_0000->GetEntry(entry); Exm3[5]  = p2p_m300_0000->GetSp2()-Sp;
+   b_p2p_m300_p100->GetEntry(entry); Exm3[6]  = p2p_m300_p100->GetSp2()-Sp;
+   b_p2p_m300_p200->GetEntry(entry); Exm3[7]  = p2p_m300_p200->GetSp2()-Sp;
+   b_p2p_m300_p300->GetEntry(entry); Exm3[8]  = p2p_m300_p300->GetSp2()-Sp;
+   b_p2p_m300_p400->GetEntry(entry); Exm3[9]  = p2p_m300_p400->GetSp2()-Sp;
+   b_p2p_m300_p500->GetEntry(entry); Exm3[10] = p2p_m300_p500->GetSp2()-Sp;
    
-   b_p2p_m200_m500->GetEntry(entry); Exm2[0]  = p2p_m200_m500->GetSp2()-13.26;
-   b_p2p_m200_m400->GetEntry(entry); Exm2[1]  = p2p_m200_m400->GetSp2()-13.26;
-   b_p2p_m200_m300->GetEntry(entry); Exm2[2]  = p2p_m200_m300->GetSp2()-13.26;
-   b_p2p_m200_m200->GetEntry(entry); Exm2[3]  = p2p_m200_m200->GetSp2()-13.26;
-   b_p2p_m200_m100->GetEntry(entry); Exm2[4]  = p2p_m200_m100->GetSp2()-13.26;
-   b_p2p_m200_0000->GetEntry(entry); Exm2[5]  = p2p_m200_0000->GetSp2()-13.26;
-   b_p2p_m200_p100->GetEntry(entry); Exm2[6]  = p2p_m200_p100->GetSp2()-13.26;
-   b_p2p_m200_p200->GetEntry(entry); Exm2[7]  = p2p_m200_p200->GetSp2()-13.26;
-   b_p2p_m200_p300->GetEntry(entry); Exm2[8]  = p2p_m200_p300->GetSp2()-13.26;
-   b_p2p_m200_p400->GetEntry(entry); Exm2[9]  = p2p_m200_p400->GetSp2()-13.26;
-   b_p2p_m200_p500->GetEntry(entry); Exm2[10] = p2p_m200_p500->GetSp2()-13.26;
+   b_p2p_m200_m500->GetEntry(entry); Exm2[0]  = p2p_m200_m500->GetSp2()-Sp;
+   b_p2p_m200_m400->GetEntry(entry); Exm2[1]  = p2p_m200_m400->GetSp2()-Sp;
+   b_p2p_m200_m300->GetEntry(entry); Exm2[2]  = p2p_m200_m300->GetSp2()-Sp;
+   b_p2p_m200_m200->GetEntry(entry); Exm2[3]  = p2p_m200_m200->GetSp2()-Sp;
+   b_p2p_m200_m100->GetEntry(entry); Exm2[4]  = p2p_m200_m100->GetSp2()-Sp;
+   b_p2p_m200_0000->GetEntry(entry); Exm2[5]  = p2p_m200_0000->GetSp2()-Sp;
+   b_p2p_m200_p100->GetEntry(entry); Exm2[6]  = p2p_m200_p100->GetSp2()-Sp;
+   b_p2p_m200_p200->GetEntry(entry); Exm2[7]  = p2p_m200_p200->GetSp2()-Sp;
+   b_p2p_m200_p300->GetEntry(entry); Exm2[8]  = p2p_m200_p300->GetSp2()-Sp;
+   b_p2p_m200_p400->GetEntry(entry); Exm2[9]  = p2p_m200_p400->GetSp2()-Sp;
+   b_p2p_m200_p500->GetEntry(entry); Exm2[10] = p2p_m200_p500->GetSp2()-Sp;
    
-   b_p2p_m100_m500->GetEntry(entry); Exm1[0]  = p2p_m100_m500->GetSp2()-13.26;
-   b_p2p_m100_m400->GetEntry(entry); Exm1[1]  = p2p_m100_m400->GetSp2()-13.26;
-   b_p2p_m100_m300->GetEntry(entry); Exm1[2]  = p2p_m100_m300->GetSp2()-13.26;
-   b_p2p_m100_m200->GetEntry(entry); Exm1[3]  = p2p_m100_m200->GetSp2()-13.26;
-   b_p2p_m100_m100->GetEntry(entry); Exm1[4]  = p2p_m100_m100->GetSp2()-13.26;
-   b_p2p_m100_0000->GetEntry(entry); Exm1[5]  = p2p_m100_0000->GetSp2()-13.26;
-   b_p2p_m100_p100->GetEntry(entry); Exm1[6]  = p2p_m100_p100->GetSp2()-13.26;
-   b_p2p_m100_p200->GetEntry(entry); Exm1[7]  = p2p_m100_p200->GetSp2()-13.26;
-   b_p2p_m100_p300->GetEntry(entry); Exm1[8]  = p2p_m100_p300->GetSp2()-13.26;
-   b_p2p_m100_p400->GetEntry(entry); Exm1[9]  = p2p_m100_p400->GetSp2()-13.26;
-   b_p2p_m100_p500->GetEntry(entry); Exm1[10] = p2p_m100_p500->GetSp2()-13.26;
+   b_p2p_m100_m500->GetEntry(entry); Exm1[0]  = p2p_m100_m500->GetSp2()-Sp;
+   b_p2p_m100_m400->GetEntry(entry); Exm1[1]  = p2p_m100_m400->GetSp2()-Sp;
+   b_p2p_m100_m300->GetEntry(entry); Exm1[2]  = p2p_m100_m300->GetSp2()-Sp;
+   b_p2p_m100_m200->GetEntry(entry); Exm1[3]  = p2p_m100_m200->GetSp2()-Sp;
+   b_p2p_m100_m100->GetEntry(entry); Exm1[4]  = p2p_m100_m100->GetSp2()-Sp;
+   b_p2p_m100_0000->GetEntry(entry); Exm1[5]  = p2p_m100_0000->GetSp2()-Sp;
+   b_p2p_m100_p100->GetEntry(entry); Exm1[6]  = p2p_m100_p100->GetSp2()-Sp;
+   b_p2p_m100_p200->GetEntry(entry); Exm1[7]  = p2p_m100_p200->GetSp2()-Sp;
+   b_p2p_m100_p300->GetEntry(entry); Exm1[8]  = p2p_m100_p300->GetSp2()-Sp;
+   b_p2p_m100_p400->GetEntry(entry); Exm1[9]  = p2p_m100_p400->GetSp2()-Sp;
+   b_p2p_m100_p500->GetEntry(entry); Exm1[10] = p2p_m100_p500->GetSp2()-Sp;
    
-   b_p2p_0000_m500->GetEntry(entry); Ex00[0]  = p2p_0000_m500->GetSp2()-13.26;
-   b_p2p_0000_m400->GetEntry(entry); Ex00[1]  = p2p_0000_m400->GetSp2()-13.26;
-   b_p2p_0000_m300->GetEntry(entry); Ex00[2]  = p2p_0000_m300->GetSp2()-13.26;
-   b_p2p_0000_m200->GetEntry(entry); Ex00[3]  = p2p_0000_m200->GetSp2()-13.26;
-   b_p2p_0000_m100->GetEntry(entry); Ex00[4]  = p2p_0000_m100->GetSp2()-13.26;
-   b_p2p_0000_p100->GetEntry(entry); Ex00[6]  = p2p_0000_p100->GetSp2()-13.26;
-   b_p2p_0000_p200->GetEntry(entry); Ex00[7]  = p2p_0000_p200->GetSp2()-13.26;
-   b_p2p_0000_p300->GetEntry(entry); Ex00[8]  = p2p_0000_p300->GetSp2()-13.26;
-   b_p2p_0000_p400->GetEntry(entry); Ex00[9]  = p2p_0000_p400->GetSp2()-13.26;
-   b_p2p_0000_p500->GetEntry(entry); Ex00[10] = p2p_0000_p500->GetSp2()-13.26;
+   b_p2p_0000_m500->GetEntry(entry); Ex00[0]  = p2p_0000_m500->GetSp2()-Sp;
+   b_p2p_0000_m400->GetEntry(entry); Ex00[1]  = p2p_0000_m400->GetSp2()-Sp;
+   b_p2p_0000_m300->GetEntry(entry); Ex00[2]  = p2p_0000_m300->GetSp2()-Sp;
+   b_p2p_0000_m200->GetEntry(entry); Ex00[3]  = p2p_0000_m200->GetSp2()-Sp;
+   b_p2p_0000_m100->GetEntry(entry); Ex00[4]  = p2p_0000_m100->GetSp2()-Sp;
+   b_p2p_0000_p100->GetEntry(entry); Ex00[6]  = p2p_0000_p100->GetSp2()-Sp;
+   b_p2p_0000_p200->GetEntry(entry); Ex00[7]  = p2p_0000_p200->GetSp2()-Sp;
+   b_p2p_0000_p300->GetEntry(entry); Ex00[8]  = p2p_0000_p300->GetSp2()-Sp;
+   b_p2p_0000_p400->GetEntry(entry); Ex00[9]  = p2p_0000_p400->GetSp2()-Sp;
+   b_p2p_0000_p500->GetEntry(entry); Ex00[10] = p2p_0000_p500->GetSp2()-Sp;
    
-   b_p2p_p100_m500->GetEntry(entry); Exp1[0]  = p2p_p100_m500->GetSp2()-13.26;
-   b_p2p_p100_m400->GetEntry(entry); Exp1[1]  = p2p_p100_m400->GetSp2()-13.26;
-   b_p2p_p100_m300->GetEntry(entry); Exp1[2]  = p2p_p100_m300->GetSp2()-13.26;
-   b_p2p_p100_m200->GetEntry(entry); Exp1[3]  = p2p_p100_m200->GetSp2()-13.26;
-   b_p2p_p100_m100->GetEntry(entry); Exp1[4]  = p2p_p100_m100->GetSp2()-13.26;
-   b_p2p_p100_0000->GetEntry(entry); Exp1[5]  = p2p_p100_0000->GetSp2()-13.26;
-   b_p2p_p100_p100->GetEntry(entry); Exp1[6]  = p2p_p100_p100->GetSp2()-13.26;
-   b_p2p_p100_p200->GetEntry(entry); Exp1[7]  = p2p_p100_p200->GetSp2()-13.26;
-   b_p2p_p100_p300->GetEntry(entry); Exp1[8]  = p2p_p100_p300->GetSp2()-13.26;
-   b_p2p_p100_p400->GetEntry(entry); Exp1[9]  = p2p_p100_p400->GetSp2()-13.26;
-   b_p2p_p100_p500->GetEntry(entry); Exp1[10] = p2p_p100_p500->GetSp2()-13.26;
+   b_p2p_p100_m500->GetEntry(entry); Exp1[0]  = p2p_p100_m500->GetSp2()-Sp;
+   b_p2p_p100_m400->GetEntry(entry); Exp1[1]  = p2p_p100_m400->GetSp2()-Sp;
+   b_p2p_p100_m300->GetEntry(entry); Exp1[2]  = p2p_p100_m300->GetSp2()-Sp;
+   b_p2p_p100_m200->GetEntry(entry); Exp1[3]  = p2p_p100_m200->GetSp2()-Sp;
+   b_p2p_p100_m100->GetEntry(entry); Exp1[4]  = p2p_p100_m100->GetSp2()-Sp;
+   b_p2p_p100_0000->GetEntry(entry); Exp1[5]  = p2p_p100_0000->GetSp2()-Sp;
+   b_p2p_p100_p100->GetEntry(entry); Exp1[6]  = p2p_p100_p100->GetSp2()-Sp;
+   b_p2p_p100_p200->GetEntry(entry); Exp1[7]  = p2p_p100_p200->GetSp2()-Sp;
+   b_p2p_p100_p300->GetEntry(entry); Exp1[8]  = p2p_p100_p300->GetSp2()-Sp;
+   b_p2p_p100_p400->GetEntry(entry); Exp1[9]  = p2p_p100_p400->GetSp2()-Sp;
+   b_p2p_p100_p500->GetEntry(entry); Exp1[10] = p2p_p100_p500->GetSp2()-Sp;
    
-   b_p2p_p200_m500->GetEntry(entry); Exp2[0]  = p2p_p200_m500->GetSp2()-13.26;
-   b_p2p_p200_m400->GetEntry(entry); Exp2[1]  = p2p_p200_m400->GetSp2()-13.26;
-   b_p2p_p200_m300->GetEntry(entry); Exp2[2]  = p2p_p200_m300->GetSp2()-13.26;
-   b_p2p_p200_m200->GetEntry(entry); Exp2[3]  = p2p_p200_m200->GetSp2()-13.26;
-   b_p2p_p200_m100->GetEntry(entry); Exp2[4]  = p2p_p200_m100->GetSp2()-13.26;
-   b_p2p_p200_0000->GetEntry(entry); Exp2[5]  = p2p_p200_0000->GetSp2()-13.26;
-   b_p2p_p200_p100->GetEntry(entry); Exp2[6]  = p2p_p200_p100->GetSp2()-13.26;
-   b_p2p_p200_p200->GetEntry(entry); Exp2[7]  = p2p_p200_p200->GetSp2()-13.26;
-   b_p2p_p200_p300->GetEntry(entry); Exp2[8]  = p2p_p200_p300->GetSp2()-13.26;
-   b_p2p_p200_p400->GetEntry(entry); Exp2[9]  = p2p_p200_p400->GetSp2()-13.26;
-   b_p2p_p200_p500->GetEntry(entry); Exp2[10] = p2p_p200_p500->GetSp2()-13.26;
+   b_p2p_p200_m500->GetEntry(entry); Exp2[0]  = p2p_p200_m500->GetSp2()-Sp;
+   b_p2p_p200_m400->GetEntry(entry); Exp2[1]  = p2p_p200_m400->GetSp2()-Sp;
+   b_p2p_p200_m300->GetEntry(entry); Exp2[2]  = p2p_p200_m300->GetSp2()-Sp;
+   b_p2p_p200_m200->GetEntry(entry); Exp2[3]  = p2p_p200_m200->GetSp2()-Sp;
+   b_p2p_p200_m100->GetEntry(entry); Exp2[4]  = p2p_p200_m100->GetSp2()-Sp;
+   b_p2p_p200_0000->GetEntry(entry); Exp2[5]  = p2p_p200_0000->GetSp2()-Sp;
+   b_p2p_p200_p100->GetEntry(entry); Exp2[6]  = p2p_p200_p100->GetSp2()-Sp;
+   b_p2p_p200_p200->GetEntry(entry); Exp2[7]  = p2p_p200_p200->GetSp2()-Sp;
+   b_p2p_p200_p300->GetEntry(entry); Exp2[8]  = p2p_p200_p300->GetSp2()-Sp;
+   b_p2p_p200_p400->GetEntry(entry); Exp2[9]  = p2p_p200_p400->GetSp2()-Sp;
+   b_p2p_p200_p500->GetEntry(entry); Exp2[10] = p2p_p200_p500->GetSp2()-Sp;
    
-   b_p2p_p300_m500->GetEntry(entry); Exp3[0]  = p2p_p300_m500->GetSp2()-13.26;
-   b_p2p_p300_m400->GetEntry(entry); Exp3[1]  = p2p_p300_m400->GetSp2()-13.26;
-   b_p2p_p300_m300->GetEntry(entry); Exp3[2]  = p2p_p300_m300->GetSp2()-13.26;
-   b_p2p_p300_m200->GetEntry(entry); Exp3[3]  = p2p_p300_m200->GetSp2()-13.26;
-   b_p2p_p300_m100->GetEntry(entry); Exp3[4]  = p2p_p300_m100->GetSp2()-13.26;
-   b_p2p_p300_0000->GetEntry(entry); Exp3[5]  = p2p_p300_0000->GetSp2()-13.26;
-   b_p2p_p300_p100->GetEntry(entry); Exp3[6]  = p2p_p300_p100->GetSp2()-13.26;
-   b_p2p_p300_p200->GetEntry(entry); Exp3[7]  = p2p_p300_p200->GetSp2()-13.26;
-   b_p2p_p300_p300->GetEntry(entry); Exp3[8]  = p2p_p300_p300->GetSp2()-13.26;
-   b_p2p_p300_p400->GetEntry(entry); Exp3[9]  = p2p_p300_p400->GetSp2()-13.26;
-   b_p2p_p300_p500->GetEntry(entry); Exp3[10] = p2p_p300_p500->GetSp2()-13.26;
+   b_p2p_p300_m500->GetEntry(entry); Exp3[0]  = p2p_p300_m500->GetSp2()-Sp;
+   b_p2p_p300_m400->GetEntry(entry); Exp3[1]  = p2p_p300_m400->GetSp2()-Sp;
+   b_p2p_p300_m300->GetEntry(entry); Exp3[2]  = p2p_p300_m300->GetSp2()-Sp;
+   b_p2p_p300_m200->GetEntry(entry); Exp3[3]  = p2p_p300_m200->GetSp2()-Sp;
+   b_p2p_p300_m100->GetEntry(entry); Exp3[4]  = p2p_p300_m100->GetSp2()-Sp;
+   b_p2p_p300_0000->GetEntry(entry); Exp3[5]  = p2p_p300_0000->GetSp2()-Sp;
+   b_p2p_p300_p100->GetEntry(entry); Exp3[6]  = p2p_p300_p100->GetSp2()-Sp;
+   b_p2p_p300_p200->GetEntry(entry); Exp3[7]  = p2p_p300_p200->GetSp2()-Sp;
+   b_p2p_p300_p300->GetEntry(entry); Exp3[8]  = p2p_p300_p300->GetSp2()-Sp;
+   b_p2p_p300_p400->GetEntry(entry); Exp3[9]  = p2p_p300_p400->GetSp2()-Sp;
+   b_p2p_p300_p500->GetEntry(entry); Exp3[10] = p2p_p300_p500->GetSp2()-Sp;
    
-   b_p2p_p400_m500->GetEntry(entry); Exp4[0]  = p2p_p400_m500->GetSp2()-13.26;
-   b_p2p_p400_m400->GetEntry(entry); Exp4[1]  = p2p_p400_m400->GetSp2()-13.26;
-   b_p2p_p400_m300->GetEntry(entry); Exp4[2]  = p2p_p400_m300->GetSp2()-13.26;
-   b_p2p_p400_m200->GetEntry(entry); Exp4[3]  = p2p_p400_m200->GetSp2()-13.26;
-   b_p2p_p400_m100->GetEntry(entry); Exp4[4]  = p2p_p400_m100->GetSp2()-13.26;
-   b_p2p_p400_0000->GetEntry(entry); Exp4[5]  = p2p_p400_0000->GetSp2()-13.26;
-   b_p2p_p400_p100->GetEntry(entry); Exp4[6]  = p2p_p400_p100->GetSp2()-13.26;
-   b_p2p_p400_p200->GetEntry(entry); Exp4[7]  = p2p_p400_p200->GetSp2()-13.26;
-   b_p2p_p400_p300->GetEntry(entry); Exp4[8]  = p2p_p400_p300->GetSp2()-13.26;
-   b_p2p_p400_p400->GetEntry(entry); Exp4[9]  = p2p_p400_p400->GetSp2()-13.26;
-   b_p2p_p400_p500->GetEntry(entry); Exp4[10] = p2p_p400_p500->GetSp2()-13.26;
+   b_p2p_p400_m500->GetEntry(entry); Exp4[0]  = p2p_p400_m500->GetSp2()-Sp;
+   b_p2p_p400_m400->GetEntry(entry); Exp4[1]  = p2p_p400_m400->GetSp2()-Sp;
+   b_p2p_p400_m300->GetEntry(entry); Exp4[2]  = p2p_p400_m300->GetSp2()-Sp;
+   b_p2p_p400_m200->GetEntry(entry); Exp4[3]  = p2p_p400_m200->GetSp2()-Sp;
+   b_p2p_p400_m100->GetEntry(entry); Exp4[4]  = p2p_p400_m100->GetSp2()-Sp;
+   b_p2p_p400_0000->GetEntry(entry); Exp4[5]  = p2p_p400_0000->GetSp2()-Sp;
+   b_p2p_p400_p100->GetEntry(entry); Exp4[6]  = p2p_p400_p100->GetSp2()-Sp;
+   b_p2p_p400_p200->GetEntry(entry); Exp4[7]  = p2p_p400_p200->GetSp2()-Sp;
+   b_p2p_p400_p300->GetEntry(entry); Exp4[8]  = p2p_p400_p300->GetSp2()-Sp;
+   b_p2p_p400_p400->GetEntry(entry); Exp4[9]  = p2p_p400_p400->GetSp2()-Sp;
+   b_p2p_p400_p500->GetEntry(entry); Exp4[10] = p2p_p400_p500->GetSp2()-Sp;
    
-   b_p2p_p500_m500->GetEntry(entry); Exp5[0]  = p2p_p500_m500->GetSp2()-13.26;
-   b_p2p_p500_m400->GetEntry(entry); Exp5[1]  = p2p_p500_m400->GetSp2()-13.26;
-   b_p2p_p500_m300->GetEntry(entry); Exp5[2]  = p2p_p500_m300->GetSp2()-13.26;
-   b_p2p_p500_m200->GetEntry(entry); Exp5[3]  = p2p_p500_m200->GetSp2()-13.26;
-   b_p2p_p500_m100->GetEntry(entry); Exp5[4]  = p2p_p500_m100->GetSp2()-13.26;
-   b_p2p_p500_0000->GetEntry(entry); Exp5[5]  = p2p_p500_0000->GetSp2()-13.26;
-   b_p2p_p500_p100->GetEntry(entry); Exp5[6]  = p2p_p500_p100->GetSp2()-13.26;
-   b_p2p_p500_p200->GetEntry(entry); Exp5[7]  = p2p_p500_p200->GetSp2()-13.26;
-   b_p2p_p500_p300->GetEntry(entry); Exp5[8]  = p2p_p500_p300->GetSp2()-13.26;
-   b_p2p_p500_p400->GetEntry(entry); Exp5[9]  = p2p_p500_p400->GetSp2()-13.26;
-   b_p2p_p500_p500->GetEntry(entry); Exp5[10] = p2p_p500_p500->GetSp2()-13.26;
+   b_p2p_p500_m500->GetEntry(entry); Exp5[0]  = p2p_p500_m500->GetSp2()-Sp;
+   b_p2p_p500_m400->GetEntry(entry); Exp5[1]  = p2p_p500_m400->GetSp2()-Sp;
+   b_p2p_p500_m300->GetEntry(entry); Exp5[2]  = p2p_p500_m300->GetSp2()-Sp;
+   b_p2p_p500_m200->GetEntry(entry); Exp5[3]  = p2p_p500_m200->GetSp2()-Sp;
+   b_p2p_p500_m100->GetEntry(entry); Exp5[4]  = p2p_p500_m100->GetSp2()-Sp;
+   b_p2p_p500_0000->GetEntry(entry); Exp5[5]  = p2p_p500_0000->GetSp2()-Sp;
+   b_p2p_p500_p100->GetEntry(entry); Exp5[6]  = p2p_p500_p100->GetSp2()-Sp;
+   b_p2p_p500_p200->GetEntry(entry); Exp5[7]  = p2p_p500_p200->GetSp2()-Sp;
+   b_p2p_p500_p300->GetEntry(entry); Exp5[8]  = p2p_p500_p300->GetSp2()-Sp;
+   b_p2p_p500_p400->GetEntry(entry); Exp5[9]  = p2p_p500_p400->GetSp2()-Sp;
+   b_p2p_p500_p500->GetEntry(entry); Exp5[10] = p2p_p500_p500->GetSp2()-Sp;
    
    //______________________________________________________________   
    saveFile->cd(); //set focus on this file

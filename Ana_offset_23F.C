@@ -47,122 +47,6 @@
 /**/
 //======================================================== analysis
 
-//TCut central = "TMath::Abs((p2p_0000_0000.fRecoilL.Theta()+p2p_0000_0000.fRecoilR.Theta())*TMath::RadToDeg()-86.5)<2.5";
-//TCut side = "TMath::Abs((p2p_0000_0000.fRecoilL.Theta()+p2p_0000_0000.fRecoilR.Theta())*TMath::RadToDeg()-86.5)<5" + !central;
-//TCut vertexZ = "TMath::Abs(beamZ.fAverage-10)<50";
-/*
-TCut central = "TMath::Abs(theta1+theta2-86.5)<2.5";
-TCut side = "TMath::Abs(theta1+theta2-86.5)<5" + !central;
-TCut vertexZ = "TMath::Abs(vertexZ-10)<50";
-
-TCut gate  = central + vertexZ;
-TCut gatec = side + vertexZ;
-
-Int_t mBin, mPeak;
-
-TString plotStr;
-TString pmi, pmj;
-
-TString getBinStr, getPeakStr, subStr;
-
-
-cScript->cd(2);
-
-Int_t maxPeak = 0;
-
-for( Int_t i = -5; i <= 5; i++){
-        for( Int_t j = -5; j <= 5; j++){
-                Int_t  ni = TMath::Abs(i);
-                Int_t  nj = TMath::Abs(j);
-                
-                if( i < 0 ) {
-                        pmi = "m";
-                }else if( i == 0){
-                        pmi = "0";
-                        ni = 0;
-                }else{
-                        pmi = "p";
-                }
-                
-                if( j < 0 ) {
-                        pmj = "m";
-                }else if( j == 0){
-                        pmj = "0";
-                        nj = 0;
-                }else{
-                        pmj = "p";
-                }
-                
-                //if( i == 0 && j == 0) continue;
-                
-                //plotStr.Form("p2p_%1s%03d_%1s%03d.fSp>>h%1s%d%1s%d(60, -30, 30)", pmi.Data(), ni*100 , pmj.Data(), nj*100, pmi.Data(), ni, pmj.Data(), nj);
-                //printf("%30s    ", plotStr.Data());
-                //tree->Draw(plotStr, gate);
-                //
-                //plotStr.Form("p2p_%1s%03d_%1s%03d.fSp>>h%1s%d%1s%dc(60, -30, 30)", pmi.Data(), ni*100 , pmj.Data(), nj*100, pmi.Data(), ni, pmj.Data(), nj);
-                //tree->Draw(plotStr, gatec);
-                
-                plotStr.Form("Ex%1s%d[%d]>>h%1s%d%1s%d(21, -10.5, 10.5)", pmi.Data(), ni , j+5, pmi.Data(), ni, pmj.Data(), nj);
-                printf("%38s    ", plotStr.Data());
-                tree->Draw(plotStr, gate);
-                
-                plotStr.Form("Ex%1s%d[%d]>>h%1s%d%1s%dc(21, -10.5, 10.5)", pmi.Data(), ni , j+5, pmi.Data(), ni, pmj.Data(), nj);
-                tree->Draw(plotStr, gatec);
-                
-                
-                subStr.Form("TH1F* p%1s%d%1s%d = new TH1F(*h%1s%d%1s%d - *h%1s%d%1s%dc)", pmi.Data(), ni, pmj.Data(), nj, pmi.Data(), ni, pmj.Data(), nj, pmi.Data(), ni, pmj.Data(), nj);
-                gROOT->ProcessLine(subStr.Data());
-                
-                getBinStr.Form("mBin = p%1s%d%1s%d->GetMaximumBin();", pmi.Data(), ni, pmj.Data(), nj);
-                gROOT->ProcessLine(getBinStr.Data());
-
-                getPeakStr.Form("mPeak = p%1s%d%1s%d->GetBinContent(mBin);", pmi.Data(), ni, pmj.Data(), nj);
-                //getPeakStr.Form("mPeak = p%1s%d%1s%d->Integral();", pmi.Data(), ni, pmj.Data(), nj);
-                gROOT->ProcessLine(getPeakStr.Data());
-                if( mPeak > maxPeak) maxPeak = mPeak;
-                h2->Fill(i/10.,j/10. , mPeak); 
-                printf("%2d, %2d : Bin:%3d, Peak:%3d \n", i, j, mBin, mPeak);
-        }
-}
-
-for( Int_t i = -5; i <= 5; i++){
-        for( Int_t j = -5; j <= 5; j++){
-                Int_t  ni = TMath::Abs(i);
-                Int_t  nj = TMath::Abs(j);
-                
-                if( i < 0 ) {
-                        pmi = "m";
-                }else if( i == 0){
-                        pmi = "0";
-                        ni = 0;
-                }else{
-                        pmi = "p";
-                }
-                
-                if( j < 0 ) {
-                        pmj = "m";
-                }else if( j == 0){
-                        pmj = "0";
-                        nj = 0;
-                }else{
-                        pmj = "p";
-                }
-                
-                cScript2->cd(11*(10-(j+5))+ (i+5)+1);
-                
-                //plotStr.Form("p%1s%d%1s%d->SetMaximum(%d); p%1s%d%1s%d->SetMinimum(%d); p%1s%d%1s%d->Draw()", pmi.Data(), ni, pmj.Data(), nj, maxPeak*1.1, pmi.Data(), ni, pmj.Data(), nj, 0, pmi.Data(), ni, pmj.Data(), nj);
-                plotStr.Form("p%1s%d%1s%d->SetMaximum(%d);  p%1s%d%1s%d->Draw()", pmi.Data(), ni, pmj.Data(), nj, maxPeak + 100, pmi.Data(), ni, pmj.Data(), nj);
-                gROOT->ProcessLine(plotStr.Data());
-        }
-}
-
-cScript->cd(1);
-h2->Draw("colz");
-
-cScript->cd(2);
-
-/**/
-
 TCut cut24o = "TMath::Abs(pidAOQ*8-24)<0.5";
 TCut cut23o = "TMath::Abs(pidAOQ*8-23)<0.5";
 TCut cut22o = "TMath::Abs(pidAOQ*8-22)<0.5";
@@ -194,8 +78,8 @@ Int_t mBin2=0, mPeak2=0;
 Int_t mBin3=0, mPeak3=0;
 
 cScript->cd(1);
-tree->Draw("pidAOQ*8>>hA( 80,18,26)", gateVertexZ);
-tree->Draw("pidAOQ*8>>hAg(80,18,26)", gateVertexZc, "same");
+tree->Draw("pidAOQ*8>>hA( 80,16,24)", gateVertexZ);
+tree->Draw("pidAOQ*8>>hAg(80,16,24)", gateVertexZc, "same");
 
 TString plotStr;
 TString pmi, pmj;

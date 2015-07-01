@@ -1,7 +1,7 @@
 
 void BeamFraction_v775() {
-   const char* rootfile="23F_run23_0603.root";
-   TString beam = "23F";
+   const char* rootfile="25F_optics.root";
+   TString beam = "25F";
    Bool_t allentry  = 1;
    Int_t firstEntry = 0;
    Int_t nEntries   =5000000;

@@ -75,6 +75,9 @@ Bool_t Selector_Post::Process(Long64_t entry)
    Terminate();
    return kTRUE;
    }/**/
+   
+   //Double_t Sp = 13.26; //23F
+   Double_t Sp = 14.43; //25F
 
    //______________________________________________________________ p2p
    if( b_p2p ) {
@@ -86,6 +89,11 @@ Bool_t Selector_Post::Process(Long64_t entry)
 
 
       kMomt = p2p->GetResidual()->P();
+      kt = p2p->GetResidual()->Pt();
+      thetak = (p2p->GetResidual()->Theta())*TMath::RadToDeg();
+      phik = (p2p->GetResidual()->Phi())*TMath::RadToDeg();
+      kp = kMomt*TMath::Cos(thetak*TMath::DegToRad());
+      kE = p2p->GetResidual()->E();
       //if( kMomt > 2000 )  {return kTRUE;}
 
       theta1 = p2p->GetRecoilL()->Theta()*TMath::RadToDeg();
@@ -102,12 +110,10 @@ Bool_t Selector_Post::Process(Long64_t entry)
       }
       
       //b_p2p_Lab->GetEntry(entry);
-      thetaR = (p2p->GetResidual()->Theta())*TMath::RadToDeg();
-      phiR = (p2p->GetResidual()->Phi())*TMath::RadToDeg();
 
 
-      Ex = p2p->GetSp2()-13.26;
-      ExS = p2p->GetSp()-13.26;
+      Ex = p2p->GetSp2()-Sp;
+      ExS = p2p->GetSp()-Sp;
       //if( TMath::IsNaN(ExS) && TMath::IsNaN(Ex) ) {return kTRUE;}
       if( TMath::IsNaN(Ex) ) {return kTRUE;}
       //printf("%f, %f \n", s1x, Ex);
@@ -126,7 +132,7 @@ Bool_t Selector_Post::Process(Long64_t entry)
       theta2c = p2p_c->GetRecoilR()->Theta()*TMath::RadToDeg();
       phi2c = p2p_c->GetRecoilR()->Phi()*TMath::RadToDeg();
 
-      Exc = p2p_c->GetSp2()-13.26;
+      Exc = p2p_c->GetSp2()-Sp;
       kMomtc = p2p_c->GetResidual()->P();
    }
 
@@ -283,9 +289,9 @@ Bool_t Selector_Post::Process(Long64_t entry)
 
       tTgt = tFH9 + (tFH9-tF3)*10865./74075.;
 
-      tof_S0D = tS0D - tTgt;
-      tofTplaL = tTplaL - tTgt;
-      tofTplaR = tTplaR - tTgt;
+      //tof_S0D = tS0D - tTgt;
+      //tofTplaL = tTplaL - tTgt;
+      //tofTplaR = tTplaR - tTgt;
    }
 
 
@@ -474,9 +480,11 @@ Bool_t Selector_Post::Process(Long64_t entry)
 
    //______________________________________________________________ correction
    if( b_s1_c){
-      b_s1_c->GetEntry(entry);
-      s1xc = TMath::QuietNaN();
-      s1xc = s1_c->GetX();
+      //b_s1_c->GetEntry(entry);
+      //s1xc = TMath::QuietNaN();
+      //s1xc = s1_c->GetX();
+      
+      
    }
 
    if( b_tof_c){
@@ -486,9 +494,12 @@ Bool_t Selector_Post::Process(Long64_t entry)
    
       //FLc = 299.792458 * betac * tofc;
    }
-
-   //pidAOQc = 0.05327*tofS1 +(-0.0021946)*s1xc +(1.64e-6)*s1xc*s1xc + 0.75409;
-   pidAOQc = pidAOQ;
+   //23F
+   pidAOQc = 0.05327*tofS1 +(-0.0021946)*s1x +(1.64e-6)*s1x*s1x + 0.75409;
+   
+   //25F
+   //pidAOQc = (0.093861)*tofS1 +(-0.001992)*s1x +(-4.503e-6)*s1x*s1x -0.758;
+   //pidAOQc = pidAOQ;
    pidZc = pidZ;
 
    /*         

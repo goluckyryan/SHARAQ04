@@ -55,6 +55,8 @@ public :
    
    
    Double_t pidAOQ;
+   Double_t pidZ;
+   Double_t tofS1;
    Double_t vertexZ;
 
    // Declaration of leaf types
@@ -835,6 +837,8 @@ void Selector_offset::Init(TTree *tree)
    
    
    pidAOQ = TMath::QuietNaN();
+   pidZ = TMath::QuietNaN();
+   tofS1 = TMath::QuietNaN();
    vertexZ = TMath::QuietNaN();
    
    for( Int_t i = 0; i < 11; i++){
@@ -852,6 +856,8 @@ void Selector_offset::Init(TTree *tree)
    }
    
    newTree->Branch("pidAOQ", &pidAOQ, "pidAOQ/D");
+   newTree->Branch("pidZ", &pidZ, "pidZ/D");
+   newTree->Branch("tofS1", &tofS1, "tofS1/D");
    newTree->Branch("vertexZ", &vertexZ, "vertexZ/D");
    
    newTree->Branch("Exm5", Exm5, "Exm5[11]/D");

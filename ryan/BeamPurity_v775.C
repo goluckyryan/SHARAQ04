@@ -10,12 +10,12 @@ void BeamPurity_v775() {
    
 //############################################################################   
    //const char* rootfile="PrimaryData/phys22Optics.root";
-   const char* rootfile="23F_run23_0603.root";
-   TString beam = "23F";
+   const char* rootfile="25F_optics.root";
+   TString beam = "25F";
    Bool_t allentry  = 1;
    Int_t firstEntry = 0;
    Int_t nEntries=600000;
-   Int_t runRange[2] = {1, 3000};
+   Int_t runRange[2] = {1, 9000};
    
             //for [23F,  318.0, 770.0, 323.0, 1000.0]
          //[22O,  302.0, 700.0, 306.0,  900.0]

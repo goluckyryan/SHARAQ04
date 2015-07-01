@@ -1,6 +1,5 @@
 aliases:
   - &beamZ      0.
-  - &useTable   0.
 #============== PROCESSORS     =============================
 Processor:
   - name: tpla_tof
@@ -39,7 +38,7 @@ Processor:
       UseIncidentAngleCorrection:   1   #s0AB
       UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1   #store in p2p.fRecoilL
-      UseTable: *useTable
+      UseTable: 0
       TableFile: prm/tof2ke.dat
         
   - name: Recoil_R
@@ -58,7 +57,7 @@ Processor:
       UseIncidentAngleCorrection:   1
       UsePolarizedMagnetCorrection: 1
       OutputTransparency:           1
-      UseTable: *useTable
+      UseTable: 0
       TableFile: prm/tof2ke.dat
 
   - name: proc_p2p
@@ -67,6 +66,57 @@ Processor:
       OutputCollection:   p2p
       RecoilL:            recoil_L
       RecoilR:            recoil_R
+      PPAC:               ppac
+      PPACDetID:          0
+      BeamParameter:      beam  # declare before and elsewhere
+      ResidualFrame:      0    # in Residual frame
+      OutputTransparency: 0
+
+
+  - name: Recoil_L_ke
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_L_ke
+      TrackCollection:  smwdc_L
+      TOFCollection:    tofL
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             0           # 0 = left, !0 = right
+      BeamZ:            *beamZ
+      AngleShift:       0.00524
+      UseReactionPointCorrection:   1   #s0? s0; vertex, 
+      UseIncidentAngleCorrection:   1   #s0AB
+      UsePolarizedMagnetCorrection: 1
+      OutputTransparency:           1   #store in p2p.fRecoilL
+      UseTable: 1
+      TableFile: prm/tof2ke.dat
+        
+  - name: Recoil_R_ke
+    type: art::sh04::TRecoilProcessor
+    parameter:
+      OutputCollection: recoil_R_ke
+      TrackCollection:  smwdc_R
+      TOFCollection:    tofR
+      S0Track:          S0img
+      Vertex:           vertex
+      Geometry:         SMWDC_geometry
+      Side:             1
+      BeamZ:            *beamZ
+      AngleShift:       -0.00524
+      UseReactionPointCorrection:   1
+      UseIncidentAngleCorrection:   1
+      UsePolarizedMagnetCorrection: 1
+      OutputTransparency:           1
+      UseTable: 1
+      TableFile: prm/tof2ke.dat
+
+  - name: proc_p2p_ke
+    type: art::sh04::TP2PKinematicsProcessor
+    parameter:
+      OutputCollection:   p2p_ke
+      RecoilL:            recoil_L_ke
+      RecoilR:            recoil_R_ke
       PPAC:               ppac
       PPACDetID:          0
       BeamParameter:      beam  # declare before and elsewhere

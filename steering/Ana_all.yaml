@@ -1,12 +1,12 @@
 aliases:
 # beware to overwrite !!!
-  - &output 23F_timeoffset_58.9_59.7.root
+  - &output 25F_ppcoin_r7_run0015_0630.root
  
 #  - &beamprm prm/kinematics/proton.yaml
 #  - &beamprm prm/kinematics/14O.yaml  
 #  - &beamprm prm/kinematics/22O.yaml
-  - &beamprm prm/kinematics/23F.yaml
-#  - &beamprm prm/kinematics/25F.yaml
+#  - &beamprm prm/kinematics/23F.yaml
+  - &beamprm prm/kinematics/25F.yaml
 #===========================================================
 Processor:
 #=============  DATA              ==========================
@@ -15,7 +15,7 @@ Processor:
 #  - include: RunsProtonUp.yaml
 #  - include: RunsProtonDown.yaml
 #----------------------------------
-  - include: RunsO22.yaml
+#  - include: RunsO22.yaml
 #  - include: RunsO22_single.yaml
 #  - include: RunsO22_clean.yaml
 #  - include: RunsO22_optics.yaml
@@ -26,7 +26,7 @@ Processor:
 #  - include: RunsO14_Others.yaml
 #----------------------------------
 #  - include: RunsO24.yaml
-#  - include: RunsO24_single.yaml
+  - include: RunsO24_single.yaml
 #  - include: RunsO24_optics.yaml
 #  - include: RunsO24_up.yaml
 #  - include: RunsO24_down.yaml
@@ -43,7 +43,7 @@ Processor:
   - include: plastic_V1190_F3.yaml         # no branch output
   - include: plastic_V1190_FH9.yaml
   - include: plastic_tof_US.yaml 
-#  - include: ppac_old.yaml                 # required for 14O and 24O run
+  - include: ppac_old.yaml                 # required for 14O and 24O run
 #  - include: dc91.yaml
 #  - include: dc91_track.yaml
   - include: plastic_V775.yaml             # include tof_DS             
@@ -53,14 +53,14 @@ Processor:
 
 ########----------------- PID
 #  - include: Gate_PID_220Orun_v1190.yaml
-  - include: Gate_PID_22Orun.yaml
+#  - include: Gate_PID_22Orun.yaml
 #  - include: Gate_PID_14Orun.yaml
-#  - include: Gate_PID_24Orun.yaml
+  - include: Gate_PID_24Orun.yaml
 
-  - include: Gate_stop_PID_23F.yaml 
+#  - include: Gate_stop_PID_23F.yaml 
 #  - include: Gate_stop_PID_22O.yaml
 #  - include: Gate_stop_PID_14O.yaml
-#  - include: Gate_stop_PID_25F.yaml 
+  - include: Gate_stop_PID_25F.yaml 
 
 ########----------------- S0img  
   - include: dcx1x2_timeRef.yaml           # required for dcx1 and dcx2
@@ -87,8 +87,8 @@ Processor:
 
 ########----------------- D1 analysis
 
-  - include: D1_analysis.yaml   # require dcS0D, S0img
-#  - include: D1_analysis_25F.yaml   # require dcS0D, S0img
+#  - include: D1_analysis.yaml   # require dcS0D, S0img
+  - include: D1_analysis_25F.yaml   # require dcS0D, S0img
 
 #  - include: s1_time_ref.yaml              # required
 #  - include: nyoki.yaml                    # require plastic_V775 for tof, and s1_time_ref
@@ -110,10 +110,11 @@ Processor:
   
   - include: smwdc_geo.yaml
   - include: vertex.yaml
-#  - include: recoil.yaml                   # set beamZ, angle correction
+  - include: recoil.yaml                   # set beamZ, angle correction
+#  - include: recoil_keTable.yaml     
 #  - include: beamZ.yaml
 #  - include: recoil_carbon.yaml
-  - include: recoil_multiOffset.yaml
+#  - include: recoil_multiOffset.yaml
 ##  - include: Gate_PIDdownstream_polygon.yaml
 #  - include: Gate_PIDdownstream_rectangle.yaml
 
