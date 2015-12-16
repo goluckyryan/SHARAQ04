@@ -76,8 +76,8 @@ Bool_t Selector_Post::Process(Long64_t entry)
    return kTRUE;
    }/**/
    
-   //Double_t Sp = 13.26; //23F
-   Double_t Sp = 14.43; //25F
+   //Double_t Sp0 = 13.26; //23F
+   Double_t Sp0 = 14.43; //25F
 
    //______________________________________________________________ p2p
    if( b_p2p ) {
@@ -112,10 +112,10 @@ Bool_t Selector_Post::Process(Long64_t entry)
       //b_p2p_Lab->GetEntry(entry);
 
 
-      Ex = p2p->GetSp2()-Sp;
-      ExS = p2p->GetSp()-Sp;
+      Ex = p2p->GetSp2()-Sp0;
+      ExS = p2p->GetSp()-Sp0;
       //if( TMath::IsNaN(ExS) && TMath::IsNaN(Ex) ) {return kTRUE;}
-      if( TMath::IsNaN(Ex) ) {return kTRUE;}
+      //if( TMath::IsNaN(Ex) ) {return kTRUE;}
       //printf("%f, %f \n", s1x, Ex);
    }
    
@@ -137,8 +137,8 @@ Bool_t Selector_Post::Process(Long64_t entry)
    }
 
    /**///______________________________________________________________ runNum
-   //b_eventheader->GetEntry(entry);
-   //runNum = eventheader->GetRunNumber();
+   b_eventheader->GetEntry(entry);
+   runNum = eventheader->GetRunNumber();
 
    //______________________________________________________________ conReg
    if( b_coinReg){
@@ -237,6 +237,14 @@ Bool_t Selector_Post::Process(Long64_t entry)
 
    }
 
+   /**///____________________________________________________________ ppac
+   ppacX = 0;
+   if ( b_ppac) {
+      b_ppac->GetEntry(entry,0);
+      for( Int_t p = 0; p < ppac->GetEntriesFast(); p++){
+         ppacX = ((art::TPPACData*) ppac->At(p))->GetX();
+      }
+   }
 
    /**/ ///______________________________________________________________ time, charge and TOF
    // This will slow the process
@@ -331,13 +339,13 @@ Bool_t Selector_Post::Process(Long64_t entry)
       }
    }
 
-   /**///______________________________________________________________ tofS1
+   /**///______________________________________________________________ tofS0DS1
    // this will slow little bit.
    if( b_tof_s1){
       b_tof_s1->GetEntry(entry);
-      tofS1 = TMath::QuietNaN();
+      tofS0DS1 = TMath::QuietNaN();
       for( Int_t p = 0; p < tof_s1->GetEntriesFast(); p++){
-         tofS1 = ((art::TTimingChargeData*)tof_s1->At(p))->GetTiming();
+         tofS0DS1 = ((art::TTimingChargeData*)tof_s1->At(p))->GetTiming();
       }
    }
    ////______________________________________________________________ S0img
@@ -365,6 +373,25 @@ Bool_t Selector_Post::Process(Long64_t entry)
          s0dy = ((art::TTrack*)((art::TMWDCTrackingResult*)dcs0d->At(p))->GetTrack())->GetY();
       }   
    }
+   ////______________________________________________________________ beam
+   if( b_beamZ){
+      b_beamZ->GetEntry(entry);
+      beam = TMath::QuietNaN();
+      for( Int_t p = 0; p < beamZ->GetEntriesFast(); p++){
+         beam = ((art::sh04::TBeamZ*)beamZ->At(p))->GetAverage();
+         //printf(" beamAvg: %7f, ", beam);
+         if( TMath::IsNaN(beam)){
+            beam = ((art::sh04::TBeamZ*)beamZ->At(p))->GetL();
+            //printf(" beamL: %7f, ", beam);
+         }
+         
+         if( TMath::IsNaN(beam)){
+            beam = ((art::sh04::TBeamZ*)beamZ->At(p))->GetR();
+            //printf(" beamR: %7f, ", beam);
+         }
+      }
+   }
+
 
    ////______________________________________________________________ vertex Z
 
@@ -376,6 +403,8 @@ Bool_t Selector_Post::Process(Long64_t entry)
       }
       //if( TMath::Abs(vertexZ-10)>40 ) {return kTRUE;}
    }
+   
+   //printf(" | beam: %7f, vertexZ: %7f \n", beam, vertexZ);
 
    /*///______________________________________________________________ MWDC-L
    if ( b_smwdc_L){
@@ -457,25 +486,6 @@ Bool_t Selector_Post::Process(Long64_t entry)
       brho    = pid_s1->GetBrho();
       pidZ    = pid_s1->GetZ();
       
-      //Double_t alpha = 299.792458/931.5* brhoc/ pidAOQc;
-      
-      //betac = alpha / TMath::Sqrt(1 + alpha*alpha);
-      
-      //Double_t nyokiT = TMath::QuietNaN();
-      //b_nyoki_zt->GetEntry(entry);
-      //pidZc = TMath::QuietNaN();
-      //nyokiID = -1;
-      //for( Int_t p = 0; p < nyoki_zt->GetEntriesFast(); p++){
-      //   pidZc = ((art::TTimingChargeData*)nyoki_zt->At(p))->GetCharge() ;
-      //   nyokiID = ((art::TTimingChargeData*)nyoki_zt->At(p))->GetAuxID() ;
-      //   //if ( nyokiT < -270 || nyokiT > -210) nyokiT = TMath::QuietNaN();
-      //}
-      
-      //tofTgtS1 = nyokiT - tTgt + 28.5;
-      
-      //if( TMath::IsNaN(pidAOQ) ) {return kTRUE;}
-      //if( pidZ<5 ) {return kTRUE;}
-      
    }
 
    //______________________________________________________________ correction
@@ -483,8 +493,6 @@ Bool_t Selector_Post::Process(Long64_t entry)
       //b_s1_c->GetEntry(entry);
       //s1xc = TMath::QuietNaN();
       //s1xc = s1_c->GetX();
-      
-      
    }
 
    if( b_tof_c){
@@ -494,17 +502,24 @@ Bool_t Selector_Post::Process(Long64_t entry)
    
       //FLc = 299.792458 * betac * tofc;
    }
-   //23F
-   pidAOQc = 0.05327*tofS1 +(-0.0021946)*s1x +(1.64e-6)*s1x*s1x + 0.75409;
    
-   //25F
-   //pidAOQc = (0.093861)*tofS1 +(-0.001992)*s1x +(-4.503e-6)*s1x*s1x -0.758;
-   //pidAOQc = pidAOQ;
-   pidZc = pidZ;
+   tofc = tofS0DS1;
+   s1xc = (s1x + (-0.004874) * (-26.6) * s0dx) / (1 + (-0.004874) * s0dx);
+   
+   //===== 23F
+   if( Sp0 == 13.26 ){
+      pidAOQ = 0.05327*tofc +(-0.0021946)*s1xc +(1.64e-6)*s1xc*s1xc + 0.75409;
+   }//const Double_t aoq = aoq_pre;
+   
+   //===== 25F
+   if( Sp0 == 14.43){
+      Double_t pidAOQ_p = 0.05327*tofc +(-0.0021946)*s1xc +(1.64e-6)*s1xc*s1xc + 0.75409;
+      pidAOQ = 1.37253 - 0.0402106*tofc + 1.05522*pidAOQ_p;
+   }
 
    /*         
    FL = 6290.4 + (-0.45172) * s1x + 3.021347e-4*s1x*s1x;
-   beta = FL / 299.792458 / tofS1[0];
+   beta = FL / 299.792458 / tofS0DS1[0];
    Double_t gamma = 1/TMath::Sqrt(1 - beta*beta);
    brho = 6.5269 * (1. + s1x / (-1200));
    pidZ = pidZc;

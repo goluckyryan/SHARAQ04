@@ -1,7 +1,9 @@
 void deleteSegBranch(){
    
-   const char* rootfile="PrimaryData/phys25F_multiOffset.root";
-   const char* savefile="PrimaryData/phys25F_multiOffset_trim.root";
+   //const char* rootfile="PrimaryData/phys25F_multiOffset.root";
+   //const char* savefile="PrimaryData/phys25F_multiOffset_trim.root";
+   const char* rootfile="25F_ppcoin_r14_0720_noCorr.root";
+   const char* savefile="25F_ppcoin_r14_core.root";
    
 //==================================================      
 	Bool_t abort= 0;
@@ -12,6 +14,7 @@ void deleteSegBranch(){
 
 //------ Get Branch name and onoff
    const Int_t nBranch = tree->GetNbranches(); 
+   printf(" number of Branches = %d \n", nBranch);
    TObjArray * listBranch = tree->GetListOfBranches();
    TString *BranchName = new TString[nBranch];
    Int_t  * BranchSwitch = new Int_t[nBranch];
@@ -22,16 +25,16 @@ void deleteSegBranch(){
       onoff.ReadLine(cin);
       if ( onoff == "y" ) {
          BranchSwitch[i] = 1;
-      }else if (onoff = "a"){
+      }else if (onoff == "a"){
       	printf(" ========== abort! \n");
       	abort = 1;
       	break;
-      }else{
+      }else if (onoff == "n"){
          BranchSwitch[i] = 0;
       }
    }
    
-   if ( aboor == 0 ){
+   if ( abort == 0 ){
 		tree->SetBranchStatus("*",0);
 		for( Int_t i = 0; i < nBranch ; i++){
 		   tree->SetBranchStatus(BranchName[i],BranchSwitch[i]);

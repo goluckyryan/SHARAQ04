@@ -1,6 +1,7 @@
 include:
 #  - hist_PID.yaml  # all plastics
 #  - hist_ana.yaml
+  - hist_ana_14O.yaml
 #  - hist_plastic.yaml
 #  - hist_mwdc_L.yaml
 #  - hist_mwdc_R.yaml
@@ -8,7 +9,7 @@ include:
 #  - hist_mwdc_s1.yaml
 #  - hist_nyoki_Qcorr.yaml
 #  - hist_nyoki_PID.yaml
-  - hist_nyoki_check_23f.yaml
+#  - hist_nyoki_check_23f.yaml
 #  - hist_nyoki_check_22o.yaml
 #  - hist_DCS0D.yaml
 #  - hist_FindGatesforEx.yaml

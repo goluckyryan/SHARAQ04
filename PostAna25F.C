@@ -5,101 +5,132 @@
 
 //========================================================
 
-        char * rootfile = "P_25F_ppcoin_r7_0609.root";
+        //char * rootfile = "P_25F_timeoffset_58.9_59.7.root";
+        //char * rootfile = "P_25F_ppcoin_r14_0715.root";
+        //char * rootfile = "X_25F_ppcoin_r14_0720_noCorr.root";
+        char * rootfile = "Z_X_25F_ppcoin_r14_0720_noCorr.root"; // using for spectrum
+        //char * rootfile = "X2_25F_ppcoin_r14_0720_noCorr.root";
+        //char * rootfile = "X_25F_ppcoin_r14_0720_noCorr.root";
         
-        TFile *f0 = new TFile (rootfile, "read"); 
-                
-        //TTree *tree = (TTree*)f0->Get("tree");
+        TFile *f0 = new TFile (rootfile, "read"); TTree *tree = (TTree*)f0->Get("tree");
         printf("=====> /// %15s //// is loaded. Total #Entry: %10d \n", rootfile,  tree->GetEntries());
+        
+        //-------------- THREEDEE
+        TFile *f00 = new TFile ("THREEDEE/25F_Sp14.5_Tc030_ang010_phi004.root", "read"); TTree *Ex00 = (TTree*)f00->Get("tree");
+        TFile *f10 = new TFile ("THREEDEE/25F_Sp19.5_Tc030_ang010_phi004.root", "read"); TTree *Ex05 = (TTree*)f10->Get("tree");
+        TFile *f20 = new TFile ("THREEDEE/25F_Sp27.5_Tc030_ang010_phi004.root", "read"); TTree *Ex13 = (TTree*)f20->Get("tree");
+        TFile *f30 = new TFile ("THREEDEE/25F_Sp34.5_Tc030_ang010_phi004.root", "read"); TTree *Ex20 = (TTree*)f30->Get("tree");
+        
 /**///======================================================== Browser or Canvas
-/*        Int_t Div[2] = {3,1};  //x,y
-        Int_t size[2] = {500,500}; //x,y
-        TCanvas * cPostAna = new TCanvas("cPostAna", "cPostAna", 2000, 0, 0 , size[0]*Div[0], size[1]*Div[1]);
+        Int_t Div[2] = {1,1};  //x,y
+        Int_t size[2] = {600,400}; //x,y
+        TCanvas * cPostAna = new TCanvas("cPostAna", "cPostAna", 2000, 0 , size[0]*Div[0], size[1]*Div[1]);
         cPostAna->Divide(Div[0],Div[1]);
+        cPostAna->cd(1);
 
 /**///======================================================== Cut 
         TCut gateCry = "s0x*s0x+TMath::Power(s0y-1.8,2)<49";
         TCut gateCryc = "s0x*s0x+TMath::Power(s0y-1.8,2)>49 && s0x*s0x+TMath::Power(s0y-1.8,2)<196";
-        TCut gateTofS1 = "35<tofS1 && tofS1<44";
+        //TCut gateTofS1 = "35<tofS1 && tofS1<39";
+        TCut gateTofS1 = "35<tofS0DS1 && tofS0DS1<39";
         TCut gateS0D = "TMath::Finite(s0dx)";
         TCut gateVertexZ = "TMath::Abs(vertexZ-10)<30";
-        TCut gateVertexZc = "TMath::Abs(vertexZ-160)<30";
+        TCut gateVertexZc = "TMath::Abs(vertexZ-165)<50";
         //TCut gateOpenAng = "90>theta1+theta2 && theta1+theta2>60";
         //TCut gateOpenAng = "theta1>30 || theta2>30";
         TCut gateOpenAng = "";
-        TCut gateZ = "8.6>pidZ && pidZ>7.4";
-        TCut gateNID = "nyokiID>5";//"nyokiID > 3 && nyokiID <11";
+        TCut gateZ = "9>pidZ && pidZ>7.4";
+        //TCut gateZ = "pidZ>7.4";
+        TCut gateNID = "";// "nyokiID>5";//"nyokiID > 3 && nyokiID <11";
         
-        TCut gate0 = /*gateCry + */gateTofS1 + gateVertexZ  + gateOpenAng + gateNID + gateS0D;
-        TCut gatec = /*gateCry + */gateTofS1 + gateVertexZc + gateOpenAng + gateNID + gateS0D + gateZ; 
-        TCut gate =  /*gateCry + */gateTofS1 + gateVertexZ  + gateOpenAng + gateNID + gateS0D + gateZ;
+        TCut gate0 = gateCry + gateTofS1 + gateVertexZ  + gateOpenAng + gateNID + gateS0D;
+        TCut gatec = gateCry + gateTofS1 + gateVertexZc + gateOpenAng + gateNID + gateS0D + gateZ; 
+        TCut gate =  gateCry + gateTofS1 + gateVertexZ  + gateOpenAng + gateNID + gateS0D + gateZ;
         
         TString gate0Str = "r_Crystal<7 X 32<tofS1<35 X |vertexZ-10|<30 X Finite(S0D)";
         TString gatecStr  = "r_Crystal<7 X 32<tofS1<35 X |vertexZ-160|<30 X Finite(S0D) X 8.6>pidZ>7.4";
         TString gateStr = "r_Crystal<7 X 32<tofS1<35 X |vertexZ-10|<30 X Finite(S0D) X 8.6>pidZ>7.4";
         
-        TCut cut22o = "TMath::Abs(pidAOQ*8-22)<0.5";
-        TCut cut23o = "TMath::Abs(pidAOQ*8-23)<0.5";
-        TCut cut24o = "TMath::Abs(pidAOQ*8-24)<0.5";
+        //TCut cut22o = "TMath::Abs(pidAOQ*8-22)<0.5";
+        //TCut cut23o = "TMath::Abs(pidAOQ*8-23)<0.5";
+        //TCut cut23o = "22.5<pidAOQ*8 && pidAOQ*8 < 23.5";
+        //TCut cut24o = "TMath::Abs(pidAOQ*8-24)<0.5";
+        //TCut cut24o = "23.5<pidAOQ*8 && pidAOQ*8 < 28";
 
         Double_t BGscale = 1.;
         
-        //TCutG * gate22o = new TCutG("cut22o", 6);
-        //gate22o->SetVarX("pidAOQ");
-        //gate22o->SetVarY("pidZ");
-        //gate22o->SetPoint(0, 2.68, 8.44);
-        //gate22o->SetPoint(1, 2.68, 7.48);
-        //gate22o->SetPoint(2, 2.73, 7.20);
-        //gate22o->SetPoint(3, 2.80, 7.59);
-        //gate22o->SetPoint(4, 2.80, 8.46);
-        //gate22o->SetPoint(5, 2.73, 9.01);
-        //gate22o->SetPoint(6, 2.68, 8.44);
-        //
-        //TCutG * gate23o = new TCutG("cut23o", 6);
-        //gate23o->SetVarX("pidAOQ");
-        //gate23o->SetVarY("pidZ");
-        //gate23o->SetPoint(0, 2.80, 8.46);
-        //gate23o->SetPoint(1, 2.80, 7.59);
-        //gate23o->SetPoint(2, 2.87, 7.41);
-        //gate23o->SetPoint(3, 2.94, 7.63);
-        //gate23o->SetPoint(4, 2.94, 8.40);
-        //gate23o->SetPoint(5, 2.87, 8.69);
-        //gate23o->SetPoint(6, 2.80, 8.46);
-        //
-        //TCutG * gate24o = new TCutG("cut24o", 6);
-        //gate24o->SetVarX("pidAOQ");
-        //gate24o->SetVarY("pidZ");
-        //gate24o->SetPoint(0, 2.94, 8.27);
-        //gate24o->SetPoint(1, 2.94, 7.65);
-        //gate24o->SetPoint(2, 3.00, 7.50);
-        //gate24o->SetPoint(3, 3.07, 7.68);
-        //gate24o->SetPoint(4, 3.07, 8.46);
-        //gate24o->SetPoint(5, 3.00, 8.65);
-        //gate24o->SetPoint(6, 2.94, 8.27);
+        TCutG * gate21o = new TCutG("cut21o", 6);
+        gate21o->SetVarX("pidAOQ");
+        gate21o->SetVarY("pidZ");
+        gate21o->SetPoint(0, 2.69-0.125, 8.58);
+        gate21o->SetPoint(1, 2.68-0.125, 7.43);
+        gate21o->SetPoint(2, 2.73-0.125, 7.30);
+        gate21o->SetPoint(3, 2.79-0.125, 7.54);
+        gate21o->SetPoint(4, 2.81-0.125, 8.63);
+        gate21o->SetPoint(5, 2.75-0.125, 8.75);
+        gate21o->SetPoint(6, 2.69-0.125, 8.58);
+        
+        TCutG * gate22o = new TCutG("cut22o", 6);
+        gate22o->SetVarX("pidAOQ");
+        gate22o->SetVarY("pidZ");
+        gate22o->SetPoint(0, 2.81-0.125, 8.63);
+        gate22o->SetPoint(1, 2.79-0.125, 7.54);
+        gate22o->SetPoint(2, 2.84-0.125, 7.32);
+        gate22o->SetPoint(3, 2.93-0.125, 7.43);
+        gate22o->SetPoint(4, 2.95-0.125, 8.58);
+        gate22o->SetPoint(5, 2.89-0.125, 8.76);
+        gate22o->SetPoint(6, 2.81-0.125, 8.63);
+        
+        TCutG * gate23o = new TCutG("cut23o", 6);
+        gate23o->SetVarX("pidAOQ");
+        gate23o->SetVarY("pidZ");
+        gate23o->SetPoint(0, 2.95-0.125, 8.58);
+        gate23o->SetPoint(1, 2.93-0.125, 7.43);
+        gate23o->SetPoint(2, 2.85, 7.38);
+        gate23o->SetPoint(3, 2.93, 7.43);
+        gate23o->SetPoint(4, 2.95, 8.58);
+        gate23o->SetPoint(5, 2.89, 8.75);
+        gate23o->SetPoint(6, 2.95-0.125, 8.58);
+        
+        TCutG * gate24o = new TCutG("cut24o", 6);
+        gate24o->SetVarX("pidAOQ");
+        gate24o->SetVarY("pidZ");
+        gate24o->SetPoint(0, 2.95, 8.58);
+        gate24o->SetPoint(1, 2.93, 7.43);
+        gate24o->SetPoint(2, 3.04, 7.38);
+        gate24o->SetPoint(3, 3.57, 7.72);
+        gate24o->SetPoint(4, 3.56, 8.50);
+        gate24o->SetPoint(5, 3.05, 8.63);
+        gate24o->SetPoint(6, 2.95, 8.58);
 
 //*///======================================================== analysis
 
         tree->Draw("Ex>>oAll( 150, -200, 100)", gate )  ; oAll->SetTitle(gateStr);
         tree->Draw("Ex>>oAllc(150, -200, 100)", gatec ) ; oAllc->SetTitle(gatecStr); oAllc->SetLineColor(2);
-        tree->Draw("Ex>>o24(  30, -20, 40)", gate  + cut24o) ; //o24->SetTitle(gateStr + " X 24O");
-        tree->Draw("Ex>>o23(  30, -20, 40)", gate  + cut23o) ; //o23->SetTitle(gateStr + " X 23O");
-        tree->Draw("Ex>>o22(  30, -20, 40)", gate  + cut22o) ; //o22->SetTitle(gateStr + " X 22O");
+        tree->Draw("Ex>>o24(  25, -40, 60)", gate  + "cut24o") ; //o24->SetTitle(gateStr + " X 24O");
+        tree->Draw("Ex>>o23(  25, -40, 60)", gate  + "cut23o") ; //o23->SetTitle(gateStr + " X 23O");
+        tree->Draw("Ex>>o22(  25, -40, 60)", gate  + "cut22o") ; //o22->SetTitle(gateStr + " X 22O");
+        tree->Draw("Ex>>o21(  25, -40, 60)", gate  + "cut21o") ; //o21->SetTitle(gateStr + " X 21O");
+        tree->Draw("Ex>>o24c( 25, -40, 60)", gatec + "cut24o") ; //o24c->SetTitle(gateStr + " X 24O");
+        tree->Draw("Ex>>o23c( 25, -40, 60)", gatec + "cut23o") ; //o23c->SetTitle(gateStr + " X 23O");
+        tree->Draw("Ex>>o22c( 25, -40, 60)", gatec + "cut22o") ; //o22c->SetTitle(gateStr + " X 22O");
+        tree->Draw("Ex>>o21c( 25, -40, 60)", gatec + "cut21o") ; //o21c->SetTitle(gateStr + " X 21O");
         
-        tree->Draw("Ex>>o24c( 30, -20, 40)", gatec + cut24o) ; //o24c->SetTitle(gateStr + " X 24O");
-        tree->Draw("Ex>>o23c( 30, -20, 40)", gatec + cut23o) ; //o23c->SetTitle(gateStr + " X 23O");
-        tree->Draw("Ex>>o22c( 30, -20, 40)", gatec + cut22o) ; //o22c->SetTitle(gateStr + " X 22O");
+        oAllc->Scale(BGscale); TH1F* mAll = new TH1F(*oAll - *oAllc); mAll->SetName("mAll"); mAll->SetTitle("25F(p,2p)24O*");
         
-        oAllc->Scale(BGscale); TH1F* mAll = new TH1F(*oAll - *oAllc); mAll->SetTitle("23F(p,2p)22O*");
-        
-        o24c->Scale(BGscale); TH1F* m24 = new TH1F(*o24 - *o24c); m24->SetLineColor(2); m24->SetTitle("25F(p,2p)24Ogs");
-        o23c->Scale(BGscale); TH1F* m23 = new TH1F(*o23 - *o23c); m23->SetLineColor(3); m23->SetTitle("25F(p,2p)24O*->23O*+n, 4.18");
-        o22c->Scale(BGscale); TH1F* m22 = new TH1F(*o22 - *o22c); m22->SetLineColor(4); m22->SetTitle("25F(p,2p)24O*->22O*+2n, 6.93");
+        o24c->Scale(BGscale); TH1F* m24 = new TH1F(*o24 - *o24c); m24->SetName("m24"); m24->SetLineColor(2); m24->SetTitle("25F(p,2p)24Ogs (0, 4.19)");
+        o23c->Scale(BGscale); TH1F* m23 = new TH1F(*o23 - *o23c); m23->SetName("m23"); m23->SetLineColor(3); m23->SetTitle("25F(p,2p)24O*->23O*+n,  (4.19, 6.93)");
+        o22c->Scale(BGscale); TH1F* m22 = new TH1F(*o22 - *o22c); m22->SetName("m22"); m22->SetLineColor(4); m22->SetTitle("25F(p,2p)24O*->22O*+2n, (6.93, 13.8)");
+        o21c->Scale(BGscale); TH1F* m21 = new TH1F(*o21 - *o21c); m21->SetName("m22"); m21->SetLineColor(6); m21->SetTitle("25F(p,2p)24O*->21O*+3n, (13.8, 17.6)");
 
+        m22->SetXTitle("Ex [MeV]"); m22->SetYTitle("count / 4 MeV");
+        
         
         THStack *mS = new THStack("mS", "Stack of Ex for 22O - 18O");
         mS->Add(m24);
         mS->Add(m23);
         mS->Add(m22);
+        mS->Add(m21);
 
         //tree->Draw("thetaR>>p24(  50, 0, 180)", gate  + "cut24o") ; //o22->SetTitle(gateStr + " X 22O");
         //tree->Draw("thetaR>>p23(  50, 0, 180)", gate  + "cut23o") ; //o21->SetTitle(gateStr + " X 21O");
@@ -113,37 +144,61 @@
         //p23c->Scale(BGscale); TH1F* q23 = new TH1F(*p23 - *p23c); q23->SetLineColor(3); q23->SetTitle("25F(p,2p)24O*->23O*+n, 4.18");
         //p22c->Scale(BGscale); TH1F* q22 = new TH1F(*p22 - *p22c); q22->SetLineColor(4); q22->SetTitle("25F(p,2p)24O*->22O*+2n, 6.93");
         
-/*
-        TF1* fit22o = new TF1("fit22o", "gaus(0)", -20, 60);
-        Double_t para22[3]={30, 0, 8};
+
+        TF1* fit24o = new TF1("fit24o", "gaus(0)", -40, 60);
+        Double_t para24[3]={8, 0, 4};
+        fit24o->SetParameters(para24);
+        fit24o->FixParameter(1, 0);
+        fit24o->SetLineColor(2);
+        fit24o->SetLineStyle(1);
+        m24->Fit("fit24o", "R");
+        printf("reduced chi-squared = %f \n", fit24o->GetChisquare()/fit24o->GetNDF());
+        
+        TF1* fit23o = new TF1("fit23o", "gaus(0)", -40, 60);
+        Double_t para23[6]={12, 6, 6};
+        fit23o->SetParameters(para23);
+        //fit23o->SetParLimits(4, 30, 40);
+        fit23o->SetLineColor(3);
+        fit23o->SetLineStyle(7);
+        m23->Fit("fit23o", "R");
+        printf("reduced chi-squared = %f \n", fit23o->GetChisquare()/fit23o->GetNDF());
+        
+        TF1* fit22o = new TF1("fit22o", "gaus(0)", -40, 60);
+        Double_t para22[6]={40, 13, 8};
         fit22o->SetParameters(para22);
-        fit22o->FixParameter(1, 0);
-        fit22o->SetLineColor(1);
+        //fit22o->SetParLimits(4, 30, 40);
+        fit22o->SetLineColor(4);
+        fit22o->SetLineStyle(2);
         m22->Fit("fit22o", "R");
         printf("reduced chi-squared = %f \n", fit22o->GetChisquare()/fit22o->GetNDF());
-        
-        TF1* fit21o = new TF1("fit21o", "gaus(0)+gaus(3)", -20, 60);
-        Double_t para21[6]={30, 8, 8, 10, 35, 10};
+
+        TF1* fit21o = new TF1("fit21o", "gaus(0)", -40, 60);
+        Double_t para21[6]={10, 26, 8};
         fit21o->SetParameters(para21);
         //fit21o->SetParLimits(4, 30, 40);
-        fit21o->SetLineColor(1);
+        fit21o->SetLineColor(6);
+        fit21o->SetLineStyle(4);
         m21->Fit("fit21o", "R");
-        printf("reduced chi-squared = %f \n", fit21o->GetChisquare()/fit21o->GetNDF());
-        
-        TF1* fit20o = new TF1("fit20o", "gaus(0)+gaus(3)", -20, 60);
-        Double_t para20[6]={30, 14, 8, 10, 35, 10};
-        fit20o->SetParameters(para20);
-        //fit20o->SetParLimits(4, 30, 40);
-        fit20o->SetLineColor(1);
-        m20->Fit("fit20o", "R");
         printf("reduced chi-squared = %f \n", fit21o->GetChisquare()/fit21o->GetNDF());
         /**/
         
+        m22->Draw();m24->Draw("same");m23->Draw("same");m21->Draw("same");
         
+        leg = new TLegend(0.1,0.5,0.3,0.9);
+        //leg->SetHeader("");
+        leg->SetTextSize(0.05);
+        leg->AddEntry(fit24o, "(^{25}F,^{24}O)", "l");
+        leg->AddEntry(fit23o, "(^{25}F,^{23}O)", "l");
+        leg->AddEntry(fit22o, "(^{25}F,^{22}O)", "l");
+        leg->AddEntry(fit21o, "(^{25}F,^{21}O)", "l");
+        leg->Draw();
+        
+/*++++++++++++++++++++++++++++++++++++++++++++++ PID*/
+/*        
         tree->Draw("pidZ:pidAOQ>>hPID(100,2.2,3.2, 100, 4, 10)", gate0, "colz"); hPID->SetTitle(gate0Str);
-        tree->Draw("pidAOQ*8>>hA(60,20, 26)", gate, "colz"); hA->SetTitle(gateStr);
-        tree->Draw("pidAOQ*8>>hAg(60,20, 26)", gate   /*+ "60>Ex && Ex>-40"*/, "colz"); hAg->SetTitle(gateStr + " X 60>Ex>-40");
-        tree->Draw("pidAOQ*8>>hAgc(60,20, 26)", gatec /*+ "60>Ex && Ex>-40"*/, "colz"); hAgc->SetTitle(gatecStr + " X 60>Ex>-40");
+        tree->Draw("(pidAOQ)*8>>hA(60,20, 26)", gate, "colz"); hA->SetTitle(gateStr);
+        tree->Draw("(pidAOQ)*8>>hAg(60,20, 26)", gate   + "60>Ex && Ex>-40", "colz"); hAg->SetTitle(gateStr + " X 60>Ex>-40");
+        tree->Draw("(pidAOQ)*8>>hAgc(60,20, 26)", gatec + "60>Ex && Ex>-40", "colz"); hAgc->SetTitle(gatecStr + " X 60>Ex>-40");
         
         hAgc->Scale(BGscale); TH1F* hAgs = new TH1F(*hAg - *hAgc); hAgs->SetTitle("");
         
@@ -155,10 +210,14 @@
         TF1* fit = new TF1("fit", "gaus(0)+gaus(3)+gaus(6)+gaus(9)", 20, 26);
         //Double_t para[18]={40, 17, 0.5, 80, 18, 0.5, 100, 19, 0.4, 210, 20, 0.3, 170, 21, 0.3, 40, 22, 0.3};
         //with gateCry
-        Double_t para[15]={20, 24, 0.3, 45, 23, 0.4, 30, 22, 0.3, 20, 21, 0.3};
+        Double_t para[15]={2, 24.5, 0.3, 10, 23, 0.4, 30, 22, 0.3, 15, 21, 0.3};
 
         fit->SetParameters(para);
         fit->SetLineColor(1);
+        fit->FixParameter(2,24.5);
+        fit->FixParameter(4,23);
+        fit->FixParameter(7,22);
+        fit->FixParameter(10,21);
         hAgs->Fit("fit");
         printf("reduced chi-squared = %f \n", fit->GetChisquare()/fit->GetNDF());        
         
@@ -172,5 +231,161 @@
         
         //tree->Draw("nyokiM:pidAOQ*8>>hAgM(80,16, 24, 5, 0, 5)", gate + "60>Ex && Ex>-40", "colz");
         
+        
+/*++++++++++++++++++++++++++++++++++++++++++++++ Momentum*/
+/*
+        tree->Draw("kMomt>>p24(  20, 0, 400)", gate  + "cut24o && 10>Ex && Ex>-10") ;   
+        tree->Draw("kMomt>>p23(  20, 0, 400)", gate  + "cut23o && 7>Ex && Ex>-10") ;
+        tree->Draw("kMomt>>p22(  20, 0, 400)", gate  + "cut22o && 20>Ex && Ex>7") ;
+        tree->Draw("kMomt>>p21(  20, 0, 400)", gate  + "cut21o && 40>Ex && Ex>10") ;
+        tree->Draw("kMomt>>p24c( 20, 0, 400)", gatec + "cut24o && 10>Ex && Ex>-10") ;   
+        tree->Draw("kMomt>>p23c( 20, 0, 400)", gatec + "cut23o && 7>Ex && Ex>-10") ;
+        tree->Draw("kMomt>>p22c( 20, 0, 400)", gatec + "cut22o && 20>Ex && Ex>7") ;
+        tree->Draw("kMomt>>p21c( 20, 0, 400)", gatec + "cut21o && 40>Ex && Ex>10") ;
 
+        p24c->Scale(BGscale); TH1F* q24 = new TH1F(*p24 - *p24c); q24->SetLineColor(1); q24->SetName("q24"); q24->SetTitle("25F(p,2p)24Ogs");
+        p23c->Scale(BGscale); TH1F* q23 = new TH1F(*p23 - *p23c); q23->SetLineColor(1); q23->SetName("q23"); q23->SetTitle("25F(p,2p)24O*->23O*+n, 4.18");
+        p22c->Scale(BGscale); TH1F* q22 = new TH1F(*p22 - *p22c); q22->SetLineColor(1); q22->SetName("q22"); q22->SetTitle("25F(p,2p)24O*->22O*+2n, 6.93");
+        p21c->Scale(BGscale); TH1F* q21 = new TH1F(*p21 - *p21c); q21->SetLineColor(1); q21->SetName("q22"); q21->SetTitle("25F(p,2p)24O*->21O*+3n, 13.8");
+
+        q24->SetXTitle("k [MeV/c]"); q24->SetYTitle("count / 10 MeV"); q24->SetTitle("Ex = 0 MeV");
+        q23->SetXTitle("k [MeV/c]"); q23->SetYTitle("count / 10 MeV"); q23->SetTitle("Ex = 5 MeV");
+        q22->SetXTitle("k [MeV/c]"); q22->SetYTitle("count / 10 MeV"); q22->SetTitle("Ex = 13 MeV");
+        q21->SetXTitle("k [MeV/c]"); q21->SetYTitle("count / 10 MeV"); q21->SetTitle("Ex = 20 MeV");
+
+        Ex00->Draw("k>>hk0a(10, 0, 400)", "xsec1d5", "E"); hk0a->SetLineColor(2); 
+        Ex00->Draw("k>>hk0b(10, 0, 400)", "xsec1p1", "E"); hk0b->SetLineColor(3); 
+        Ex00->Draw("k>>hk0c(10, 0, 400)", "xsec1p3", "E"); hk0c->SetLineColor(4); 
+        Ex00->Draw("k>>hk0d(10, 0, 400)", "xsec2s1", "E"); hk0d->SetLineColor(6);
+                                                      
+        Ex05->Draw("k>>hk1a(10, 0, 400)", "xsec1d5", "E"); hk1a->SetLineColor(2); 
+        Ex05->Draw("k>>hk1b(10, 0, 400)", "xsec1p1", "E"); hk1b->SetLineColor(3); 
+        Ex05->Draw("k>>hk1c(10, 0, 400)", "xsec1p3", "E"); hk1c->SetLineColor(4); 
+        Ex05->Draw("k>>hk1d(10, 0, 400)", "xsec2s1", "E"); hk1d->SetLineColor(6); 
+                                                      
+        Ex13->Draw("k>>hk2a(10, 0, 400)", "xsec1d5", "E"); hk2a->SetLineColor(2); 
+        Ex13->Draw("k>>hk2b(10, 0, 400)", "xsec1p1", "E"); hk2b->SetLineColor(3); 
+        Ex13->Draw("k>>hk2c(10, 0, 400)", "xsec1p3", "E"); hk2c->SetLineColor(4); 
+        Ex13->Draw("k>>hk2d(10, 0, 400)", "xsec2s1", "E"); hk2d->SetLineColor(6); 
+                                                      
+        Ex20->Draw("k>>hk3a(10, 0, 400)", "xsec1d5", "E"); hk3a->SetLineColor(2); 
+        Ex20->Draw("k>>hk3b(10, 0, 400)", "xsec1p1", "E"); hk3b->SetLineColor(3); 
+        Ex20->Draw("k>>hk3c(10, 0, 400)", "xsec1p3", "E"); hk3c->SetLineColor(4); 
+        Ex20->Draw("k>>hk3d(10, 0, 400)", "xsec2s1", "E"); hk3d->SetLineColor(6); 
+        
+        
+        Double_t temp = hk0a->GetMaximum(); 
+        hk0a->Scale(q24->GetMaximum()/temp);
+        hk0b->Scale(q24->GetMaximum()/temp);
+        hk0c->Scale(q24->GetMaximum()/temp);
+        hk0d->Scale(q24->GetMaximum()/temp);
+        Double_t temp = hk1a->GetMaximum(); 
+        hk1a->Scale(q23->GetMaximum()/temp);
+        hk1b->Scale(q23->GetMaximum()/temp);
+        hk1c->Scale(q23->GetMaximum()/temp);
+        hk1d->Scale(q23->GetMaximum()/temp);
+        Double_t temp = hk2b->GetMaximum(); 
+        hk2a->Scale(q22->GetMaximum()/temp);  
+        hk2b->Scale(q22->GetMaximum()/temp);  
+        hk2c->Scale(q22->GetMaximum()/temp);
+        hk2d->Scale(q22->GetMaximum()/temp);
+        Double_t temp = hk3c->GetMaximum(); 
+        hk3a->Scale(q21->GetMaximum()/temp);  
+        hk3b->Scale(q21->GetMaximum()/temp);  
+        hk3c->Scale(q21->GetMaximum()/temp);
+        hk3d->Scale(q21->GetMaximum()/temp);
+        
+        q24->SetMaximum(hk0a->GetMaximum()*1.1);
+        q23->SetMaximum(hk1a->GetMaximum()*1.1);
+        q22->SetMaximum(hk2a->GetMaximum()*1.1);
+        q21->SetMaximum(hk3a->GetMaximum()*1.1);
+        
+        q24->Draw();hk0a->Draw("same l");hk0b->Draw("same l");hk0c->Draw("same l");hk0d->Draw("same l");
+        
+        /**/
+        
+/*++++++++++++++++++++++++++++++++++++++++++++++ Asymmetry*/
+/*
+        TCutG* cutAsy = gate24o;
+        TString plotTitle = "(25F,24O)"; 
+        TCut energy = "abs(Ex-0)<15";
+                
+        cutAsy->SetName("cutAsy");
+
+        tree->Draw("theta1>>h2aL(5,20,70)", gate + "cutAsy" + energy + "runNum<=43", "colz");
+        tree->Draw("theta2>>h2aR(5,20,70)", gate + "cutAsy" + energy + "runNum<=43", "colz");
+        
+        tree->Draw("theta1>>h2aLg(5,20,70)", gatec + "cutAsy" + energy + "runNum<=43", "colz");
+        tree->Draw("theta2>>h2aRg(5,20,70)", gatec + "cutAsy" + energy + "runNum<=43", "colz");
+        
+        TH1F* h2aLs = new TH1F(*h2aL - *h2aLg); h2aLs->SetName("h2aLs"); h2aLs->SetLineColor(4);
+        TH1F* h2aRs = new TH1F(*h2aR - *h2aRg); h2aRs->SetName("h2aRs"); h2aRs->SetLineColor(2);
+        
+        h2aLs->SetXTitle("theta [deg]"); h2aLs->SetYTitle("count / 10 deg"); h2aLs->SetTitle(plotTitle + "Spin up");
+        h2aRs->SetXTitle("theta [deg]"); h2aRs->SetYTitle("count / 10 deg"); h2aRs->SetTitle(plotTitle + "Spin up");
+        
+        cPostAna->cd(1);
+        h2aRs->Draw("");
+        h2aLs->Draw("same");
+        
+        tree->Draw("theta1>>h2bL(5,20,70)", gate + "cutAsy" + energy + "runNum>43", "colz");
+        tree->Draw("theta2>>h2bR(5,20,70)", gate + "cutAsy" + energy + "runNum>43", "colz");
+        
+        tree->Draw("theta1>>h2bLg(5,20,70)", gatec + "cutAsy" + energy + "runNum>43", "colz");
+        tree->Draw("theta2>>h2bRg(5,20,70)", gatec + "cutAsy" + energy + "runNum>43", "colz");
+        
+        TH1F* h2bLs = new TH1F(*h2bL - *h2bLg); h2bLs->SetName("h2bLs"); h2bLs->SetLineColor(4);
+        TH1F* h2bRs = new TH1F(*h2bR - *h2bRg); h2bRs->SetName("h2bRs"); h2bRs->SetLineColor(2);
+        
+        h2bLs->SetXTitle("theta [deg]"); h2bLs->SetYTitle("count / 10 deg"); h2bLs->SetTitle(plotTitle + "Spin down");
+        h2bRs->SetXTitle("theta [deg]"); h2bRs->SetYTitle("count / 10 deg"); h2bRs->SetTitle(plotTitle + "Spin down");
+        
+        Ex20->Draw("theta1>>g1(5,20,70)", "xsec1p3*(1+asym1p3)","");
+        Ex20->Draw("theta2>>g2(5,20,70)", "xsec1p3*(1+asym1p3)","");
+        
+        cPostAna->cd(2);
+        h2bLs->Draw("E"); h2bLs->Draw("same");
+        h2bRs->Draw("E same"); h2bRs->Draw("same");
+        
+        cPostAna->cd(1);
+        h2aLs->Draw("E"); h2aLs->Draw("same");
+        h2aRs->Draw("E same"); h2aRs->Draw("same");
+        
+        //--------------------calculate AyP
+        Int_t nBin = h2aLs->GetNbinsX();
+        
+        Double_t yLu[nBin], yRu[nBin], yLd[nBin], yRd[nBin];
+        Double_t xBin[nBin], AyP[nBin];
+        
+        for ( Int_t l = 1; l <= nBin; l++){
+                Int_t i = l-1;
+                xBin[i] = h2aLs->GetBinCenter(l);
+                yLu[i]=h2aLs->GetBinContent(l);
+                yRu[i]=h2aRs->GetBinContent(l);
+                yLd[i]=h2bLs->GetBinContent(l);
+                yRd[i]=h2bRs->GetBinContent(l);
+                
+                Double_t tYL = g1->GetBinContent(l);
+                Double_t tYR = g2->GetBinContent(l);
+                
+                Double_t tAy = (tYL-tYR)/(tYL+tYR);
+                
+                Double_t YL = TMath::Sqrt(yLu[i]*yRd[i]);
+                Double_t YR = TMath::Sqrt(yRu[i]*yLd[i]);
+                
+                Double_t dYL = TMath::Sqrt(yLu[i] + yRd[i])/2;
+                Double_t dYR = TMath::Sqrt(yLd[i] + yRu[i])/2;
+                
+                AyP[i] = (YL - YR)/(YL + YR);
+                
+                Double_t dAyP = TMath::Sqrt(YL*YL*dYR*dYR + YR*YR*dYL*dYL)/TMath::Power(YL + YR,2);
+                
+                Double_t Ay = AyP[i]/0.3;
+                Double_t dAy = Ay * TMath::Sqrt( TMath::Power(dAyP/AyP[i],2) + TMath::Power(dAyP/AyP[i],2));
+                
+                printf("x:%4.0f, yLu:%4.0f, yRu:%4.0f, yLd:%4.0f, yRd:%4.0f, AyP:%6.4f, dAyp:%10.6f, Ay:%10.6f, dAy:%10.6f, tAy:%10.6f\n", xBin[i], yLu[i], yRu[i], yLd[i], yRd[i], AyP[i], dAyP, Ay, dAy, tAy); 
+        }
+        
+                
+/****/
 }

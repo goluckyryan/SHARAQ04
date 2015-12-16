@@ -4,13 +4,15 @@
         gStyle->SetOptStat(0);
 
 //========================================================
-        char * rootfile = "O_25F_timeoffset_58.9_59.7.root";
+        //char * rootfile = "O_25F_timeoffset_58.9_59.7.root";
+        //char * rootfile = "O_25F_timeoffset_58.7_59.5.root";
+        //char * rootfile = "O_25F_timeoffset_58.7_59.5_315.38_noppac.root";
+        char * rootfile = "O_25F_timeoffset_58.7_59.5_315.23.root";
         
-        TFile *f0 = new TFile (rootfile, "read"); 
-                
-        TTree *tree = (TTree*)f0->Get("tree");
+        TFile *f0 = new TFile (rootfile, "read"); TTree *tree = (TTree*)f0->Get("tree");
         gROOT->ProcessLine("listg tree");
         printf("=====> /// %15s //// is loaded. Total #Entry: %10d \n", rootfile,  tree->GetEntries());
+        
 /**/
 //======================================================== Browser or Canvas
 
@@ -32,7 +34,7 @@ TCut cut22o = "TMath::Abs(pidAOQ*8-22)<0.5";
 TCut cut21o = "TMath::Abs(pidAOQ*8-21)<0.5";
 
 TCut gateVertexZ = "TMath::Abs(pidZ-8)<0.6 && TMath::Abs(vertexZ-10)<30";
-TCut gateVertexZc = "TMath::Abs(pidZ-8)<0.6 && TMath::Abs(vertexZ-165)<40";
+TCut gateVertexZc = "TMath::Abs(pidZ-8)<0.6 && TMath::Abs(vertexZ-165)<50";
 
 TCut gate21  = cut21o + gateVertexZ;
 TCut gate21c = cut21o + gateVertexZc;
@@ -61,8 +63,8 @@ cScript->cd(1);
 
 Int_t maxPeak = 0;
 
-Int_t nBin = 75;
-Int_t range[2] = {-140,110};
+Int_t nBin = 40;
+Int_t range[2] = {-140,60};
 
 Double_t binsize = (range[1] - range[0])*1./nBin;
 TString hYTitle;
@@ -92,12 +94,12 @@ for( Int_t i = -5; i <= 5; i++){
                 }
                 
                 //---------------
-                plotStr.Form("Ex%1s%d[%d]-6>>h%1s%d%1s%d(%d, %d, %d)", pmi.Data(), ni , j+5, pmi.Data(), ni, pmj.Data(), nj, nBin, range[0], range[1]);
+                plotStr.Form("Ex%1s%d[%d]>>h%1s%d%1s%d(%d, %d, %d)", pmi.Data(), ni , j+5, pmi.Data(), ni, pmj.Data(), nj, nBin, range[0], range[1]);
                 printf("%30s    ", plotStr.Data());
                 tree->Draw(plotStr, gate24);
                 
                 plotStr.Clear();
-                plotStr.Form("Ex%1s%d[%d]-6>>h%1s%d%1s%dc(%d, %d, %d)", pmi.Data(), ni , j+5, pmi.Data(), ni, pmj.Data(), nj, nBin, range[0], range[1]);
+                plotStr.Form("Ex%1s%d[%d]>>h%1s%d%1s%dc(%d, %d, %d)", pmi.Data(), ni , j+5, pmi.Data(), ni, pmj.Data(), nj, nBin, range[0], range[1]);
                 tree->Draw(plotStr, gate24c);
                 
                 subStr.Form("TH1F* p%1s%d%1s%d = new TH1F(*h%1s%d%1s%d - *h%1s%d%1s%dc); htemp = p%1s%d%1s%d;", pmi.Data(), ni, pmj.Data(), nj, pmi.Data(), ni, pmj.Data(), nj, pmi.Data(), ni, pmj.Data(), nj, pmi.Data(), ni, pmj.Data(), nj);
@@ -111,12 +113,12 @@ for( Int_t i = -5; i <= 5; i++){
                 htemp = 0;
 
                 //-------------
-                plotStr.Form("Ex%1s%d[%d]-6>>g%1s%d%1s%d(%d, %d, %d)", pmi.Data(), ni , j+5, pmi.Data(), ni, pmj.Data(), nj, nBin, range[0], range[1]);
+                plotStr.Form("Ex%1s%d[%d]>>g%1s%d%1s%d(%d, %d, %d)", pmi.Data(), ni , j+5, pmi.Data(), ni, pmj.Data(), nj, nBin, range[0], range[1]);
                 printf("%30s    ", plotStr.Data());
                 tree->Draw(plotStr, gate23);
                 
                 plotStr.Clear();
-                plotStr.Form("Ex%1s%d[%d]-6>>g%1s%d%1s%dc(%d, %d, %d)", pmi.Data(), ni , j+5, pmi.Data(), ni, pmj.Data(), nj, nBin, range[0], range[1]);
+                plotStr.Form("Ex%1s%d[%d]>>g%1s%d%1s%dc(%d, %d, %d)", pmi.Data(), ni , j+5, pmi.Data(), ni, pmj.Data(), nj, nBin, range[0], range[1]);
                 tree->Draw(plotStr, gate23c);
                 
                 subStr.Form("TH1F* q%1s%d%1s%d = new TH1F(*g%1s%d%1s%d - *g%1s%d%1s%dc); htemp = q%1s%d%1s%d;", pmi.Data(), ni, pmj.Data(), nj, pmi.Data(), ni, pmj.Data(), nj, pmi.Data(), ni, pmj.Data(), nj, pmi.Data(), ni, pmj.Data(), nj);
@@ -130,11 +132,11 @@ for( Int_t i = -5; i <= 5; i++){
                 htemp = 0;
                 
                 //-------------
-                plotStr.Form("Ex%1s%d[%d]-6>>k%1s%d%1s%d(%d, %d, %d)", pmi.Data(), ni , j+5, pmi.Data(), ni, pmj.Data(), nj, nBin, range[0], range[1]);
+                plotStr.Form("Ex%1s%d[%d]>>k%1s%d%1s%d(%d, %d, %d)", pmi.Data(), ni , j+5, pmi.Data(), ni, pmj.Data(), nj, nBin, range[0], range[1]);
                 printf("%30s    ", plotStr.Data());
                 tree->Draw(plotStr, gate22);
                 
-                plotStr.Form("Ex%1s%d[%d]-6>>k%1s%d%1s%dc(%d, %d, %d)", pmi.Data(), ni , j+5, pmi.Data(), ni, pmj.Data(), nj, nBin, range[0], range[1]);
+                plotStr.Form("Ex%1s%d[%d]>>k%1s%d%1s%dc(%d, %d, %d)", pmi.Data(), ni , j+5, pmi.Data(), ni, pmj.Data(), nj, nBin, range[0], range[1]);
                 tree->Draw(plotStr, gate22c);
                 
                 subStr.Form("TH1F* r%1s%d%1s%d = new TH1F(*k%1s%d%1s%d - *k%1s%d%1s%dc); htemp = r%1s%d%1s%d;", pmi.Data(), ni, pmj.Data(), nj, pmi.Data(), ni, pmj.Data(), nj, pmi.Data(), ni, pmj.Data(), nj, pmi.Data(), ni, pmj.Data(), nj);
@@ -148,7 +150,7 @@ for( Int_t i = -5; i <= 5; i++){
                 htemp = 0;
                 
                 //-----------------------
-                Int_t mPeak = mPeak1+ mPeak2+mPeak3;
+                Int_t mPeak = mPeak1 ;//+ mPeak2+mPeak3;
         
                 h2->Fill(2*i/10.,2*j/10. , mPeak); 
                 printf("%2d, %2d : Peak:%3d \n", i, j,  mPeak);

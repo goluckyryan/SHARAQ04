@@ -179,7 +179,7 @@ for( Int_t i = -5; i <= 5; i++){
                 htemp = 0;
                 
                 //-----------------------
-                Int_t mPeak = mPeak1+ mPeak2+mPeak3;
+                Int_t mPeak = mPeak1;//+ mPeak2+mPeak3;
         
                 h2->Fill(2*i/10.,2*j/10. , mPeak); 
                 printf("%2d, %2d : Peak:%3d \n", i, j,  mPeak);

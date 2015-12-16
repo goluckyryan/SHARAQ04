@@ -65,7 +65,7 @@ public :
    //Double_t qS0DU, qS0DD, tS0DU, tS0DD;
    Double_t tTgt;
 	//-----------tof from S0DPL to nyoki
-	Double_t tofS1, qS1[14], tS1[14];
+	Double_t tofS0DS1, qS1[14], tS1[14];
 	Double_t tofTgtS1, tofS0DS1;
    Int_t nyokiM;
 	//Double_t qS1c[14];
@@ -81,6 +81,8 @@ public :
 	//-----------pid_ds_corr
 	Double_t pidZc, pidAOQc;
    Double_t brhoc, FLc, betac;
+   //-----------beamZ
+	Double_t beam;
    //-----------vertex
 	Double_t vertexZ;
    //-----------correction
@@ -112,6 +114,7 @@ public :
    TClonesArray    *tof_US;
    TClonesArray    *plaV775;
    TClonesArray    *tof_DS;
+   TClonesArray    *ppac;
    TClonesArray    *S0img;
    TClonesArray    *dcs0d;
    TClonesArray    *smwdc_L;
@@ -144,6 +147,7 @@ public :
    TBranch        *b_tof_US;   //!
    TBranch        *b_plaV775;   //!
    TBranch        *b_tof_DS;   //!
+   TBranch        *b_ppac;   //!
    TBranch        *b_S0img;   //!
    TBranch        *b_dcs0d;   //!
    TBranch        *b_smwdc_L;   //!
@@ -210,6 +214,7 @@ void Selector_Post::Init(TTree *tree)
    tof_US = 0;
    plaV775 = 0;
    tof_DS = 0;
+   ppac = 0;
    S0img = 0;
    dcs0d = 0;
    smwdc_L = 0;
@@ -238,15 +243,16 @@ void Selector_Post::Init(TTree *tree)
    fChain = tree;
    fChain->SetMakeClass(1);
 
+   fChain->SetBranchAddress("eventheader0", &eventheader, &b_eventheader);
    //fChain->SetBranchAddress("eventheader0", &eventheader, &b_eventheader);
-   fChain->SetBranchAddress("eventheader", &eventheader, &b_eventheader);
-   //fChain->SetBranchAddress("coinReg", &coinReg, &b_coinReg);
+   fChain->SetBranchAddress("coinReg", &coinReg, &b_coinReg);
    //fChain->SetBranchAddress("gate", &gate, &b_gate);
    //fChain->SetBranchAddress("plaV1190_F3", &plaV1190_F3, &b_plaV1190_F3);
    //fChain->SetBranchAddress("plaV1190_FH9", &plaV1190_FH9, &b_plaV1190_FH9);
    //fChain->SetBranchAddress("tof_US", &tof_US, &b_tof_US);
    fChain->SetBranchAddress("plaV775", &plaV775, &b_plaV775);
    //fChain->SetBranchAddress("tof_DS", &tof_DS, &b_tof_DS);
+   fChain->SetBranchAddress("ppac", &ppac, &b_ppac);
    fChain->SetBranchAddress("S0img", &S0img, &b_S0img);
    fChain->SetBranchAddress("dcs0d", &dcs0d, &b_dcs0d);
    //fChain->SetBranchAddress("smwdc_L", &smwdc_L, &b_smwdc_L);
@@ -260,11 +266,11 @@ void Selector_Post::Init(TTree *tree)
    fChain->SetBranchAddress("pid_s1", &pid_s1, &b_pid_s1);
    fChain->SetBranchAddress("tof_c", &tof_c, &b_tof_c);
    fChain->SetBranchAddress("s1_c", &s1_c, &b_s1_c);
-   //fChain->SetBranchAddress("beamZ", &beamZ, &b_beamZ);
+   fChain->SetBranchAddress("beamZ", &beamZ, &b_beamZ);
    fChain->SetBranchAddress("vertex", &vertex, &b_vertex);
+   fChain->SetBranchAddress("tofS0D", &tofS0D, &b_tofS0D);
    fChain->SetBranchAddress("tofL", &tofL, &b_tofL);
    fChain->SetBranchAddress("tofR", &tofR, &b_tofR);
-   fChain->SetBranchAddress("tofS0D", &tofS0D, &b_tofS0D);
    fChain->SetBranchAddress("p2p", &p2p, &b_p2p);
    //fChain->SetBranchAddress("p2p_Lab", &p2p_Lab, &b_p2p_Lab);
    //fChain->SetBranchAddress("p2p_c", &p2p_c, &b_p2p_c);
@@ -276,6 +282,7 @@ void Selector_Post::Init(TTree *tree)
    if (b_tof_US        ) printf("%10s....on\n", "tof_US");
    if (b_plaV775       ) printf("%10s....on\n", "plaV775");
    if (b_tof_DS        ) printf("%10s....on\n", "tof_DS");
+   if (b_ppac          ) printf("%10s....on\n", "tof_DS");
    if (b_S0img         ) printf("%10s....on\n", "S0img");
    if (b_dcs0d         ) printf("%10s....on\n", "DCS0D");
    if (b_smwdc_L       ) printf("%10s....on\n", "smwdc-L");
@@ -335,8 +342,9 @@ void Selector_Post::Init(TTree *tree)
       qS1[p] = TMath::QuietNaN();
    }
    nyokiM = 0;
+   ppac = 0;
    
-   tofS1 = TMath::QuietNaN();
+   tofS0DS1 = TMath::QuietNaN();
    tofS0DS1 = TMath::QuietNaN();
 	
    x1 = TMath::QuietNaN(); y1 = TMath::QuietNaN(); a1 = TMath::QuietNaN(); b1 = TMath::QuietNaN(); 
@@ -357,15 +365,16 @@ void Selector_Post::Init(TTree *tree)
    FLc = TMath::QuietNaN();
    betac = TMath::QuietNaN();
    
+   beam = TMath::QuietNaN();
    vertexZ = TMath::QuietNaN();
    E1 = TMath::QuietNaN();
    E2 = TMath::QuietNaN();
    theta1 = TMath::QuietNaN();
    theta2 = TMath::QuietNaN();
-   phi1 = TMath::QuietNaN(); 
+   phi1 = TMath::QuietNaN();
    phi2 = TMath::QuietNaN();
-   Ex = TMath::QuietNaN(); // Sp2 - 13.26;
-   ExS = TMath::QuietNaN(); // Sp - 13.26;
+   Ex = TMath::QuietNaN();    // Sp2 - 13.26;
+   ExS = TMath::QuietNaN();   // Sp - 13.26;
    kMomt = TMath::QuietNaN(); // redisual momentum
    thetak = TMath::QuietNaN();
    phik = TMath::QuietNaN();
@@ -411,6 +420,8 @@ void Selector_Post::Init(TTree *tree)
    newTree->Branch("tofTplaR",&tofTplaR,"tofTplaR/D");
    newTree->Branch("tofS0D",&tof_S0D,"tof_S0D/D");
    
+   newTree->Branch("ppac",&ppac,"ppac/D");
+   
    if( b_plaV775){
       newTree->Branch("tTgt",&tTgt,"tTgt/D");
    //   
@@ -452,7 +463,7 @@ void Selector_Post::Init(TTree *tree)
    }
    
    if( b_tof_s1){
-      newTree->Branch("tofS1", &tofS1, "tofS1/D");
+      newTree->Branch("tofS0DS1", &tofS0DS1, "tofS0DS1/D");
    }
    
    if( b_nyoki_z){
@@ -508,6 +519,10 @@ void Selector_Post::Init(TTree *tree)
    
    if( b_vertex){
       newTree->Branch("vertexZ",&vertexZ,"vertexZ/D");
+   }
+
+   if( b_beamZ){
+      newTree->Branch("beamZ",&beam,"beam/D");
    }
    
    if( b_p2p){

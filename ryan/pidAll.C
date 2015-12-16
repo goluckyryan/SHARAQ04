@@ -4,8 +4,9 @@
 
 void pidAll() {
 
-   const char* rootfile="23F_1105_optics.root";
-   TBeamData *beam = new TBeamData("23F");
+   //const char* rootfile="23F_optics_0603.root";
+   const char* rootfile="25F_optics_0908.root";
+   TBeamData *beam = new TBeamData("25F");
    
    Bool_t BeamTrigger = 0;
    Bool_t ppcoin      = 0;
@@ -13,8 +14,8 @@ void pidAll() {
    
    Bool_t allentry    = 1;
    Int_t firstEntry   = 0;
-   Int_t nEntries     = 500;
-   Int_t runRange[2] = {1000, 2000};
+   Int_t nEntries     = 50000;
+   Int_t runRange[2] = {0, 99000};
   
    beam->Print();
 
@@ -35,7 +36,7 @@ void pidAll() {
    //TH2F* hPIDUS = new TH2F("PID_US",histTitle,300, -1500, -1410, 300 , 4900, 6200);
    //hPIDUS->SetXTitle("tof before offset [ns]");
    //hPIDUS->SetYTitle("Q(FH9)");	
-   TH2F* hPIDUS = new TH2F("PID_US",histTitle,400, 2.2, 3.2, 300 , 0, 11);
+   TH2F* hPIDUS = new TH2F("PID_US",histTitle,400, 2.2, 3.2, 300 , 1, 11);
    hPIDUS->SetXTitle("A/Q");
    hPIDUS->SetYTitle("Z");	
    TH2F* hPIDDS_S0D = new TH2F("hPIDDS_S0D","PID down stream",300, -128,-120, 300 , 1200, 3500);
@@ -150,19 +151,22 @@ void pidAll() {
       for (Int_t p = 0; p < nHit1; p++){
          for (Int_t q = 0; q< nHit2; q++){
          	//printf(" %d, %d \n", hitIDFH9[p], hitID[q]);
+            if (nHit2>1) continue;
             if (hitIDFH9[p] == hitID[q]){
                //printf("PID US : %f, %f \n", tof[q], QAveFH9[p]);
                if ( PIDUSGate && (tof[q] < beam->fTofGate[0] || tof[q] > beam->fTofGate[1])) continue; //PID gate
                if ( PIDUSGate && (QAveFH9[p] < beam->fQGate[0] || QAveFH9[p] > beam->fQGate[1])) continue; // PID gate
                PIDcheck = 1;
-               tof[q] = tof[q] - beam->fToffsetV1190 + 382.18;
+               //hPIDUS->Fill(tof[q],QAveFH9[p]);
+               //tof[q] = tof[q] - beam->fToffsetV1190 + 382.18; //23F
+               tof[q] = tof[q] - beam->fToffsetV1190 + 387.98; //25F
                Double_t beta = L_F3FH9/cVaccum/tof[q];
                Double_t gamma = 1./TMath::Sqrt(1-beta*beta);
-               //hPIDUS->Fill(tof[q],QAveFH9[p]);
+               
                Double_t AoQ = cVaccum*beam->fBrho/mu/gamma/beta;
                //Double_t Zvalue = 0.0073*QAveFH9[p]-33.6; 
                Double_t L = (QAveFH9[p]-4930.);
-               Double_t z = TMath::Sqrt(L/(8.042-L*0.003698))*beta;
+               Double_t z = TMath::Sqrt(L/(8.042-L*0.003698))*beta; //23F and 25F
                //hPIDUS->Fill(AQ,QAveFH9[p]);
                hPIDUS->Fill(AoQ,z);
             }

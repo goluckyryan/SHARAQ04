@@ -279,7 +279,7 @@ void Ana_carbon(){
 
 	//*********************************
 	printf("reduced chi-square: %3.1f/%d = %3.1f\n", total->GetChisquare(), total->GetNDF(), total->GetChisquare()/total->GetNDF());
-	/*
+	
 	textStr.Form("#chi^{2}/NDF: %3.3f", total->GetChisquare()/total->GetNDF());
 	text.DrawLatex(0.15, 0.86, textStr.Data());
 
@@ -385,7 +385,7 @@ void Ana_carbon(){
 		textStr.Form("count: %.0f(%.0f)", k6->Integral(para[16]-3*para[17],para[16]+3*para[17])/binWidth,sigma_integral/binWidth);
 		text.DrawLatex(0.75, 0.42, textStr.Data());
 	}
-	*/
+	
 	k1->Draw("same");
 	if(numGauss >= 2) k2->Draw("same");
 	if(numGauss >= 3) k3->Draw("same");

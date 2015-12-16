@@ -1,10 +1,13 @@
 {
-        gROOT->Reset();
-        gROOT->ProcessLine(".!date");
+        
+        
+        
+        //gROOT->Reset();
+        //gROOT->ProcessLine(".!date");
         gStyle->SetOptStat(0);
 
 //========================================================
-        //char * rootfile = "O_23F_timeoffset.root";
+/*        //char * rootfile = "O_23F_timeoffset.root";
         char * rootfile = "O_23F_timeoffset_58.9_59.7.root";
         //char * rootfile = "O_25F_timeoffset_58.4_59.7.root";
         //char * rootfile = "O_pp_0605.root";
@@ -27,16 +30,16 @@
         //tree->Process("Selector_Aux.C");
 
         
-        Int_t Div[2] = {2,1};  //x,y
-        Int_t size[2] = {500,500}; //x,y
+        Int_t Div[2] = {4,2};  //x,y
+        Int_t size[2] = {300,300}; //x,y
         TCanvas * cScript = new TCanvas("cScript", "cScript", 2000,10 , size[0]*Div[0], size[1]*Div[1]);
         cScript->Divide(Div[0],Div[1]);
         
         
-        TH2F* h2 = new TH2F("h2", rootfile, 11, -1.1, 1.1, 11, -1.1, 1.1);
-   
-        TCanvas * cScript2 = new TCanvas("cScript2", "cScript", 0,0 , 1500, 1500);
-        cScript2->Divide(11,11);
+        //TH2F* h2 = new TH2F("h2", rootfile, 11, -1.1, 1.1, 11, -1.1, 1.1);
+        //
+        //TCanvas * cScript2 = new TCanvas("cScript2", "cScript", 0,0 , 1500, 1500);
+        //cScript2->Divide(11,11);
         
 //======================================================== load histogram
 //	TFile *f1 = new TFile ("hist_23F_0112_new_smwdc_S1_config.root", "read");
@@ -46,6 +49,22 @@
 //	f0->Close();
 /**/
 //======================================================== analysis
+
+        TCut cutL = "plaV775.fID==0 && plaV775.fCharge>1000 && smwdc_L[0].fNPlaneValid>0 && TMath::Abs(plaV775.fTDiff+5)<1";
+        TCut cutR = "plaV775.fID==1 && plaV775.fCharge>1000 && smwdc_R[0].fNPlaneValid>0 && TMath::Abs(plaV775.fTDiff)<1";
+
+        cScript->cd(1); tree->Draw("smwdc_L[0].GetSigma(0)>>h1(100, 0, 1)", cutL);       h1->SetTitle("MWDC-L sigma(X)"); h1->SetXTitle("sigma(X) [mm]");
+        cScript->cd(2); tree->Draw("smwdc_L[0].GetSigma(1)*1000>>h2(50, 0, 20)", cutL); h2->SetTitle("MWDC-L sigma(A)"); h2->SetXTitle("sigma(A) [mrad]");
+        cScript->cd(3); tree->Draw("smwdc_L[0].GetSigma(2)>>h3(100, 0, 1)", cutL);       h3->SetTitle("MWDC-L sigma(Y)"); h3->SetXTitle("sigma(Y) [mm]");
+        cScript->cd(4); tree->Draw("smwdc_L[0].GetSigma(3)*1000>>h4(50, 0, 20)",cutL);  h4->SetTitle("MWDC-L sigma(B)"); h4->SetXTitle("sigma(B) [mrad]");
+
+        cScript->cd(5); tree->Draw("smwdc_R[0].GetSigma(0)>>g1(100, 0, 1)", cutR);       g1->SetTitle("MWDC-L sigma(X)"); g1->SetXTitle("sigma(X) [mm]");
+        cScript->cd(6); tree->Draw("smwdc_R[0].GetSigma(1)*1000>>g2(50, 0, 20)", cutR); g2->SetTitle("MWDC-L sigma(A)"); g2->SetXTitle("sigma(A) [mrad]");
+        cScript->cd(7); tree->Draw("smwdc_R[0].GetSigma(2)>>g3(100, 0, 1)", cutR);       g3->SetTitle("MWDC-L sigma(Y)"); g3->SetXTitle("sigma(Y) [mm]");
+        cScript->cd(8); tree->Draw("smwdc_R[0].GetSigma(3)*1000>>g4(50, 0, 20)",cutR);  g4->SetTitle("MWDC-L sigma(B)"); g4->SetXTitle("sigma(B) [mrad]");
+
+
+
 
 //TCut central = "TMath::Abs((p2p_0000_0000.fRecoilL.Theta()+p2p_0000_0000.fRecoilR.Theta())*TMath::RadToDeg()-86.5)<2.5";
 //TCut side = "TMath::Abs((p2p_0000_0000.fRecoilL.Theta()+p2p_0000_0000.fRecoilR.Theta())*TMath::RadToDeg()-86.5)<5" + !central;
@@ -162,7 +181,7 @@ h2->Draw("colz");
 cScript->cd(2);
 
 /**/
-
+/*
 TCut cut24o = "TMath::Abs(pidAOQ*8-24)<0.5";
 TCut cut23o = "TMath::Abs(pidAOQ*8-23)<0.5";
 TCut cut22o = "TMath::Abs(pidAOQ*8-22)<0.5";

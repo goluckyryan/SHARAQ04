@@ -1,5 +1,7 @@
 aliases:
-  - &beamZ      0.
+  - &beamZ      10.
+  - &shiftL     -0.2
+  - &shiftR     -0.2
   - &useTable   0.
 #============== PROCESSORS     =============================
 Processor:
@@ -19,8 +21,8 @@ Processor:
       TPlasticLDetID:     0
       TPlasticRDetID:     1
       BeamZ:              *beamZ
-      ShiftL:             0.0
-      ShiftR:             0.0
+      ShiftL:             *shiftL
+      ShiftR:             *shiftR
       OutputTransparency: 0
 
   - name: Recoil_L

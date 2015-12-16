@@ -1,0 +1,15 @@
+Processor:
+  - name: proc_coin_gate
+    type: art::TCoinRegGateProcessor.cc
+    parameter:
+      InputCollection:    coinReg
+      GateCoincidenceID:  3
+#===========================================================
+# coincident Register
+# 0 : F3
+# 1 : FH9 (beam trigger)
+# 2 : ppcoin
+# 3 : NDcoin
+# 4 : pp single
+# 5 : ND single
+# 6 : ND cosmic

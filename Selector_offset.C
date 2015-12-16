@@ -101,7 +101,7 @@ Bool_t Selector_offset::Process(Long64_t entry)
       tofS1 = ((art::TTimingData*)tof_s1->At(p))->GetTiming();
    }
    //if( tofS1< 32 || tofS1 > 35 || TMath::IsNaN(tofS1)) return kTRUE; //23F
-   if( tofS1< 35 || tofS1 > 44 || TMath::IsNaN(tofS1)) return kTRUE; //25F
+   if( tofS1< 35 || tofS1 > 39 || TMath::IsNaN(tofS1)) return kTRUE; //25F
    
    //------------------------------
    b_dcs0d->GetEntry(entry);

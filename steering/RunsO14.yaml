@@ -1,0 +1,49 @@
+Processor:
+  - name: ridfevent
+    type: art::TRIDFEventStore
+    parameter:
+      OutputTransparency: 1
+      InputFiles:
+          - /media/sh04HD/RawData/phys140001.ridf
+          - /media/sh04HD/RawData/phys140002.ridf
+          - /media/sh04HD/RawData/phys140003.ridf
+          - /media/sh04HD/RawData/phys140004.ridf
+          - /media/sh04HD/RawData/phys140005.ridf
+          - /media/sh04HD/RawData/phys140006.ridf
+          - /media/sh04HD/RawData/phys140007.ridf
+          - /media/sh04HD/RawData/phys140008.ridf
+          - /media/sh04HD/RawData/phys140009.ridf
+          - /media/sh04HD/RawData/phys140010.ridf
+          - /media/sh04HD/RawData/phys140011.ridf
+          - /media/sh04HD/RawData/phys140012.ridf
+          - /media/sh04HD/RawData/phys140013.ridf
+          - /media/sh04HD/RawData/phys140014.ridf
+          - /media/sh04HD/RawData/phys140015.ridf
+          - /media/sh04HD/RawData/phys140016.ridf
+          - /media/sh04HD/RawData/phys140017.ridf
+          - /media/sh04HD/RawData/phys140018.ridf
+          - /media/sh04HD/RawData/phys140019.ridf
+          - /media/sh04HD/RawData/phys140020.ridf
+          - /media/sh04HD/RawData/phys140021.ridf
+          - /media/sh04HD/RawData/phys140022.ridf
+          - /media/sh04HD/RawData/phys140023.ridf
+          - /media/sh04HD/RawData/phys140024.ridf
+          - /media/sh04HD/RawData/phys140025.ridf
+          - /media/sh04HD/RawData/phys140026.ridf
+          - /media/sh04HD/RawData/phys140027.ridf
+          - /media/sh04HD/RawData/phys140028.ridf
+          - /media/sh04HD/RawData/phys140029.ridf
+          - /media/sh04HD/RawData/phys140030.ridf
+          - /media/sh04HD/RawData/phys140031.ridf
+          - /media/sh04HD/RawData/phys140032.ridf
+#          - /media/sh04HD/RawData/phys140033.ridf  # MWDC problem
+#          - /media/sh04HD/RawData/phys140034.ridf  # MWDC problem
+#          - /media/sh04HD/RawData/phys140035.ridf  # only 10 sec 
+          - /media/sh04HD/RawData/phys140036.ridf
+          - /media/sh04HD/RawData/phys140037.ridf
+          - /media/sh04HD/RawData/phys140038.ridf
+          - /media/sh04HD/RawData/phys140039.ridf
+          - /media/sh04HD/RawData/phys140040.ridf
+          - /media/sh04HD/RawData/phys140041.ridf
+#          - /media/sh04HD/RawData/phys140042.ridf  # some problem
+          - /media/sh04HD/RawData/phys140043.ridf

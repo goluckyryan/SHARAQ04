@@ -91,7 +91,8 @@ void Ana(){
 
   	/**/
   	//========================================================================
-  	/*
+  	
+
 	Double_t para[3*3];
 	Double_t paraError[3*3];
 	
@@ -120,9 +121,10 @@ void Ana(){
 	g2->GetParameters(&para[3]);
 	g3->GetParameters(&para[6]);
 	
-//	g1->GetParErrors(&paraError[0]);
-//	g2->GetParErrors(&paraError[3]);
-//	g3->GetParErrors(&paraError[6]);
+	g1->GetParErrors(&paraError[0]);
+	g2->GetParErrors(&paraError[3]);
+ 
+	g3->GetParErrors(&paraError[6]);
 
 	total->SetParameters(para);
 	

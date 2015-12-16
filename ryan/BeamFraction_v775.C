@@ -1,5 +1,6 @@
 
 void BeamFraction_v775() {
+   //const char* rootfile="23F_optics_0603.root";
    const char* rootfile="25F_optics.root";
    TString beam = "25F";
    Bool_t allentry  = 1;
@@ -8,7 +9,7 @@ void BeamFraction_v775() {
    
    Double_t Zchm = -111.; // -111 = cooling chamber entrance, -222 is beam pipe, +55 NMR coil
    Double_t center[2]={0.4, 1.8};
-   Double_t radius = 7.;
+   Double_t radius = 8.;
    
    Double_t tGate[2];
    Double_t qGate[2];

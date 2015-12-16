@@ -1,12 +1,13 @@
 aliases:
 # beware to overwrite !!!
-  - &output 25F_ppcoin_r7_run0015_0630.root
+  - &output 14O_ND_r14_1022.root
  
 #  - &beamprm prm/kinematics/proton.yaml
-#  - &beamprm prm/kinematics/14O.yaml  
+  - &beamprm prm/kinematics/14O.yaml  
 #  - &beamprm prm/kinematics/22O.yaml
 #  - &beamprm prm/kinematics/23F.yaml
-  - &beamprm prm/kinematics/25F.yaml
+#  - &beamprm prm/kinematics/25F.yaml
+#  - &beamprm prm/kinematics/24O.yaml
 #===========================================================
 Processor:
 #=============  DATA              ==========================
@@ -21,12 +22,12 @@ Processor:
 #  - include: RunsO22_optics.yaml
 #----------------------------------
 #  - include: RunsO14_single.yaml
-#  - include: RunsO14_Up.yaml
-#  - include: RunsO14_Down.yaml
+  - include: RunsO14_up.yaml
+#  - include: RunsO14_down.yaml
 #  - include: RunsO14_Others.yaml
 #----------------------------------
 #  - include: RunsO24.yaml
-  - include: RunsO24_single.yaml
+#  - include: RunsO24_single.yaml
 #  - include: RunsO24_optics.yaml
 #  - include: RunsO24_up.yaml
 #  - include: RunsO24_down.yaml
@@ -36,7 +37,8 @@ Processor:
   - include: coinReg.yaml
   - include: Gate_Initialtor.yaml
 #  - include: Gate_stop_beam.yaml
-  - include: Gate_stop_ppcoin.yaml
+#  - include: Gate_stop_ppcoin.yaml
+  - include: Gate_stop_ND.yaml
 
 ########----------------- BigRIPS & plastics
   - include: plastic_V1190_prm.yaml
@@ -54,13 +56,14 @@ Processor:
 ########----------------- PID
 #  - include: Gate_PID_220Orun_v1190.yaml
 #  - include: Gate_PID_22Orun.yaml
-#  - include: Gate_PID_14Orun.yaml
-  - include: Gate_PID_24Orun.yaml
+  - include: Gate_PID_14Orun.yaml
+#  - include: Gate_PID_24Orun.yaml
 
 #  - include: Gate_stop_PID_23F.yaml 
 #  - include: Gate_stop_PID_22O.yaml
-#  - include: Gate_stop_PID_14O.yaml
-  - include: Gate_stop_PID_25F.yaml 
+  - include: Gate_stop_PID_14O.yaml
+#  - include: Gate_stop_PID_25F.yaml 
+#  - include: Gate_stop_PID_24O.yaml 
 
 ########----------------- S0img  
   - include: dcx1x2_timeRef.yaml           # required for dcx1 and dcx2
@@ -70,8 +73,10 @@ Processor:
   - include: Gate_S0img.yaml
 #  - include: dcx1_track.yaml
 #  - include: dcx2_track.yaml
-  - include: Gate_stop_Crystal_r7.yaml
-#  - include: Gate_stop_Crystal_r14.yaml
+#  - include: Gate_stop_Crystal_r7.yaml
+#  - include: Gate_stop_Crystal_r10.yaml
+  - include: Gate_stop_Crystal_r14.yaml
+
 
 ########----------------- DCS0D  
   - include: dcS0D.yaml    
@@ -87,9 +92,10 @@ Processor:
 
 ########----------------- D1 analysis
 
-#  - include: D1_analysis.yaml   # require dcS0D, S0img
-  - include: D1_analysis_25F.yaml   # require dcS0D, S0img
+  - include: D1_analysis.yaml   # require dcS0D, S0img
+#  - include: D1_analysis_25F.yaml   # require dcS0D, S0img
 
+#------ if using D1_analysis.yaml, no need
 #  - include: s1_time_ref.yaml              # required
 #  - include: nyoki.yaml                    # require plastic_V775 for tof, and s1_time_ref
 #  - include: smwdc_s1_PolyConvert.yaml
@@ -115,15 +121,19 @@ Processor:
 #  - include: beamZ.yaml
 #  - include: recoil_carbon.yaml
 #  - include: recoil_multiOffset.yaml
+
+########----------------- S0DPL PID   
 ##  - include: Gate_PIDdownstream_polygon.yaml
+  - include: Gate_PIDdownstream_polygon_14O.yaml
 #  - include: Gate_PIDdownstream_rectangle.yaml
 
+
 ########----------------- Hist
-#  - name: projection
-#    type: art::TTreeProjectionProcessor
-#    parameter:
-#      Type:  art::TTreeProjection
-#      FileName: steering/hist.yaml
+  - name: projection
+    type: art::TTreeProjectionProcessor
+    parameter:
+      Type:  art::TTreeProjection
+      FileName: steering/hist.yaml
 
 #============== Output     =============================
   - name: outputtree

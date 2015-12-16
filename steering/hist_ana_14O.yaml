@@ -1,0 +1,253 @@
+alias:
+  pidDS: gate.Test(8)
+
+
+group:
+  - name: Analysis
+    title: Analysis
+    contents:      
+#============================ Upstream PID 
+    - name: PIDupstream
+      title: PID updtream | PID(14O)
+      x: [tof_US.fTiming, 500, -1490, -1420]
+      y: [plaV1190_FH9.fCharge, 500, 5000, 6200]
+      cut: gate.Test(0)
+      
+    - name: mwdc_S1_XY
+      title: mwdc S1 XY | PID(14O), dsPID(O)
+      x: [smwdc_S1.fX, 300, -200, 600]
+      y: [smwdc_S1.fY, 300, -200, 200]
+      cut: gate.Test(0) && pidDS
+        
+    - name: dcs0d
+      title: DCS0D XY  | PID(14O), dsPID(O)
+      x: [dcs0d.fX, 300, -100, 100]
+      y: [dcs0d.fY, 300, -100, 100]
+      cut: gate.Test(0) && pidDS
+
+    - name: targetX
+      title: DCS0D X vs TOFS1 | PID(14O)
+      x: [tof_s1.fTiming, 200, 30, 50]
+      y: [S0img.fX, 200, -30, 30]
+      cut: gate.Test(0)
+
+    - name: targetY
+      title: DCS0D Y vs TOFS1 | PID(14O)
+      x: [tof_s1.fTiming, 200, 30, 50]
+      y: [S0img.fY, 200, -30, 30]
+      cut: gate.Test(0)
+        
+    - name: check1
+      title: DCS0D X vs mwdc_S1 X | PID(14O), dsPID(O), cry
+      y: [smwdc_S1.fX, 100, -100, 600]
+      x: [dcs0d.fX, 100, -60, 60]
+      cut: gate.Test(0) && pidDS && gate.Test(3)
+    
+    - name: check2
+      title: DCS0D X vs mwdc_S1 X | PID(14O), dsPID(O), cry
+      x: [tof_s1.fTiming, 100, 30, 50]
+      y: [smwdc_S1.fX, 100, -100, 600]
+      cut: gate.Test(0) && pidDS && gate.Test(3)
+
+    - name: mass
+      title: mass | PID(14O), dsPID(O), s1x<350, cry
+      x: [pid_s1.fAOQ*8*0.384614+5.53846, 100, 10, 16]
+      cut: gate.Test(0) && pidDS && smwdc_S1.fX<350 && gate.Test(3)
+
+    - name: mass_carbon
+      title: mass | PID(14O), dsPID(O), s1x<350, !cry
+      x: [pid_s1.fAOQ*8*0.384614+5.53846, 100, 10, 16]
+      cut: gate.Test(0) && pidDS && smwdc_S1.fX<350  && !gate.Test(3)
+        
+    - name: S0DPID
+      title: QDC(S0D) vs Tof(FH9-S0D)
+      x: [tof_DS.fTiming, 400, -68, -55]
+      y: [plaV775.fCharge, 400,  200, 3000]
+      cut: gate.Test(0) && plaV775.fID == 4
+      
+    - name: Ex
+      title: Sp
+      x: ["p2p.fSp2-4.63", 200, -100, 100]
+      cut: gate.Test(0) && pidDS && TMath::Abs(pid_s1.fAOQ*8*0.384614+5.53846-13)<0.5 && gate.Test(3)
+
+    - name: Ex_carbon
+      title: Sp carbon
+      x: ["p2p.fSp2-4.63", 200, -100, 100]
+      cut: gate.Test(0) && pidDS && TMath::Abs(pid_s1.fAOQ*8*0.384614+5.53846-13)<0.5 && !gate.Test(3)
+
+    - name: momentum
+      title: momentum
+      x: ["p2p.fResidual.P()", 40, 0, 400]
+      cut: gate.Test(0) && pidDS && TMath::Abs(pid_s1.fAOQ*8*0.384614+5.53846-13)<0.5 && gate.Test(3)
+
+    - name: momentum_caron
+      title: momentum, carbon
+      x: ["p2p.fResidual.P()", 40, 0, 400]
+      cut: gate.Test(0) && pidDS && TMath::Abs(pid_s1.fAOQ*8*0.384614+5.53846-13)<0.5 && !gate.Test(3)
+
+#    - name: PIDupstream_2
+#      title: PID upstream | PID(23F)
+#      x: [pid_us.fAOQ, 500, 1.8, 3.2]
+#      y: [pid_us.fZ, 500, 1, 12]
+#      cut: gate.Test(0)
+#============================ S0img
+#    - name: S0img_XY
+#      title: S0img | PID(23F)
+#      x: [S0img.fTrack.fX, 500, -50, 50]
+#      y: [S0img.fTrack.fY, 500, -50, 50]
+#      cut: gate.Test(0)
+#      
+#    - name: S0img_AX
+#      title: S0img | PID(23F)
+#      x: [S0img.fTrack.fX, 500, -50, 50]
+#      y: [S0img.fTrack.fA*1000, 500, -50, 50]
+#      cut: gate.Test(0)
+#      
+#    - name: S0img_BY
+#      title: S0img | PID(23F)
+#      x: [S0img.fTrack.fY, 500, -50, 50]
+#      y: [S0img.fTrack.fB*1000, 500, -50, 50]
+#      cut: gate.Test(0)
+#      
+#    - name: S0img_BA
+#      title: S0img | PID(23F)
+#      x: [S0img.fTrack.fA*1000, 500, -50, 50]
+#      y: [S0img.fTrack.fB*1000, 500, -50, 50]
+#      cut: gate.Test(0)
+#      
+#    - name: S0imgX_nyokiID
+#      title: S0img X vs nyokiID | PID(23F)
+#      x: [nyoki.fID, 10, 1, 11]
+#      y: ["S0img[0].fTrack.fX", 500, -50, 50]
+#      cut: gate.Test(0) & & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax)
+#      
+#    - name: S0imgY_nyokiID
+#      title: S0img Y vs nyokiID | PID(23F)
+#      x: [nyoki.fID, 10, 1, 11]
+#      y: ["S0img[0].fTrack.fY", 500, -50, 50]
+#      cut: gate.Test(0)
+#============================ vertex
+#    - name: vertexZ
+#      title: Vertex.Z | PID(23F)
+#      x: [vertex.fZ, 300, -100, 200]
+#      cut: gate.Test(0)
+#      
+#    - name: vertexXY
+#      title: Vertex.XY | PID(23F)
+#      x: [vertex.fX, 300, -50, 50]
+#      y: [vertex.fY, 300, -50, 50]
+#      cut: gate.Test(0)
+# 
+#============================ Downstream PID
+#    - name: S0DPID
+#      title: QDC(S0D) vs Tof(FH9-S0D)
+#      x: [tof_DS.fTiming, 400, -68, -55]
+#      y: [plaV775.fCharge, 400,  200, 3000]
+#      cut: gate.Test(0) && plaV775.fID == 4
+      
+#============================ p2p
+#   #------------ simple = PID(23F) + vertexZ + tof_D1
+#    - name: Sp
+#      title: Sp
+#      x: ["p2p[0].fSp", 200, -100, 100]
+#      cut: gate.Test(0) && gate.Test(
+
+      
+#   #------------ simple + crystal
+#    - name: Sp_tgt
+#      title: Sp | simple & crystal
+#      x: ["p2p[0].fSp", 200, -100, 100]
+#      cut: simpleGate & tgtGate
+#    
+#    - name: Sp_s1x_tgt
+#      title: Sp vs s1x | simple & crystal
+#      x: [smwdc_S1.fTrack.fX, 200, -200, 400]
+#      y: ["p2p[0].fSp", 200, -100, 100]
+#      cut: simpleGate & tgtGate
+# 
+#   #------------ simple + holder   
+#    - name: Sp_holder
+#      title: Sp | simple & hoder
+#      x: ["p2p[0].fSp", 200, -100, 100]
+#      cut: simpleGate & holderGate
+#    
+#    - name: Sp_s1x_holder
+#      title: Sp vs s1x | simple & holder
+#      x: [smwdc_S1.fTrack.fX, 200, -200, 400]
+#      y: ["p2p[0].fSp", 200, -100, 100]
+#      cut: simpleGate & holderGate
+#      
+#   #------------ common
+#    - name: Sp_common
+#      title: *title_Spcommon
+#      x: ["p2p[0].fSp", 200, -100, 100]
+#      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax)
+#    
+#    - name: Sp_s1x_common
+#      title: Sp vs s1x | common
+#      x: [smwdc_S1.fTrack.fX, 200, -200, 400]
+#      y: ["p2p[0].fSp", 200, -100, 100]
+#      cut: commonGate &  nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax)
+#
+#    - name: Sp_AoQ_common
+#      title: Sp vs A/Q | common
+#      x: ["pid_s1.fAOQ", 500, 1.8, 3.2]
+#      y: ["p2p[0].fSp", 200, -100, 100]
+#      cut: commonGate &  nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax)
+#   #------------ common + tgt
+#    - name: Sp_common_tgt
+#      title: Sp | common tgt
+#      x: ["p2p[0].fSp", 200, -100, 100]
+#      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & tgtGate
+#    
+#    - name: Sp_s1x_common_tgt
+#      title: Sp vs s1x | common tgt
+#      x: [smwdc_S1.fTrack.fX, 200, -200, 400]
+#      y: ["p2p[0].fSp", 200, -100, 100]
+#      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & tgtGate
+#      
+#    - name: Sp_Z_common_tgt
+#      title: Sp vs Z | common tgt
+#      x: [pid_s1.fZ, 500, 0, 11]
+#      y: ["p2p[0].fSp", 200, -100, 100]
+#      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & tgtGate
+#      
+#    - name: Sp_AoQ_common_tgt
+#      title: Sp vs A/Q | common tgt
+#      x: ["pid_s1.fAOQ", 500, 1.8, 3.2]
+#      y: ["p2p[0].fSp", 200, -100, 100]
+#      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & tgtGate
+#   #------------ common + holder
+#    - name: Sp_common_holder
+#      title: Sp | common holder
+#      x: ["p2p[0].fSp", 200, -100, 100]
+#      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & holderGate
+#    
+#    - name: Sp_s1x_common_holder
+#      title: Sp vs s1x | common holder
+#      x: [smwdc_S1.fTrack.fX, 200, -200, 400]
+#      y: ["p2p[0].fSp", 200, -100, 100]
+#      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & holderGate
+#      
+#    - name: Sp_Z_common_holder
+#      title: Sp vs Z | common holder
+#      x: [pid_s1.fZ, 500, 0, 11]
+#      y: ["p2p[0].fSp", 200, -100, 100]
+#      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & tgtGate
+#      
+#    - name: Sp_AoQ_common__holder
+#      title: Sp vs A/Q | common holder
+#      x: ["pid_s1.fAOQ", 500, 1.8, 3.2]
+#      y: ["p2p[0].fSp", 200, -100, 100]
+#      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & holderGate
+#      
+#      #------------
+#    - name: Sp_common_tgt_AoQ
+#      title: Sp | common tgt |AoQ-2.56|<0.26
+#      x: ["p2p[0].fSp", 100, -20, 80]
+#      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & tgtGate & abs(pid_s1.fAOQ-2.56)<0.26
+#    - name: Sp_common_holder_AoQ
+#      title: Sp | common tgt |AoQ-2.56|<0.26
+#      x: ["p2p[0].fSp", 100, -20, 80]
+#      cut: commonGate & nyoki.fCharge>nyokiQmin & (nyokiIDmin<=nyoki.fID & nyoki.fID <=nyokiIDmax) & holderGate & abs(pid_s1.fAOQ-2.56)<0.26          
+#         
