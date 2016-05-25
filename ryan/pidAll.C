@@ -4,9 +4,9 @@
 
 void pidAll() {
 
-   //const char* rootfile="23F_optics_0603.root";
-   const char* rootfile="25F_optics_0908.root";
-   TBeamData *beam = new TBeamData("25F");
+   const char* rootfile="23F_optics_0603.root";
+   //const char* rootfile="25F_optics_0908.root";
+   TBeamData *beam = new TBeamData("23F");
    
    Bool_t BeamTrigger = 0;
    Bool_t ppcoin      = 0;
@@ -18,6 +18,12 @@ void pidAll() {
    Int_t runRange[2] = {0, 99000};
   
    beam->Print();
+   
+   //-1465.,5767.,-1461.,6060.] // 23F
+   double t1 = -1465.;
+   double t2 = -1460.;
+   double q1 = 5680.;
+   double q2 = 6060.;
 
 //########################################################   
    Double_t Principle_tof = tofByBrho(L_F3FH9,beam->fBrho, beam->fMass, beam->fZ);
@@ -30,15 +36,18 @@ void pidAll() {
    
    gStyle->SetOptStat(0);
 
-   TCanvas* cPidAll = new TCanvas("cPidAll", "PID", 2000, 0, 800, 800);
-   cPidAll->Divide(1,1);
+   TCanvas* cPidAll = new TCanvas("cPidAll", "PID", 2000, 0, 1600, 800);
+   cPidAll->Divide(2,1);
    
    //TH2F* hPIDUS = new TH2F("PID_US",histTitle,300, -1500, -1410, 300 , 4900, 6200);
    //hPIDUS->SetXTitle("tof before offset [ns]");
    //hPIDUS->SetYTitle("Q(FH9)");	
-   TH2F* hPIDUS = new TH2F("PID_US",histTitle,400, 2.2, 3.2, 300 , 1, 11);
+   TH2F* hPIDUS = new TH2F("PID_US",histTitle,400, 2.2, 3.2, 300 , 1, 12);
    hPIDUS->SetXTitle("A/Q");
    hPIDUS->SetYTitle("Z");	
+   TH2F* hPIDUSg = new TH2F("PID_USg",histTitle,400, 2.2, 3.2, 300 , 1, 12);
+   hPIDUSg->SetXTitle("A/Q");
+   hPIDUSg->SetYTitle("Z");	
    TH2F* hPIDDS_S0D = new TH2F("hPIDDS_S0D","PID down stream",300, -128,-120, 300 , 1200, 3500);
    hPIDDS_S0D->SetXTitle("tof before offset [ns]");
    hPIDDS_S0D->SetYTitle("Q");
@@ -48,7 +57,14 @@ void pidAll() {
    TH2F* hPIDDS_TplaR = new TH2F("hPIDDS_TplaR","PID Tpla-R",100, -60, -20, 300 ,500, 2500);
    hPIDDS_TplaR->SetXTitle("tof before offset [ns]");
    hPIDDS_TplaR->SetYTitle("Q");
-  
+   
+   TH2F* hdETOF = new TH2F("US_dETOF", "US dE-TOF", 400, -1500, -1410, 300, 4900, 6100);
+   hdETOF->SetXTitle("TOF [ns]");
+   hdETOF->SetYTitle("dE [ch]");
+
+   TH2F* hdETOF2 = new TH2F("US_dETOF2", "US dE-TOF", 400, -1500, -1410, 300, 4900, 6100);
+   hdETOF2->SetXTitle("TOF [ns]");
+   hdETOF2->SetYTitle("dE [ch]");
 
 //#####################################################
    TBenchmark clock;
@@ -158,9 +174,9 @@ void pidAll() {
                if ( PIDUSGate && (QAveFH9[p] < beam->fQGate[0] || QAveFH9[p] > beam->fQGate[1])) continue; // PID gate
                PIDcheck = 1;
                //hPIDUS->Fill(tof[q],QAveFH9[p]);
-               //tof[q] = tof[q] - beam->fToffsetV1190 + 382.18; //23F
-               tof[q] = tof[q] - beam->fToffsetV1190 + 387.98; //25F
-               Double_t beta = L_F3FH9/cVaccum/tof[q];
+               Double_t tofq = tof[q] - beam->fToffsetV1190 + 382.18; //23F
+               //tof[q] = tof[q] - beam->fToffsetV1190 + 387.98; //25F
+               Double_t beta = L_F3FH9/cVaccum/tofq;
                Double_t gamma = 1./TMath::Sqrt(1-beta*beta);
                
                Double_t AoQ = cVaccum*beam->fBrho/mu/gamma/beta;
@@ -169,6 +185,16 @@ void pidAll() {
                Double_t z = TMath::Sqrt(L/(8.042-L*0.003698))*beta; //23F and 25F
                //hPIDUS->Fill(AQ,QAveFH9[p]);
                hPIDUS->Fill(AoQ,z);
+               hdETOF->Fill(tof[q], QAveFH9[p]);
+               //if( 2.52<AoQ && AoQ<2.58 && 7.7<z && z<10.5){
+               //   hdETOF2->Fill(tof[q], QAveFH9[p]);
+               //}
+               
+               if( t1<tof[q] && tof[q]< t2 && q1<QAveFH9[p] && QAveFH9[p]<q2){
+                  hPIDUSg->Fill(AoQ,z);
+                  hdETOF2->Fill(tof[q], QAveFH9[p]);
+               }
+               
             }
          }
       }
@@ -219,9 +245,28 @@ void pidAll() {
       }
 
    }
+
+   TCutG * gate = new TCutG("gate", 4);
+   gate->SetVarX("");
+   gate->SetVarY("");
+   gate->SetPoint(0, t1, q1);
+   gate->SetPoint(1, t2, q1);
+   gate->SetPoint(2, t2, q2);
+   gate->SetPoint(3, t1, q2);
+   gate->SetPoint(4, t1, q1);
+   gate->SetLineColor(2);
+   gate->SetLineWidth(2);
+
    
    cPidAll->cd(1);
-   hPIDUS->Draw("colz");
+   //hPIDUS->Draw("colz");
+   hdETOF->Draw("colz");
+   gate->Draw("same");
+   cPidAll->cd(2);
+   //hPIDUSg->Draw("colz");
+   hdETOF2->Draw("colz");
+   
+
    /*
    TLatex text;
    text.SetNDC();

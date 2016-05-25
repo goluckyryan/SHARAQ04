@@ -1,5 +1,7 @@
 void MaxiLikelihood2(TH1F* h1, TH1F* h2, TH1F* h3) {
    
+   // find the ratio of h2 an h3 in h1
+   
    Int_t nBin = h1->GetNbinsX();
    if( h2->GetNbinsX() != nBin ) return 0;
    if( h3->GetNbinsX() != nBin ) return 0;

@@ -202,6 +202,15 @@ void Selector_Post::Init(TTree *tree)
    // code, but the routine can be extended by the user if needed.
    // Init() will be called many times when running on PROOF
    // (once per file to be processed).
+   
+   
+   printf("/******************************/\n");
+   printf("This is Selector_Post    \n");
+   printf("This simply trim the artemis \n");
+   printf("      generated root into a root.\n");
+   printf("Thsi generated P_*.root\n");
+   printf("/******************************/\n");
+   
    totnumEntry = tree->GetEntries();
 
    count = 0;
@@ -243,7 +252,7 @@ void Selector_Post::Init(TTree *tree)
    fChain = tree;
    fChain->SetMakeClass(1);
 
-   fChain->SetBranchAddress("eventheader0", &eventheader, &b_eventheader);
+   fChain->SetBranchAddress("eventheader", &eventheader, &b_eventheader);
    //fChain->SetBranchAddress("eventheader0", &eventheader, &b_eventheader);
    fChain->SetBranchAddress("coinReg", &coinReg, &b_coinReg);
    //fChain->SetBranchAddress("gate", &gate, &b_gate);
@@ -344,7 +353,6 @@ void Selector_Post::Init(TTree *tree)
    nyokiM = 0;
    ppac = 0;
    
-   tofS0DS1 = TMath::QuietNaN();
    tofS0DS1 = TMath::QuietNaN();
 	
    x1 = TMath::QuietNaN(); y1 = TMath::QuietNaN(); a1 = TMath::QuietNaN(); b1 = TMath::QuietNaN(); 

@@ -73,36 +73,39 @@ Bool_t Selector_PostAna::Process(Long64_t entry)
    const Double_t L_FH9S0 = 10865.;
    const Double_t L_F3FH9 = 74075.;
    const Double_t toffset_F3FH9 = 703.68;
-   const Double_t toffset_L = 58.7;
-   const Double_t toffset_R = 59.5;
+   const Double_t toffset_L = 58.7 + 0.2;
+   const Double_t toffset_R = 59.5 + 0.2;
    
-   const Double_t CryRadius = 8;
+   const Double_t CryRadius = 14;
    
    const Bool_t vertexCorr = 1; 
    const Bool_t IncAngleCorr = 1; 
    const Bool_t PolMagCorr = 1; 
 
-   /*
-   Sp0 = 23.26; //22O
-   mass = 20498.064784;
-   massA = 22;
-   massZ = 8;
-   Brho0 = 6.7288;
-   /**/
+   //if ( ISO == "22O"){
+   //   Sp0 = 23.26; //22O
+   //   mass = 20498.064784;
+   //   massA = 22;
+   //   massZ = 8;
+   //   Brho0 = 6.7288;
+   //}
+   //
+   //if( ISO == "23F"){
+   //   Sp0 = 13.26; //23F
+   //   mass = 21423.077578;
+   //   massA = 23;
+   //   massZ = 9;
+   //   Brho0 = 6.7288;
+   //}
    
-   
-   //Sp0 = 13.26; //23F
-   //mass = 21423.077578;
-   //massA = 23;
-   //massZ = 9;
-   //Brho0 = 6.7288;
-   
-   
-   Sp0 = 14.43; //25F
-   mass = 23294.116162;
-   massA = 25;
-   massZ = 9;
-   Brho0 = 7.1315;
+   //if( ISO == "25F"){
+      Sp0 = 14.43; //25F
+      mass = 23294.116162;
+      massA = 25;
+      massZ = 9;
+      Brho0 = 7.1315;
+      //printf(" using 25F: Sp:%f \n", Sp0);
+   //}
    
    beamZ = 10.; // for TOF
    
@@ -176,8 +179,9 @@ Bool_t Selector_PostAna::Process(Long64_t entry)
    if( TMath::IsNaN(tF3)) return kTRUE;
    if( TMath::IsNaN(tTplaL)) return kTRUE;
    if( TMath::IsNaN(tTplaR)) return kTRUE;
-   if( TMath::IsNaN(qTplaL)) return kTRUE;
+   if( TMath::IsNaN(qTplaL)) return kTRUE; 
    if( TMath::IsNaN(qTplaR)) return kTRUE;
+   
    //____________________________________________________________ nyoki_t
    tofS0DS1 = TMath::QuietNaN(); qS1 = TMath::QuietNaN(); tS1 = TMath::QuietNaN();
    b_nyoki_t->GetEntry(entry,0);
@@ -307,14 +311,23 @@ Bool_t Selector_PostAna::Process(Long64_t entry)
    //____________________________________________________________ 
    TVector3 p1(x1,y1,1022.37), p2(x2,y2,1022.37), pV(vertexX,vertexY,vertexZ); // vector of P1, P2, P_vertex
    
-   TVector3 dp1(x1+dx1,y1+dy1,1022.37), dp2(x2+dx2,y2+dy2,1022.37);
+   TRandom ranG;
+   
+   Double_t Dx1 = ranG.Gaus(x1,dx1);
+   Double_t Dy1 = ranG.Gaus(y1,dy1);
+   Double_t Dx2 = ranG.Gaus(x2,dx2);
+   Double_t Dy2 = ranG.Gaus(y2,dy2);
+   
+   Double_t terr= 0.5;
+   
+   TVector3 dp1(Dx1, Dy1, 1022.37), dp2( Dx2, Dy2, 1022.37);
 
    // rotate to Lab frame
    p1.RotateY(60*TMath::DegToRad());
    dp1.RotateY(60*TMath::DegToRad());
    //set the length to Tpla;
    p1.SetMag(p1.Mag()*1400/1022.37);
-   dp1.SetMag(p1.Mag()*1400/1022.37);
+   dp1.SetMag(dp1.Mag()*1400/1022.37);
    // Reaction Vectex Correction
    if( vertexCorr ) {
       p1 = p1 - pV;
@@ -333,7 +346,7 @@ Bool_t Selector_PostAna::Process(Long64_t entry)
    p1.SetMag(mp*beta1/TMath::Sqrt(1-beta1*beta1));
    
    Double_t dFL1 = dp1.Mag();
-   Double_t dbeta1 = dFL1/tofTplaL/299.792458;
+   Double_t dbeta1 = dFL1/(ranG.Gaus(tofTplaL, terr))/299.792458;
    dp1.SetMag(mp*dbeta1/TMath::Sqrt(1-dbeta1*dbeta1));
    
    // rotate to Lab frame
@@ -341,7 +354,7 @@ Bool_t Selector_PostAna::Process(Long64_t entry)
    dp2.RotateY(-60*TMath::DegToRad());
    //set the length to Tpla;
    p2.SetMag(p2.Mag()*1400/1022.37);
-   dp2.SetMag(p2.Mag()*1400/1022.37);
+   dp2.SetMag(dp2.Mag()*1400/1022.37);
    // Reaction Vectex Correction
    if( vertexCorr) {
       p2 = p2 - pV;
@@ -360,7 +373,7 @@ Bool_t Selector_PostAna::Process(Long64_t entry)
    p2.SetMag(mp*beta2/TMath::Sqrt(1-beta2*beta2));
    
    Double_t dFL2 = dp2.Mag();
-   Double_t dbeta2 = dFL2/tofTplaR/299.792458;
+   Double_t dbeta2 = dFL2/(ranG.Gaus(tofTplaR, terr))/299.792458;
    dp2.SetMag(mp*dbeta2/TMath::Sqrt(1-dbeta2*dbeta2));
    
    //______________________________________________________________________ 4-vector
@@ -419,13 +432,20 @@ Bool_t Selector_PostAna::Process(Long64_t entry)
    kMomt = Prc.P();
    dkMomt = Prc.P()-dPrc.P();
    
-   //if(-40<Ex && Ex<60) printf("kMomt:%10.3f, dkMomt:%10.3f\n", kMomt, dkMomt); 
-   
+   //if(-40<Ex && Ex<60) {
+   //   printf(" dx1:%10.3f, dy1:%10.3f, dx2:%10.3f, dy2:%10.3f \n", dx1, dy1, dx2, dy2);
+   //   printf(" FL1:%10.3f, dFL1:%10.3f \n", FL1, dFL1);
+   //   printf(" p1:%10.3f, dp1:%10.3f \n", p1.Mag(), dp1.Mag());
+   //   P1.Print();
+   //   dP1.Print();
+   //   printf("kMomt:%10.3f, dkMomt:%10.3f, %%diff: %10.3f\n", kMomt, dkMomt, 100.*dkMomt/kMomt); 
+   //}
    //#################################################################### Downsteam analsysi
    pidZ = qS1;
    
    tofc = tofS0DS1;
-   s1xc = (s1x + (-0.004874) * (-26.6) * s0dx) / (1 + (-0.004874) * s0dx);
+   Double_t s0da = (s0dx - s0x);
+   s1xc = (s1x + (-0.004874) * (-26.6) * s0da) / (1 + (-0.004874) * s0da); // from 23F
    
    //===== 23F
    if( Sp0 == 13.26 ){
@@ -436,8 +456,16 @@ Bool_t Selector_PostAna::Process(Long64_t entry)
    if( Sp0 == 14.43){
       //pidAOQ_p = 0.05327*tofc +(-0.0021946)*s1xc +(1.64e-6)*s1xc*s1xc + 0.75409;
       //pidAOQ = 1.37253 - 0.0402106*tofc + 1.05522*pidAOQ_p -1./8.;
-      pidAOQ_p = -0.595295 + 0.0854414*tofc +(-0.00209171)*s1xc +(9.523e-7)*s1xc*s1xc;
-      pidAOQ = 2.41191 - 0.0676409*tofc + 1.06027*pidAOQ_p;
+      
+      //pidAOQ_p = -0.595295 + 0.0854414*tofc +(-0.00209171)*s1xc +(9.523e-7)*s1xc*s1xc;
+      //pidAOQ = 2.41191 - 0.0676409*tofc + 1.06027*pidAOQ_p;
+      
+      s1xc = s1x + 0.129648 * s0dx;
+      
+      Double_t AOQ_x = 0.6629 + 1.0097 * 1e-6 *(s1xc - 1058.2371)* (s1xc - 1058.2371) + 0.0229501 * tofc;
+
+      pidAOQ = -0.469828*AOQ_x*AOQ_x +3.71596*AOQ_x -3.92076;
+      
    }
    
    //===== 22O

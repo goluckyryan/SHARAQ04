@@ -3,6 +3,10 @@
 // Fri Jul 24 15:48:54 2015 by ROOT version 5.34/10
 // from TTree tree/tree
 // found on file: X_25F_ppcoin_r14_core.root
+
+
+// process on after PostAna
+
 //////////////////////////////////////////////////////////
 
 #ifndef Selector_PostAna2_h
@@ -167,6 +171,12 @@ void Selector_PostAna2::Init(TTree *tree)
    // code, but the routine can be extended by the user if needed.
    // Init() will be called many times when running on PROOF
    // (once per file to be processed).
+   
+   printf("/******************************/\n");
+   printf("This is Selector_Post    \n");
+   printf("This simply trim the X_*.root or P_*.root \n");
+   printf("Thsi generated Z_*.root\n");
+   printf("/******************************/\n");
    
    totnumEntry = tree->GetEntries();
 

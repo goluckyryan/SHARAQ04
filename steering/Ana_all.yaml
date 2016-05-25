@@ -1,11 +1,11 @@
 aliases:
 # beware to overwrite !!!
-  - &output 14O_ND_r14_1022.root
+  - &output 23F_optics_0404.root
  
 #  - &beamprm prm/kinematics/proton.yaml
-  - &beamprm prm/kinematics/14O.yaml  
+#  - &beamprm prm/kinematics/14O.yaml  
 #  - &beamprm prm/kinematics/22O.yaml
-#  - &beamprm prm/kinematics/23F.yaml
+  - &beamprm prm/kinematics/23F.yaml
 #  - &beamprm prm/kinematics/25F.yaml
 #  - &beamprm prm/kinematics/24O.yaml
 #===========================================================
@@ -19,10 +19,10 @@ Processor:
 #  - include: RunsO22.yaml
 #  - include: RunsO22_single.yaml
 #  - include: RunsO22_clean.yaml
-#  - include: RunsO22_optics.yaml
+  - include: RunsO22_optics.yaml
 #----------------------------------
 #  - include: RunsO14_single.yaml
-  - include: RunsO14_up.yaml
+#  - include: RunsO14_up.yaml
 #  - include: RunsO14_down.yaml
 #  - include: RunsO14_Others.yaml
 #----------------------------------
@@ -38,7 +38,7 @@ Processor:
   - include: Gate_Initialtor.yaml
 #  - include: Gate_stop_beam.yaml
 #  - include: Gate_stop_ppcoin.yaml
-  - include: Gate_stop_ND.yaml
+#  - include: Gate_stop_ND.yaml
 
 ########----------------- BigRIPS & plastics
   - include: plastic_V1190_prm.yaml
@@ -56,43 +56,43 @@ Processor:
 ########----------------- PID
 #  - include: Gate_PID_220Orun_v1190.yaml
 #  - include: Gate_PID_22Orun.yaml
-  - include: Gate_PID_14Orun.yaml
+#  - include: Gate_PID_14Orun.yaml
 #  - include: Gate_PID_24Orun.yaml
 
 #  - include: Gate_stop_PID_23F.yaml 
 #  - include: Gate_stop_PID_22O.yaml
-  - include: Gate_stop_PID_14O.yaml
+#  - include: Gate_stop_PID_14O.yaml
 #  - include: Gate_stop_PID_25F.yaml 
 #  - include: Gate_stop_PID_24O.yaml 
 
 ########----------------- S0img  
-  - include: dcx1x2_timeRef.yaml           # required for dcx1 and dcx2
-  - include: dcx1.yaml
-  - include: dcx2.yaml
-  - include: S0img.yaml
-  - include: Gate_S0img.yaml
+#  - include: dcx1x2_timeRef.yaml           # required for dcx1 and dcx2
+#  - include: dcx1.yaml
+#  - include: dcx2.yaml
+#  - include: S0img.yaml
+#  - include: Gate_S0img.yaml
 #  - include: dcx1_track.yaml
 #  - include: dcx2_track.yaml
 #  - include: Gate_stop_Crystal_r7.yaml
 #  - include: Gate_stop_Crystal_r10.yaml
-  - include: Gate_stop_Crystal_r14.yaml
+#  - include: Gate_stop_Crystal_r14.yaml
 
 
 ########----------------- DCS0D  
-  - include: dcS0D.yaml    
-  - include: dcS0D_track.yaml   
+#  - include: dcS0D.yaml    
+#  - include: dcS0D_track.yaml   
 
 ########----------------- MWDC-L and R
-  - include: plastic_V767_timeRef.yaml
-  - include: plastic_V767.yaml
-  - include: smwdc_l_PolyConvert.yaml
-  - include: smwdc_l_track.yaml  
-  - include: smwdc_r_PolyConvert.yaml     
-  - include: smwdc_r_track.yaml
+#  - include: plastic_V767_timeRef.yaml
+#  - include: plastic_V767.yaml
+#  - include: smwdc_l_PolyConvert.yaml
+#  - include: smwdc_l_track.yaml  
+#  - include: smwdc_r_PolyConvert.yaml     
+#  - include: smwdc_r_track.yaml
 
 ########----------------- D1 analysis
 
-  - include: D1_analysis.yaml   # require dcS0D, S0img
+#  - include: D1_analysis.yaml   # require dcS0D, S0img
 #  - include: D1_analysis_25F.yaml   # require dcS0D, S0img
 
 #------ if using D1_analysis.yaml, no need
@@ -107,16 +107,16 @@ Processor:
 #  - include: PID_24Orun.yaml
 
 ########----------------- Physics
-  - name: proc_beam
-    type: art::TParameterLoader
-    parameter:
-      Name:     beam
-      Type:     art::sh04::TBeamParameter
-      FileName: *beamprm
-  
-  - include: smwdc_geo.yaml
-  - include: vertex.yaml
-  - include: recoil.yaml                   # set beamZ, angle correction
+#  - name: proc_beam
+#    type: art::TParameterLoader
+#    parameter:
+#      Name:     beam
+#      Type:     art::sh04::TBeamParameter
+#      FileName: *beamprm
+#  
+#  - include: smwdc_geo.yaml
+#  - include: vertex.yaml
+#  - include: recoil.yaml                   # set beamZ, angle correction
 #  - include: recoil_keTable.yaml     
 #  - include: beamZ.yaml
 #  - include: recoil_carbon.yaml
@@ -124,16 +124,16 @@ Processor:
 
 ########----------------- S0DPL PID   
 ##  - include: Gate_PIDdownstream_polygon.yaml
-  - include: Gate_PIDdownstream_polygon_14O.yaml
+#  - include: Gate_PIDdownstream_polygon_14O.yaml
 #  - include: Gate_PIDdownstream_rectangle.yaml
 
 
 ########----------------- Hist
-  - name: projection
-    type: art::TTreeProjectionProcessor
-    parameter:
-      Type:  art::TTreeProjection
-      FileName: steering/hist.yaml
+#  - name: projection
+#    type: art::TTreeProjectionProcessor
+#    parameter:
+#      Type:  art::TTreeProjection
+#      FileName: steering/hist.yaml
 
 #============== Output     =============================
   - name: outputtree

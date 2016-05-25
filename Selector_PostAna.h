@@ -3,6 +3,10 @@
 // Tue Jul 21 18:26:44 2015 by ROOT version 5.34/10
 // from TTree tree/tree
 // found on file: 25F_ppcoin_r14_0720_noCorr.root
+
+
+// This is for processing .root
+
 //////////////////////////////////////////////////////////
 
 #ifndef Selector_PostAna_h
@@ -12,6 +16,7 @@
 #include <TChain.h>
 #include <TFile.h>
 #include <TSelector.h>
+#include <TBenchmark.h>
 
 // Header file for the classes stored in the TTree if any.
 //#include "./TEventHeader.h"
@@ -28,6 +33,8 @@
 class Selector_PostAna : public TSelector {
 public :
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
+   
+   TString ISO;
    
    TBenchmark clock;
    Bool_t shown;
@@ -182,8 +189,19 @@ void Selector_PostAna::Init(TTree *tree)
    // Init() will be called many times when running on PROOF
    // (once per file to be processed).
    
+   //ISO = "23F";
+   ISO = "25F";
+   //ISO = "22O";
+   
+   printf("/******************************      %s /\n", ISO.Data());
+   printf("This is Selector_Post    \n");
+   printf("This simply trim the artemis \n");
+   printf("      generated root into a root.\n");
+   printf("Thsi generated X_*.root\n");
+   printf("/******************************/\n");
+   
    totnumEntry = tree->GetEntries();
-
+   
    count = 0;
    
    mp = 938.272;
@@ -224,14 +242,14 @@ void Selector_PostAna::Init(TTree *tree)
    fChain = tree;
    fChain->SetMakeClass(1);
 
-   //fChain->SetBranchAddress("eventheader0", &eventheader, &b_eventheader);
-   fChain->SetBranchAddress("eventheader", &eventheader, &b_eventheader);
+   if( ISO == "23F" || ISO == "22O") fChain->SetBranchAddress("eventheader0", &eventheader, &b_eventheader);
+   if( ISO == "25F") fChain->SetBranchAddress("eventheader", &eventheader, &b_eventheader);
    fChain->SetBranchAddress("coinReg", &coinReg, &b_coinReg);
    //fChain->SetBranchAddress("gate", &gate, &b_gate);
    //fChain->SetBranchAddress("plaV1190_F3", &plaV1190_F3, &b_plaV1190_F3);
    //fChain->SetBranchAddress("plaV1190_FH9", &plaV1190_FH9, &b_plaV1190_FH9);
    //fChain->SetBranchAddress("tof_US", &tof_US, &b_tof_US);
-   //fChain->SetBranchAddress("ppac", &ppac, &b_ppac);
+   if( ISO == "25F") fChain->SetBranchAddress("ppac", &ppac, &b_ppac);
    fChain->SetBranchAddress("plaV775", &plaV775, &b_plaV775);
    //fChain->SetBranchAddress("tof_DS", &tof_DS, &b_tof_DS);
    fChain->SetBranchAddress("S0img", &S0img, &b_S0img);
@@ -258,7 +276,7 @@ void Selector_PostAna::Init(TTree *tree)
    
    //================================Store in New ROOT file
    saveFileName = fChain->GetDirectory()->GetName();
-   saveFileName = "X2_"+saveFileName;
+   saveFileName = "X4_"+saveFileName;
    
    printf("Converting %s ------> %s , total Entry : %d \n", fChain->GetDirectory()->GetName(), saveFileName.Data(), totnumEntry);
    
