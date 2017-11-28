@@ -9,8 +9,8 @@
         //char * rootfile = "O_25F_timeoffset_58.9_59.7.root";
         //char * rootfile = "P_25F_ppcoin_r14_0715.root";
         //char * rootfile = "X2_25F_ppcoin_r14_0715.root"; // using correct momt calculation
-        char * rootfile = "X_25F_ppcoin_r14_0720_noCorr.root"; 
-        //char * rootfile = "Z_X_25F_ppcoin_r14_0720_noCorr.root"; // using for spectrum, tTpla offset + 0.2 from X_25*.root
+        //char * rootfile = "X_25F_ppcoin_r14_0720_noCorr.root"; 
+        char * rootfile = "Z_X_25F_ppcoin_r14_0720_noCorr.root"; // using for spectrum, tTpla offset + 0.2 from X_25*.root
         //char * rootfile = "X2_25F_ppcoin_r14_0720_noCorr.root"; // using correct momt calculation
         //char * rootfile = "X3_25F_ppcoin_r14_0720_noCorr.root"; // using s0dx-s0x as angle for downstream PID
         //char * rootfile = "X4_25F_ppcoin_r14_0720_noCorr.root"; // 20160512 dsPID
@@ -32,9 +32,9 @@
         TFile *f30 = new TFile ("THREEDEE/25F_Sp34.4_Tc010_ang003_phi002_DiracYesPerey.root", "read"); TTree *Ex20 = (TTree*)f30->Get("tree");
         
 /**///======================================================== Browser or Canvas
-        Int_t Div[2] = {1,1};  //x,y
-        Int_t size[2] = {600,600}; //x,y
-        TCanvas * cPostAna = new TCanvas("cPostAna", "cPostAna", 2000, 0 , size[0]*Div[0], size[1]*Div[1]);
+        Int_t Div[2] = {2,1};  //x,y
+        Int_t size[2] = {300,200}; //x,y
+        TCanvas * cPostAna = new TCanvas("cPostAna", "cPostAna", 50, 0 , size[0]*Div[0], size[1]*Div[1]);
         cPostAna->Divide(Div[0],Div[1]);
         cPostAna->cd(1);
 
@@ -323,23 +323,59 @@
 /*++++++++++++++++++++++++++++++++++++++++++++++ Momentum*/
 
         tree->Draw("kMomt>>p24(  20, 0, 400)", gate  + "cut24o && 5>Ex && Ex>-10") ;   
-        tree->Draw("kMomt+10>>p23(  20, 0, 400)", gate  + "cut23o && 20>Ex && Ex>-10") ;
+        //tree->Draw("kMomt+10>>p23(  20, 0, 400)", gate  + "cut23o && 20>Ex && Ex>-10") ;
         tree->Draw("kMomt>>p22(  20, 0, 400)", gate  + "cut22o && 20>Ex && Ex>7") ;
         tree->Draw("kMomt>>p21(  20, 0, 400)", gate  + "cut21o && 40>Ex && Ex>10") ;
         tree->Draw("kMomt>>p24c( 20, 0, 400)", gatec + "cut24o && 5>Ex && Ex>-10") ;   
-        tree->Draw("kMomt+10>>p23c( 20, 0, 400)", gatec + "cut23o && 20>Ex && Ex>-10") ;
+        //tree->Draw("kMomt+10>>p23c( 20, 0, 400)", gatec + "cut23o && 20>Ex && Ex>-10") ;
         tree->Draw("kMomt>>p22c( 20, 0, 400)", gatec + "cut22o && 20>Ex && Ex>7") ;
         tree->Draw("kMomt>>p21c( 20, 0, 400)", gatec + "cut21o && 40>Ex && Ex>10") ;
+        
+        TH1F* q23 = new TH1F("q23", "", 20, 0, 400);
+        q23->SetLineColor(1);
+        q23->SetXTitle("k [MeV/c]"); q23->SetYTitle("count / 20 MeV"); q23->SetTitle("");//"Ex = 5 MeV");
 
-        p24c->Scale(BGscale); TH1F* q24 = new TH1F(*p24 - *p24c); q24->SetLineColor(1); q24->SetName("q24"); q24->SetTitle("25F(p,2p)24Ogs");
-        p23c->Scale(BGscale); TH1F* q23 = new TH1F(*p23 - *p23c); q23->SetLineColor(1); q23->SetName("q23"); q23->SetTitle("25F(p,2p)24O*->23O*+n, 4.18");
-        p22c->Scale(BGscale); TH1F* q22 = new TH1F(*p22 - *p22c); q22->SetLineColor(1); q22->SetName("q22"); q22->SetTitle("25F(p,2p)24O*->22O*+2n, 6.93");
-        p21c->Scale(BGscale); TH1F* q21 = new TH1F(*p21 - *p21c); q21->SetLineColor(1); q21->SetName("q22"); q21->SetTitle("25F(p,2p)24O*->21O*+3n, 13.8");
+        q23->Fill(10,1);
+        q23->Fill(70,1);
+        q23->Fill(90,6);
+        q23->Fill(110,4);
+        q23->Fill(130,11);
+        q23->Fill(150,9);
+        q23->Fill(170,5);
+        q23->Fill(210,-1);
+        q23->Fill(250,3);
+        q23->Fill(330,1);
+        q23->Fill(350,1);
 
-        q24->SetXTitle("k [MeV/c]"); q24->SetYTitle("count / 10 MeV"); q24->SetTitle("Ex = 0 MeV");
-        q23->SetXTitle("k [MeV/c]"); q23->SetYTitle("count / 10 MeV"); q23->SetTitle("Ex = 5 MeV");
-        q22->SetXTitle("k [MeV/c]"); q22->SetYTitle("count / 10 MeV"); q22->SetTitle("Ex = 13 MeV");
-        q21->SetXTitle("k [MeV/c]"); q21->SetYTitle("count / 10 MeV"); q21->SetTitle("Ex = 20 MeV");
+        p24c->Scale(BGscale); //TH1F* q24 = new TH1F(*p24 - *p24c); q24->SetLineColor(1); q24->SetName("q24"); q24->SetTitle("25F(p,2p)24Ogs");
+        p22c->Scale(BGscale); //TH1F* q22 = new TH1F(*p22 - *p22c); q22->SetLineColor(1); q22->SetName("q22"); q22->SetTitle("25F(p,2p)24O*->22O*+2n, 6.93");
+        p21c->Scale(BGscale); //TH1F* q21 = new TH1F(*p21 - *p21c); q21->SetLineColor(1); q21->SetName("q22"); q21->SetTitle("25F(p,2p)24O*->21O*+3n, 13.8");
+
+         q23->Sumw2(1);
+
+         Int_t nbin = p24->GetNbinsX();
+         Double_t xmin = p24->GetBinLowEdge(1);
+         Double_t xmax = p24->GetBinLowEdge(nbin+1);
+         TH1F* q24 = new TH1F("q24", "", nbin,  xmin, xmax); q24->Sumw2(1); q24->Add(p24, p24c,1,-1);
+         q24->SetLineColor(1);
+
+         Int_t nbin = p22->GetNbinsX();
+         Double_t xmin = p22->GetBinLowEdge(1);
+         Double_t xmax = p22->GetBinLowEdge(nbin+1);
+         TH1F* q22 = new TH1F("q22", "", nbin,  xmin, xmax); q22->Sumw2(1); q22->Add(p22, p22c,1,-1);
+         q22->SetLineColor(1);
+
+         Int_t nbin = p21->GetNbinsX();
+         Double_t xmin = p21->GetBinLowEdge(1);
+         Double_t xmax = p21->GetBinLowEdge(nbin+1);
+         TH1F* q21 = new TH1F("q21", "", nbin,  xmin, xmax); q21->Sumw2(1); q21->Add(p21, p21c,1,-1);
+         q21->SetLineColor(1);
+         
+
+        q24->SetXTitle("k [MeV/c]"); q24->SetYTitle("count / 20 MeV/c"); q24->SetTitle("");//"Ex = 0 MeV");
+        q23->SetXTitle("k [MeV/c]"); q23->SetYTitle("count / 20 MeV/c"); q23->SetTitle("");//"Ex = 0 MeV");
+        q22->SetXTitle("k [MeV/c]"); q22->SetYTitle("count / 20 MeV/c"); q22->SetTitle("");//"Ex = 13 MeV");
+        q21->SetXTitle("k [MeV/c]"); q21->SetYTitle("count / 20 MeV/c"); q21->SetTitle("");//"Ex = 20 MeV");
 
         Ex00->Draw("k>>hk0a(20, 0, 400)", "xsec1d5", ""); hk0a->SetLineColor(2); 
         Ex00->Draw("k>>hk0b(20, 0, 400)", "xsec1p1", ""); hk0b->SetLineColor(3); 
@@ -362,22 +398,22 @@
         Ex20->Draw("k>>hk3d(20, 0, 400)", "xsec2s1", ""); hk3d->SetLineColor(6); 
         
         
-        Double_t temp = hk0a->GetMaximum(); 
+        Double_t temp = hk0a->GetMaximum()*1.2; 
         hk0a->Scale(q24->GetMaximum()/temp);
         hk0b->Scale(q24->GetMaximum()/temp);
         hk0c->Scale(q24->GetMaximum()/temp);
         hk0d->Scale(q24->GetMaximum()/temp);
-        Double_t temp = hk1a->GetMaximum(); 
+        Double_t temp = hk1a->GetMaximum()*1.2; 
         hk1a->Scale(q23->GetMaximum()/temp);
         hk1b->Scale(q23->GetMaximum()/temp);
         hk1c->Scale(q23->GetMaximum()/temp);
         hk1d->Scale(q23->GetMaximum()/temp);
-        Double_t temp = hk2b->GetMaximum(); 
+        Double_t temp = hk2b->GetMaximum()*1.2; 
         hk2a->Scale(q22->GetMaximum()/temp);  
         hk2b->Scale(q22->GetMaximum()/temp);  
         hk2c->Scale(q22->GetMaximum()/temp);
         hk2d->Scale(q22->GetMaximum()/temp);
-        Double_t temp = hk3c->GetMaximum(); 
+        Double_t temp = hk3c->GetMaximum()*1.2; 
         hk3a->Scale(q21->GetMaximum()/temp);  
         hk3b->Scale(q21->GetMaximum()/temp);  
         hk3c->Scale(q21->GetMaximum()/temp);
@@ -388,20 +424,76 @@
         q22->SetMaximum(hk2a->GetMaximum()*1.1);
         q21->SetMaximum(hk3a->GetMaximum()*1.1);
         
-        q24->Draw();hk0a->Draw("l same");hk0b->Draw("l same");hk0c->Draw("l same");hk0d->Draw("l same");
+        /**/ //for small plot 
+        cPostAna->cd(1)->SetTopMargin(0.01);
+        cPostAna->cd(2)->SetTopMargin(0.01);
+        cPostAna->cd(3)->SetTopMargin(0.01);
+        cPostAna->cd(4)->SetTopMargin(0.01);
+        cPostAna->cd(1)->SetRightMargin(0.05);
+        cPostAna->cd(2)->SetRightMargin(0.05);
+        cPostAna->cd(3)->SetRightMargin(0.05);
+        cPostAna->cd(4)->SetRightMargin(0.05);
+        cPostAna->cd(1)->SetLeftMargin(0.2);
+        cPostAna->cd(2)->SetLeftMargin(0.2);
+        cPostAna->cd(3)->SetLeftMargin(0.2);
+        cPostAna->cd(4)->SetLeftMargin(0.2);
+        cPostAna->cd(1)->SetBottomMargin(0.2);
+        cPostAna->cd(2)->SetBottomMargin(0.2);
+        cPostAna->cd(3)->SetBottomMargin(0.2);
+        cPostAna->cd(4)->SetBottomMargin(0.2);
+        
+        cPostAna->cd(1)->SetGridx(0);
+        cPostAna->cd(2)->SetGridx(0);
+        cPostAna->cd(3)->SetGridx(0);
+        cPostAna->cd(4)->SetGridx(0);
+        cPostAna->cd(1)->SetGridy(0);
+        cPostAna->cd(2)->SetGridy(0);
+        cPostAna->cd(3)->SetGridy(0);
+        cPostAna->cd(4)->SetGridy(0);
+        
+        q24->GetXaxis()->SetNdivisions(-505);
+        q23->GetXaxis()->SetNdivisions(-505);
+        q22->GetXaxis()->SetNdivisions(-505);
+        q21->GetXaxis()->SetNdivisions(-505);
+        
+        q24->GetXaxis()->SetLabelSize(9e-2);
+        q23->GetXaxis()->SetLabelSize(9e-2);
+        q22->GetXaxis()->SetLabelSize(9e-2);
+        q21->GetXaxis()->SetLabelSize(9e-2);
+        q24->GetYaxis()->SetLabelSize(9e-2);
+        q23->GetYaxis()->SetLabelSize(9e-2);
+        q22->GetYaxis()->SetLabelSize(9e-2);
+        q21->GetYaxis()->SetLabelSize(9e-2);
+        q24->GetXaxis()->SetTitleSize(9e-2);
+        q23->GetXaxis()->SetTitleSize(9e-2);
+        q22->GetXaxis()->SetTitleSize(9e-2);
+        q21->GetXaxis()->SetTitleSize(9e-2);
+        q24->GetYaxis()->SetTitleSize(10e-2);
+        q23->GetYaxis()->SetTitleSize(10e-2);
+        q22->GetYaxis()->SetTitleSize(10e-2);
+        q21->GetYaxis()->SetTitleSize(10e-2);
+        q24->GetYaxis()->SetTitleOffset(0.8);
+        q23->GetYaxis()->SetTitleOffset(0.8);
+        q22->GetYaxis()->SetTitleOffset(0.8);
+        q21->GetYaxis()->SetTitleOffset(0.8);
+        
+        //q24->GetYaxis()->SetLabelOffset(1.7);
+        //q23->GetYaxis()->SetLabelOffset(1.7);
+        /**/
+        //q24->Draw();hk0a->Draw("l same");hk0b->Draw("l same");hk0c->Draw("l same");hk0d->Draw("l same");
         
         gROOT->ProcessLine(".L ryan/Replot.C");
-        //Replot(hk0a, hk0b, hk0c, hk0d, q24,0);
-        Replot(hk1a, hk1b, hk1c, hk1d, q23,0);
-        //Replot(hk2a, hk2b, hk2c, hk2d, q22,0);
-        //Replot(hk3a, hk3b, hk3c, hk3d, q21,0);
+        cPostAna->cd(1); Replot(hk0a, hk0b, hk0c, hk0d, q24,0, "(^{25}F,^{24}O)");
+        cPostAna->cd(2); Replot(hk1a, hk1b, hk1c, hk1d, q23,0, "(^{25}F,^{23}O)");
+        //cPostAna->cd(3); Replot(hk2a, hk2b, hk2c, hk2d, q22,0, "(^{25}F,^{22}O)");
+        //cPostAna->cd(4); Replot(hk3a, hk3b, hk3c, hk3d, q21,0, "(^{25}F,^{21}O)");
         
         
         
         //cPostAna->cd(2);
-        gROOT->ProcessLine(".L ryan/Replot_fit.C");
+        //gROOT->ProcessLine(".L ryan/Replot_fit.C");
         //Replot_fit(hk0a, hk0c, q24,0);
-        Replot_fit(hk1a, hk1c, q23,0);
+        //Replot_fit(hk1a, hk1c, q23,0);
         //Replot_fit(hk2a, hk2c, q22,0);
         //Replot_fit(hk3a, hk3c, q21,0);
         

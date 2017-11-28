@@ -2,7 +2,7 @@
 #include "MaxiLikelihood_Func.C";
 #include "MaxiLikelihood.C";
 
-void Replot(TH1F* h1a, TH1F* h1b, TH1F* h1c, TH1F* h1d, TH1F* h2, Bool_t plothk) {
+void Replot(TH1F* h1a, TH1F* h1b, TH1F* h1c, TH1F* h1d, TH1F* h2, Bool_t plothk, TString name) {
    
    // replot the momementum with a fitted function.
    
@@ -93,8 +93,11 @@ void Replot(TH1F* h1a, TH1F* h1b, TH1F* h1c, TH1F* h1d, TH1F* h2, Bool_t plothk)
 
    
    h2->SetMaximum(gMaxY+1);
-   h2->SetFillColor(1);
-   h2->SetFillStyle(3004);
+   //h2->SetMaximum(21.5); // for 23F,22O
+   //h2->SetMinimum(-4.8); // for 23F,22O
+   
+   //h2->SetFillColor(1);
+   //h2->SetFillStyle(3004);
 
    h2->Draw("E");
    h2->Draw("same");
@@ -107,13 +110,36 @@ void Replot(TH1F* h1a, TH1F* h1b, TH1F* h1c, TH1F* h1d, TH1F* h2, Bool_t plothk)
    if( plothk) h1d->Draw("same");
    f1d->Draw("same");
    
+   //small plot setting
+   Double_t textSize1 = 0.10;
+   Double_t textXpos1 = 0.5;
+   Double_t textYpos1 = 0.88;
+   Double_t textSize2 = 0.10;
+   Double_t textXpos2 = 0.80;
+   Double_t textYpos2a = 0.80;
+   Double_t textYpos2b = 0.70;
+   Double_t textYpos2c = 0.60;
+   Double_t textYpos2d = 0.50;
+   
+   //normal plot setting
+   //Double_t textSize2 = 0.05;
+   //Double_t textXpos2 = 0.70;
+   //Double_t textYpos2a = 0.80;
+   //Double_t textYpos2b = 0.75;
+   //Double_t textYpos2c = 0.70;
+   //Double_t textYpos2d = 0.65;
+   
+   
    TLatex text;
    text.SetNDC();
-   text.SetTextColor(2); text.DrawLatex( 0.7, 0.80, "1d_{5/2}");
-   text.SetTextColor(3); text.DrawLatex( 0.7, 0.75, "1p_{1/2}");
-   text.SetTextColor(4); text.DrawLatex( 0.7, 0.70, "1p_{3/2}");
-   text.SetTextColor(6); text.DrawLatex( 0.7, 0.65, "2s_{1/2}");
-   
+   text.SetTextSize(textSize1);
+   text.SetTextColor(1); text.DrawLatex( textXpos1, textYpos1, name);
+   text.SetTextSize(textSize2);
+   text.SetTextColor(2); text.DrawLatex( textXpos2, textYpos2a, "0d_{5/2}");
+   text.SetTextColor(3); text.DrawLatex( textXpos2, textYpos2b, "0p_{1/2}");
+   text.SetTextColor(4); text.DrawLatex( textXpos2, textYpos2c, "0p_{3/2}");
+   text.SetTextColor(6); text.DrawLatex( textXpos2, textYpos2d, "1s_{1/2}");
+   //text.SetTextColor(1); text.DrawLatex( textXpos2-0.1, textYpos2d-0.05, "a*1d_{5/2}+b*1p_{5/2}");
    
    MaxiLikelihood_Func_Norm(h2, f1a, h1a);
    MaxiLikelihood_Func_Norm(h2, f1b, h1b);

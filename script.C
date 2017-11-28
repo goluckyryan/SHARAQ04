@@ -1,7 +1,19 @@
 {
         
+        for( Int_t i = 1; i <= 26; i++){
+                printf("%2d | %3d, %2d, %2d, %2d, %2d \n",
+                i,
+                m24->GetBinCenter(i),
+                m24->GetBinContent(i),
+                m23->GetBinContent(i),
+                m22->GetBinContent(i),
+                m21->GetBinContent(i)
+                
+                );
+        }
         
         
+/*        
         //gROOT->Reset();
         //gROOT->ProcessLine(".!date");
         gStyle->SetOptStat(0);
@@ -28,7 +40,7 @@
         //tree->Process("Selector_PostAna.C");
         //tree->Process("Selector_MWDC_S0D_charge.C");
         //tree->Process("Selector_Aux.C");
-
+/*
         
         Int_t Div[2] = {4,2};  //x,y
         Int_t size[2] = {300,300}; //x,y
@@ -49,7 +61,7 @@
 //	f0->Close();
 /**/
 //======================================================== analysis
-
+/*
         TCut cutL = "plaV775.fID==0 && plaV775.fCharge>1000 && smwdc_L[0].fNPlaneValid>0 && TMath::Abs(plaV775.fTDiff+5)<1";
         TCut cutR = "plaV775.fID==1 && plaV775.fCharge>1000 && smwdc_R[0].fNPlaneValid>0 && TMath::Abs(plaV775.fTDiff)<1";
 
